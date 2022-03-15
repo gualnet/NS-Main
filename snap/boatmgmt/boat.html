@@ -1,0 +1,18 @@
+<tr>
+    <form method="POST" enctype="multipart/form-data" id="__FORMID__">
+        <td><input name="id" type="hidden" value="__ID__">__ID__</td>
+        <td>__HARBOUR_NAME__</td>
+        <td>__USER__</td>
+        <td><input name="name" value="__NAME__" /></td>
+        <td><select name="place_id">__PLACE__</select></td>
+        <td><input name="immatriculation" value="__IMMATRICULATION__" /></td>
+        <td><input name="longueur" value="__LONGUEUR__" /></td>
+        <td><input name="largeur" value="__LARGEUR__" /></td>
+        <td><input name="tirant_eau" value="__TIRANT_EAU__" /></td>
+        <!--<td><textarea name="enabled">__ENABLED__</textarea></td>-->
+        <td>
+            <a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?boat_id=__ID__&mode=delete';"> <i class="fe fe-trash"></i></a>
+            <button type="button" class="btn" onclick="sendUpdateForm('__FORMID__');"> <i class="fa fa-save"></i></button>
+        </td>
+    </form>
+</tr>

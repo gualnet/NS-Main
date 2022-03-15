@@ -1,0 +1,51 @@
+<div class="row" id="navbarRow">
+    <nav class="navbar fixed-bottom navbar-light bg-light nav-pills nav-fill">
+        <div class="nav-item">
+            <a class="navbar-brand" href="/index"><img id="navbar-index" src="/library/toolbar-anchor-48.png" style="height:24px;width:24px;"></a>
+        </div>
+        <div class="nav-item">
+            <a id="harbourmap" class="navbar-brand" href="/map"><img id="navbar-map" src="/library/toolbar-map-48-empty.png" style="height:24px;width:24px;"></a>
+        </div>
+        <div class="nav-item">
+            <a class="navbar-brand" href="/notifications"><img id="navbar-notif" src="/library/toolbar-bell-48.png" style="height:24px;width:24px;"></a>
+        </div>
+        <div class="nav-item">
+            <a class="navbar-brand" href="/profil"><img id="navbar-profil" src="/library/toolbar-profile-48.png" style="height:24px;width:24px;"></a>
+        </div>
+    </nav>
+</div>
+
+<script>
+    var url = window.location.href;
+    url = url.split('/');
+    var currentLocation = url[url.length - 1];
+    console.log(currentLocation);
+    if (currentLocation == "index")
+        document.getElementById('navbar-index').src = "/library/toolbar-anchor-blue-48.png";
+    else if (currentLocation == "map")
+        document.getElementById('navbar-map').src = "/library/toolbar-map-blue-48.png";
+    else if (currentLocation == "notifications")
+        document.getElementById('navbar-notif').src = "/library/toolbar-bell-blue-48.png";
+    else if (currentLocation == "profil")
+        document.getElementById('navbar-profil').src = "/library/toolbar-profile-blue-48.png";
+        
+    fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+        let harbour = _data.data;
+        var sBrowser, sUsrAg = navigator.userAgent;
+                if (sUsrAg.indexOf("Safari") > -1) {
+                    sBrowser = "Apple Safari";
+                    document.getElementById("harbourmap").href = 'http://maps.apple.com/?q=' + harbour.address;
+                } else {
+                    document.getElementById("harbourmap").href = 'geo:0,0?q=' + harbour.address;
+                }
+    }).catch((e) => console.error(e))
+    
+    fetch("/api/coms/isunread?id=" + localStorage["user"]).then(response => response.json()).then(_data => {
+        if (_data.success) {
+            if (_data.data) {
+                document.getElementById('navbar-notif').src = "/library/notification-active-48.png";
+            }
+        }
+    }).catch((e) => {console.error(e)});
+
+</script>

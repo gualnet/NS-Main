@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+
+    <!-- screen loader -->
+    {{element->loader.html}}
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0 p-0">
+        <!-- Fixed navbar -->
+        {{element->navheader.html}}
+        <!-- page content start -->
+        <!-- map -->
+        <div class="container p-0 m-0 h-100 v-100">
+            <div class="row m-0" style="height:100%;">
+                <!--  <iframe style="display: block; width: 100%; height: 90%; border: none;" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1674.9494684683343!2d-1.458484208354475!3d53.580323542286514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1598610506292!5m2!1sen!2sin" class="map-view-map" frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>-->
+
+                <div id="svg_container" style="display: block; width: 100%; height: 100%; border: none;">
+
+                </div>
+            </div>
+            {{element->navbar.html}}
+        </div>
+
+
+    </main>
+
+
+
+    <!-- color settings style switcher     <button type="button" class="btn btn-info colorsettings">
+        <span class="text-white">
+            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                <title>ionicons-v5-m</title>
+                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
+                <circle cx='144' cy='208' r='32' />
+                <circle cx='152' cy='311' r='32' />
+                <circle cx='224' cy='144' r='32' />
+                <circle cx='256' cy='367' r='48' />
+                <circle cx='328' cy='144' r='32' />
+            </svg>
+        </span>
+    </button>
+        -->
+
+    <div class="sidebar-right">
+        <div class="selectoption">
+            <input type="checkbox" id="darklayout" name="darkmode">
+            <label for="darklayout">Dark</label>
+        </div>
+        <div class="selectoption mb-0">
+            <input type="checkbox" id="rtllayout" name="layoutrtl">
+            <label for="rtllayout">RTL</label>
+        </div>
+        <hr>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
+            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
+            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
+            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
+            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
+            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
+            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
+            <label for="templatecolor8" class="bg-red" data-title="red"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
+            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
+            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
+            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
+            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
+            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
+            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
+            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+        </div>
+
+    </div>
+
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  js-->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- nouislider js -->
+    <script src="vendor/nouislider/nouislider.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+
+
+        "use strict"
+        $(window).on('load', function () {
+            fetch("/api/map?harbour_id=" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+                console.log(_data);
+                if (_data.success) {
+                    document.getElementById("svg_container").innerHTML = _data.data.map;
+                    var draw = SVG("#drawcard").fill('ADD8E6').back();
+                    var svg = draw.node;
+                    var viewPort = SVG("#viewport");
+                    var background = SVG("#background");
+                    var backgroundGroup = SVG("#background");
+                    var point = svg.createSVGPoint();
+                    var startClient = svg.createSVGPoint();
+                    var startGlobal = svg.createSVGPoint();
+
+                    console.log("viewbox")
+                    console.log(svg.viewBox);
+                    var viewBox = svg.viewBox.baseVal;
+                    //viewport
+                    draggable(viewPort.node);
+                    draw.viewbox(background.width / 2, background.height / 2, window.screen.width, window.screen.height);
+
+
+                    var cachedViewBox = {
+                        x: viewBox.x,
+                        y: viewBox.y,
+                        width: viewBox.width,
+                        height: viewBox.height
+                    };
+
+                    var zoom = {
+                        animation: new TimelineLite(),
+                        scaleFactor: 1.6,
+                        duration: 0,
+                        ease: Power2.easeOut,
+                    };
+                    var resetAnimation = new TimelineLite();
+                    draw.node.addEventListener("contextmenu", e => e.preventDefault());
+                    draw.node.addEventListener("mousedown", (evt) => { });
+                    function zoomIn() {
+                        zoomMGMT(120);
+                    }
+
+                    function zoomOut() {
+                        zoomMGMT(-120);
+                    }
+
+                    function onWheel(event) {
+                        event.preventDefault();
+                        console.log(event.wheelDelta);
+
+                        var normalized;
+                        var delta = event.wheelDelta;
+                        if (delta) {
+                            normalized = (delta % 120) == 0 ? delta / 120 : delta / 12;
+                        } else {
+                            delta = event.deltaY || event.detail || 0;
+                            normalized = -(delta % 3 ? delta * 10 : delta / 3);
+                        }
+
+                        var scaleDelta = normalized > 0 ? 1 / zoom.scaleFactor : zoom.scaleFactor;
+
+                        point.x = event.clientX;
+                        point.y = event.clientY;
+
+                        var startPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+
+                        var fromVars = {
+                            ease: zoom.ease,
+                            x: viewBox.x,
+                            y: viewBox.y,
+                            width: viewBox.width,
+                            height: viewBox.height,
+                        };
+
+                        viewBox.x -= (startPoint.x - viewBox.x) * (scaleDelta - 1);
+                        viewBox.y -= (startPoint.y - viewBox.y) * (scaleDelta - 1);
+                        viewBox.width *= scaleDelta;
+                        viewBox.height *= scaleDelta;
+
+                        zoom.animation = TweenLite.from(viewBox, zoom.duration, fromVars);
+                        console.log("done");
+
+
+                    }
+
+                    draw.node.addEventListener("wheel", onWheel);
+
+                    function zoomMGMT(delta) {
+
+                        var normalized;
+                        if (delta) {
+                            normalized = (delta % 120) == 0 ? delta / 120 : delta / 12;
+                        } else {
+                            delta = event.deltaY || event.detail || 0;
+                            normalized = -(delta % 3 ? delta * 10 : delta / 3);
+                        }
+
+                        var scaleDelta = normalized > 0 ? 1 / zoom.scaleFactor : zoom.scaleFactor;
+                        var startPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+
+                        var fromVars = {
+                            ease: zoom.ease,
+                            x: viewBox.x,
+                            y: viewBox.y,
+                            width: viewBox.width,
+                            height: viewBox.height,
+                        };
+
+                        viewBox.x -= (viewBox.x / 2) * (scaleDelta - 1);
+                        viewBox.y -= (viewBox.y / 2) * (scaleDelta - 1);
+                        viewBox.width *= scaleDelta;
+                        viewBox.height *= scaleDelta;
+
+                        zoom.animation = TweenLite.from(viewBox, zoom.duration, fromVars);
+                        console.log("done");
+                    }
+
+                    function resetViewport() {
+
+                        var duration = 0.8;
+                        var ease = Power3.easeOut;
+
+
+                        resetAnimation.clear()
+                            .to(viewBox, duration, {
+                                x: cachedViewBox.x,
+                                y: cachedViewBox.y,
+                                width: cachedViewBox.width,
+                                height: cachedViewBox.height,
+                                ease: ease
+                            }, 0)
+                            .to(viewport, duration, {
+                                attr: { transform: "matrix(1,0,0,1,0,0)" },
+                                // rotation: "0_short",
+                                smoothOrigin: false,
+                                svgOrigin: "0 0",
+                                ease: ease
+                            }, 0)
+
+                        resetAnimation = new TimelineLite();
+                    }
+
+
+
+                    function draggable(el) {
+                        if (!el) return console.error('makeDraggable() needs an element');
+                        var svg = el;
+                        while (svg && svg.tagName != 'svg') svg = svg.parentNode;
+                        if (!svg) return console.error(el, 'must be inside an SVG wrapper');
+                        var pt = svg.createSVGPoint(), doc = svg.ownerDocument;
+
+                        var root = doc.rootElement || doc.body || svg;
+                        var xlate, txStartX, txStartY, mouseStart;
+                        var xforms = el.transform.baseVal;
+                        var elementselected = SVG(el);
+                        elementselected.center(elementselected.cx(), elementselected.cy());
+                        el.addEventListener('touchstart', startMove, false);
+                        var pointInit = false;
+                        var pointStart;
+                        var pointTwoStart;
+                        var pastdist = 0;
+                        function startMove(evt) {
+                            evt.preventDefault();
+                            root.addEventListener('touchmove', handleMove, false);
+                            root.addEventListener('touchend', finishMove, false);
+                            txStartX = elementselected.transform('translateX');
+                            txStartY = elementselected.transform('translateY');
+                            mouseStart = inElementSpace(evt);
+                            fireEvent('dragstart');
+                        }
+
+
+                        function handleMove(evt) {
+
+                            if (evt.touches[0] && !evt.touches[1]) {
+                                var point = inElementSpace(evt);
+                                elementselected.transform({
+                                    rotate: elementselected.transform('rotate'),
+                                    origin: { x: elementselected.cx(), y: elementselected.cy() },
+                                    translateX: txStartX + point.x - mouseStart.x,
+                                    translateY: txStartY + point.y - mouseStart.y
+                                })
+                                fireEvent('drag');
+                            } else if (evt.touches[0] && evt.touches[1]) {
+                                var point = inElementSpace(evt);
+                                var pointTwo = inElementSpaceTwo(evt);
+
+                                if (pointInit == false) {
+                                    pointInit = true;
+
+                                    pointStart = point;
+                                    pointTwoStart = pointTwo;
+                                }
+
+                                console.log("ici")
+                                console.log(point)
+                                console.log(pointStart)
+                                console.log(pointTwo)
+                                console.log(pointTwoStart)
+                                console.log()
+                                console.log((point - pointStart) - (pointTwo - pointTwoStart))
+                                var dist = Math.sqrt((point.x - pointTwo.x) * (point.x - pointTwo.x) + (point.y - pointTwo.y) * (point.y - pointTwo.y));
+                                console.log("dist " + dist);
+                                if (dist < pastdist - 20) {
+                                    zoomMGMT(dist * -1)
+                                    pastdist = dist;
+                                }
+                                else if (dist > pastdist + 20) {
+                                    zoomMGMT(pastdist)
+                                    pastdist = dist;
+                                }
+
+
+                                //zoomMGMT((point - pointStart) - (pointTwo - pointTwoStart));
+                            }
+                        }
+
+
+                        function finishMove(evt) {
+                            pointInit = false;
+                            root.removeEventListener('mousemove', handleMove, false);
+                            root.removeEventListener('mouseup', finishMove, false);
+                            fireEvent('dragend');
+                            pastdist = 0;
+                        }
+
+                        function fireEvent(eventName) {
+                            var event = new Event(eventName);
+                            event.detail = { x: elementselected.transform('translateX'), y: elementselected.transform('translateY') };
+                            return el.dispatchEvent(event);
+                        }
+
+                        // Convert mouse position from screen space to coordinates of el
+                        function inElementSpace(evt) {
+                            pt.x = evt.touches[0].clientX; pt.y = evt.touches[0].clientY;
+                            return pt.matrixTransform(el.parentNode.getScreenCTM().inverse());
+                        }
+
+                        function inElementSpaceTwo(evt) {
+                            pt.x = evt.touches[1].clientX; pt.y = evt.touches[1].clientY;
+                            return pt.matrixTransform(el.parentNode.getScreenCTM().inverse());
+                        }
+                    };
+                }
+
+
+                /* carousel */
+                var swiper = new Swiper('.swiper-products', {
+                    slidesPerView: 'auto',
+                    spaceBetween: 0,
+                    pagination: 'false'
+                });
+
+                refreshData();
+                const interval = setInterval(function () {
+                    refreshData();
+                }, 5000);
+            }).catch((e) => { console.error(e) });
+        });
+        function refreshData() {
+            fetch("/api/emplacements?harbour_id=" + localStorage["harbourid"], { method: "GET" }).then(response => response.json()).then(_data => {
+                if (_data.success) {
+                    console.log(_data);
+                    var bouees = _data.data[0];
+                    for (var i = 0; i < bouees.length; i++) {
+                        if (document.getElementById(bouees[i].id) != null) {
+                            if (bouees[i].status) {
+                                let currentBouee = SVG(document.getElementById(bouees[i].id).childNodes[0]);
+
+                                if (document.getElementById(bouees[i].id).childNodes[0]) {
+                                    if (bouees[i].status == 1) //occupied
+                                        currentBouee.fill('#5EC1C5');
+                                    else if (bouees[i].status == 0) // empty
+                                        currenBouee.fill("#F39D26");
+                                }
+
+                            }
+                        }
+                    }
+                    var places = _data.data[1];
+                    for (var i = 0; i < places.length; i++) {
+                        if (document.getElementById(places[i].id) != null) {
+                            let currentPlace = SVG(document.getElementById(places[i].id).childNodes[0]);
+                            console.log(places[i].occupation)
+                            if (document.getElementById(places[i].id).childNodes[0]) {
+                                switch (places[i].occupation) {
+                                    case "empty":
+                                        console.log("empty");
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#F39D26');
+                                        break;
+                                    case "occupied":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#5EC1C5');
+                                        break;
+                                    case "emptyEscaleDisponible":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#33B460');
+                                        break;
+                                    case "occupiedEscale":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#243E7E');
+                                        break;
+                                    case "error":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#EE433C');
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }).catch((e) => { console.error(e) });
+        }
+    </script>
+    {{element->footer_app.html}}
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/nearby.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
+</html>

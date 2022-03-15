@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/fortpress_admin_assets/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/fortpress_admin_assets/favicon.ico" />
+    <link href="/assets/quill/quill.snow.css" rel="stylesheet">
+    <script src="/assets/quill/quill.js"></script> <!-- Create the editor container -->
+    <title>Vendors management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/fortpress_admin_assets/assets/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '/'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/fortpress_admin_assets/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/input-mask/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/datatables/plugin.js"></script>
+</head>
+
+<body class="">
+    <div class="page">
+        <div class="flex-fill">
+            <div class="my-3 my-md-5">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Gestion des partenaires</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="harbourError"></div>
+                                <form method="POST" enctype="multipart/form-data" id="createForm">
+                                    <div class="row">
+                                        __HARBOUR_ID_INPUT__
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Nom du partenaire</label>
+                                                <input class="form-control" name="name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Catégorie</label>
+                                                <select class="form-control" id="category_select" name="category">
+                                                    <option value="harbourlife">Vie au port</option>
+                                                    <option value="experience">Experiences</option>
+                                                    <option value="discovery">Découvertes</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Sous catégorie</label>
+                                                <select class="form-control" id="subcategory_select" name="subcategory">
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Email</label>
+                                                <input class="form-control" name="email" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Préfixe/Téléphone</label>
+                                                <div class="input-group">
+                                                    <input value="+33" style="width:35%;" class="form-control"
+                                                        name="prefix" required>
+                                                    <input style="width:65%;" class="form-control" name="phone"
+                                                        required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Website</label>
+                                                <input type="url" class="form-control" name="website" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Adresse</label>
+                                                <input class="form-control" name="address" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label">image</label>
+                                                <input class="form-control" accept="image/png, image/jpg" type="file"
+                                                    name="img">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-11">
+                                            <div class="form-group">
+                                                <label class="form-label">Description</label>
+                                                <div id="editor"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <div class="form-group">
+                                                <button type="button" style="margin-top:27px" class="btn btn-primary"
+                                                    onclick="sendCreateForm();"> <i class="fe fe-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <div class="table-responsive">
+                                    <table id="partnersTable"
+                                        class="table card-table table-vcenter text-nowrap datatable dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nom du Port</th>
+                                                <th>Catégorie</th>
+                                                <th>Sous catégorie</th>
+                                                <th>Nom</th>
+                                                <th>Description</th>
+                                                <th>Email</th>
+                                                <th>Téléphone</th>
+                                                <th>Website</th>
+                                                <th>Adresse</th>
+                                                <th>Image</th>
+                                                <th>Remplacer l'image</th>
+                                                <th></th>
+                                            </tr>
+                                            <thead>
+                                            <tbody id="result">
+                                                __PARTNERS__
+                                            </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var quill = new Quill('#editor', {
+            placeholder: 'Entrez le texte...',
+            theme: 'snow'
+        });
+        var dataTable;
+        window.onload = function () {
+            require(['datatables', 'jquery'], function (datatable, $) {
+                dataTable = $('.datatable').DataTable(
+                    {
+                        language: {
+                            search: '<span></span>',
+                            searchPlaceholder: 'Votre recherche'
+                        },
+                        paging: false,
+                        "order": [[2, "desc"]],
+                        "info": false,
+                    });
+            });
+        }
+        document.getElementById('sharbour_id').addEventListener('change', function (e) {
+            var ids = []
+            if (ids[0]) {
+                for (var i = 0; i < ids.length; i++) {
+                    document.getElementbyId('editor_' + ids[i].replace(/\./g, "_")).innerHTML = "";
+                }
+            }
+            console.log("preuve : " + e.target.value);
+            require(['datatables', 'jquery'], function (datatable, $) {
+                fetch("/api/partners/?harbour_id=" + e.target.value).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        dataTable.destroy();
+                        var _partners = _data.data.partners;
+                        var _partnerGen = "";
+                        var gen = "";
+                        console.log(_partnerHtml);
+                        console.log("la");
+                        console.log(_partnerGen);
+
+                        for (var i = 0; i < _partners.length; i++) {
+                            var _partnerHtml = _data.data.html;
+                            _partnerGen = _partnerHtml.replace(/__ID__/g, _partners[i].id)
+                                .replace(/__FORMID__/g, _partners[i].id.replace(/\./g, "_"))
+                                .replace(/__HARBOUR_NAME__/g, _data.data.harbour.name)
+                                .replace(/__HARBOUR_ID__/g, _partners[i].harbour_id)
+                                .replace(/__CATEGORY__/g, _partners[i].category)
+                                .replace(/__SUBCATEGORY__/g, _partners[i].subcategory)
+                                .replace(/__NAME__/g, _partners[i].name)
+                                .replace(/__EDITOR_ID__/g, "editor_" + _partners[i].id.replace(/\./g, "_"))
+                                .replace(/__DESCRIPTION__/g, _partners[i].description)
+                                .replace(/__EMAIL__/g, _partners[i].email)
+                                .replace(/__PREFIX__/g, _partners[i].prefix)
+                                .replace(/__PHONE__/g, _partners[i].phone)
+                                .replace(/__IMG__/g, _partners[i].img)
+                                .replace(/__WEBSITE__/g, _partners[i].website)
+                                .replace(/__ADDRESS__/g, _partners[i].address)
+
+                            ids.push(_partners[i].id.replace(/\./g, "_"));
+
+                            console.log(gen);
+                            console.log('ici');
+                            console.log(_partnerGen);
+                            gen += _partnerGen;
+                        }
+                        console.log(gen);
+
+                        document.getElementById("result").innerHTML = "";
+                        document.getElementById("result").insertAdjacentHTML('beforeend', gen);
+                        console.log(ids);
+                        dataTable = $('.datatable').DataTable(
+                            {
+                                language: {
+                                    search: '<span></span>',
+                                    searchPlaceholder: 'Votre recherche'
+                                },
+                                paging: false,
+                                "order": [[2, "desc"]],
+                                "info": false,
+                            });
+
+                        var quills = [];
+
+                        for (var i = 0; i < ids.length; i++) {
+                            quills[i] = new Quill('#editor_' + ids[i], {
+                                placeholder: 'Entrez le texte...',
+                                theme: 'snow'
+                            });
+                        }
+                        /*
+                        require(['jquery'], function ($) {
+                        $('#harbour_id').multiSelect('refresh');
+                        });
+                        */
+
+                    } else {
+
+                        document.getElementById("result").innerHTML = "";
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+            });
+        });
+
+
+        var subCategoryHarbourLife = '<option value="sos">S.O.S.</option>'
+            + '<option value="maintenance">Maintenance</option>'
+            + '<option value="bricolage">Bricolage</option>'
+            + '<option value="sante">Santé</option>'
+            + '<option value="annonce">Annonce</option>'
+            + '<option value="laverie">Laverie</option>'
+            + '<option value="transport">Transport</option>'
+            + '<option value="alimentation">Alimentation</option>'
+            + '<option value="boutique">Boutique</option>'
+            + '<option value="Vendeur/Loueur">Vendeur / Loueur</option>'
+            + '<option value="vieportautre">Autre</option>';
+
+        var subCategoryExperience = '<option value="nautic">Activités nautiques</option>'
+            + '<option value="terrestres">Activités terrestres</option>'
+            + '<option value="association">Association</option>'
+            + '<option value="equipbourse">Bourse aux équipiers</option>'
+            + '<option value="Vendeur/Loueur">Vendeur / Loueur</option>'
+            + '<option value="experienceautre">Autre</option>';
+
+        var subCategoryDiscovery = '<option value="restaurant">Restaurants</option>'
+            + '<option value="bar">Bar</option>'
+            + '<option value="culture">Culture</option>'
+            + '<option value="divertissement">Loisirs</option>'
+            + '<option value="detente">Détente</option>'
+            + '<option value="decouverteautre">Autre</option>';
+
+        var selectedCategory = document.getElementById('category_select').value;
+        if (selectedCategory == "harbourlife") {
+            document.getElementById("subcategory_select").innerHTML = subCategoryHarbourLife;
+        } else if (selectedCategory == "experience") {
+            document.getElementById("subcategory_select").innerHTML = subCategoryExperience;
+        } else if (selectedCategory == "discovery") {
+            document.getElementById("subcategory_select").innerHTML = subCategoryDiscovery;
+        }
+
+        document.getElementById('category_select').addEventListener('change', function (e) {
+            if (e.target.value === "harbourlife") {
+                document.getElementById("subcategory_select").innerHTML = subCategoryHarbourLife;
+            } else if (e.target.value === "experience") {
+                document.getElementById("subcategory_select").innerHTML = subCategoryExperience;
+            } else if (e.target.value === "discovery") {
+                document.getElementById("subcategory_select").innerHTML = subCategoryDiscovery;
+            }
+        });
+
+        function sendCreateForm() {
+            var form = document.getElementById("createForm");
+            var formData = new FormData(form);
+            formData.append("description", document.getElementById('editor').firstChild.innerHTML);
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
+                });
+        }
+
+        function sendUpdateForm(id) {
+            console.log("id : " + id)
+            var form = document.getElementById(id);
+            form.appendChild(document.getElementById('id_' + id))
+            form.appendChild(document.getElementById('name_' + id))
+            form.appendChild(document.getElementById('email_' + id))
+            form.appendChild(document.getElementById('prefix_' + id))
+            form.appendChild(document.getElementById('phone_' + id))
+            form.appendChild(document.getElementById('website_' + id))
+            form.appendChild(document.getElementById('address_' + id))
+            form.appendChild(document.getElementById('img_' + id))
+            // add category info
+            const categoryValue = document.createElement('textarea');
+            categoryValue.id = `category_${id}`;
+            categoryValue.innerHTML = document.getElementById(`category_${id}`).value;
+            form.appendChild(categoryValue);
+            // add subcategory info
+            const subcategoryValue = document.createElement('textarea');
+            subcategoryValue.id = `subcategory_${id}`;
+            const elem = document.getElementById(`subcategory_${id}`)
+            subcategoryValue.innerHTML = elem.value;
+            form.appendChild(subcategoryValue);
+
+
+            // console.log(form);
+            var formData = new FormData(form);
+            // console.log(form);
+            // console.log(formData);
+            formData.set("description", document.getElementById('editor_' + id).firstChild.innerHTML);
+            /*
+            formData.set("id", document.getElementById('id_' + id).innerHTML);
+            formData.set("name", document.getElementById('name_' + id).innerHTML);
+            formData.set("email", document.getElementById('email_' + id).innerHTML);
+            formData.set("prefix", document.getElementById('prefix_' + id).value);
+            formData.set("phone", document.getElementById('phone_' + id).value);
+            formData.set("website", document.getElementById('website_' + id).value);
+            formData.set("address", document.getElementById('address_' + id).innerHTML);
+            formData.set("img", document.getElementById('img_' + id).value);
+            */
+
+            // console.log(formData);
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log('Data>', _data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
+                });
+        }
+    </script>
+</body>
+
+</html>

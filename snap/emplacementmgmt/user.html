@@ -1,0 +1,18 @@
+<tr>
+    <form method="POST" enctype="multipart/form-data" id="__FORMID__">
+        <td><input name="id" type="hidden" value="__ID__">__ID__</td>
+        <td>__HARBOUR_NAME__</td>
+        <td><textarea name="category">__CATEGORY__</textarea></td>
+        <td><textarea name="first_name">__FIRST_NAME__</textarea></td>
+        <td><textarea name="last_name">__LAST_NAME__</textarea></td>
+        <td><textarea name="email">__EMAIL__</textarea></td>
+        <td>__PHONE__</td>
+        <td data-order="__DATETIMEORDER__">__DATE__</td>
+        <td><textarea name="contract_number">__CONTRACT_NUMBER__</textarea></td>
+        <td><textarea name="is_resident">__IS_RESIDENT__</textarea></td>
+        <td>
+            <a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?user_id=__ID__&mode=delete';"> <i class="fe fe-trash"></i></a>
+            <button type="button" class="btn" onclick="sendUpdateForm('__FORMID__');"> <i class="fa fa-save"></i></button>
+        </td>
+    </form>
+</tr>

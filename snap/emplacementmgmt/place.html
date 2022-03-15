@@ -1,0 +1,20 @@
+<tr>
+    <form method="POST" enctype="multipart/form-data" id="__FORMID__">
+        <td><input name="id" type="hidden" value="__ID__">__ID__</td>
+        <td>__HARBOUR_NAME__</td>
+        <td><input name="number" value="__NUMBER__"></td>
+        <td><input name="captorNumber" value="__CAPTOR_NUMBER__"></td>
+        <td><input name="longueur" value="__LONGUEUR__"></td>
+        <td><input name="largeur" value="__LARGEUR__"></td>
+        <td><input name="tirantDeau" value="__TIRANTDEAU__"></td>
+        <td><input name="type" value="__TYPE__"></td>
+        <td><input name="nbTramesDepart" value="__NBTRAMESDEPART__"></td>
+        <td><input name="nbTramesRetour" value="__NBTRAMESRETOUR__"></td>
+        <td><input name="maxSeuil" value="__MAXSEUIL__"></td>
+        <td><input name="minSeuil" value="__MINSEUIL__"></td>
+        <td>
+            <a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?place_id=__ID__&mode=delete&type=place';"> <i class="fe fe-trash"></i></a>
+            <button type="button" class="btn" onclick="sendUpdatePlaceForm('__FORMID__');"> <i class="fa fa-save"></i></button>
+        </td>
+    </form>
+</tr>

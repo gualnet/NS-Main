@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+    <!-- screen loader -->
+    {{element->loader.html}}
+    <div id="exitFullscreen"></div>
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        <!-- Fixed navbar -->
+        {{element->navheader.html}}
+        <nav class="navbar navbar-light fixed-top" style="padding-top:35px;">
+            <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
+        </nav>
+        <!-- page content start -->
+        <!-- map -->
+        <div class="container" style="padding-top:35px;">
+            <div class="row" style="height:90%;">
+                <div class="col" id="cameras"></div>
+                <!--  <iframe style="display: block; width: 100%; height: 90%; border: none;" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1674.9494684683343!2d-1.458484208354475!3d53.580323542286514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1598610506292!5m2!1sen!2sin" class="map-view-map" frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>-->
+
+            </div>
+            {{element->navbar.html}}
+        </div>
+
+
+    </main>
+
+
+
+    <!-- color settings style switcher     <button type="button" class="btn btn-info colorsettings">
+        <span class="text-white">
+            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                <title>ionicons-v5-m</title>
+                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
+                <circle cx='144' cy='208' r='32' />
+                <circle cx='152' cy='311' r='32' />
+                <circle cx='224' cy='144' r='32' />
+                <circle cx='256' cy='367' r='48' />
+                <circle cx='328' cy='144' r='32' />
+            </svg>
+        </span>
+    </button>
+        -->
+
+    <div class="sidebar-right">
+        <div class="selectoption">
+            <input type="checkbox" id="darklayout" name="darkmode">
+            <label for="darklayout">Dark</label>
+        </div>
+        <div class="selectoption mb-0">
+            <input type="checkbox" id="rtllayout" name="layoutrtl">
+            <label for="rtllayout">RTL</label>
+        </div>
+        <hr>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
+            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
+            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
+            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
+            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
+            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
+            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
+            <label for="templatecolor8" class="bg-red" data-title="red"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
+            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
+            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
+            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
+            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
+            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
+            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
+            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+        </div>
+
+    </div>
+
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  js-->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- nouislider js -->
+    <script src="vendor/nouislider/nouislider.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        "use strict"
+        $(window).on('load', function () {
+
+            /* carousel */
+            var swiper = new Swiper('.swiper-products', {
+                slidesPerView: 'auto',
+                spaceBetween: 0,
+                pagination: 'false'
+            });
+
+
+            fetch("/api/camera/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+                console.log(_data)
+                var cameras = _data.data;
+                if (cameras[0]) {
+                    for (var i = 0; i < cameras.length; i++) {
+                        console.log('test');
+                        var camera = '<div class="pb-5"><div class="row  m-0 p-0"><div class="col-11 m-0 p-0"><h5>' + cameras[i].title + '</div><div class="col-1  m-0 p-0"><a onclick="setFullScreen(\'' + cameras[i].id.replace(/\./g, '_') + '\');"><i style="flex" class="bi bi-arrows-fullscreen"></i></a></h5></div></div><embed id="' + cameras[i].id.replace(/\./g, '_') + '" src="' + cameras[i].url + '" style="width:100%;height:220px;;"></div>';
+
+                        console.log(camera);
+                        document.getElementById("cameras").insertAdjacentHTML('beforeend', camera);
+                    }
+                }
+                else {
+
+                    document.getElementById("cameras").insertAdjacentHTML('beforeend', '<p class="text-secondary text-justify">Aucune caméra disponible actuellement.</p>');
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+
+        });
+
+        function setFullScreen(_id) {
+            document.getElementById(_id).style = 'z-index: 100000;display: block inherit;width: ' + window.innerWidth + 'px;height: ' + window.innerHeight + 'px;position:fixed !important;border: none;overflow-y: auto;overflow-x: hidden;margin: 0; padding:0;left: 0px;top: 0px;';//'height:' + window.innerWidth + ';width:' + window.innerHeight + ';';
+            var intervalId = setInterval(function () { document.getElementById(_id).style = 'z-index: 100000;display: block inherit;width: ' + window.innerWidth + 'px;height: ' + window.innerHeight + 'px;position:fixed !important;border: none;overflow-y: auto;overflow-x: hidden;margin: 0; padding:0;left: 0px;top: 0px;'; }, 10);
+            document.getElementById("exitFullscreen").innerHTML = '<a onClick="stopFullScreen(\'' + _id + '\', ' + intervalId + ');" style="position: fixed !important; z-index:20000000;top:70px;right:25px;"><i style=" font-size:40px;color:white;" class="bi bi-x-circle"></i></a>';
+
+            //id="navbarRow"
+            //id="navbarHeader"
+        }
+        function stopFullScreen(_id, _intervalId) {
+            clearInterval(_intervalId);
+            document.getElementById(_id).style = "width:100%;height:220px;";
+            document.getElementById("exitFullscreen").innerHTML = "";
+        }
+
+    </script>
+    <style>
+        embed {
+        }
+    </style>
+</body>
+    {{element->footer_app.html}}
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/nearby.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
+</html>

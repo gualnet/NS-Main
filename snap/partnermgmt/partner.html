@@ -1,0 +1,96 @@
+<tr>
+    <form method="POST" enctype="multipart/form-data" id="__FORMID__">
+        <td><input id="id___FORMID__" name="id" type="hidden" value="__ID__">__ID__</td>
+        <td>__HARBOUR_NAME__</td>
+        <td>
+            <select id="category___FORMID__" name="category" onchange="updateSubcategories(this)">
+                __CATEGORY__
+            </select>
+        </td>
+        <td>
+            <select id="subcategory___FORMID__" name="subcategory">
+                __SUBCATEGORY__
+            </select>
+        </td>
+        <td><textarea id="name___FORMID__" name="name">__NAME__</textarea></td>
+        <td>
+            <div id="__EDITOR_ID__" style="width:400px;height:100px;">__DESCRIPTION__</div>
+            <script>
+                var quill___EDITOR_ID__ = new Quill('#__EDITOR_ID__', {
+                    placeholder: 'Entrez le texte...',
+                    theme: 'snow'
+                });</script>
+        </td>
+        <td><textarea id="email___FORMID__" name="email">__EMAIL__</textarea></td>
+        <td>
+            <div class="form-group" style="width:200px;">
+                <label class="form-label">Préfixe/Téléphone</label>
+                <div class="input-group">
+                    <input id="prefix___FORMID__" value="__PREFIX__" style="width:35%;" class="form-control"
+                        name="prefix" required>
+                    <input id="phone___FORMID__" value="__PHONE__" style="width:65%;" class="form-control" name="phone"
+                        required>
+                </div>
+            </div>
+        </td>
+        <td><input id="website___FORMID__" type="url" name="website" value="__WEBSITE__"></td>
+        <td><textarea id="address___FORMID__" name="address">__ADDRESS__</textarea></td>
+        <td><a target="_blank" href="__IMG__">__IMG__</a></td>
+        <td><input id="img___FORMID__" type="file" class="form-control" accept="image/png, image/jpg" name="img"></td>
+        <td>
+            <a href="#"
+                onclick="if(confirm('Delete __ID__ ?'))document.location.href='?partner_id=__ID__&mode=delete';"> <i
+                    class="fe fe-trash"></i></a>
+            <button type="button" class="btn" onclick="sendUpdateForm('__FORMID__');"> <i
+                    class="fa fa-save"></i></button>
+        </td>
+    </form>
+</tr>
+
+<script>
+    const subcategoriesObj = {
+        harbourlife: {
+            sos: 'S.O.S.',
+            maintenance: 'Maintenance',
+            bricolage: 'Bricolage',
+            sante: 'Santé',
+            annonce: 'Annonce',
+            laverie: 'Laverie',
+            transport: 'Transport',
+            alimentation: 'Alimentation',
+            boutique: 'Boutique',
+            'Vendeur/Loueur': 'Vendeur / Loueur',
+            vieportautre: 'Autre<',
+        },
+        experience: {
+            nautic: 'Activités nautiques',
+            terrestres: 'Activités terrestres',
+            association: 'Association',
+            equipbourse: 'Bourse aux équipiers',
+            'Vendeur/Loueur': 'Vendeur / Loueur',
+            experienceautre: 'Autre',
+        },
+        discovery: {
+            restaurant: 'Restaurants',
+            bar: 'Bar',
+            culture: 'Culture',
+            divertissement: 'Loisirs',
+            detente: 'Détente',
+            decouverteautre: 'Autre',
+        }
+    };
+
+    function updateSubcategories(target) {
+        const targetId = target.id.split('_')[1];
+        const newCategory = target.value;
+        const subcategoryElem = document.getElementById(`subcategory_${targetId}`);
+        subcategoryElem.options.length
+        while (subcategoryElem.options.length > 0) {
+            subcategoryElem.remove(0);
+        };
+        Object.entries(subcategoriesObj[newCategory]).map(([subKey, subValue]) => {
+            const newOption = new Option(subValue, subKey);
+            subcategoryElem.add(newOption, undefined);
+        });
+    };
+</script>

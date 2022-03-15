@@ -1,0 +1,34 @@
+{{element->meta.html}}
+{{element->header.html}}
+
+<script>document.body.id = "post"</script>
+{{element->hero.html}}
+<div class="entry-wrapper">
+  <header class="entry-header">
+  <ul class="entry-tags">
+    __TAGS__
+  </ul>
+  <h1 class="entry-title">__TITLE__</h1>
+  </header>
+
+  {{element->author.html}}
+
+  <div class="entry-content" style="margin-right:0;">
+
+  __CONTENT__
+
+  <div>
+  __HOOK_FOOTER_TOP_BLOG__
+  </div>
+
+  __HOOK_DISQUS__
+
+  <div>
+  __HOOK_FOOTER_BOTTOM_BLOG__
+  </div>
+
+  </div>
+
+__HOOK_END_POST__
+
+{{element->footer.html}}

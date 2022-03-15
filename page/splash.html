@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/splash.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:16 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="generator" content="">
+    <title>Nauticspot</title>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="img/favicon180.png" sizes="180x180">
+    <link rel="icon" href="img/favicon32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="img/favicon16.png" sizes="16x16" type="image/png">
+
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&amp;display=swap" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet" id="style">
+</head>
+
+<body class="d-flex flex-column h-100">
+    <!-- Fixed navbar -->
+
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0  h-100">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="align-self-center col">
+                    <img style="width:100%;height:auto;" class="p-0" id="loader_entity_logo" src="" />
+                    <div class="logo-loading">
+
+                        
+                        <div class="loader-ellipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  -->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        /*"use strict"
+        $(window).on('load', function() {
+            setTimeout(function() {
+                window.window.location.href = ("landing.html");
+            }, 2000)
+        });*/
+        var urlParam = new URLSearchParams(window.location.search);
+        if (urlParam.get('entity')) {
+            fetch("/api/entity/get/" + urlParam.get('entity')).then(response => response.json()).then(_data => {
+                console.log(_data);
+                if (_data.success) {
+                    var entity = _data.data;
+                    localStorage['entity_id'] = urlParam.get('entity');
+                    localStorage['entity_name'] = entity.name;
+                    localStorage['entity_logo'] = entity.logo;
+                     if (localStorage['entity_logo']) {
+                        document.getElementById('loader_entity_logo').src = localStorage['entity_logo'];
+                    }
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
+    </script>
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/splash.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:16 GMT -->
+</html>

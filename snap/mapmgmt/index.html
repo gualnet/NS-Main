@@ -1,0 +1,1759 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/fortpress_admin_assets/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/fortpress_admin_assets/favicon.ico" />
+
+    <title>Vendors management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <!--<script src="/js/jquery-3.3.1.min.js"></script>-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+    <!--<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>-->
+    <script src="/fortpress_admin_assets/assets/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '/'
+        });
+    </script>
+    <!-- GSAP GeenSock-->
+    <!-- Dashboard Core -->
+    <link href="/fortpress_admin_assets/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/input-mask/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/datatables/plugin.js"></script>
+</head>
+<body class="m-0 p-0" style="">
+    <div class="page h-100 m-0 p-0">
+        <div class="container-fluid m-0 p-0 h-100">
+            <button type="button" style="position:fixed;top:10px;right:30px;z-index:1000000;" class="btn btn-primary" onclick="zoomIn();"><i class="fe fe-zoom-in "></i></button>
+            <button type="button" style="position:fixed;top:50px;right:30px;z-index:1000000;" class="btn btn-primary" onclick="resetViewport();"><i class="fe fe-stop-circle"></i></button>
+            <button type="button" style="position:fixed;top:90px;right:30px;z-index:1000000;" class="btn btn-primary" onclick="zoomOut();"><i class="fe fe-zoom-out "></i></button>
+            <button type="button" style="position:fixed;top:10px;right:75px;z-index:1000000;" class="btn btn-primary" onclick="save();"><i class="fe fe-save"></i></button>
+            <div class="row m-0 p-0 h-100" style="margin:90px;">
+                <div class="col-3 m-0 p-0 h-100">
+                    <div class="card m-0 p-0 h-100">
+                        <div class="card-header">
+                            <ul class="nav  nav-pills  m-0 p-0">
+                                <li class="nav-item m-0 p-0">
+                                    <span class="nav-link" id="nav_liste" onclick="changeTab('liste');">Liste</span>
+                                </li>
+                                <li class="nav-item m-0 p-0">
+                                    <span class="nav-link" href="#" id="nav_selection" onclick="changeTab('selection');">Sélection</span>
+                                </li>
+                                <li class="nav-item m-0 p-0">
+                                    <span class="nav-link" id="nav_ajout" onclick="changeTab('ajout');">Ajout</span>
+                                </li>
+                                <li class="nav-item m-0 p-0">
+                                    <span class="nav-link active" id="nav_plan" onclick="changeTab('plan');">Plan</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body" style="height:100%;overflow:auto;">
+                            <div id="harbourError"></div>
+                            <div class="row" id="plan">
+                                <form id="form_plan">
+                                    __HARBOUR_ID_INPUT__
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Titre</label>
+                                            <input class="form-control" name="title" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="form-label">Carte du port</label>
+                                            <input type="file" class="form-control" name="img">
+                                        </div>
+                                    </div>
+                                    <div class="col-1">
+                                        <div class="form-group">
+                                            <button type="button" style="margin-top:27px" class="btn btn-primary" onclick="addPlan();"> <i class="fe fe-plus"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="row" id="selection" hidden>
+                                <div class="col-12" id="showArea">
+                                </div>
+                            </div>
+                            <div class="row" id="ajout" hidden>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <button type="button" style="margin-top:27px" class="btn btn-primary w-100" onclick="addPlace();"> Ajouter une place<i class="fe fe-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <button type="button" style="margin-top:27px" class="btn btn-primary w-100" onclick="addBoue();"> Ajouter une bouée<i class="fe fe-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <button type="button" style="margin-top:27px" class="btn btn-primary w-100" onclick="addZone();"> Ajouter une zone<i class="fe fe-plus"></i></button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row" id="liste" hidden>
+                                <select class="form-control" name="state" id="type_list">
+                                    <option value="place">Places</option>
+                                    <option value="zone">Zones</option>
+                                    <option value="bouee">Bouées</option>
+                                </select>
+                                <div id="map_list">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-9  m-0 p-0" style="height:100% !important;">
+                    <div class="card m-0 p-0 h-100" style="height:100% !important;width:100% !important;overflow:hidden;">
+                        <div id="svg_container">
+                            <svg viewBox="0 0 1000 1000" id="drawcard" style="width: 100%; height: 100%;">
+                                <g id="viewport" style="z-index:-10;">
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+
+        window.addEventListener("keydown", function (event) {
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        var places = {};
+        var zones = {};
+        var bouees = {};
+        var plan = null;
+        var previousTab = "plan";
+        var draw;
+        var viewPort;
+        var background
+        var backgroundGroup
+        var svg;
+
+        var point;
+        var startClient;
+        var startGlobal;
+
+
+
+        var viewBox;
+
+        var cachedViewBox;
+
+        var zoom;
+        var resetAnimation;
+
+
+        getPlan();
+        document.getElementById("harbour_id").addEventListener('change', function (e) { getPlan() });
+
+
+        var dynamicSort = function (property) {
+            var sortOrder = 1;
+            if (property[0] === "-") {
+                sortOrder = -1;
+                property = property.substr(1);
+            }
+            return function (a, b) {
+                /* next line works with strings and numbers,
+                 * and you may want to customize it to your needs
+                 */
+                var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+                return result * sortOrder;
+            }
+        }
+
+        function getPlan() {
+            fetch("/admin/plugin/mapmgmt?harbour_id=" + document.getElementById("harbour_id").value, { method: "GET" }).then(response => response.json()).then(_data => {
+
+                places = {};
+                zones = {};
+                bouees = {};
+                document.getElementById("viewport").innerHTML = "";
+                plan = null;
+
+                if (_data.success) {
+
+                    var map = _data.data;
+                    map.zones = map.zones.sort(dynamicSort("name"));
+                    document.getElementById("svg_container").innerHTML = map.svg[0].map;
+                    for (var i = 0; i < map.zones.length; i++) {
+
+                        zones[map.zones[i].id] = map.zones[i];
+                        if (document.getElementById(map.zones[i].id)) {
+                            makePointDraggable(document.getElementById(map.zones[i].id), map.zones[i].id);
+                        }
+
+                    }
+                    map.bouees = map.bouees.sort(dynamicSort("name"));
+                    for (var i = 0; i < map.bouees.length; i++) {
+
+                        bouees[map.bouees[i].id] = map.bouees[i];
+                        if (document.getElementById(map.bouees[i].id)) {
+                            makeCircleDraggable(document.getElementById(map.bouees[i].id), map.bouees[i].id);
+                        }
+                    }
+                    map.places = map.places.sort(dynamicSort("number"));
+                    for (var i = 0; i < map.places.length; i++) {
+
+                        places[map.places[i].id] = map.places[i];
+                        if (document.getElementById(map.places[i].id)) {
+                            makeDraggable(document.getElementById(map.places[i].id), map.places[i].id);
+                        }
+                    }
+
+                    viewPort = SVG("#viewport");
+                    background = SVG("#background");
+                    backgroundGroup = SVG("#backgroundGroup");
+
+                    draw = SVG("#drawcard");
+                } else {
+                    draw = SVG("#drawcard").fill('ADD8E6').back();
+                    background = draw.rect(2000, 2000).attr({ fill: '#ADD8E6' }).back();
+                    backgroundGroup = draw.group().back();
+                    background.node.id = "background";
+                    backgroundGroup.node.id = "backgroundGroup";
+                    backgroundGroup.add(background);
+                    viewPort = SVG("#viewport");
+                    viewPort.add(backgroundGroup);
+                    draw.line(0, 0, 100, 0).stroke({ width: 1 }).front();
+                    //draw.polyline([0,0][0, 100]).front();
+                }
+
+                svg = document.querySelector("#drawcard");
+                point = svg.createSVGPoint();
+                startClient = svg.createSVGPoint();
+                startGlobal = svg.createSVGPoint();
+
+
+
+                viewBox = svg.viewBox.baseVal;
+
+
+                draggable(viewPort.node);
+
+
+                cachedViewBox = {
+                    x: viewBox.x,
+                    y: viewBox.y,
+                    width: viewBox.width,
+                    height: viewBox.height
+                };
+
+                zoom = {
+                    animation: new TimelineLite(),
+                    scaleFactor: 1.6,
+                    duration: 0.5,
+                    ease: Power2.easeOut,
+                };
+                resetAnimation = new TimelineLite();
+                draw.node.addEventListener("contextmenu", e => e.preventDefault());
+                draw.node.addEventListener("mousedown", (evt) => { });
+                draw.node.addEventListener("wheel", onWheel);
+            }).catch((e) => console.error(e));
+        }
+
+        function addPlan() {
+            var form = document.getElementById("form_plan");
+            var formData = new FormData(form);
+            if (plan != null) {
+                plan.node.remove();
+                plan = null;
+            }
+            plan = draw.image(URL.createObjectURL(formData.get("img")), function (event) {
+                event.target.id = "plan";
+
+
+                background.height(event.target.naturalHeight);
+                background.width(event.target.naturalWidth);
+                backgroundGroup.add(plan);
+                background.back().opacity(0.3);
+                plan.back();
+            });
+        }
+
+        function draggable(el) {
+            if (!el) return console.error('makeDraggable() needs an element');
+            var svg = el;
+            while (svg && svg.tagName != 'svg') svg = svg.parentNode;
+            if (!svg) return console.error(el, 'must be inside an SVG wrapper');
+            var pt = svg.createSVGPoint(), doc = svg.ownerDocument;
+
+            var root = doc.rootElement || doc.body || svg;
+            var xlate, txStartX, txStartY, mouseStart;
+            var xforms = el.transform.baseVal;
+            var elementselected = SVG(el);
+            elementselected.center(elementselected.cx(), elementselected.cy());
+            el.addEventListener('mousedown', startMove, false);
+            function startMove(evt) {
+                switch (evt.which) {
+                    case 1:
+                        //alert('Left Mouse button pressed.');
+
+                        if (evt.target.id == "background") {
+
+                            root.addEventListener('mousemove', handleMove, false);
+                            root.addEventListener('mouseup', finishMove, false);
+                        }
+                        break;
+                    case 2:
+                        //alert('Middle Mouse button pressed.');
+                        evt.preventDefault();
+                        break;
+                    case 3:
+                        //alert('Right Mouse button pressed.');
+                        break;
+                    default:
+                    //alert('You have a strange Mouse!');
+                }
+
+                txStartX = elementselected.transform('translateX');
+                txStartY = elementselected.transform('translateY');
+                mouseStart = inElementSpace(evt);
+                fireEvent('dragstart');
+            }
+
+
+            function handleMove(evt) {
+                var point = inElementSpace(evt);
+                elementselected.transform({
+                    rotate: elementselected.transform('rotate'),
+                    origin: { x: elementselected.cx(), y: elementselected.cy() },
+                    translateX: txStartX + point.x - mouseStart.x,
+                    translateY: txStartY + point.y - mouseStart.y
+                })
+                fireEvent('drag');
+            }
+
+
+            function finishMove(evt) {
+                root.removeEventListener('mousemove', handleMove, false);
+                root.removeEventListener('mouseup', finishMove, false);
+                fireEvent('dragend');
+            }
+
+            function fireEvent(eventName) {
+                var event = new Event(eventName);
+                event.detail = { x: elementselected.transform('translateX'), y: elementselected.transform('translateY') };
+                return el.dispatchEvent(event);
+            }
+
+            // Convert mouse position from screen space to coordinates of el
+            function inElementSpace(evt) {
+                pt.x = evt.clientX; pt.y = evt.clientY;
+                return pt.matrixTransform(el.parentNode.getScreenCTM().inverse());
+            }
+        };
+        function zoomIn() {
+            zoomMGMT(120);
+        }
+
+        function zoomOut() {
+            zoomMGMT(-120);
+        }
+
+        function onWheel(event) {
+            event.preventDefault();
+
+
+            var normalized;
+            var delta = event.wheelDelta;
+            if (delta) {
+                normalized = (delta % 120) == 0 ? delta / 120 : delta / 12;
+            } else {
+                delta = event.deltaY || event.detail || 0;
+                normalized = -(delta % 3 ? delta * 10 : delta / 3);
+            }
+
+            var scaleDelta = normalized > 0 ? 1 / zoom.scaleFactor : zoom.scaleFactor;
+
+            point.x = event.clientX;
+            point.y = event.clientY;
+
+            var startPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+
+            var fromVars = {
+                ease: zoom.ease,
+                x: viewBox.x,
+                y: viewBox.y,
+                width: viewBox.width,
+                height: viewBox.height,
+            };
+
+            viewBox.x -= (startPoint.x - viewBox.x) * (scaleDelta - 1);
+            viewBox.y -= (startPoint.y - viewBox.y) * (scaleDelta - 1);
+            viewBox.width *= scaleDelta;
+            viewBox.height *= scaleDelta;
+
+            zoom.animation = TweenLite.from(viewBox, zoom.duration, fromVars);
+
+
+
+        }
+
+
+        function zoomMGMT(delta) {
+
+            var normalized;
+            if (delta) {
+                normalized = (delta % 120) == 0 ? delta / 120 : delta / 12;
+            } else {
+                delta = event.deltaY || event.detail || 0;
+                normalized = -(delta % 3 ? delta * 10 : delta / 3);
+            }
+
+            var scaleDelta = normalized > 0 ? 1 / zoom.scaleFactor : zoom.scaleFactor;
+            var startPoint = point.matrixTransform(svg.getScreenCTM().inverse());
+
+            var fromVars = {
+                ease: zoom.ease,
+                x: viewBox.x,
+                y: viewBox.y,
+                width: viewBox.width,
+                height: viewBox.height,
+            };
+
+            viewBox.x -= (viewBox.x / 2) * (scaleDelta - 1);
+            viewBox.y -= (viewBox.y / 2) * (scaleDelta - 1);
+            viewBox.width *= scaleDelta;
+            viewBox.height *= scaleDelta;
+
+            zoom.animation = TweenLite.from(viewBox, zoom.duration, fromVars);
+
+        }
+
+        function resetViewport() {
+
+            var duration = 0.8;
+            var ease = Power3.easeOut;
+
+
+            resetAnimation.clear()
+                .to(viewBox, duration, {
+                    x: cachedViewBox.x,
+                    y: cachedViewBox.y,
+                    width: cachedViewBox.width,
+                    height: cachedViewBox.height,
+                    ease: ease
+                }, 0)
+                .to(viewport, duration, {
+                    attr: { transform: "matrix(1,0,0,1,0,0)" },
+                    // rotation: "0_short",
+                    smoothOrigin: false,
+                    svgOrigin: "0 0",
+                    ease: ease
+                }, 0).then(function () { resetAnimation = new TimelineLite(); draw.node.viewBox = "0 0 1000 1000"; })
+
+
+        }
+
+
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
+            var dataURL = canvas.toDataURL("image/png");
+
+            return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        }
+
+        function changeTab(_tab) {
+            document.getElementById(previousTab).hidden = true;
+            document.getElementById("nav_" + previousTab).classList.remove("active");
+            previousTab = _tab;
+            document.getElementById(_tab).hidden = false;
+            document.getElementById("nav_" + _tab).className += " active";
+
+            if (_tab == 'liste') {
+                getList(document.getElementById("type_list").value);
+            }
+        }
+
+        function deletePlace(elId) {
+            document.getElementById(elId).remove();
+            delete places[elId];
+            document.getElementById("showArea").innerHTML = "";
+            changeTab('ajout');
+        }
+
+        function deleteBouee(elId) {
+            document.getElementById(elId).remove();
+            delete bouees[elId];
+            document.getElementById("showArea").innerHTML = "";
+            changeTab('ajout');
+        }
+
+        function deleteZone(elId) {
+            document.getElementById(elId).remove();
+            delete zones[elId];
+            document.getElementById("showArea").innerHTML = "";
+            changeTab('ajout');
+        }
+
+        document.getElementById("type_list").addEventListener('change', manageListTypeEvent, false);
+
+        function manageListTypeEvent(event) {
+            getList(event.target.value);
+        }
+
+        function getList(_type) {
+            if (_type == "place") {
+                document.getElementById("map_list").innerHTML = '<ul class="list-group">';
+                let sortedPlaces = Object.values(places).sort((a, b) => a.number.localeCompare(b.number));
+                for (var i = 0; i < sortedPlaces.length; i++) {
+                    document.getElementById("map_list").innerHTML += '<li class="list-group-item w-100" onclick="showPlaceInfoById(\'' + sortedPlaces[i].id + '\');">' + sortedPlaces[i].number + '</li>'
+                }
+                document.getElementById("map_list").innerHTML += "</ul>";
+            } else if (_type == "zone") {
+                document.getElementById("map_list").innerHTML = '<ul class="list-group">';
+                let sortedZones = Object.values(zones).sort((a, b) => a.name.localeCompare(b.name));
+                for (var i = 0; i < sortedZones.length; i++) {
+                    document.getElementById("map_list").innerHTML += '<li class="list-group-item w-100" onclick="showPlaceInfoById(\'' + sortedZones[i].id + '\');">' + sortedZones[i].name + '</li>'
+                }
+                document.getElementById("map_list").innerHTML += "</ul>";
+            } else if (_type == "bouee") {
+                document.getElementById("map_list").innerHTML = '<ul class="list-group">';
+                let sortedBouees = Object.values(bouees).sort((a, b) => a.number.localeCompare(b.number));
+                for (var i = 0; i < sortedBouees.length; i++) {
+                    document.getElementById("map_list").innerHTML += '<li class="list-group-item w-100" onclick="showPlaceInfoById(\'' + sortedBouees[i].id + '\');">' + sortedBouees[i].number + '</li>'
+                }
+                document.getElementById("map_list").innerHTML += "</ul>";
+            }
+        }
+
+        function showPlaceInfoById(_id) {
+            if (document.getElementById(_id)) {
+                showPlaceInfo(document.getElementById(_id));
+            } else {
+                drawPlace(_id);
+                showPlaceInfo(document.getElementById(_id));
+            }
+        }
+
+        function showZoneInfoById(_id) {
+            if (document.getElementById(_id)) {
+                showZoneInfo(document.getElementById(_id));
+            } else {
+                drawZone(_id);
+                showZoneInfo(document.getElementById(_id));
+            }
+        }
+
+        function showBoueeInfoById(_id) {
+            showBoueeInfo(document.getElementById(_id))
+        }
+
+        function showPlaceInfo(_el) {
+
+            changeTab('selection');
+            document.getElementById("showArea").hidden = true;
+            document.getElementById("showArea").hidden = false;
+
+            var elId = _el.id//innerHTML.match(/id=\"[A-Za-z0-9_-]*_[0-9]*\"/gi);
+            // elId = elId[0].replace(/id=/, "").replace(/\"/gi, "");
+
+            document.getElementById("showArea").innerHTML = '<form id="FORM">' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Numéro de place</label>' +
+                '   <input type="text" class="form-control" name="number"  id="NUMBER" value="' + places[elId].number + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Numéro de capteur</label>' +
+                '   <input type="text" class="form-control" name="captorNumber"  id="CAPTORNUMBER" value="' + places[elId].captorNumber + '">' +
+                '</div>' +
+                '<div class="form-group" >' +
+                '   <label class="form-label" >Ponton</label>' +
+                '   <select class="form-control" name="pontonId" id="PONTONID" value="' + places[elId].pontonId + '">' +
+                '   </select>' +
+                '</div > ' +
+                '<div class="form-group">' +
+                '   <label class="form-label">nombres de trames Départ</label>' +
+                '   <input type="number" class="form-control" name="nbTramesDepart"  id="NBTRAMESDEPART" value="' + places[elId].nbTramesDepart + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Nombre de trames Retour</label>' +
+                '   <input type="number" class="form-control" name="nbTramesRetour"  id="NBTRAMERETOUR" value="' + places[elId].nbTramesRetour + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Longueur</label>' +
+                '   <input type="number" class="form-control" name="longueur"  id="LONGUEUR" value="' + places[elId].longueur + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Largeur</label>' +
+                '   <input type="number" class="form-control" name="largeur"  id="LARGEUR" value="' + places[elId].largeur + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Tirant d\'eau</label>' +
+                '   <input type="number" class="form-control" name="tirantDeau"  id="TIRANTDEAU" value="' + places[elId].tirantDeau + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Seuil Maximum</label>' +
+                '   <input type="number" class="form-control" name="maxSeuil"  id="MAXSEUIL" value="' + places[elId].maxSeuil + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Seuil minimum</label>' +
+                '   <input type="number" class="form-control" name="minSeuil"  id="MINSEUIL" value="' + places[elId].minSeuil + '">' +
+                '</div>' +
+                '<div class="form-group" >' +
+                '<label class="form-label" >Type</label>' +
+                '<select class="form-control" name="type" id="TYPE" value="' + places[elId].type + '">' +
+                '<option value="resident">Résident</option>' +
+                '<option value="visiteur">Visiteur</option>' +
+                '</select>' +
+                '</div > ' +
+                '<div class="form-group" >' +
+                '   <label class="form-label" > état</label>' +
+                '   <select class="form-control" name="occupation" id="OCCUPATION" value="' + places[elId].occupation + '">' +
+                '       <option value="empty">Vide</option>' +
+                '       <option value="occupied">Occupé vide</option>' +
+                '       <option value="emptyEscaleDisponible">Vide et disponible en escale</option>' +
+                '       <option value="occupiedEscale">Occupé en escale</option>' +
+                '       <option value="error">Erreur capteur</option>' +
+                '   </select>' +
+                '</div > ' +
+                "</form>" +
+                '<button type="button" style="margin-top:27px" class="btn btn-primary" onclick="duplicatePlace(\'' + elId + '\');">Dupliquer<i class="fe fe-plus"></i></button>' +
+                '<button type="button" style="margin-top:27px" class="btn btn-danger" onclick="deletePlace(\'' + elId + '\');"> supprimer<i class="fe fe-plus"></i></button>';
+            //newPlace = { group: group, number: currentPlace.number, captorNumber: currentPlace.captorNumber , pontonId: currentPlace.pontonId,
+            // longueur: currentPlace.longueur,
+            // largeur: currentPlace.largeur, tirantDeau: currentPlace.tirantdeau, type: currentPlace.type, nbTramesDepart: currentPlace.nbTramesDepart,
+            // nbTramesRetour: currentPlace.nbTramesRetour, maxSeuil: currentPlace.maxSeuil, minSeuil: currentPlace.minSeuil,
+            //occupation :  currentPlace.occupation };
+            var mySelectPoton = document.getElementById('PONTONID');
+            var zonesArray = Object.entries(zones);
+
+
+            var filterZonePonton = zonesArray.filter(zone => zone[1].type == "ponton")
+
+
+            for (var i = 0; i < filterZonePonton.length; i++) {
+
+                document.getElementById('PONTONID').innerHTML += '<option value="' + filterZonePonton[i][1].id + '">' + filterZonePonton[i][1].name + '</option>'
+            }
+
+            for (var i, j = 0; i = document.getElementById('PONTONID').options[j]; j++) {
+                if (i.value == places[elId].pontonId) {
+                    document.getElementById('PONTONID').selectedIndex = j;
+                    break;
+                }
+            }
+
+            var mySelect = document.getElementById('TYPE');
+
+            for (var i, j = 0; i = mySelect.options[j]; j++) {
+                if (i.value == places[elId].type) {
+                    mySelect.selectedIndex = j;
+                    break;
+                }
+            }
+
+            var mySelect = document.getElementById('OCCUPATION');
+
+            for (var i, j = 0; i = mySelect.options[j]; j++) {
+                if (i.value == places[elId].type) {
+                    mySelect.selectedIndex = j;
+                    break;
+                }
+            }
+
+            var arr = document.getElementById("showArea").innerHTML.match(/id=\"[A-Za-z0-9_-]*\"/gi);
+            for (var i = 0; i < arr.length; i++) {
+                document.getElementById(arr[i].replace(/id=/, "").replace(/\"/gi, "")).addEventListener('change', function () { updateValue(elId, SVG(_el.childNodes[0]), SVG(_el.childNodes[1]), "place") }, false);
+            }
+        }
+
+        function showZoneInfo(_el) {
+            changeTab('selection');
+            var elId = _el.innerHTML.match(/id=\"[A-Za-z0-9_-]*_[0-9]*\"/gi);
+            var elId = _el.id//innerHTML.match(/id=\"[A-Za-z0-9_-]*_[0-9]*\"/gi);
+            // elId = elId[0].replace(/id=/, "").replace(/\"/gi, "");
+
+            document.getElementById("showArea").innerHTML = '<form id="FORM">' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Nom de la zone</label>' +
+                '<input type="text" class="form-control" name="name"  id="NAME" value="' + zones[elId].name + '">' +
+                '</div>' +
+                '<div class="form-group" >' +
+                '<label class="form-label" > Type</label>' +
+                '<select class="form-control" name="type" id="TYPE" value="' + zones[elId].type + '">' +
+                '<option value="ponton">ponton</option>' +
+                '<option value="pontongroup">groupement de ponton</option>' +
+                '<option value="parking">parking</option>' +
+                '<option value="placetechnique">place technique</option>' +
+                '<option value="bassin">bassin</option>' +
+                '<option value="port">port</option>' +
+                '<option value="zone">zone incidents/sécurité</option>' +
+                '</select>' +
+                '</div > ' +
+                "</form>" +
+                '<button type="button" style="margin-top:27px" class="btn btn-primary" onclick="duplicate(\'' + elId + '\');">Dupliquer<i class="fe fe-plus"></i></button>' +
+                '<button type="button" style="margin-top:27px" class="btn btn-danger" onclick="deleteZone(\'' + elId + '\');"> supprimer<i class="fe fe-plus"></i></button>';
+            var mySelect = document.getElementById('TYPE');
+
+            for (var i, j = 0; i = mySelect.options[j]; j++) {
+                if (i.value == zones[elId].type) {
+                    mySelect.selectedIndex = j;
+                    break;
+                }
+            }
+
+            var arr = document.getElementById("showArea").innerHTML.match(/id=\"[A-Za-z0-9_-]*\"/gi);
+            for (var i = 0; i < arr.length; i++) {
+
+                document.getElementById(arr[i].replace(/id=/, "").replace(/\"/gi, "")).addEventListener('change', function () { updateValue(elId, SVG(_el.childNodes[0]), SVG(_el.childNodes[1]), "zone") }, false);
+            }
+        }
+
+        function showBoueeInfo(_el) {
+            changeTab('selection');
+            var elId = _el.id//innerHTML.match(/id=\"[A-Za-z0-9_-]*_[0-9]*\"/gi);
+            // elId = elId[0].replace(/id=/, "").replace(/\"/gi, "");
+
+            document.getElementById("showArea").innerHTML = '<form id="FORM">' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Numéro de bouée</label>' +
+                '   <input type="text" class="form-control" name="number"  id="NUMBER" value="' + bouees[elId].number + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Numéro de capteur</label>' +
+                '   <input type="text" class="form-control" name="captorNumber"  id="CAPTORNUMBER" value="' + bouees[elId].captorNumber + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">nombres de trames Départ</label>' +
+                '   <input type="number" class="form-control" name="nbTramesDepart"  id="NBTRAMESDEPART" value="' + bouees[elId].nbTramesDepart + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Nombre de trames Retour</label>' +
+                '   <input type="number" class="form-control" name="nbTramesRetour"  id="NBTRAMERETOUR" value="' + bouees[elId].nbTramesRetour + '">' +
+                '</div>' +
+                '<div class="form-group">' +
+                '   <label class="form-label">Inclinaison</label>' +
+                '   <input type="number" class="form-control" name="inclinaison"  id="INCLINAISON" value="' + bouees[elId].inclinaison + '">' +
+                '</div>' +
+                '<div class="form-group" >' +
+                '<label class="form-label" > Type</label>' +
+                '<select class="form-control" name="type" id="TYPE" value="' + bouees[elId].type + '">' +
+                '<option value="resident">Résident</option>' +
+                '<option value="visiteur">Visiteur</option>' +
+                '</select>' +
+                '</div > ' +
+                "</form>" +
+                '<button type="button" style="margin-top:27px" class="btn btn-primary" onclick="duplicateBouee(\'' + elId + '\');">Dupliquer<i class="fe fe-plus"></i></button>' +
+                '<button type="button" style="margin-top:27px" class="btn btn-danger" onclick="deleteBouee(\'' + elId + '\');"> supprimer<i class="fe fe-plus"></i></button>';
+            var mySelect = document.getElementById('TYPE');
+
+            for (var i, j = 0; i = mySelect.options[j]; j++) {
+                if (i.value == bouees[elId].type) {
+                    mySelect.selectedIndex = j;
+                    break;
+                }
+            }
+
+            var arr = document.getElementById("showArea").innerHTML.match(/id=\"[A-Za-z0-9_-]*\"/gi);
+            for (var i = 0; i < arr.length; i++) {
+
+                document.getElementById(arr[i].replace(/id=/, "").replace(/\"/gi, "")).addEventListener('change', function () { updateValue(elId, SVG(_el.childNodes[0]), SVG(_el.childNodes[1]), "bouee") }, false);
+            }
+        }
+
+        function updateValue(_elId, _rect, _text, _type) {
+
+            var form = document.getElementById("FORM");
+            var formData = new FormData(form);
+            _text = SVG(_text);
+            var _group = SVG(_rect.node.parentNode);
+            if (_type == "zone") {
+                zones[_elId].name = formData.get("name");
+                zones[_elId].type = formData.get("type");
+
+                _text.text(formData.get("name"));
+
+                switch (zones[_elId].type) {
+                    case "ponton":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill("#00D5FF").opacity(0.3);
+                        SVG(document.getElementById(_elId)).back().forward().forward().forward();
+                        break;
+                    case "pontongroup":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill("#008CC2").opacity(0.3);
+                        SVG(document.getElementById(_elId)).back().forward().forward().forward();
+                        break;
+                    case "parking":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill("#000000").opacity(0.3);
+                        SVG(document.getElementById(_elId)).back().forward().forward().forward();
+                        break;
+                    case "placetechnique":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill("#4D4F00").opacity(0.3);
+                        SVG(document.getElementById(_elId)).back().forward().forward().forward();
+                        break;
+                    case "bassin":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill("#005067").opacity(0.3);
+                        SVG(document.getElementById(_elId)).back().forward().forward().forward();
+                        break;
+                    case "port":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill("#D3D3D3").opacity(1)
+                        SVG(document.getElementById(_elId)).back().forward().forward();
+                        break;
+                    case "zone":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill("#7E80FF").opacity(0.3);
+                        SVG(document.getElementById(_elId)).back().forward().forward().forward();
+                        break;
+                }
+                /*'<option value="ponton">ponton</option>'
+                    '<option value="pontongroup">groupement de ponton</option>'
+                    '<option value="parking">parking</option>'
+                    '<option value="placetechnique">place technique</option>'
+                    '<option value="bassin">bassin</option>'
+                    '<option value="port">port</option>'
+                    '<option value="zone">zone incidents/sécurité</option>'*/
+
+            } else if (_type == "place") {
+                places[_elId].number = formData.get("number");
+                places[_elId].occupation = formData.get("occupation");
+                places[_elId].captorNumber = formData.get("captorNumber");
+                places[_elId].pontonId = formData.get("pontonId");
+                places[_elId].nbTramesDepart = parseInt(formData.get("nbTramesDepart"), 10);
+                places[_elId].nbTramesRetour = parseInt(formData.get("nbTramesRetour"), 10);
+                places[_elId].longueur = parseInt(formData.get("longueur"), 10);
+                places[_elId].largeur = parseInt(formData.get("largeur"), 10);
+                places[_elId].tirantDeau = parseInt(formData.get("tirantDeau"), 10);
+                places[_elId].maxSeuil = parseInt(formData.get("maxSeuil"), 10);
+                places[_elId].minSeuil = parseInt(formData.get("minSeuil"), 10);
+                places[_elId].type = formData.get("type");
+                _text.text(formData.get("number"));
+
+                switch (places[_elId].occupation) {
+                    case "empty":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill('#F39D26');
+                        break;
+                    case "occupied":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill('#5EC1C5');
+                        break;
+                    case "emptyEscaleDisponible":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill('#33B460');
+                        break;
+                    case "occupiedEscale":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill('#243E7E');
+                        break;
+                    case "error":
+                        SVG(document.getElementById(_elId).childNodes[0]).fill('#EE433C');
+                        break;
+                }
+
+                if (_text.cx() * 2 > _rect.cx() * 2) {
+                    _rect.width(_text.cx() * 2 + 1)
+                    _rect.center(_rect.width() / 2, _rect.height() / 2);
+                }
+            } else if (_type == "bouee") {
+
+                if (_text.cx() * 2 > _rect.cx() * 2) {
+                    _rect.width(_text.cx() * 2 + 1)
+                    _rect.center(_rect.width() / 2, _rect.height() / 2);
+                }
+                bouees[_elId].number = formData.get("number");
+                bouees[_elId].captorNumber = formData.get("captorNumber");
+                bouees[_elId].nbTramesDepart = parseInt(formData.get("nbTramesDepart"), 10);
+                bouees[_elId].nbTramesRetour = parseInt(formData.get("nbTramesRetour"), 10);
+                bouees[_elId].inclinaison = parseInt(formData.get("inclinaison"), 10);
+                bouees[_elId].type = formData.get("type");
+                _text.text(formData.get("number"));
+            }
+
+            _text.transform({ translateX: _rect.transform('translateX') + _group.cx() - _text.cx(), translateY: _rect.transform('translateY') + _group.cy() - _text.cy() })
+
+        }
+
+        function duplicate(_id) {
+            var zoneId = makeid(10) + '_' + Date.now();
+            var currentZone = zones[_id];
+            currentZoneGroup = SVG(document.getElementById(_id));
+            var currentPolygone = SVG(currentZoneGroup.node.childNodes[0]);
+            var currentText = SVG(currentZoneGroup.node.childNodes[1]);
+            var group = draw.group().back().forward();
+            group.transform(currentZoneGroup.transform())
+            var polyline = draw.polyline(currentPolygone.array()).attr({ fill: currentPolygone.attr('fill') }).opacity(0.3).back()
+            polyline.transform(currentPolygone.transform());
+            //polyline.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + zoneId + '" id="' + zoneId + '" hidden>';
+            var text = draw.text(zones[_id].name);
+            text.font(currentText.font());
+            group.add(polyline);
+            group.add(text);
+            newZone = { id: zoneId, harbour_id: document.getElementById("harbour_id").value, name: currentZone.name, type: currentZone.type };
+            zones[zoneId] = newZone;
+            viewPort.add(group);
+            group.node.id = zoneId;
+            makePointDraggable(group.node);
+        }
+
+        function duplicatePlace(_id) {
+            var placeId = makeid(10) + '_' + Date.now();
+            var currentPlace = places[_id];
+            currentPlaceGroup = SVG(document.getElementById(_id));
+
+            var currentRect = SVG(currentPlaceGroup.node.childNodes[0]);
+
+            var currentText = SVG(currentPlaceGroup.node.childNodes[1]);
+
+            var group = draw.group().front()
+            group.transform(currentPlaceGroup.transform());
+            var rect = draw.rect(currentRect.width(), currentRect.height()).attr({ fill: currentRect.attr('fill') })//.opacity(0.6)
+            rect.transform(currentRect.transform());
+            rect.rotate(currentRect.transform("rotate"));
+            //rect.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + placeId + '" id="' + placeId + '" hidden>';
+            var text = draw.text(places[_id].number);
+            text.font(currentText.font());
+            group.add(rect)
+            group.add(text);
+            text.transform({ translateX: rect.transform('translateX') + group.cx() - text.cx(), translateY: rect.transform('translateY') + group.cy() - text.cy() })
+            newPlace = { id: placeId, harbour_id: document.getElementById("harbour_id").value, number: currentPlace.number, captorNumber: currentPlace.captorNumber, pontonId: currentPlace.pontonId, longueur: currentPlace.longueur, largeur: currentPlace.largeur, tirantDeau: currentPlace.tirantDeau, type: currentPlace.type, nbTramesDepart: currentPlace.nbTramesDepart, nbTramesRetour: currentPlace.nbTramesRetour, maxSeuil: currentPlace.maxSeuil, minSeuil: currentPlace.minSeuil, occupation: currentPlace.occupation };
+            places[placeId] = newPlace;
+
+            viewPort.add(group);
+            group.node.id = placeId;
+            makeDraggable(group.node, placeId);
+        }
+
+        function duplicateBouee(_id) {
+            var boueeId = makeid(10) + '_' + Date.now();
+            var currentBouee = bouees[_id];
+            currentBoueeGroup = SVG(document.getElementById(_id));
+            var currentCircle = SVG(currentBoueeGroup.node.childNodes[0]);
+            var currentText = SVG(currentBoueeGroup.node.childNodes[1]);
+            var group = draw.group().front()
+            group.transform(currentBoueeGroup.transform()).attr({ fill: currentCircle.attr('fill') });
+            var circle = draw.circle(100).attr({ fill: '#4682b4' }).opacity(0.6)
+            circle.transform(currentCircle.transform());
+            //circle.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + boueeId + '" id="' + boueeId + '" hidden>';
+            var text = draw.text(bouees[_id].number).front();
+            text.font(currentText.font());
+            group.add(circle)
+            group.add(text);
+            text.transform({ translateX: circle.transform('translateX') + group.cx() - text.cx(), translateY: circle.transform('translateY') + group.cy() - text.cy() })
+            bouees[boueeId] = { id: boueeId, harbour_id: document.getElementById("harbour_id").value, number: currentBouee.number, type: currentBouee.type, captorNumber: currentBouee.captorNumber, nbTramesDepart: currentBouee.nbTramesDepart, nbTramesRetour: currentBouee.nbTramesRetour, inclinaison: currentBouee.inclinaison };
+            text.fill(currentText.fill());
+            circle.width(currentCircle.width());
+            circle.height(currentCircle.height());
+            viewPort.add(group);
+            group.node.id = boueeId;
+            makeCircleDraggable(group.node, boueeId);
+        }
+
+        function makeid(length) {
+            var result = '';
+            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var charactersLength = characters.length;
+            for (var i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() *
+                    charactersLength));
+            }
+            return result;
+        }
+
+        function addBoue() {
+            var group = draw.group().front();
+            var circle = draw.circle(100).attr({ fill: '#4682b4' }).opacity(0.6);
+            var text = draw.text("0").font('size', 30);
+            group.add(circle);
+            group.add(text);
+            var boueeId = makeid(10) + '_' + Date.now();
+            bouees[boueeId] = { id: boueeId, harbour_id: document.getElementById("harbour_id").value, number: 0, type: "resident", captorNumber: 0, nbTramesDepart: 0, nbTramesRetour: 0, inclinaison: 0 };
+            //circle.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + boueeId + '" id="' + boueeId + '" hidden>';
+            text.transform({ translateX: circle.transform('translateX') + group.cx() - text.cx(), translateY: circle.transform('translateY') + group.cy() - text.cy() })
+            viewPort.add(group);
+            group.node.id = boueeId;
+            makeCircleDraggable(group.node, boueeId);
+        }
+
+        function drawPlace(_id) {
+            var group = draw.group().front()
+            var rect = draw.rect(100, 100).attr({ fill: '#F39D26' })
+            var text = draw.text(places[_id].number);
+            group.add(rect);
+            group.add(text);
+            text.font('size', 30)
+            text.transform({ translateX: rect.transform('translateX') + group.cx() - text.cx(), translateY: rect.transform('translateY') + group.cy() - text.cy() })
+
+            // text.parentNode = rec.node;
+            //rect.opacity(0.6);
+
+            //rect.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + placeId + '" id="' + placeId + '" hidden>';
+
+            //rect.parentNode = document.getElementById("drawcard");
+            viewPort.add(group);
+            group.node.id = _id;
+            makeDraggable(group.node, _id);
+        }
+
+        function addPlace() {
+            var group = draw.group().front()
+            var rect = draw.rect(100, 100).attr({ fill: '#F39D26' })
+            var text = draw.text("0");
+            group.add(rect);
+            group.add(text);
+            text.font('size', 30)
+            text.transform({ translateX: rect.transform('translateX') + group.cx() - text.cx(), translateY: rect.transform('translateY') + group.cy() - text.cy() })
+
+            // text.parentNode = rec.node;
+            var placeId = makeid(10) + '_' + Date.now();
+            places[placeId] = { id: placeId, harbour_id: document.getElementById("harbour_id").value, number: 0, captorNumber: 0, pontonId: 0, longueur: 0, largeur: 0, tirantDeau: 0, type: "resident", nbTramesDepart: 0, nbTramesRetour: 0, maxSeuil: 6500, minSeuil: 900, occupation: "occupied" };
+            //rect.opacity(0.6);
+
+            //rect.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + placeId + '" id="' + placeId + '" hidden>';
+
+            //rect.parentNode = document.getElementById("drawcard");
+            viewPort.add(group);
+            group.node.id = placeId;
+            makeDraggable(group.node, placeId);
+        }
+
+        function addZone() {
+            var group = draw.group().back().forward()
+            var polyline = draw.polyline([[0, 0], [0, 100], [100, 100], [100, 0]]).attr({ fill: '#00D5FF' }).opacity(0.3).back()
+            var text = draw.text("Zone");
+            text.font('size', 30)
+            var zoneId = makeid(10) + '_' + Date.now();
+            //polyline.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + zoneId + '" id="' + zoneId + '" hidden>';
+            group.add(polyline)
+            group.add(text);
+            zones[zoneId] = { id: zoneId, harbour_id: document.getElementById("harbour_id").value, name: "Zone", type: "ponton" };
+            viewPort.add(group);
+            group.node.id = zoneId;
+            makePointDraggable(group.node, zoneId);
+        }
+        function drawZone(_id) {
+            var group = draw.group().back().forward()
+            var polyline = draw.polyline([[0, 0], [0, 100], [100, 100], [100, 0]]).attr({ fill: '#00D5FF' }).opacity(0.3).back()
+            var text = draw.text(zones[_id].name);
+            text.font('size', 30)
+            //polyline.node.innerHTML = '<input type="text" class="form-control" name="id" value="' + zoneId + '" id="' + zoneId + '" hidden>';
+            group.add(polyline)
+            group.add(text);
+            viewPort.add(group);
+            group.node.id = _id;
+            makePointDraggable(group.node, _id);
+        }
+
+        // makeDraggable(document.getElementById("svgiddeu"));
+        // Makes an element in an SVG document draggable.
+        // Fires custom `dragstart`, `drag`, and `dragend` events on the
+        // element with the `detail` property of the event carrying XY
+        // coordinates for the location of the element.
+        function makePointDraggable(el, _elId) {
+            if (!el) return console.error('makeDraggable() needs an element');
+            var svg = el;
+            while (svg && svg.tagName != 'svg') svg = svg.parentNode;
+            if (!svg) return console.error(el, 'must be inside an SVG wrapper');
+            var pt = svg.createSVGPoint(), doc = svg.ownerDocument;
+
+            var root = doc.rootElement || doc.body || svg;
+            var xlate, txStartX, txStartY, mouseStart;
+            var xforms = el.transform.baseVal;
+            var elementselected = SVG(el);
+
+            var polygonselected = SVG(el.childNodes[0])
+            var textselected = SVG(el.childNodes[1])
+            elementselected.center(elementselected.cx(), elementselected.cy());
+            textselected.transform({ translateX: polygonselected.transform('translateX') + polygonselected.cx() - textselected.cx(), translateY: polygonselected.transform('translateY') + polygonselected.cy() - textselected.cy() })
+            var pointIndex = 0;
+            var isPointselected = false;
+            var ptStartX = 0;
+            var ptStartY = 0;
+            var prevPointX = 0;
+            var prevPointY = 0;
+            var pointArr = polygonselected.array()
+            var canSwitchMode = true;
+            var count = 0;
+            el.addEventListener('mousedown', startMove, false);
+            showZoneInfo(el);
+
+            function addPoint(_indexOne, _indexTwo, _pointClick, _orX, _orY) {
+                //pointArr.splice(_indexOne + 1, 0, [Math.abs(_orX - _pointClick.x), Math.abs(_orY - _pointClick.y)]);
+                pointArr.splice(_indexOne + 1, 0, [_pointClick.x - _orX, _pointClick.y - _orY]);
+                polygonselected.plot(pointArr);
+                ptStartX = pointArr[_indexOne + 1][0];
+                ptStartY = pointArr[_indexOne + 1][1];
+                pointIndex = _indexOne + 1;
+                textselected.transform({ translateX: polygonselected.transform('translateX') + polygonselected.cx() - textselected.cx(), translateY: polygonselected.transform('translateY') + polygonselected.cy() - textselected.cy() })
+                isPointselected = true;
+            }
+
+            function removePoint(_id) {
+                //pointArr.splice(_indexOne + 1, 0, [Math.abs(_orX - _pointClick.x), Math.abs(_orY - _pointClick.y)]);
+                pointArr.splice(_id, 1);
+                polygonselected.plot(pointArr);
+                textselected.transform({ translateX: polygonselected.transform('translateX') + polygonselected.cx() - textselected.cx(), translateY: polygonselected.transform('translateY') + polygonselected.cy() - textselected.cy() })
+                // ptStartX = pointArr[_indexOne + 1][0];
+                //ptStartY = pointArr[_indexOne + 1][1];
+                //  pointIndex = _indexOne + 1;
+                // isPointselected = true;
+            }
+
+            function startMove(evt) {
+                // We listen for mousemove/up on the root-most
+                // element in case the mouse is not over el.
+                if (canSwitchMode) {
+                    switch (evt.which) {
+                        case 1:
+                            showZoneInfo(el);
+
+                            root.addEventListener('mousemove', handleMove, false);
+                            root.addEventListener('mouseup', finishMove, false);
+                            // Ensure that the first transform is a translate()
+                            break;
+                        case 2:
+                            //alert('Middle Mouse button pressed.');
+                            // root.addEventListener('mousemove', handleScale, false);
+                            //  root.addEventListener('mouseup', finishScale, false);
+
+                            evt.preventDefault();
+                            var offset = 10;
+                            plStartX = elementselected.transform('translateX');
+                            plStartY = elementselected.transform('translateY');
+                            //alert('Left Mouse button pressed.');
+                            var point = inElementSpace(evt);
+                            pointArr = polygonselected.array()
+                            count = 0;
+                            var isPointselected = true;
+                            for (var i = 0; i < pointArr.length; i++) {
+                                count++;
+                                if (count >= pointArr.length)
+                                    count = 0;
+
+
+                                if (point.x < txStartX + pointArr[i][0] + offset && point.x > txStartX + pointArr[i][0] - offset && point.y < txStartY + pointArr[i][1] + offset && point.y > txStartY + pointArr[i][1] - offset) {
+                                    pointIndex = i;
+                                    ptStartX = pointArr[pointIndex][0];
+                                    ptStartY = pointArr[pointIndex][1];
+                                    isPointselected = true;
+                                    break;
+                                } else if (point.x > txStartX + pointArr[i][0] + offset && point.x < txStartX + pointArr[count][0] - offset && point.y > txStartY + pointArr[i][1] - offset && point.y < txStartY + pointArr[count][1] + offset) {
+                                    addPoint(i, count, point, txStartX, txStartY);
+                                    count = 0;
+                                    isPointselected = true;
+                                    break;
+                                }
+                                else if (point.x > txStartX + pointArr[i][0] - offset && point.x < txStartX + pointArr[count][0] + offset && point.y < txStartY + pointArr[i][1] - offset && point.y > txStartY + pointArr[count][1] + offset) {
+                                    addPoint(i, count, point, txStartX, txStartY);
+                                    count = 0;
+                                    isPointselected = true;
+                                    break;
+                                }
+                                else if (point.x < txStartX + pointArr[i][0] - offset && point.x > txStartX + pointArr[count][0] + offset && point.y < txStartY + pointArr[i][1] + offset && point.y > txStartY + pointArr[count][1] - offset) {
+                                    addPoint(i, count, point, txStartX, txStartY);
+                                    count = 0;
+                                    isPointselected = true;
+                                    break;
+                                }
+                                else if (point.x < txStartX + pointArr[i][0] + offset && point.x > txStartX + pointArr[count][0] - offset && point.y > txStartY + pointArr[i][1] + offset && point.y < txStartY + pointArr[count][1] - offset) {
+                                    addPoint(i, count, point, txStartX, txStartY);
+                                    count = 0;
+                                    isPointselected = true;
+                                    break;
+                                }
+                                else {
+                                    isPointselected = false;
+                                }
+                            }
+                            if (isPointselected) {
+                                root.addEventListener('mousemove', handlePointMove, false);
+                                root.addEventListener('mouseup', finishPointMove, false);
+                            }
+                            break;
+                        case 3:
+                            //alert('Right Mouse button pressed.');
+                            // root.addEventListener('mousemove', handleRotate, false);
+                            // root.addEventListener('mouseup', finishRotate, false);
+                            // Ensure that the first transform is a translate()
+                            evt.preventDefault();
+                            var offset = 10;
+                            plStartX = elementselected.transform('translateX');
+                            plStartY = elementselected.transform('translateY');
+                            //alert('Left Mouse button pressed.');
+                            var point = inElementSpace(evt);
+                            pointArr = polygonselected.array()
+                            count = 0;
+                            var isPointselected = true;
+                            if (pointArr.length > 4) {
+                                for (var i = 0; i < pointArr.length; i++) {
+                                    count++;
+                                    if (count >= pointArr.length)
+                                        count = 0;
+
+
+                                    if (point.x < txStartX + pointArr[i][0] + offset && point.x > txStartX + pointArr[i][0] - offset && point.y < txStartY + pointArr[i][1] + offset && point.y > txStartY + pointArr[i][1] - offset) {
+                                        pointIndex = i;
+                                        removePoint(pointIndex);
+                                        ptStartX = pointArr[pointIndex - 1][0];
+                                        ptStartY = pointArr[pointIndex - 1][1];
+                                        isPointselected = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                        //alert('You have a strange Mouse!');
+                    }
+
+
+                    txStartX = elementselected.transform('translateX');
+                    txStartY = elementselected.transform('translateY');
+                    mouseStart = inElementSpace(evt);
+                    fireEvent('dragstart');
+                }
+            }
+
+            function handleMove(evt) {
+                var point = inElementSpace(evt);
+                elementselected.transform({
+                    rotate: elementselected.transform('rotate'),
+                    origin: { x: elementselected.cx(), y: elementselected.cy() },
+                    translateX: txStartX + point.x - mouseStart.x,
+                    translateY: txStartY + point.y - mouseStart.y
+                })
+                isPointselected = false;
+                fireEvent('drag');
+
+            }
+
+            function finishMove(evt) {
+                root.removeEventListener('mousemove', handleMove, false);
+                root.removeEventListener('mouseup', finishMove, false);
+                canSwitchMode = true;
+                fireEvent('dragend');
+            }
+
+            function handlePointMove(evt) {
+                var point = inElementSpace(evt);
+                isPointselected = true;
+                pointArr[pointIndex] = [ptStartX + point.x - mouseStart.x, ptStartY + point.y - mouseStart.y]
+                polygonselected.plot(pointArr);
+                textselected.transform({ translateX: polygonselected.transform('translateX') + polygonselected.cx() - textselected.cx(), translateY: polygonselected.transform('translateY') + polygonselected.cy() - textselected.cy() })
+                fireEvent('drag');
+
+            }
+
+            function finishPointMove(evt) {
+                root.removeEventListener('mousemove', handlePointMove, false);
+                root.removeEventListener('mouseup', finishPointMove, false);
+                canSwitchMode = true;
+                //zones[_elId].group = elementselected;
+                fireEvent('dragend');
+            }
+            function fireEvent(eventName) {
+                var event = new Event(eventName);
+                event.detail = { x: elementselected.transform('translateX'), y: elementselected.transform('translateY') };
+                return el.dispatchEvent(event);
+            }
+
+            // Convert mouse position from screen space to coordinates of el
+            function inElementSpace(evt) {
+                pt.x = evt.clientX; pt.y = evt.clientY;
+                return pt.matrixTransform(el.parentNode.getScreenCTM().inverse());
+            }
+
+        }
+
+
+        // makeDraggable(document.getElementById("svgiddeu"));
+        // Makes an element in an SVG document draggable.
+        // Fires custom `dragstart`, `drag`, and `dragend` events on the
+        // element with the `detail` property of the event carrying XY
+        // coordinates for the location of the element.
+        function makeDraggable(el, _elid) {
+            if (!el) return console.error('makeDraggable() needs an element');
+            var svg = el;
+            while (svg && svg.tagName != 'svg') svg = svg.parentNode;
+            if (!svg) return console.error(el, 'must be inside an SVG wrapper');
+            var pt = svg.createSVGPoint(), doc = svg.ownerDocument;
+
+            var root = doc.rootElement || doc.body || svg;
+            var xlate, txStartX, txStartY, mouseStart;
+            var xforms = el.transform.baseVal;
+
+            var elementselected = SVG(el);
+            var rectSelected = SVG(el.childNodes[0]);
+            var textSelected = SVG(el.childNodes[1]);
+            elementselected.center(elementselected.cx(), elementselected.cy());
+            var prevPointX = 0;
+            var prevPointY = 0;
+            var elementID = el.id//innerHTML.match(/id=\"[A-Za-z0-9_-]*_[0-9]*\"/gi);;
+            el.addEventListener('mousedown', startMove, false);
+            showPlaceInfo(el);
+            function startMove(evt) {
+                // We listen for mousemove/up on the root-most
+                // element in case the mouse is not over el.
+                switch (evt.which) {
+                    case 1:
+                        //alert('Left Mouse button pressed.');
+                        elementselected.front();
+                        root.addEventListener('mousemove', handleMove, false);
+                        root.addEventListener('mouseup', finishMove, false);
+                        // Ensure that the first transform is a translate()
+                        break;
+                    case 2:
+                        //alert('Middle Mouse button pressed.');
+                        elementselected.front();
+                        root.addEventListener('mousemove', handleScale, false);
+                        root.addEventListener('mouseup', finishScale, false);
+                        evt.preventDefault();
+                        break;
+                    case 3:
+                        elementselected.front();
+                        //alert('Right Mouse button pressed.');
+                        root.addEventListener('mousemove', handleRotate, false);
+                        root.addEventListener('mouseup', finishRotate, false);
+                        // Ensure that the first transform is a translate()
+
+                        break;
+                    default:
+                    //alert('You have a strange Mouse!');
+                }
+                showPlaceInfo(el);
+
+                txStartX = elementselected.transform('translateX');
+                txStartY = elementselected.transform('translateY');
+                mouseStart = inElementSpace(evt);
+                fireEvent('dragstart');
+            }
+
+            function handleRotate(evt) {
+                var point = inElementSpace(evt);
+                var offset = 0;
+                if (point.x < prevPointX - offset) {
+                    elementselected.rotate(5);
+                    prevPointX = point.x;
+                }
+                else if (point.x > prevPointX + offset) {
+                    elementselected.rotate(-5);
+                    prevPointX = point.x;
+                }
+                elementselected.center(elementselected.cx(), elementselected.cy());
+                fireEvent('drag');
+            }
+
+            function handleMove(evt) {
+                var point = inElementSpace(evt);
+                elementselected.transform({
+                    rotate: elementselected.transform('rotate'),
+                    origin: { x: elementselected.cx(), y: elementselected.cy() },
+                    translateX: txStartX + point.x - mouseStart.x,
+                    translateY: txStartY + point.y - mouseStart.y
+                })
+                fireEvent('drag');
+            }
+
+
+            function handleScale(evt) {
+                var widthToApply = 0;
+                var heightToApply = 0;
+                var point = inElementSpace(evt);
+
+                var offset = 1;
+                if (point.x < prevPointX - offset) {
+                    widthToApply = -2;
+                    prevPointX = point.x;
+                }
+                else if (point.x > prevPointX + offset) {
+                    widthToApply = +2;
+                    prevPointX = point.x;
+                }
+
+                if (point.y < prevPointY - offset) {
+                    heightToApply = -2;
+                    prevPointY = point.y;
+                }
+                else if (point.y > prevPointY + offset) {
+
+                    heightToApply = +2;
+                    prevPointY = point.y;
+                }
+
+                if (rectSelected.width() > textSelected.cx() * 2) {
+                    rectSelected.size(rectSelected.width() + widthToApply, rectSelected.height() + heightToApply);
+                    rectSelected.center(rectSelected.cx(), rectSelected.cy());
+                    textSelected.transform({ translateX: rectSelected.transform('translateX') + rectSelected.cx() - textSelected.cx(), translateY: rectSelected.transform('translateY') + rectSelected.cy() - textSelected.cy() })
+                    if (widthToApply > 0)
+                        textSelected.font('size', textSelected.font("size") + 1)
+                } else {
+                    textSelected.font('size', textSelected.font("size") - 1)
+                }
+
+
+
+                if (rectSelected.height() > textSelected.cy() * 2) {
+
+                    rectSelected.size(rectSelected.width() + widthToApply, rectSelected.height() + heightToApply);
+                    rectSelected.center(rectSelected.cx(), rectSelected.cy());
+                    textSelected.transform({ translateX: rectSelected.transform('translateX') + rectSelected.cx() - textSelected.cx(), translateY: rectSelected.transform('translateY') + rectSelected.cy() - textSelected.cy() })
+
+                    if (heightToApply > 0)
+                        textSelected.font('size', textSelected.font("size") + 1)
+
+                } else {
+                    textSelected.font('size', textSelected.font("size") - 1)
+                }
+                fireEvent('drag');
+            }
+
+            function finishMove(evt) {
+                root.removeEventListener('mousemove', handleMove, false);
+                root.removeEventListener('mouseup', finishMove, false);
+
+                // places[_elid].group = elementselected;
+                fireEvent('dragend');
+            }
+
+            function finishScale(evt) {
+                root.removeEventListener('mousemove', handleScale, false);
+                root.removeEventListener('mouseup', finishScale, false);
+                // places[_elid].group = elementselected;
+                fireEvent('dragend');
+            }
+
+            function finishRotate(evt) {
+                root.removeEventListener('mousemove', handleRotate, false);
+                root.removeEventListener('mouseup', finishRotate, false);
+                //places[_elid].group = elementselected;
+                fireEvent('dragend');
+            }
+
+            function fireEvent(eventName) {
+                var event = new Event(eventName);
+                event.detail = { x: elementselected.transform('translateX'), y: elementselected.transform('translateY') };
+                return el.dispatchEvent(event);
+            }
+
+            // Convert mouse position from screen space to coordinates of el
+            function inElementSpace(evt) {
+                pt.x = evt.clientX; pt.y = evt.clientY;
+                return pt.matrixTransform(el.parentNode.getScreenCTM().inverse());
+            }
+        }
+
+
+        // makeDraggable(document.getElementById("svgiddeu"));
+        // Makes an element in an SVG document draggable.
+        // Fires custom `dragstart`, `drag`, and `dragend` events on the
+        // element with the `detail` property of the event carrying XY
+        // coordinates for the location of the element.
+        function makeCircleDraggable(el, _elid) {
+            if (!el) return console.error('makeDraggable() needs an element');
+            var svg = el;
+            while (svg && svg.tagName != 'svg') svg = svg.parentNode;
+            if (!svg) return console.error(el, 'must be inside an SVG wrapper');
+            var pt = svg.createSVGPoint(), doc = svg.ownerDocument;
+
+            var root = doc.rootElement || doc.body || svg;
+            var xlate, txStartX, txStartY, mouseStart;
+            var xforms = el.transform.baseVal;
+
+            var elementselected = SVG(el);
+            var rectSelected = SVG(el.childNodes[0]);
+            var textSelected = SVG(el.childNodes[1]);
+            elementselected.center(elementselected.cx(), elementselected.cy());
+            var prevPointX = 0;
+            var prevPointY = 0;
+            var elementID = el.id//innerHTML.match(/id=\"[A-Za-z0-9_-]*_[0-9]*\"/gi);;
+            el.addEventListener('mousedown', startMove, false);
+            showBoueeInfo(el);
+            function startMove(evt) {
+                // We listen for mousemove/up on the root-most
+                // element in case the mouse is not over el.
+                switch (evt.which) {
+                    case 1:
+                        //alert('Left Mouse button pressed.');
+                        elementselected.front();
+                        root.addEventListener('mousemove', handleMove, false);
+                        root.addEventListener('mouseup', finishMove, false);
+                        // Ensure that the first transform is a translate()
+                        break;
+                    case 2:
+                        //alert('Middle Mouse button pressed.');
+                        elementselected.front();
+                        root.addEventListener('mousemove', handleScale, false);
+                        root.addEventListener('mouseup', finishScale, false);
+                        evt.preventDefault();
+                        break;
+                    case 3:
+                        //alert('Right Mouse button pressed.');
+                        break;
+                    default:
+                    //alert('You have a strange Mouse!');
+                }
+                showBoueeInfo(el);
+
+                txStartX = elementselected.transform('translateX');
+                txStartY = elementselected.transform('translateY');
+                mouseStart = inElementSpace(evt);
+                fireEvent('dragstart');
+            }
+
+            function handleMove(evt) {
+                var point = inElementSpace(evt);
+                elementselected.transform({
+                    rotate: elementselected.transform('rotate'),
+                    origin: { x: elementselected.cx(), y: elementselected.cy() },
+                    translateX: txStartX + point.x - mouseStart.x,
+                    translateY: txStartY + point.y - mouseStart.y
+                })
+                fireEvent('drag');
+            }
+
+
+            function handleScale(evt) {
+                var widthToApply = 0;
+                var heightToApply = 0;
+                var point = inElementSpace(evt);
+
+                var offset = 1;
+                if (point.x < prevPointX - offset) {
+                    widthToApply = -2;
+                    prevPointX = point.x;
+                }
+                else if (point.x > prevPointX + offset) {
+                    widthToApply = +2;
+                    prevPointX = point.x;
+                }
+
+                if (point.y < prevPointY - offset) {
+                    heightToApply = -2;
+                    prevPointY = point.y;
+                }
+                else if (point.y > prevPointY + offset) {
+
+                    heightToApply = +2;
+                    prevPointY = point.y;
+                }
+
+                if (rectSelected.width() > textSelected.cx() * 2) {
+
+                    rectSelected.size(rectSelected.width() + widthToApply, rectSelected.height() + heightToApply);
+                    rectSelected.center(rectSelected.cx(), rectSelected.cy());
+                    textSelected.transform({ translateX: rectSelected.transform('translateX') + rectSelected.cx() - textSelected.cx(), translateY: rectSelected.transform('translateY') + rectSelected.cy() - textSelected.cy() })
+
+                    if (widthToApply > 0)
+                        textSelected.font('size', textSelected.font("size") + 1)
+
+                } else {
+                    textSelected.font('size', textSelected.font("size") - 1)
+                }
+
+
+                if (rectSelected.height() > textSelected.cy() * 2) {
+
+                    rectSelected.size(rectSelected.width() + widthToApply, rectSelected.height() + heightToApply);
+                    rectSelected.center(rectSelected.cx(), rectSelected.cy());
+                    textSelected.transform({ translateX: rectSelected.transform('translateX') + rectSelected.cx() - textSelected.cx(), translateY: rectSelected.transform('translateY') + rectSelected.cy() - textSelected.cy() })
+
+                    if (heightToApply > 0)
+                        textSelected.font('size', textSelected.font("size") + 1)
+
+                } else {
+                    textSelected.font('size', textSelected.font("size") - 1)
+                }
+
+                fireEvent('drag');
+            }
+
+            function finishMove(evt) {
+                root.removeEventListener('mousemove', handleMove, false);
+                root.removeEventListener('mouseup', finishMove, false);
+
+                //bouees[_elid].group = elementselected;
+                fireEvent('dragend');
+            }
+
+            function finishScale(evt) {
+                root.removeEventListener('mousemove', handleScale, false);
+                root.removeEventListener('mouseup', finishScale, false);
+                //bouees[_elid].group = elementselected;
+                fireEvent('dragend');
+            }
+
+
+
+            function fireEvent(eventName) {
+                var event = new Event(eventName);
+                event.detail = { x: elementselected.transform('translateX'), y: elementselected.transform('translateY') };
+                return el.dispatchEvent(event);
+            }
+
+            // Convert mouse position from screen space to coordinates of el
+            function inElementSpace(evt) {
+                pt.x = evt.clientX; pt.y = evt.clientY;
+                return pt.matrixTransform(el.parentNode.getScreenCTM().inverse());
+            }
+        }
+
+        window.onload = function () {
+
+        }
+        function save() {
+            var formData = new FormData();
+            if (plan != null) {
+                plan.node.remove();
+                plan = null;
+            }
+            resetViewport();
+
+            var placesToSend = places;
+            var boueesToSend = bouees;
+            var zonesToSend = zones;
+            var seen = [];
+            formData.append("places", JSON.stringify(placesToSend, function (key, val) {
+                if (val != null && typeof val == "object") {
+                    if (seen.indexOf(val) >= 0) {
+                        return;
+                    }
+                    seen.push(val);
+                }
+                return val;
+            }));
+            var seenb = [];
+            formData.append("bouees", JSON.stringify(boueesToSend, function (key, val) {
+                if (val != null && typeof val == "object") {
+                    if (seenb.indexOf(val) >= 0) {
+                        return;
+                    }
+                    seenb.push(val);
+                }
+                return val;
+            }));
+            var seenc = [];
+            formData.append("zones", JSON.stringify(zonesToSend, function (key, val) {
+                if (val != null && typeof val == "object") {
+                    if (seenc.indexOf(val) >= 0) {
+                        return;
+                    }
+                    seenc.push(val);
+                }
+                return val;
+            }));
+            formData.append("svg", document.getElementById("svg_container").innerHTML);
+            formData.append("harbour_id", document.getElementById("harbour_id").value);
+
+
+            fetch("/admin/plugin/mapmgmt",
+                {
+                    method: "POST",
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+
+                    if (_data.success) {
+
+
+
+                        //location.reload();
+
+
+
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                });
+
+        }
+
+
+        function refreshData() {
+            fetch("/api/emplacements?harbour_id=" + document.getElementById("harbour_id").value, { method: "GET" }).then(response => response.json()).then(_data => {
+                if (_data.success) {
+                    console.log(_data);
+                    var bouees = _data.data[0];
+                    for (var i = 0; i < bouees.length; i++) {
+                        if (document.getElementById(bouees[i].id) != null) {
+                            if (bouees[i].status) {
+                                let currentBouee = SVG(document.getElementById(bouees[i].id).childNodes[0]);
+
+                                if (document.getElementById(bouees[i].id).childNodes[0]) {
+                                    if (bouees[i].status == 1) //occupied
+                                        currentBouee.fill('#5EC1C5');
+                                    else if (bouees[i].status == 0) // empty
+                                        currenBouee.fill("#F39D26");
+                                }
+
+                            }
+                        }
+                    }
+                    var places = _data.data[1];
+                    for (var i = 0; i < places.length; i++) {
+                        if (document.getElementById(places[i].id) != null) {
+                            let currentPlace = SVG(document.getElementById(places[i].id).childNodes[0]);
+                            console.log(places[i].occupation)
+                            if (document.getElementById(places[i].id).childNodes[0]) {
+                                switch (places[i].occupation) {
+                                    case "empty":
+                                        console.log("empty");
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#F39D26');
+                                        break;
+                                    case "occupied":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#5EC1C5');
+                                        break;
+                                    case "emptyEscaleDisponible":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#33B460');
+                                        break;
+                                    case "occupiedEscale":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#243E7E');
+                                        break;
+                                    case "error":
+                                        SVG(document.getElementById(places[i].id).childNodes[0]).fill('#EE433C');
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }).catch((e) => { console.error(e) });
+        }
+        refreshData();
+        const interval = setInterval(function () {
+            refreshData();
+        }, 5000);
+
+    </script>
+</body>
+</html>

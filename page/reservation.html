@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/nearby.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:13 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="generator" content="">
+    <title>Nauticspot</title>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.8.0/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="img/favicon180.png" sizes="180x180">
+    <link rel="icon" href="img/favicon32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="img/favicon16.png" sizes="16x16" type="image/png">
+
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500&amp;display=swap" rel="stylesheet">
+
+    <!-- nouislider CSS -->
+    <link href="vendor/nouislider/nouislider.min.css" rel="stylesheet">
+
+    <!-- swiper CSS -->
+    <link href="vendor/swiper/css/swiper.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet" id="style">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+    
+</head>
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+    <!-- screen loader -->
+    {{element->loader.html}}
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0 p-0">
+        <!-- Fixed navbar 
+        {{element->navheader.html}}-->
+        <!-- page content start -->
+        <!-- map -->
+        <nav class="navbar-light" style="right: 1px !important;position: fixed;top: 0;">
+          <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
+        </nav>
+        <div class="container p-0 m-0 h-100 v-100">
+            <div class="row m-0" style="height:100%;">
+                <!--  <iframe style="display: block; width: 100%; height: 90%; border: none;" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1674.9494684683343!2d-1.458484208354475!3d53.580323542286514!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1598610506292!5m2!1sen!2sin" class="map-view-map" frameborder="0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>-->
+            <div class="navily-resaweb"><div>
+                
+               <!-- <div id="svg_container" style="display: block; width: 100%; height: 100%; border: none;">
+                    
+                </div>-->
+            </div>
+            {{element->navbar.html}}
+        </div>
+
+
+    </main>
+
+
+
+    <!-- color settings style switcher     <button type="button" class="btn btn-info colorsettings">
+        <span class="text-white">
+            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                <title>ionicons-v5-m</title>
+                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
+                <circle cx='144' cy='208' r='32' />
+                <circle cx='152' cy='311' r='32' />
+                <circle cx='224' cy='144' r='32' />
+                <circle cx='256' cy='367' r='48' />
+                <circle cx='328' cy='144' r='32' />
+            </svg>
+        </span>
+    </button>
+        -->
+
+    <div class="sidebar-right">
+        <div class="selectoption">
+            <input type="checkbox" id="darklayout" name="darkmode">
+            <label for="darklayout">Dark</label>
+        </div>
+        <div class="selectoption mb-0">
+            <input type="checkbox" id="rtllayout" name="layoutrtl">
+            <label for="rtllayout">RTL</label>
+        </div>
+        <hr>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
+            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
+            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
+            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
+            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
+            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
+            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
+            <label for="templatecolor8" class="bg-red" data-title="red"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
+            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
+            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
+            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
+            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
+            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
+            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
+            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+        </div>
+
+    </div>
+
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  js-->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- nouislider js -->
+    <script src="vendor/nouislider/nouislider.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <script>
+    // Last update: 2021-04-26
+    
+    const navilyUrl = 'https://www.navily.com/',
+    	  apiUrl = 'https://api.navily.com/';
+    
+    var cookieBlock,
+        cookieButton,
+        cookieText,
+        stylesheet = null,
+        ifrmSrc; 
+        
+        
+        fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+            let harbour = _data.data;
+            ifrmSrc = "https://www.navily.com/fr/resaweb?port_id=" + harbour.navily_id + "&customer_id=2063604034";
+            setScriptVersion();
+            createIframe();
+        }).catch((error) => {
+            console.log(error);
+        });
+
+    
+    function addUserInfo() {
+        let ifr = document.getElementById("navily-resaweb-0").childNodes[0];
+        let content = ifr.contentWindow.document;
+        var formData = new FormData();
+        formData.append("token", localStorage["token"])
+        fetch("/api/getuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
+            console.log(_data);
+            if (_data.success) {
+                var user = _data.data;
+                //document.getElementById("first_name").value = user.first_name;
+                //document.getElementById("last_name").value = user.last_name;
+               // document.getElementById("email").value = user.email;
+                //document.getElementById("phone").value = user.phone;
+                //document.getElementById("prefix").value = user.prefix;
+                //api/get / userboats
+                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + user.harbourid, { method: "GET" }).then(response => response.json()).then(_data => {
+                    if (_data.success) {
+                        const boat = _data.data[0];
+                        //document.getElementById("boat_id").value = boat.id;
+                        //document.getElementById("name").value = boat.name;
+                        //document.getElementById("immatriculation").value = boat.immatriculation;
+                        content.getElementById("boat_length").value = boat.longueur;
+                        content.getElementById("boat_width").value = boat.largeur;
+                        content.getElementById("boat_draft").value = boat.tirant_eau;
+                        getPlaces(boat.place_id);
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+    
+    function setScriptVersion() {
+        let src = ifrmSrc,
+            customerId = src.split("&customer_id=")[1],
+            portId = src.split("port_id=")[1];
+    
+        portId = portId.split("&customer_id=")[0];
+    
+        let currentScript = document.querySelector('script[src="'+apiUrl+'storage/resaweb/'+customerId+'/resaweb-'+customerId+'-'+portId+'.js"]');
+    
+        if(currentScript !== undefined && currentScript !== null) {
+            let now = new Date();
+            currentScript.setAttribute('src', currentScript.src+'?v='+now.getTime());
+        }
+    }
+    
+    function createStylesheet() {
+        var head = document.getElementsByTagName('head')[0];
+        var link = document.createElement('link');
+    
+        link.id = 'navily-resaweb-stylesheet';
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = apiUrl+'css/resaweb-cookies.css';
+        head.appendChild(link);
+    }
+    
+    function isSafari() {
+        return navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0 && document.hasStorageAccess;
+    }
+    
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    
+    function openWebApp() {
+        if (document.hasStorageAccess) {
+            var promise = document.hasStorageAccess();
+            promise.then(
+                function() {
+                    // Storage access was granted.
+                    var language = getLanguage(),
+                    	webAppUrl;
+    
+                    if(language == 'en') {
+                    	webAppUrl = navilyUrl+'resaweb/set-cookies';
+                    } else {
+                    	webAppUrl = navilyUrl+language+'/resaweb/set-cookies';
+                    }
+    
+                    window.open(webAppUrl, '_blank');
+    
+                    cookieText.innerHTML = "Please reload the page to access this booking module";
+                    cookieButton.innerHTML = 'Reload the page';
+                    cookieButton.removeEventListener('click', openWebApp, false);
+                    cookieButton.addEventListener('click', reloadPage, false);
+                },
+                function() {
+                    // Storage access was denied.
+                    alert('Error, please contact contact@navily.com');
+                }
+            );
+    
+        }
+    }
+    
+    function reloadPage() {
+        document.cookie = "buttonAcceptCookies=hidden";
+    
+        // Remove stylesheet
+        if( stylesheet !== null ) {
+            stylesheet.disabled = true;
+        }
+    
+        location.reload();
+    }
+    
+    function onMessage(e) {
+        if (e && e.data && e.data.source === 'navily-resaweb') {
+            var ifrms = document.querySelectorAll('.navily-resaweb iframe');
+            for (var i = 0; i < ifrms.length; ++i) {
+                var ifrm = ifrms[i];
+                if (e.data.hasOwnProperty('height')) {
+                    ifrm.style.height = e.data.height + 'px';
+                }
+                if (e.data.hasOwnProperty('width')) {
+                    ifrm.style.width = e.data.width + 'px';
+                }
+            };
+        }
+    }
+    
+    
+    
+    function createCookieSection(node) {
+        cookieBlock = document.createElement("div");
+        cookieButton = document.createElement("button");
+        cookieText = document.createElement("p");
+    
+        cookieBlock.setAttribute('id', 'navily-resaweb-cookie-block');
+    
+        cookieButton.setAttribute('type', 'button');
+        cookieButton.innerHTML = "I accept";
+        cookieButton.setAttribute('id', 'navily-resaweb-cookie-button');
+    
+        cookieText.setAttribute('id', 'navily-resaweb-cookie-text');
+        cookieText.innerHTML = "You must accept cookies to access this booking module";
+    
+        node.appendChild(cookieBlock);
+        cookieBlock.appendChild(cookieText);
+        cookieBlock.appendChild(cookieButton);
+    }
+    
+    function getLanguage() {
+        var supportedLanguages = ['fr', 'en', 'de', 'it', 'es'],
+            language = 'en';
+    
+        for(let i = 0; i <= supportedLanguages.length; i++) {
+            if(ifrmSrc.includes('/'+supportedLanguages[i]+'/')) {
+                language = supportedLanguages[i];
+                break;
+            }
+        }
+    
+        return language;
+    }
+    
+    function getIfrmSrc() {
+        return ifrmSrc;
+    }
+    
+    function createIframe() {
+        window.addEventListener('message', onMessage, false);
+        var navilyResaweb = document.querySelectorAll('.navily-resaweb');
+        for (var i = 0; i < navilyResaweb.length; ++i) {
+            var node = navilyResaweb[i];
+            var parent = node.parentNode;
+    
+            node.innerHTML = '';
+            var ifrm = document.createElement("iframe");
+            ifrm.setAttribute("src", getIfrmSrc());
+            ifrm.setAttribute("frameBorder", "0");
+            ifrm.setAttribute("allowTransparency", "true");
+            ifrm.setAttribute("scrolling", "no");
+            ifrm.setAttribute("width", parent.offsetWidth + "px");
+            ifrm.setAttribute("height", "1100px");
+            if (isSafari()) {
+                ifrm.setAttribute("sandbox", "allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-forms allow-modals allow-popups");
+            } else {
+                ifrm.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms allow-modals allow-popups");
+            }
+            node.appendChild(ifrm);
+            node.setAttribute("id", "navily-resaweb-" + i);
+    
+            node.style.cssText = "width: 100%; height: 100%;";
+    
+            if (isSafari()) {
+                createStylesheet();
+                createCookieSection(node);
+    
+                stylesheet = document.getElementById('navily-resaweb-stylesheet');
+    
+                cookieButton.addEventListener('click', openWebApp, false);
+                var buttonAcceptCookies = getCookie("buttonAcceptCookies");
+    
+                if (buttonAcceptCookies == "hidden") {
+                    cookieBlock.style.display = "none";
+                    stylesheet.disabled = true;
+                }
+            }
+    
+            ifrm.addEventListener("load", function(e) {
+                window.parent.postMessage({
+                    source: 'navily-resaweb',
+                    height: document.body.clientHeight,
+                    width: parent.offsetWidth
+                }, '*');
+                addUserInfo();
+            });
+    
+            window.addEventListener("resize", function(e) {
+                //let ifrmDocument = ifrm.document;
+                window.parent.postMessage({
+                    source: 'navily-resaweb',
+                    height: null,
+                    width: parent.offsetWidth
+                }, '*');
+            });
+        }
+        
+    }
+    </script>
+
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/nearby.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
+</html>

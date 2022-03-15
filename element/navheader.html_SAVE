@@ -1,0 +1,17 @@
+<header class="header bg-light" onclick="window.location.href = '/index'" id="navbarHeader">
+    <div class="row">
+        <div class="col-4" style="width:100px;">
+            <img id="nav_entity_logo" style="height:24px;" src="" />
+        </div>
+        <div class="col-8">
+            <h5 style="white-space:pre-warp;"><span style="color:#000000;" id="harbour_name"></span></h5>
+        </div>
+    </div>
+    <script>
+        document.getElementById("harbour_name").innerHTML = localStorage["harbourname"];
+        document.getElementById("nav_entity_logo").src = localStorage["entity_logo"];
+    </script>
+</header>
+<style>
+    #return_link { color:#004577 !important; }
+</style>

@@ -1,0 +1,44 @@
+<tr>
+    <form method="POST" enctype="multipart/form-data" id="__FORMID__">
+    <td><input name="id" type="hidden" value="__ID__">__ID__</td>
+    <td><textarea name="name">__NAME__</textarea></td>
+    <td><textarea name="email">__EMAIL__</textarea></td>
+    <td>
+        <div class="form-group" style="width:200px;">
+            <label class="form-label">Préfixe/Téléphone</label>
+            <div class="input-group">
+                <input value="__PREFIX__" style="width:35%;" class="form-control" name="prefix" required>
+                <input value="__PHONE__" style="width:65%;" class="form-control" name="phone" required>
+            </div>
+        </div>
+    </td>
+    <td><textarea name="address">__ADDRESS__</textarea></td>
+    <td><a target="_blank" href="__LINK__">__LINK__</a></td>
+    <td><a target="_blank" href="__LOGO__">__LOGO__</a></td>
+    <td><input class="form-control" type="file" accept="image/png, image/jpg" name="logo"></td>
+    <td><a target="_blank" href="__IMG__">__IMG__</a></td>
+    <td><input type="file" class="form-control" accept="image/png, image/jpg" name="img"></td>
+    <td><textarea name="onesignal_app_id">__ONESIGNAL_APP_ID__</textarea></td>
+    <td><textarea name="onesignal_auth">__ONESIGNAL_AUTH__</textarea></td>
+    <td><textarea name="mailjet_mail">__MAILJET_MAIL__</textarea></td>
+    <td><textarea name="mailjet_apikey">__MAILJET_APIKEY__</textarea></td>
+    <td><textarea name="mailjet_secretkey">__MAILJET_SECRETKEY__</textarea></td>
+    <td><textarea name="maree_id">__MAREE_ID__</textarea></td>
+    <td>__ABSENCE_MODULE__</td>
+    <td>__SECURITY_MODULE__</td>
+    <td>__MAREES_MODULE__</td>
+    <td>__CHALLENGES_MODULE__</td>
+    <td><select name="weather_api">__WEATHER_API__</select></td>
+    <td><textarea name="wlink_vone_user">__WLINK_VONE_USER__</textarea></td>
+    <td><textarea name="wlink_vone_pw">__WLINK_VONE_PW__</textarea></td>
+    <td><textarea name="wlink_vone_token">__WLINK_VONE_TOKEN__</textarea></td>
+    <td><textarea name="wlink_vtwo_apikey">__WLINK_VTWO_APIKEY__</textarea></td>
+    <td><textarea name="wlink_vtwo_secretkey">__WLINK_VTWO_SECRETKEY__</textarea></td>
+    <td>
+        <a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?entity_id=__ID__&mode=delete';"> <i class="fe fe-trash"></i></a>
+        <button type="button" class="btn" onclick="sendUpdateForm('__FORMID__');"> <i class="fa fa-save"></i></button>
+    </td>
+    </form>
+</tr>
+
+

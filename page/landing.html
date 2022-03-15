@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+<!-- Swiper -->
+
+
+<body class="d-flex flex-column h-100">
+
+    
+    <style>
+        .product-image-top {
+            margin-top: 50px !important;
+        }
+
+        @font-face {
+            font-family: 'Poppins Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+        }
+
+        * {
+            font-family: 'Poppins Regular';
+        }
+
+        body {
+            background: url("../background2.png") #FFF fixed;
+            font-family: 'Poppins Regular' !important;
+        }
+
+        .viewer {
+            position: absolute;
+            left: 0;
+            right: 0;
+        }
+
+        .swiper-container {
+            width: 100%;
+        }
+
+
+        .swiper-slide {
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 100%;
+        }
+
+        .tete {
+            background-image: url(/img/toulon1.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 500px;
+            background-position: 50% 50%;
+            max-width: 100%;
+        }
+
+        .btn-lgft {
+            border-radius: 50px;
+        }
+
+        .btn-visit {
+            border: 1px solid #cecece;
+            background-color: #cecece;
+            color: #fff;
+            font-size: 14px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        .contenu {
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .fa-angle-right::before {
+            content: "\f138";
+        }
+
+        @media screen and (max-width:1024px) {
+            .tete {
+                background-image: url(/img/toulon1.jpg);
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 300px;
+                background-position: 50% 50%;
+                max-width: 100%;
+            }
+        }
+    </style>
+
+    <!--   <header class="header">
+
+       </header>-->
+    <!-- Begin page content -->
+    <div class="product-image-top" style="border-radius:0px;">
+        <img id="img" style="width:100%;height:100%;" src="" alt="">
+        <svg id="wave" style="transform:rotate(0deg); transition: 0.3s; position: relative; bottom: 105px;" viewBox="0 0 1440 490" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sw-gradient-1" x1="0" x2="0" y1="1" y2="0"><stop stop-color="rgba(255, 255, 255, 0.48)" offset="0%"></stop><stop stop-color="rgba(255, 255, 255, 0.49)" offset="100%"></stop></linearGradient></defs><path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-1)" d="M0,98L120,138.8C240,180,480,261,720,245C960,229,1200,114,1440,130.7C1680,147,1920,294,2160,359.3C2400,425,2640,408,2880,343C3120,278,3360,163,3600,98C3840,33,4080,16,4320,8.2C4560,0,4800,0,5040,49C5280,98,5520,196,5760,245C6000,294,6240,294,6480,269.5C6720,245,6960,196,7200,155.2C7440,114,7680,82,7920,89.8C8160,98,8400,147,8640,138.8C8880,131,9120,65,9360,32.7C9600,0,9840,0,10080,73.5C10320,147,10560,294,10800,294C11040,294,11280,147,11520,122.5C11760,98,12000,196,12240,220.5C12480,245,12720,196,12960,147C13200,98,13440,49,13680,98C13920,147,14160,294,14400,310.3C14640,327,14880,212,15120,147C15360,82,15600,65,15840,114.3C16080,163,16320,278,16560,326.7C16800,376,17040,359,17160,351.2L17280,343L17280,490L17160,490C17040,490,16800,490,16560,490C16320,490,16080,490,15840,490C15600,490,15360,490,15120,490C14880,490,14640,490,14400,490C14160,490,13920,490,13680,490C13440,490,13200,490,12960,490C12720,490,12480,490,12240,490C12000,490,11760,490,11520,490C11280,490,11040,490,10800,490C10560,490,10320,490,10080,490C9840,490,9600,490,9360,490C9120,490,8880,490,8640,490C8400,490,8160,490,7920,490C7680,490,7440,490,7200,490C6960,490,6720,490,6480,490C6240,490,6000,490,5760,490C5520,490,5280,490,5040,490C4800,490,4560,490,4320,490C4080,490,3840,490,3600,490C3360,490,3120,490,2880,490C2640,490,2400,490,2160,490C1920,490,1680,490,1440,490C1200,490,960,490,720,490C480,490,240,490,120,490L0,490Z"></path></svg>
+        <svg id="wave" style="transform:rotate(0deg); transition: 0.3s; position: relative; bottom: 220px;" viewBox="0 0 1440 490" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0"><stop stop-color="rgba(255, 255, 255, 1)" offset="0%"></stop><stop stop-color="rgba(255, 255, 255, 1)" offset="100%"></stop></linearGradient></defs><path style="transform:translate(0, 0px); opacity:1" fill="url(#sw-gradient-0)" d="M0,98L120,138.8C240,180,480,261,720,245C960,229,1200,114,1440,130.7C1680,147,1920,294,2160,359.3C2400,425,2640,408,2880,343C3120,278,3360,163,3600,98C3840,33,4080,16,4320,8.2C4560,0,4800,0,5040,49C5280,98,5520,196,5760,245C6000,294,6240,294,6480,269.5C6720,245,6960,196,7200,155.2C7440,114,7680,82,7920,89.8C8160,98,8400,147,8640,138.8C8880,131,9120,65,9360,32.7C9600,0,9840,0,10080,73.5C10320,147,10560,294,10800,294C11040,294,11280,147,11520,122.5C11760,98,12000,196,12240,220.5C12480,245,12720,196,12960,147C13200,98,13440,49,13680,98C13920,147,14160,294,14400,310.3C14640,327,14880,212,15120,147C15360,82,15600,65,15840,114.3C16080,163,16320,278,16560,326.7C16800,376,17040,359,17160,351.2L17280,343L17280,490L17160,490C17040,490,16800,490,16560,490C16320,490,16080,490,15840,490C15600,490,15360,490,15120,490C14880,490,14640,490,14400,490C14160,490,13920,490,13680,490C13440,490,13200,490,12960,490C12720,490,12480,490,12240,490C12000,490,11760,490,11520,490C11280,490,11040,490,10800,490C10560,490,10320,490,10080,490C9840,490,9600,490,9360,490C9120,490,8880,490,8640,490C8400,490,8160,490,7920,490C7680,490,7440,490,7200,490C6960,490,6720,490,6480,490C6240,490,6000,490,5760,490C5520,490,5280,490,5040,490C4800,490,4560,490,4320,490C4080,490,3840,490,3600,490C3360,490,3120,490,2880,490C2640,490,2400,490,2160,490C1920,490,1680,490,1440,490C1200,490,960,490,720,490C480,490,240,490,120,490L0,490Z"></path></svg>
+    </div>
+
+    <div class="container">
+        <div class="container contenu" style="margin-top: 0px;">
+            <div class="row">
+                <div class="col-12 col-lg-12 col-md-12 col-sm-12 p-1">
+                    <center>
+                        <img id="logo" style="width:275px;" src="" /><br>
+                        <img class="fit-picture" src="/library/Groupe_30.png" style="float: left; width: 40px;margin-top: 20px;"><p style="color: #033B8A; font-size: 18px; font-weight: bold; margin-top: 20px">Bienvenue au Port !</p>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--       <div class="container">
+           <div class="container contenu">
+               <center>
+                   <div class="row" style="margin-top: 30px">
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12 p-1">
+                        <center>
+                       <img class="fit-picture" src="/library/Groupe_30.png" style="float: left; width: 40px"><p style="color: #033B8A; font-size: 18px; font-weight: bold">Bienvenue au Port !</p>
+                       </center>
+                   </div>
+               </div>
+               </center>
+           </div>
+       </div> -->
+
+    <footer class="footer mt-auto py-3">
+        <div class="container" style="margin-bottom: 25px">
+            <!-- PWA add to home display -->
+            <div class="row" id="addtodevice">
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1">
+                    <p style="color: #033B8A; margin-left: 15px">Ajouter à <span class="font-weight-bold">l'écran d'accueil</span></p>
+                </div>
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1" style="margin-bottom: 15px">
+                    <button class="btn btn-block btn-info btn-lg btn-lgft" style="color: #FFF; padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.15em; right: 15px; position: relative; bottom: 8px; font-size: 10px;" id="addtohome">Installer</button>
+                </div>
+            </div>
+            <!-- PWA add to home display -->
+            <div class="row">
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1">
+                    <p style="color: #033B8A; margin-left: 15px">J'ai un compte !</p>
+                </div>
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1" style="margin-bottom: 15px">
+                    <a onclick="changePage('/signin');" class="btn btn-block btn-info btn-lg btn-lgft" style="color: #FFF; padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.15em; right: 15px; position: relative; bottom: 8px; font-size: 10px;">CONNEXION &nbsp;&nbsp;<i class="fa fa-angle-left fa fa-angle-right" style="font-size: 11px;"></i></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1">
+                    <p style="color: #0090A8; margin-left: 15px">1ère connexion ?</p>
+                </div>
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1">
+                    <a id="validate_button" onclick="changePage('/selectharbour?account=true');" href="/selectharbour?account=true" style="padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.05em; right: 15px; position: relative; bottom: 8px; font-size: 9px;" class="btn btn-block btn-danger btn-lg btn-lgft">S'ENREGISTRER &nbsp;&nbsp;<i class="fa fa-angle-left fa fa-angle-right" style="font-size: 11px;"></i></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1" style="margin-top: 15px">
+                    <p style="color: #8c8c8c; margin-left: 15px">Je suis visiteur</p>
+                </div>
+                <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1" style="margin-top: 15px">
+                    <a onclick="changePage('/selectharbour?account=false');" style="padding: 6px 30px; padding-bottom: 3px;padding-top: 3px; right: 15px; position: relative; bottom: 8px; width: 100%; font-size: 10px; color: #FFF;" class="btn btn-lgft btn-visit">accès rapide &nbsp;&nbsp;<i class="fa fa-angle-left fa fa-angle-right" style="font-size: 11px;"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Required jquery and libraries -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="/js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  -->
+    <script src="/vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="/vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="/js/main.js"></script>
+    <script src="/js/color-scheme-demo.js"></script>
+
+    <!-- PWA app service registration and works -->
+    <script src="/library/pwa-services.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        var urlParam = new URLSearchParams(window.location.search);
+        function changePage(_url) {
+            var urlPara = new URLSearchParams(window.location.search);
+
+            if (urlParam.get("osid"))
+                localStorage['onesignal_userid'] = urlPara.get("osid");
+
+            window.location.href = _url;
+        }
+        "use strict"
+        var urlParam = new URLSearchParams(window.location.search);
+
+        if (urlParam.get("osid"))
+            localStorage['onesignal_userid'] = urlParam.get("osid");
+
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+            },
+        });
+        var data = new FormData();
+        data.append("token", localStorage["token"]);
+        if (localStorage['token']) {
+            fetch("/api/user/session", { method: "post", body: data }).then(response => response.json()).then(_data => {
+                if (_data.success)
+                    window.location.href = ("/index");
+
+            }).catch((error) => {
+                console.log(error);
+            })
+        } else {
+            delete localStorage["user"];
+            delete localStorage["token"];
+        }
+
+
+        //if(!urlParam.get("osid")) {
+        //    window.location = window.location.replace
+        //}
+        
+        if (urlParam.get('entity')) {
+            fetch("/api/entity/get/" + urlParam.get('entity')).then(response => response.json()).then(_data => {
+                console.log(_data);
+                if (_data.success) {
+                    var entity = _data.data;
+                    localStorage['entity_id'] = urlParam.get('entity');
+                    localStorage['entity_name'] = entity.name;
+                    localStorage['entity_logo'] = entity.logo;
+
+
+
+                    if (urlParam.get('entity') == '4eqv44307K')
+                        document.getElementById('validate_button').setAttribute("style", "background-color: #FB9101;padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.05em; right: 15px; position: relative; bottom: 8px; font-size: 9px;");
+
+                    document.getElementById('img').src = entity.img;
+                    document.getElementById('logo').src = localStorage['entity_logo'];
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+        else if (localStorage['harbourid'])
+            window.location.href = "/index";
+        else {
+            window.location.href = "https://www.nauticspot.com/fr/";
+        }
+
+    </script>
+    {{element->footer_app.html}}
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/landing.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:16 GMT -->
+</html>

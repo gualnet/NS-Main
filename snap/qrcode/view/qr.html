@@ -1,0 +1,16 @@
+<tr>
+	<form method="POST" enctype="multipart/form-data" id="form__ID__">
+		<td><input name="id" type="hidden" value="__ID__">__ID__</td>
+		<td><input name="title" value="__TITLE__"></td>
+		<td><input name="apple" value="__APPLE__"></td>
+		<td><input name="android" value="__ANDROID__"></td>
+		<td><img src="__IMG__"></td>
+		<td>
+			<a href="__URL__" target="_blank"> <i class="fe fe-eye"></i></a>
+			<a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?target=__ID__&mode=delete';"> <i class="fe fe-trash"></i></a>
+			<button type="button" class="btn" onclick="sendUpdateForm('form__ID__');"> <i class="fa fa-save"></i></button>
+		</td>
+	</form>
+</tr>
+
+

@@ -1,0 +1,16 @@
+<tr>
+    <form method="POST" enctype="multipart/form-data" id="__FORMID__">
+        <td><input name="id" type="hidden" value="__ID__">__ID__</td>
+        <td>__HARBOUR_NAME__</td>
+        <td>__USER_NAME__</td>
+        <td>__BOAT_NAME__</td>
+        <td>__PLACE_NUMBER__</td>
+        <td><input name="date_start" type="date" value="__DATE_START__" /></td>
+        <td><input name="date_end " type="date" value="__DATE_END__" /></td>
+        <td>__DATE__</td>
+        <td>
+            <a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?absence_id=__ID__&mode=delete';"> <i class="fe fe-trash"></i></a>
+            <button type="button" class="btn" onclick="sendUpdateForm('__FORMID__');"> <i class="fa fa-save"></i></button>
+        </td>
+    </form>
+</tr>

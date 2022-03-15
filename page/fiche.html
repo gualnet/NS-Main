@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+    <!-- screen loader -->
+    {{element->loader.html}}
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        <!-- Fixed navbar -->
+        {{element->navheader.html}}
+        <div class="product-image-top">
+            <div class="background" style="background-image: url(_img/image-3.html);">
+                <img src="img/image-3.png" alt="" style="display: none;">
+            </div>
+        </div>
+        <!-- page content start -->
+        <div class="container top-30">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5>Nom du lieux</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="small vm">
+                                <a href=""><span class=" text-secondary">site internet</span></a>
+                            </p>
+                        </div>
+                        <div class="col-auto">
+                            <a href="tel:0494185300" class="small text-secondary">04 94 18 53 00</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="small text-secondary">7h à 17h, 7/7</p>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="gps_adress" class="card-body border-top border-color">
+
+                    <script>
+
+                        var sBrowser, sUsrAg = navigator.userAgent;
+                        if (sUsrAg.indexOf("Safari") > -1) {
+                            sBrowser = "Apple Safari";
+                            document.getElementById("gps_adress").insertAdjacentHTML('beforeend', '<a href="http://maps.apple.com/?q=15 Quai du Petit Rang, 83000 Toulon" class="small text-secondary"><i class="bi bi-geo-alt"></i> 15 Quai du Petit Rang, 83000 Toulon</a>')
+                        } else {
+                            document.getElementById("gps_adress").insertAdjacentHTML('beforeend', '<a href="geo:0,0?q=15 Quai du Petit Rang, 83000 Toulon" class="small text-secondary"><i class="bi bi-geo-alt"></i> 15 Quai du Petit Rang, 83000 Toulon</a>')
+                        }
+
+                    </script>
+                </div>
+                <div class="card-body border-top border-color">
+                    <p class="text-secondary">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="container py-3">
+            <div class="row">
+                <nav class="navbar fixed-bottom navbar-light bg-light nav-pills nav-fill">
+                    <div class="nav-item">
+                        <a class="navbar-brand" href="/index"><i class="bi bi-house"></i></a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="navbar-brand" href="/map"><i class="bi bi-map"></i></a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="navbar-brand" href="/index"><i class="bi bi-chat-dots"></i></a>
+                    </div>
+                    <div class="nav-item">
+                        <a class="navbar-brand" href="/profil"><i class="bi bi-person"></i></a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+    </main>
+    <!-- color settings style switcher
+    <button type="button" class="btn btn-info colorsettings">
+        <span class="text-white">
+            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                <title>ionicons-v5-m</title>
+                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
+                <circle cx='144' cy='208' r='32' />
+                <circle cx='152' cy='311' r='32' />
+                <circle cx='224' cy='144' r='32' />
+                <circle cx='256' cy='367' r='48' />
+                <circle cx='328' cy='144' r='32' />
+            </svg>
+        </span>
+    </button>-->
+    <div class="sidebar-right">
+        <div class="selectoption">
+            <input type="checkbox" id="darklayout" name="darkmode">
+            <label for="darklayout">Dark</label>
+        </div>
+        <div class="selectoption mb-0">
+            <input type="checkbox" id="rtllayout" name="layoutrtl">
+            <label for="rtllayout">RTL</label>
+        </div>
+        <hr>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
+            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
+            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
+            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
+            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
+            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
+            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
+            <label for="templatecolor8" class="bg-red" data-title="red"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
+            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
+            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
+            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
+            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
+            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
+            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
+            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+        </div>
+
+    </div>
+
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  js-->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- nouislider js -->
+    <script src="vendor/nouislider/nouislider.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        "use strict"
+        $(window).on('load', function () {
+
+        });
+    </script>
+    {{element->footer_app.html}}
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/property-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:04 GMT -->
+</html>

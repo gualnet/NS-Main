@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/fortpress_admin_assets/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/fortpress_admin_assets/favicon.ico" />
+
+
+    <title>Vendors management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/fortpress_admin_assets/assets/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '/'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/fortpress_admin_assets/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/input-mask/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/datatables/plugin.js"></script>
+</head>
+<body class="">
+    <div class="page">
+        <div class="flex-fill">
+            <div class="my-3 my-md-5">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">import csv de places</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="mailError"></div>
+                                <form id="addPlacesCsv">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            __HARBOUR_ID_PLACE_INPUT__
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Fichier csv contenant les places</label>
+                                                <input class="form-control" type="file" name="csvplaces" id="csvplaces">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary" type="button" onclick="sendCreatePlaceForm();">ajouter places</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Gestion des places</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="place_table" class="table card-table table-vcenter text-nowrap datatable dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nom du port</th>
+                                                <th>Numéro de place</th>
+                                                <th>Numéro de capteur</th>
+                                                <th>Longueur</th>
+                                                <th>Largeur</th>
+                                                <th>tirant D'eau</th>
+                                                <th>type</th>
+                                                <th>nbTramesDepart</th>
+                                                <th>nbTramesRetour</th>
+                                                <th>maxSeuil</th>
+                                                <th>minSeuil</th>
+                                                <th></th>
+                                            </tr>
+                                        <thead>
+                                        <tbody id="place_result">
+                                            __PLACES__
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Import csv de pontons</h3>
+                            </div>
+                            <div class="card-body">
+                                <form id="addPontonsCsv">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            __HARBOUR_ID_PONTON_INPUT__
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label class="form-label">Fichier csv contenant les pontons</label>
+                                                <input class="form-control" type="file" name="csvzones" id="csvzones">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <button class="btn btn-primary" type="button" onclick="sendCreateZoneForm();">ajouter pontons</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Gestion des pontons</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="ponton_table" class="table card-table table-vcenter text-nowrap datatable dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nom du port</th>
+                                                <th>Nom</th>
+                                                <th></th>
+                                            </tr>
+                                        <thead>
+                                        <tbody id="ponton_result">
+                                            __ZONES__
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var placeTable;
+        var pontonTable;
+        window.onload = function () {
+            require(['datatables', 'jquery'], function (datatable, $) {
+                placeTable = $('#place_table').DataTable(
+                    {
+                        language: {
+                            search: '<span></span>',
+                            searchPlaceholder: 'Votre recherche'
+                        },
+                        paging: true,
+                        "order": [[2, "desc"]],
+                        "info": false,
+                    });
+                pontonTable = $('#ponton_table').DataTable(
+                    {
+                        language: {
+                            search: '<span></span>',
+                            searchPlaceholder: 'Votre recherche'
+                        },
+                        paging: true,
+                        "order": [[2, "desc"]],
+                        "info": false,
+                    });
+            });
+        }
+
+        var placeHtml = '<tr>'
+            + '<form method="POST" enctype="multipart/form-data" id="__FORMID__">'
+            + '   <td><input name="id" type="hidden" value="__ID__">__ID__</td>'
+            + '  <td>__HARBOUR_NAME__</td>'
+            + ' <td><input name="number" value="__NUMBER__"></td>'
+            + '<td><input name="captorNumber" value="__CAPTOR_NUMBER__"></td>'
+            + '   <td><input name="longueur" value="__LONGUEUR__"></td>'
+            + '   <td><input name="largeur" value="__LARGEUR__"></td>'
+            + '   <td><input name="tirantDeau" value="__TIRANTDEAU__"></td>'
+            + '   <td><input name="type" value="__TYPE__"></td>'
+            + '   <td><input name="nbTramesDepart" value="__NBTRAMESDEPART__"></td>'
+            + '  <td><input name="nbTramesRetour" value="__NBTRAMESRETOUR__"></td>'
+            + '  <td><input name="maxSeuil" value="__MAXSEUIL__"></td>'
+            + '  <td><input name="minSeuil" value="__MINSEUIL__"></td>'
+            + '  <td>'
+            + '     <a href="#" onclick="if(confirm(\'Delete __ID__ ?\'))document.location.href=\'?place_id=__ID__&mode=delete&type=place\';"> <i class="fe fe-trash"></i></a>'
+            + '     <button type="button" class="btn" onclick="sendUpdatePlaceForm(\'__FORMID__\');"> <i class="fa fa-save"></i></button>'
+            + ' </td>'
+            + ' </form>'
+            + '</tr>'
+
+        document.getElementById('harbourid_place').addEventListener('change', function (e) {
+            console.log("preuve : " + e.target.value);
+            console.log(e.target)
+            require(['datatables', 'jquery'], function (datatable, $) {
+                fetch("/api/places?harbour_id=" + e.target.value).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        placeTable.destroy();
+                        var _places = _data.data;
+                        var _placeGen = "";
+                        for (var i = 0; i < _places.length; i++) {
+                            console.log(placeHtml);
+                            _placeGen += placeHtml.replace(/__ID__/g, _places[i].id)
+                                .replace(/__FORMID__/g, _places[i].id.replace(/\./g, "_"))
+                                .replace(/__HARBOUR_NAME__/g, e.target.options[e.target.selectedIndex].text)
+                                .replace(/__NUMBER__/g, _places[i].number)
+                                .replace(/__CAPTOR_NUMBER__/g, _places[i].captorNumber)
+                                .replace(/__LONGUEUR__/g, _places[i].longueur)
+                                .replace(/__LARGEUR__/g, _places[i].largeur)
+                                .replace(/__TIRANTDEAU__/g, _places[i].tirantDeau)
+                                .replace(/__TYPE__/g, _places[i].type)
+                                .replace(/__NBTRAMESDEPART__/g, _places[i].nbTramesDepart)
+                                .replace(/__NBTRAMESRETOUR__/g, _places[i].nbTramesRetour)
+                                .replace(/__MAXSEUIL__/g, _places[i].maxSeuil)
+                                .replace(/__MINSEUIL__/g, _places[i].minSeuil)
+                        }
+                        document.getElementById("place_result").innerHTML = "";
+                        document.getElementById("place_result").insertAdjacentHTML('beforeend', _placeGen);
+                        placeTable = $('#place_table').DataTable(
+                            {
+                                language: {
+                                    search: '<span></span>',
+                                    searchPlaceholder: 'Votre recherche'
+                                },
+                                paging: true,
+                                "order": [[2, "desc"]],
+                                "info": false,
+                            });
+                    } else {
+                        document.getElementById("result").innerHTML = "";
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+            });
+        });
+
+        var zoneHtml = '<tr>'
+            + '<form method="POST" enctype="multipart/form-data" id="__FORMID__">'
+            + '   <td><input name="id" type="hidden" value="__ID__">__ID__</td>'
+            + '      <td>__HARBOUR_NAME__</td>'
+            + '     <td><input name="name" value="__NAME__"></td>'
+            + '        <td>'
+            + '           <a href="#" onclick="if(confirm(\'Delete __ID__ ?\'))document.location.href=\' ? zone_id = __ID__ & mode=delete& type=zone\';"> <i class="fe fe-trash"></i></a>'
+            + '          <button type="button" class="btn" onclick="sendUpdateZoneForm(\'__FORMID__\');"> <i class="fa fa-save"></i></button>'
+            + '     </td>'
+            + '  </form>'
+            + '</tr>'
+
+        document.getElementById('harbourid_ponton').addEventListener('change', function (e) {
+            var ids = []
+            if (ids[0]) {
+                for (var i = 0; i < ids.length; i++) {
+                    document.getElementbyId('editor_' + ids[i].replace(/\./g, "_")).innerHTML = "";
+                }
+            }
+            console.log("preuve : " + e.target.value);
+            require(['datatables', 'jquery'], function (datatable, $) {
+                fetch("/api/pontons?harbour_id=" + e.target.value).then(response => response.json()).then(_data => {
+                    if (_data.success) {
+                        pontonTable.destroy();
+                        var _zones = _data.data;
+                        var _zoneGen = "";
+                        for (var i = 0; i < _zones.length; i++) {
+                            _zoneGen += zoneHtml.replace(/__ID__/g, _zones[i].id)
+                                .replace(/__FORMID__/g, _zones[i].id.replace(/\./g, "_"))
+                                .replace(/__NAME__/g, _zones[i].name)
+                                .replace(/__HARBOUR_NAME__/g, e.target.options[e.target.selectedIndex].text)
+                        }
+                        document.getElementById("ponton_result").innerHTML = "";
+                        document.getElementById("ponton_result").insertAdjacentHTML('beforeend', _zoneGen);
+                        pontonTable = $('#ponton_table').DataTable(
+                            {
+                                language: {
+                                    search: '<span></span>',
+                                    searchPlaceholder: 'Votre recherche'
+                                },
+                                paging: true,
+                                "order": [[2, "desc"]],
+                                "info": false,
+                            });
+                    } else {
+                        document.getElementById("result").innerHTML = "";
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+            });
+        });
+
+
+
+        function sendCreatePlaceForm() {
+            var form = document.getElementById("addPlacesCsv");
+            var formData = new FormData(form);
+            formData.append("type", 'csvplace');
+            //formData.append("harbour_id", document.getElementById("habour_id").value);
+            fetch(window.location.href,
+                {
+                    method: "post",
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("mailError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("mailError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("mailError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("mailError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + error + '</div>');
+                });
+        }
+        function sendCreateZoneForm() {
+            var form = document.getElementById("addPontonsCsv");
+            var formData = new FormData(form);
+            formData.append("type", 'csvzone');
+            //formData.append("harbour_id", document.getElementById("habour_id").value);
+            fetch(window.location.href,
+                {
+                    method: "post",
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("mailError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("mailError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("mailError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("mailError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + error + '</div>');
+                });
+        }
+
+        function sendUpdatePlaceForm(id) {
+            var form = document.getElementById(id);
+            console.log(form);
+            var formData = new FormData(form);
+            formData.append("type", 'place');
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("userError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("userError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                    alert(_data.message);
+                });
+        }
+
+        function sendUpdateZoneForm(id) {
+            var form = document.getElementById(id);
+            console.log(form);
+            var formData = new FormData(form);
+            formData.append("type", 'zone');
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("userError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("userError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                    alert(_data.message);
+                });
+        }
+
+        function sendUpdateForm(id) {
+            var form = document.getElementById(id);
+            console.log(form);
+            var formData = new FormData(form);
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("userError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("userError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<tr>
+	<form method="POST" enctype="multipart/form-data" id="__FORMID__">
+		<td></td>
+		<td><input name="id" type="hidden" value="__ID__">__ID__</td>
+		<td>__HARBOUR_NAME__</td>
+		<td><textarea name="title">__TITLE__</textarea></td>
+		<td><a target="_blank" class="link" href="__BULLETIN__">__BULLETIN__</a></td>
+		<td data-order="__DATETIMEORDER__">__DATE__</td>
+		<td>
+			<a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?weather_id=__ID__&mode=delete';"> <i class="fe fe-trash"></i></a>
+			<button type="button" class="btn" onclick="sendUpdateForm('__FORMID__');"> <i class="fa fa-save"></i></button>
+		</td>
+	</form>
+</tr>

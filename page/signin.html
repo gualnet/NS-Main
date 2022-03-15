@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="d-flex flex-column h-100">
+    <!-- screen loader -->
+    {{element->loader.html}}
+    <!-- Fixed navbar -->
+    <header class="header">
+        <div class="row">
+            <div class="col-auto px-0">
+                <a href="/" class="btn menu-btn btn-link text-dark">
+                    <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                        <title>ionicons-v5-a</title>
+                        <polyline points='244 400 100 256 244 112' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+                        <line x1='120' y1='256' x2='412' y2='256' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+                    </svg>
+                </a>
+            </div>
+            <div class="text-left col">
+
+            </div>
+            <div class="ml-auto col-auto px-0">
+
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        <div class="container text-center  mt-4">
+            <img src="" style="width:100%;height:100%;" class="p-2" id="logo" />
+            <h4 class="mt-0 mb-4" style="color:#004577;" id="name"></h4>
+        </div>
+        <div class="container">
+            <div class="login-box">
+                <div id="loginError"></div>
+                <form method="post" action="/api/login" id="signinForm">
+                    <div class="form-group floating-form-group">
+                        <input name="email" type="email" class="form-control floating-input">
+                        <label class="floating-label">Email</label>
+                    </div>
+                    <div class="form-group floating-form-group">
+                        <input name="password" type="password" class="form-control floating-input" autofocus>
+                        <label class="floating-label">Mot de passe</label>
+                    </div>
+                    <div class="form-group my-4">
+                        <a href="#" class="link">Mot de passe oublié?</a>
+                    </div>
+                </form>
+                <button class="btn btn-block btn-info btn-lg" onclick="login();">Se connecter</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <a href="/selectharbour?account=true" class="link">S'enregistrer</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  -->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        "use strict"
+        $(window).on('load', function () {
+            var data = new FormData();
+            data.append("token", localStorage["token"]);
+            if (localStorage['token']) {
+                fetch("/api/user/session", { method: "post", body: data }).then(response => response.json()).then(_data => {
+                    if (_data.success)
+                        window.location.href = ("/index");
+
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
+
+            if (localStorage['entity_name'] && localStorage['entity_logo']) {
+                document.getElementById('logo').src = localStorage['entity_logo'];
+                document.getElementById('name').innerHTML = localStorage['entity_name'];
+            }
+
+
+
+            var swiper = new Swiper('.swiper-container', {
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+        });
+    </script>
+
+
+    <!-- Auth scripts -->
+    <script>
+
+
+        function login() {
+            const form = document.getElementById("signinForm");
+            var formData = new FormData(form);
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        console.log(_data);
+                        var user = _data.data;
+                        localStorage["user"] = user.id;
+                        localStorage["harbourid"] = user.harbourid;
+                        localStorage["token"] = user.token;
+                        fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+                            console.log(_data.data);
+                            localStorage["harbourname"] = _data.data.name;
+                            window.location.href = ("/index");
+                        }).catch((error) => {
+                            console.log(error);
+                        });
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("loginError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("loginError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                    }
+                }).catch((error) => {
+                    console.error('Error:', error);
+                });
+
+        }
+    </script>
+    {{element->footer_app.html}}
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:04 GMT -->
+</html>

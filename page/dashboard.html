@@ -1,0 +1,175 @@
+{{element->meta_dashboard.html}}
+{{element->header_dashboard.html}}
+<style>
+    .bg-theme-color-active {background-color:#59c1c6;}
+    .bg-theme-color {background-color:#001529;}
+    
+@media screen and (max-width: 1600px) {
+.navbar {
+    font-size: 12px!important;
+    padding-bottom: 0.1rem !important;
+    padding-top: 0.1rem !important;
+    }
+}
+
+.pb-2, .py-2 {
+    padding-bottom: 0.3rem !important;
+    padding-top: 0.3rem !important;
+    }
+
+</style>
+
+<div class="container-fluid m-0 p-0 h-100">
+    <div class="row p-0 m-0 h-100" >
+        <div class="col-12 m-0 p-0 h-100">
+            <div class="d-flex flex-column h-100">
+                <div class="row p-0 m-0" style="height:90vh;" >
+                    <div class="col-12 m-0 p-0">
+                    <nav class="navbar navbar-expand-md navbar-light bg-light">
+                        <a href="/dashboard"><img class="navbar-brand " src="/library/logonauticspot.png" style="height:64px;"></a>
+                        
+
+                            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                            </ul>
+                            <!-- <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>-->
+                            <div class="dropdown">
+                                <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
+                                    <span id="my_avatar" class="avatar" style="background-image: url(&quot;/fortpress_admin_assets/img/default.png&quot;);"></span>
+                                    <span class="ml-2 d-none d-lg-block">
+                                        <small id="name" class="text-muted d-block mt-1"></small>
+                                    </span>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                    <a class="dropdown-item" href="#" onclick="document.getElementById('plugin_display').hidden = true;delete_cookie('fortpress');document.location.href='/dashboard/';">
+                                        <i class="dropdown-icon fe fe-log-out"></i> Déconnexion
+                                    </a>
+                                </div>
+                            </div>
+                        
+                        
+                    </nav>
+                </div>
+       
+                    <div class="col-2 bg-theme-color m-0 p-0" style="height:87vh;overflow:auto;">
+                        <nav class="navbar navbar-dark bg-theme-color align-items-start p-0 w-100">
+                            <ul id="nav_list" class=" navbar-nav justify-content-between w-100" >
+                                <li id="nav_" class="nav-item my-2">
+                                    <a class="nav-link pl-0 text-nowrap" href="#"><img class="d-none d-md-inline" id="entity_img"></a><span id="entity_name" class="d-none d-md-inline"></span>
+                                </li>
+                                <li id="nav_boatmgmt" class="nav-item py-2 w-100 active bg-theme-color-active" onclick="switchPlugin('boatmgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-ship fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Bateaux</span></a>
+                                </li>
+                                <li id="nav_cameramgmt" class="nav-item py-2">
+                                    <a class="nav-link pl-0" href="#" onclick="switchPlugin('cameramgmt');"><i class="fa fa-video-camera fa-fw float-left"></i><span class="ml-2 overflow-hidden float-right">Caméras</span></a>
+                                </li>
+                                <li id="nav_enititymgmt" class="nav-item py-2" onclick="switchPlugin('enititymgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-object-group fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Groupes portuaires</span></a>
+                                </li>
+                                <li id="nav_eventmgmt" class="nav-item py-2" onclick="switchPlugin('eventmgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-calendar-minus-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">&Eacute;vénements</span></a>
+                                </li>
+                                <li id="nav_newsmgmt" class="nav-item py-2" onclick="switchPlugin('newsmgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-book fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Actualités</span></a>
+                                </li>
+                                <li id="nav_harbourmgmt" class="nav-item py-2" onclick="switchPlugin('harbourmgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-anchor fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Ports</span></a>
+                                </li>
+                                <li id="nav_partnermgmt" class="nav-item py-2" onclick="switchPlugin('partnermgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-handshake-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Partenaires</span></a>
+                                </li>
+                                <li id="nav_qrcode" class="nav-item py-2" onclick="switchPlugin('qrcode');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-qrcode fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">QRCODE</span></a>
+                                </li>
+                                <li id="nav_usermgmt" class="nav-item py-2" onclick="switchPlugin('usermgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-users fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Utilisateurs</span></a>
+                                </li>
+                                <li id="nav_weathermgmt" class="nav-item py-2" onclick="switchPlugin('weathermgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-sun-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Météo</span></span></a>
+                                </li>
+                                <li id="nav_commgmt" class="nav-item py-2" onclick="switchPlugin('commgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-commenting-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Communications</span></span></a>
+                                </li>
+                                <li id="nav_absencemgmt" class="nav-item py-2" onclick="switchPlugin('absencemgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-exchange fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Absences</span></a>
+                                </li>
+                                <li id="nav_sortiemgmt" class="nav-item py-2" onclick="switchPlugin('sortiemgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-arrows-h fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Sorties</span></a>
+                                </li>
+                                <li id="nav_securitemgmt" class="nav-item py-2" onclick="switchPlugin('securitemgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-user-circle-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Sécurité/Maintenance</span></a>
+                                </li>
+                                <li id="nav_prevdashadmin" class="nav-item py-2" onclick="switchPlugin('prevdashadmin');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-user-circle-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Back Admin</span></span></a>
+                                </li>
+                                <li id="nav_prevdashuser" class="nav-item py-2" onclick="switchPlugin('prevdashuser');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-user-circle fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Back user</span></span></a>
+                                </li>
+                                <li id="nav_adminmgmt" class="nav-item py-2" onclick="switchPlugin('adminmgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-user fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Admins</span></a>
+                                </li>
+                                <li id="nav_mapmgmt" class="nav-item py-2" onclick="switchPlugin('mapmgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-map fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Plan d'eau</span></a>
+                                </li>
+                                <li id="nav_emplacementmgmt" class="nav-item py-2" onclick="switchPlugin('emplacementmgmt');">
+                                    <a class="nav-link pl-0" href="#"><i class="fa fa-map fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Emplacements</span></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="col-10 p-0 m-0">
+                        <iframe id="plugin_display" class="p-0 m-0" src="/admin/plugin/boatmgmt" style="border:none;height:100% !important;width:100%;"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function switchPlugin(_pluginName) {
+                let children = document.querySelectorAll("li.nav-item.active");
+                children[0].setAttribute("class", "nav-item py-2");
+                document.getElementById("nav_" + _pluginName).setAttribute("class", "nav-item py-2 active bg-theme-color-active");
+                if (_pluginName == "prevdashadmin")
+                    document.getElementById("plugin_display").src = "https://admin.nauticspot.io/#/login";
+                else if (_pluginName == "prevdashuser")
+                    document.getElementById("plugin_display").src = "https://app.nauticspot.io/#/login";
+                else
+                    document.getElementById("plugin_display").src = "/admin/plugin/" + _pluginName;
+            }
+
+            var formData = new FormData();
+            formData.append("mode", "get_session");
+            window.onload = function () {
+                fetch("/admin/plugin/adminmgmt", { method: "POST", body: formData }).then(response => response.json()).then(_data => {
+                    //console.log(_data);
+                    if (_data.success) {
+                        var _user = _data.data;
+                        if (_user.role != "admin") {
+                            var disabledPlugin = ["adminmgmt", "prevdashadmin", "prevdashuser", "qrcode", "enititymgmt", "mapmgmt"];
+                            for (var i = 0; i < disabledPlugin.length; i++)
+                                document.getElementById("nav_" + disabledPlugin[i]).hidden = true;
+                        }
+                        document.getElementById("name").innerHTML = _user.name;
+                    }
+                    else
+                        location.replace("/dashboard/login");
+                }).catch((e) => { location.replace("/dashboard/login");/*console.error(e);*/ });
+
+                formData = new FormData();
+                formData.append("mode", "getEntity");
+                fetch("/admin/plugin/enititymgmt", { method: "POST", body: formData }).then(response => response.json()).then(_data => {
+                    document.getElementById("entity_img").src = _data.data.logo;
+                    document.getElementById("entity_name").src = _data.data.name;
+                    if(_data.data.absence_module == false)
+                                document.getElementById("nav_absencemgmt").hidden = true;
+                    if(_data.data.security_module == false)
+                                document.getElementById("nav_securitemgmt").hidden = true;
+
+
+                }).catch((e) => { console.error(e); });
+            };
+        </script>
+    </div>
+    </div>
+{{element->footer_dashboard.html}}

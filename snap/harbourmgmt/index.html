@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/fortpress_admin_assets/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/fortpress_admin_assets/favicon.ico" />
+
+
+    <title>Vendors management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/fortpress_admin_assets/assets/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '/'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/fortpress_admin_assets/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/input-mask/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/datatables/plugin.js"></script>
+</head>
+<body class="">
+    <div class="page">
+        <div class="flex-fill">
+            <div class="my-3 my-md-5">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Gestion des ports</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="harbourError"></div>
+                                <form method="POST" enctype="multipart/form-data" id="createForm">
+                                    <div class="row">
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">ID Groupe</label>
+                                                <input class="form-control" name="id_entity" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Nom du port</label>
+                                                <input class="form-control" name="name" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Email</label>
+                                                <input class="form-control" name="email" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Préfixe/Téléphone</label>
+                                                <div class="input-group">
+                                                    <input value="+33" style="width:35%;" class="form-control" name="prefix" required>
+                                                    <input style="width:65%;" class="form-control" name="phone" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Préfixe/Téléphone urgence</label>
+                                                <div class="input-group">
+                                                    <input value="+33" style="width:35%;" class="form-control" name="prefix_urgency" required>
+                                                    <input style="width:65%;" class="form-control" name="phone_urgency" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Adresse</label>
+                                                <input class="form-control" name="address" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Latitude</label>
+                                                <input class="form-control" name="latitude" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Longitude</label>
+                                                <input class="form-control" name="longitude" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Horaires lundi</label>
+                                                <input class="form-control" name="lundi">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Horaires mardi</label>
+                                                <input class="form-control" name="mardi">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Horaires mercredi</label>
+                                                <input class="form-control" name="mercredi">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Horaires jeudi</label>
+                                                <input class="form-control" name="jeudi">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Horaires vendredi</label>
+                                                <input class="form-control" name="vendredi">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Horaires samedi</label>
+                                                <input class="form-control" name="samedi">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Horaires dimanche</label>
+                                                <input class="form-control" name="dimanche">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Site vitrine</label>
+                                                <input class="form-control" name="website">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Site office de tourisme</label>
+                                                <input class="form-control" name="touristwebsite">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Infos Techniques / Équipements</label>
+                                                <input class="form-control" name="technical_informations">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">VFH</label>
+                                                <input class="form-control" name="vfh">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Places</label>
+                                                <input class="form-control" name="places">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Bouées</label>
+                                                <input class="form-control" name="buoy">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Tirant d'eau</label>
+                                                <input class="form-control" name="tirantdeau">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">longueur max</label>
+                                                <input class="form-control" name="longmax">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Électricité</label>
+                                                <input class="form-control" name="electricity">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Eau</label>
+                                                <input class="form-control" name="water">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Douches</label>
+                                                <input class="form-control" name="showers">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Toilettes</label>
+                                                <input class="form-control" name="toilet">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Code sanitaires</label>
+                                                <input class="form-control" name="sanitary_code">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Carburant</label>
+                                                <input class="form-control" name="fuel">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">WiFi</label>
+                                                <input class="form-control" name="wifi">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Code WiFi</label>
+                                                <input class="form-control" name="wifi_pass">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">image</label>
+                                                <input class="form-control" accept="image/png, image/jpg" type="file" name="img">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Plan du port</label>
+                                                <input class="form-control" accept="application/pdf" type="file" name="harbour_map">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">grille tarifaire</label>
+                                                <input class="form-control" accept="application/pdf" type="file" name="price_list">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Pièce jointe</label>
+                                                <input class="form-control" type="file" name="pj">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Nom de la pièce jointe</label>
+                                                <input class="form-control" name="pj_name">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Lien vers ERP</label>
+                                                <input class="form-control" name="erp_link">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Email conciergerie</label>
+                                                <input type="email" class="form-control" name="email_concierge">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Onesignal ID</label>
+                                                <input class="form-control" name="onesignal_id">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <button type="button" style="margin-top:27px" class="btn btn-primary" onclick="sendCreateForm();"> <i class="fe fe-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <div class="table-responsive">
+                                    <table class="table card-table table-vcenter text-nowrap datatable dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>ID Groupe</th>
+                                                <th>Nom</th>
+                                                <th>Email</th>
+                                                <th>Téléphone</th>
+                                                <th>Téléphone urgence</th>
+                                                <th>Adresse</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th>Horaires lundi</th>
+                                                <th>Horaires mardi</th>
+                                                <th>Horaires mercredi</th>
+                                                <th>Horaires jeudi</th>
+                                                <th>Horaires vendredi</th>
+                                                <th>Horaires samedi</th>
+                                                <th>Horaires dimanche</th>
+                                                <th>Site vitrine</th>
+                                                <th>Site office de tourisme</th>
+                                                <th>Infos techniques / équipements</th>
+                                                <th>VFH</th>
+                                                <th>Places</th>
+                                                <th>Bouées</th>
+                                                <th>Tirant d'eau</th>
+                                                <th>Longueur Max</th>
+                                                <th>Électricité</th>
+                                                <th>Eau</th>
+                                                <th>Douches</th>
+                                                <th>Toilettes</th>
+                                                <th>Code Sanitaires</th>
+                                                <th>Carburant</th>
+                                                <th>WiFi</th>
+                                                <th>Code WiFi</th>
+                                                <th>Lien ERP</th>
+                                                <th>Image</th>
+                                                <th>Remplacer Image</th>
+                                                <th>Plan du port</th>
+                                                <th>Remplacer le plan du port</th>
+                                                <th>Grille tarifaire</th>
+                                                <th>Remplacer la grille tarifaire</th>
+                                                <th>Pièce jointe</th>
+                                                <th>Remplacer la pièce jointe</th>
+                                                <th>nom de la pièce jointe</th>
+                                                <th>Email Conciergerie</th>
+                                                <th>ID Navily</th>
+                                                <th></th>
+                                            </tr>
+                                        <thead>
+                                        <tbody id="result">
+                                            __HARBOURS__
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            require(['datatables', 'jquery'], function (datatable, $) {
+                $('.datatable').DataTable(
+                    {
+                        language: {
+                            search: '<span></span>',
+                            searchPlaceholder: 'Votre recherche'
+                        },
+                        paging: false,
+                        "order": [[2, "desc"]],
+                        "info": false,
+                    });
+            });
+        }
+        function sendCreateForm() {
+            var form = document.getElementById("createForm");
+            var formData = new FormData(form);
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                });
+        }
+
+        function sendUpdateForm(id) {
+            var form = document.getElementById(id);
+            console.log(form);
+            var formData = new FormData(form);
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!--FOR TEST ONLY-->
+
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <title>PAGE DE TEST</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- <script src="script.js"></script> -->
+</head>
+
+<body>
+  <button id='clickBtn'>CLICK</button>
+  <div class="col-10 p-0 m-0">
+    <iframe id="plugin_display" class="p-0 m-0" src="/admin/plugin/t_user"
+      style="border:none;height:100% !important;width:100%;"></iframe>
+  </div>
+  
+  
+  <script>
+  console.log('HELLO WORLD')
+  let clickBtn;
+  const onLoadHandler = (ev) => {
+    console.log('CALL onLoadHandler');
+    clickBtn = document.getElementById('clickBtn');
+    if (clickBtn) clickBtn.addEventListener('click', clickHandler);
+  };
+
+  const clickHandler = async (ev) => {
+    console.log('CALL clickHandler');
+    try {
+    //   const result = await fetch('/api/getusers?token=1', {
+    //       method: 'POST',
+    //   });
+      const results = await STORE['usermgmt'].getUserById();
+      console.log('Retch users results', result);
+      const data = await result.json();
+      console.log('data', data);
+  
+    } catch (error) {
+      console.error('[ERROR]', error);
+    }
+    
+  }
+
+  window.addEventListener('load', onLoadHandler);
+
+  // 
+
+</script>
+</body>
+
+</html>
+

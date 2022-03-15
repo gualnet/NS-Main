@@ -1,0 +1,56 @@
+<div class="container-fluid h-100 loader-display">
+    <div class="row h-100">
+        <div class="align-self-center col-12 text-center">
+            <img style="width:100%;height:auto;" class="p-0" id="loader_entity_logo" src="" />
+            <div style="width:100%;height:100%;" class="logo-loading">
+                <div class="row">
+                    <div class="col-12">
+                        <!--<h4 class="mt-0 mb-4" style="color:#10348A;" id="loader_entity_name"></h4>-->
+                        <div class="loader-ellipsis">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var urlParam = new URLSearchParams(window.location.search);
+    if (localStorage['entity_logo']) {
+        document.getElementById('loader_entity_logo').src = localStorage['entity_logo'];
+    }
+    if (localStorage['entity_id']) {
+        fetch("/api/entity/get/" + localStorage['entity_id']).then(response => response.json()).then(_data => {
+            if (_data.success) {
+                var entity = _data.data;
+                document.getElementById('loader_entity_logo').src = entity.logo;
+                localStorage['entity_logo'] = entity.logo;
+                localStorage['absence_module'] = entity.absence_module;
+                localStorage['security_module'] = entity.security_module;
+                //document.getElementById('loader_entity_name').innerHTML = entity.name;
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+    } else if (urlParam.get('entity')) {
+        fetch("/api/entity/get/" + urlParam.get('entity')).then(response => response.json()).then(_data => {
+            if (_data.success) {
+                var entity = _data.data;
+                document.getElementById('loader_entity_logo').src = entity.logo;
+                localStorage['entity_logo'] = entity.logo;
+                localStorage['absence_module'] = entity.absence_module;
+                localStorage['security_module'] = entity.security_module;
+
+                // document.getElementById('loader_entity_name').innerHTML = entity.name;
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+</script>

@@ -1,0 +1,36 @@
+<tr>
+    <form method="POST" enctype="multipart/form-data" id="__FORMID__">
+        <td><input name="id" type="hidden" value="__ID__">__ID__</td>
+        <td><input name="harbour_id" type="hidden" value="__HARBOUR_ID__">__HARBOUR_NAME__</td>
+        <td>__CATEGORY__</td>
+        <td><textarea name="title">__TITLE__</textarea></td>
+        <td><input name="date_start" type="date" value="__DATE_START__" /></td>
+        <td><input name="date_end " type="date" value="__DATE_END__" /></td>
+        <td>
+            <div id="__EDITOR_DESC_ID__" style="width:400px;height:100px;">__DESCRIPTION__</div>
+            <script>
+                var quill___EDITOR_DESC_ID__ = new Quill('#__EDITOR_DESC_ID__', {
+                    placeholder: 'Entrez le texte...',
+                    theme: 'snow'
+                });</script>
+        </td>
+        <td>
+            <div id="__EDITOR_ID__" style="width:400px;height:100px;">__CONTENT__</div>
+            <script>
+                var quill___EDITOR_ID__ = new Quill('#__EDITOR_ID__', {
+                    placeholder: 'Entrez le texte...',
+                    theme: 'snow'
+                });</script>
+        </td>
+        <td><input name="pjname" value="__PJNAME__"></td>
+        <td><a target="_blank" href="__PJ__">__PJ__</a></td>
+        <td><input type="file" class="form-control" name="pj"></td>
+        <td><a target="_blank" href="__IMG__">__IMG__</a></td>
+        <td><input type="file" accept="image/png, image/jpg" class="form-control" accept="image/png, image/jpg" name="img"></td>
+        <td>__DATE__</td>
+        <td>
+            <a href="#" onclick="if(confirm('Delete __ID__ ?'))document.location.href='?event_id=__ID__&mode=delete';"> <i class="fe fe-trash"></i></a>
+            <button type="button" class="btn" onclick="sendUpdateForm('__FORMID__');"> <i class="fa fa-save"></i></button>
+        </td>
+    </form>
+</tr>

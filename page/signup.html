@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="d-flex flex-column h-100">
+    <!-- screen loader -->
+    {{element->loader.html}}
+
+
+
+    <!-- Fixed navbar -->
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        <!--
+                <div class="container text-center mt-4">
+                    <img src="" class="p-2" style="width: 100%;height: auto;" id="logo" />
+                    <h4 class="mt-0 mb-4" style="color:#004577;" id="name"></h4>
+                </div>
+            -->
+        <div class="container" style="border-radius: 25px; width: 325px; background-color: #FFFFFFF1; margin-bottom: 100px; padding-top: 40px; padding-bottom: 40px">
+            <div class="login-box">
+                <p style="text-align: center; font-size: 22px; margin-bottom: 0rem;">Création de votre profil</p>
+                <p style="text-align: center; font-size: 14px; color: #666">Complétez vos informations</p>
+                <form id="signupForm" method="post">
+                    <div class="form-group floating-form-group">
+                        <input name="first_name" type="text" class="form-control floating-input" value="" required>
+                        <label class="floating-label" style="color: #446E7B">Nom</label>
+                    </div>
+                    <div class="form-group floating-form-group">
+                        <input name="last_name" type="text" class="form-control floating-input" value="" required>
+                        <label class="floating-label" style="color: #446E7B">Prénom</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="form-group floating-form-group">
+                                <input name="prefix" type="text" class="form-control floating-input" value="+33" required>
+                                <label class="floating-label" style="color: #446E7B">Préfixe</label>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="form-group floating-form-group">
+                                <input name="phone" type="tel" class="form-control floating-input" value="" required>
+                                <label class="floating-label" style="color: #446E7B">Téléphone mobile</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group floating-form-group">
+                        <input name="email" type="email" class="form-control floating-input" value="" autofocus required>
+                        <label class="floating-label" style="color: #446E7B">Email</label>
+                    </div>
+                    <div class="form-group floating-form-group">
+                        <input name="password" type="password" class="form-control floating-input" required>
+                        <label class="floating-label" style="color: #446E7B">Mot de passe</label>
+                    </div>
+                    <div class="form-group floating-form-group">
+                        <input name="password_confirm" type="password" class="form-control floating-input" required>
+                        <label class="floating-label" style="color: #446E7B">Confirmer mot de passe</label>
+                    </div>
+                    <div class="form-group floating-form-group">
+                        <input name="contract_number" type="text" class="form-control floating-input" required>
+                        <label class="floating-label" style="color: #446E7B">N° contrat (facultatif)</label>
+                    </div>
+                    <div class="form-group floating-form-group">
+                        <label class="text-muted" for="category-select" style="color: #446E7B">Quelle est votre catégorie:</label>
+                        <select name="category" class="form-control" id="category-select" style="color: #446E7B">
+                            <!--<option value="professional">Professionel</option>-->
+                            <option value="yachtsman" style="color: #446E7B">Plaisancier</option>
+                            <!--<option value="visitor">Visiteur</option>-->
+                        </select>
+                    </div>
+
+                    <div class="form-group floating-form-group">
+                        <label class="text-muted" for="harbourId" style="color: #446E7B" style="color: #446E7B">Votre port de plaisance:</label>
+                        <select name="harbourid" class="form-control" id="harbourlist" style="color: #446E7B">
+                        </select>
+                    </div>
+                    <div class="form-group my-4 text-secondary">
+                        En cliquant sur le bouton ci-dessous, je reconnais avoir
+                        <a href="#" class="link">lu et accepté les conditions générales</a> de l'application
+                    </div>
+                </form>
+                <form method="post" id="boatform">
+                    <div class="form-group floating-form-group">
+                        <p class="text-muted" style="color: #446E7B">Etes-vous résident du port ?</p>
+                        <div class="row">
+                            <div class="col">
+                                <button id="yesButton" type="button" class="btn btn-secondary" style="width:100%;" onclick="showResidentInputs();">Oui</button>
+                            </div>
+                            <div class="col">
+                                <button id="noButton" type="button" class="btn btn-primary" style="width:100%;" onclick="hideResidentInputs();">Non</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div id="residentInputs">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <button id="validate_button" onclick="sendSignupForm();" class="btn btn-block btn-danger btn-lg">Valider</button><br>
+                <div class="row">
+                    <div class="col text-center">
+                        <div id="addUserError"></div>
+                        <a href="/signin" class="link" style="color: #446E7B">Déjà un compte ? Cliquez ici.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        body, main {
+            background: url("/library/Nauticspot-profil-background.jpg") 1500px / 500% !important;
+        }
+
+        @font-face {
+            font-family: 'Poppins Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+        }
+
+        * {
+            font-family: 'Poppins Regular';
+        }
+
+        body {
+            background: url("../background2.png") #FFF fixed;
+            font-family: 'Poppins Regular' !important;
+        }
+    </style>
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  -->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        "use strict"
+        $(window).on('load', function () {
+            if (localStorage['entity_id'] == '4eqv44307K')
+                document.getElementById('validate_button').setAttribute("style", "background-color: #FB9101;");
+            var data = new FormData();
+            data.append("token", localStorage["token"]);
+            if (localStorage['token']) {
+                fetch("/api/user/session", { method: "post", body: data }).then(response => response.json()).then(_data => {
+                    if (_data.success)
+                        window.location.href = ("/index");
+
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
+            /*
+            if (localStorage['entity_name'] && localStorage['entity_logo']) {
+                document.getElementById('logo').src = localStorage['entity_logo'];
+                document.getElementById('name').innerHTML = localStorage['entity_name'];
+            }
+            */
+
+
+            var swiper = new Swiper('.swiper-container', {
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+            fetch("/api/getharbours/" + localStorage['entity_id'], {
+                method: "get"
+            }).then(response => response.json()).then(_data => {
+                var harbours = _data.data;
+                for (var i = 0; i < harbours.length; i++) {
+                    console.log(harbours[i].name);
+                    console.log(harbours[i].id);
+                    if (harbours[i].id == localStorage['harbourid'])
+                        document.getElementById("harbourlist").insertAdjacentHTML("beforeend", ('<option value="' + harbours[i].id + '" selected>' + harbours[i].name + '</option>'));
+                    else
+                        document.getElementById("harbourlist").insertAdjacentHTML("beforeend", ('<option value="' + harbours[i].id + '">' + harbours[i].name + '</option>'));
+                }
+
+            }).catch((error) => {
+                console.log(error);
+            });
+        });
+
+        document.getElementById("harbourlist").addEventListener("change", function (event) {
+            getPlaces();
+        })
+
+        function sendSignupForm() {
+            var form = document.getElementById("signupForm");
+            console.log(form);
+            var formData = new FormData(form);
+
+            fetch("/api/verify/mail/", {
+                method: form.method,
+                body: formData
+            }).then(response => response.json()).then(_data => {
+                console.log(_data);
+                if (_data.success) {
+                    fetch("/api/adduser", {
+                        method: form.method,
+                        body: formData,
+                    }).then(response => response.json()).then(_data => {
+                        console.log(_data);
+                        if (_data.success) {
+                            var user = _data.data;
+                            console.log('la');
+                            //user created, now creating the boat if user have boat
+                            if (document.getElementById("residentInput")) {
+                                console.log('ici');
+                                form = document.getElementById("boatform");
+                                console.log(form);
+                                formData = new FormData(form);
+                                formData.append("user", user.id);
+                                formData.append("harbour", user.harbourid);
+                                fetch("/api/addboat",
+                                    {
+                                        method: form.method,
+                                        body: formData,
+                                    }).then(response => response.json()).then(_data => {
+                                        //localStorage["boat"] = _data.data.id;
+                                        console.log("boat created");
+                                        console.log(user);
+                                        localStorage["user"] = user.id;
+                                        localStorage["harbourid"] = user.harbourid;
+                                        localStorage["token"] = user.token;
+                                        fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+                                            console.log(_data.data);
+                                            localStorage["harbourname"] = _data.data.name;
+                                            window.location.href = ("/index");
+                                        }).catch((error) => {
+                                            console.log(error);
+                                        });
+                                    }).catch((error) => {
+                                        console.log('Error:', error);
+                                    });
+                            } else {
+                                localStorage["user"] = user.id;
+                                localStorage["harbourid"] = user.harbourid;
+                                localStorage["token"] = user.token;
+
+                                fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+                                    console.log(_data.data);
+                                    localStorage["harbourname"] = _data.data.name;
+                                    window.location.href = ("/index");
+                                }).catch((error) => {
+                                    console.log(error);
+                                });
+                            }
+                        }
+                        else {
+                            if (document.getElementById("error"))
+                                document.getElementById("addUserError").removeChild(document.getElementById("error"));
+
+                            document.getElementById("addUserError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
+                        }
+                    }).catch((error) => {
+                        console.log('Error:', error);
+                    });
+
+
+                } else {
+                    if (document.getElementById("error"))
+                        document.getElementById("addUserError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("addUserError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
+                }
+            }).catch((error) => {
+                console.log("error");
+            })
+        }
+
+        function showResidentInputs() {
+            document.getElementById('yesButton').className = "btn btn-primary";
+            document.getElementById('noButton').className = "btn btn-secondary";
+
+            if (document.getElementById("residentInput"))
+                document.getElementById("residentInputs").removeChild(document.getElementById("residentInput"));
+
+            document.getElementById("residentInputs").insertAdjacentHTML('beforeend', '<div id="residentInput">'
+                + '<div class="form-group floating-form-group">'
+                + '        <label class="text-muted" for="category-select" style="color: #446E7B">Ponton</label>'
+                + '        <select name="ponton_id" class="form-control" id="ponton-select">'
+                + '        </select>'
+                + '    </div>'
+                + '</div >'
+                + '<div class="form-group floating-form-group">'
+                + '        <label class="text-muted" for="category-select" style="color: #446E7B">Numéro de place</label>'
+                + '        <select name="place_id" class="form-control" id="place-select">'
+                + '        </select>'
+                + '    </div>'
+                + '</div >'
+                + '<div class="form-group floating-form-group">'
+                + '<input name="name" type="text" class="form-control floating-input" required>'
+                + '<label class="floating-label" style="color: #446E7B">Nom du bateau</label>'
+                + '</div >'
+                + '<div class="form-group floating-form-group">'
+                + '<input name="immatriculation" type="text" class="form-control floating-input" required>'
+                + '<label class="floating-label" style="color: #446E7B">Immatriculation</label>'
+                + '</div >'
+                + '<div class="form-group floating-form-group">'
+                + '<input name="longueur" type="number" class="form-control floating-input" required>'
+                + '<label class="floating-label" style="color: #446E7B">Longueur (en m)</label>'
+                + '</div >'
+                + '<div class="form-group floating-form-group">'
+                + '<input name="largeur" type="text" class="form-control floating-input" required>'
+                + '<label class="floating-label" style="color: #446E7B">Largeur (en m)</label>'
+                + '</div >'
+                + '<div class="form-group floating-form-group">'
+                + '<input name="tirant_eau" type="number" class="form-control floating-input" required>'
+                + '<label class="floating-label" style="color: #446E7B">Tirant d\'eau (en m)</label>'
+                + '</div >'
+                + '<input name="is_resident" value="1" hidden>'
+                + '</div >'
+            );
+            getPonton();
+            document.getElementById("ponton-select").addEventListener('change', (event) => {
+                getPlaces(event.target.value);
+            });
+        }
+
+        var dynamicSort = function (property) {
+            var sortOrder = 1;
+            if (property[0] === "-") {
+                sortOrder = -1;
+                property = property.substr(1);
+            }
+            return function (a, b) {
+                /* next line works with strings and numbers,
+                 * and you may want to customize it to your needs
+                 */
+                var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+                return result * sortOrder;
+            }
+        }
+        function hideResidentInputs() {
+            document.getElementById('yesButton').className = "btn btn-secondary";
+            document.getElementById('noButton').className = "btn btn-primary";
+
+            if (document.getElementById("residentInput"))
+                document.getElementById("residentInputs").removeChild(document.getElementById("residentInput"));
+
+            //document.getElementById("residentInputs").insertAdjacentHTML('beforeend', '<input id="residentInput" name="is_resident" hidden>');
+        }
+        function getPonton() {
+            fetch("/api/pontons?harbour_id=" + document.getElementById("harbourlist").value, { method: "GET" }).then(response => response.json()).then(_data => {
+                console.log(_data);
+                var pontons = _data.data.sort(dynamicSort("name"));
+                document.getElementById('ponton-select').innerHTML = "";
+                for (var i = 0; i < pontons.length; i++) {
+                    if(i == 0)
+                        getPlaces(pontons[i].id);
+                        if (pontons[i].name != "")
+                            document.getElementById('ponton-select').innerHTML += '<option value="' + pontons[i].id + '" >' + pontons[i].name + '</option>';
+                }
+            }).catch((e) => console.error(e));
+        }
+        function getPlaces(_ponton_id) {
+            fetch("/api/placesbyponton?harbour_id=" + document.getElementById("harbourlist").value + "&ponton_id=" + _ponton_id, { method: "GET" }).then(response => response.json()).then(_data => {
+                if(_data.data) {
+                    console.log(_data);
+                    var places = _data.data.sort(dynamicSort("number"));
+                    document.getElementById('place-select').innerHTML = "";
+                    for (var i = 0; i < places.length; i++) {
+                        document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" >' + places[i].number + '</option>';
+                    }
+                } else {
+                    document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
+                }
+            }).catch((e) => console.error(e));
+        }
+    </script>
+    {{element->footer_app.html}}
+</body>
+
+
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:16 GMT -->
+</html>

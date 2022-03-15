@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+<body class="d-flex flex-column h-100 menu-overlay">
+    <nav class="navbar navbar-light fixed-top mt-3">
+        <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
+    </nav>
+    <!-- screen loader -->
+    {{element->loader.html}}
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        <!-- Fixed navbar        <header class="header">
+                    <div class="row">
+                        <div class="col-auto px-0">
+                            <a href="/index" class="btn menu-btn btn-link text-dark">
+                                <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                                    <title>ionicons-v5-a</title>
+                                    <polyline points='244 400 100 256 244 112' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+                                    <line x1='120' y1='256' x2='412' y2='256' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="text-left col align-self-center">
+                            <h5>Profil</h5>
+                        </div>
+                        <div class="ml-auto col-auto align-self-center">
+
+                        </div>
+                    </div>
+                </header>
+
+                page content start
+
+
+                <div class="container mt-4 text-center">
+                    <div class="icon icon-100 position-relative">
+                        <figure class="background">
+                            <img src="img/" alt="">
+                        </figure>
+                    </div>
+                </div>
+        -->
+        <div class="container mt-4">
+            <div><p>Challenges accomplis : <span id="challengesCount"></span></p></div>
+            <div><p>Nombres de sorties : <span id="nbSorties"></span></p></div>
+            <div id="sorties">
+
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="container py-3">
+            {{element->navbar.html}}
+        </div>
+    </main>
+    <!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
+        <span class="text-white">
+            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                <title>ionicons-v5-m</title>
+                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
+                <circle cx='144' cy='208' r='32' />
+                <circle cx='152' cy='311' r='32' />
+                <circle cx='224' cy='144' r='32' />
+                <circle cx='256' cy='367' r='48' />
+                <circle cx='328' cy='144' r='32' />
+            </svg>
+        </span>
+    </button>
+         -->
+
+    <div class="sidebar-right">
+        <div class="selectoption">
+            <input type="checkbox" id="darklayout" name="darkmode">
+            <label for="darklayout">Dark</label>
+        </div>
+        <div class="selectoption mb-0">
+            <input type="checkbox" id="rtllayout" name="layoutrtl">
+            <label for="rtllayout">RTL</label>
+        </div>
+        <hr>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
+            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
+            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
+            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
+            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
+            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
+            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
+            <label for="templatecolor8" class="bg-red" data-title="red"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
+            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
+            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
+            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
+            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
+            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
+            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
+            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+        </div>
+
+    </div>
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  -->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        var user;
+        "use strict"
+        $(window).on('load', function () {
+            if (localStorage['entity_id'] == '4eqv44307K')
+                document.getElementById('validate_button').setAttribute("style", "background-color: #FB9101;");
+
+            var swiper = new Swiper('.swiper-container', {
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+
+            var formData = new FormData();
+            formData.append("token", localStorage["token"])
+            fetch("/api/sortie/user", { method: "post", body: formData }).then(response => response.json()).then(_data => {
+                if (_data.success) {
+
+                    var sorties = _data.data.sort(dynamicSort("date")).reverse();
+                    document.getElementById("sorties").innerHTML = "";
+                    if (sorties[0]) {
+                        let challengesCount = 0;
+                        let dateEntre;
+                        let dateEntreFormated;
+                        let duree;
+                        let card;
+                        for (var i = 0; i < sorties.length; i++) {
+                            card = "";
+                            var dateSortie = new Date(sorties[i].sorti);
+                            var date_sortiFormated = [("0" + (dateSortie.getDate())).slice(-2), ("0" + (dateSortie.getMonth() + 1)).slice(-2), dateSortie.getFullYear()].join('-') + ' ' + [("0" + (dateSortie.getHours())).slice(-2), ("0" + (dateSortie.getMinutes())).slice(-2), ("0" + (dateSortie.getSeconds())).slice(-2)].join(':');
+                            if (sorties[i].challenge) {
+                                challengesCount++;
+                                card += '<div class="card mt-3 mb-4">'
+                                    + '<div class="card-header justify-content-center bg-primary"><h6>Challenge sortie N° ' + sorties[i].id + '</h6></div>'
+                                    + '<div class="card-body">'
+                                    + '<div class="row m-0">'
+                            } else {
+                                card += '<div class="card mt-3 mb-4">'
+                                    + '<div class="card-header justify-content-center"><h6>Sortie N° ' + sorties[i].id + '</h6></div>'
+                                    + '<div class="card-body">'
+                                    + '<div class="row m-0">'
+                            }
+
+                            card += '<div class="col-6 p-0">'
+                                + '<div class="form-group floating-form-group active" >'
+                                + '   <input id="phone" name="date_end" type="text" class="form-control floating-input" value="' + sorties[i].place.number + '" readonly>'
+                                + '   <label class="floating-label">Place</label>'
+                                + '</div>'
+                                + '</div>'
+
+                            card += '<div class="col-6 p-0">'
+                                + '<div class="form-group floating-form-group active" >'
+                                + '   <input id="phone" name="date_end" type="text" class="form-control floating-input" value="' + sorties[i].boat.name + '" readonly>'
+                                + '   <label class="floating-label">Bateau</label>'
+                                + '</div>'
+                                + '</div>'
+
+                            card += '<div class="col-6 p-0">'
+                                + '<div class="form-group floating-form-group active" >'
+                                + '   <input id="phone" name="date_end" type="text" class="form-control floating-input" value="' + date_sortiFormated + '" readonly>'
+                                + '   <label class="floating-label">Date de sortie</label>'
+                                + '</div>'
+                                + '</div>'
+
+                            if (sorties[i].entre != "empty" && sorties[i].entre != null) {
+                                dateEntre = new Date(sorties[i].entre);
+                                date_entreFormated = [("0" + (dateEntre.getDate())).slice(-2), ("0" + (dateEntre.getMonth() + 1)).slice(-2), dateEntre.getFullYear()].join('-') + ' ' + [("0" + (dateEntre.getHours())).slice(-2), ("0" + (dateEntre.getMinutes())).slice(-2), ("0" + (dateEntre.getSeconds())).slice(-2)].join(':');
+                                duree = dateDiffToString(sorties[i].sorti, sorties[i].entre)
+                                card += '<div class="col-6 p-0">'
+                                    + '<div class="form-group floating-form-group active" >'
+                                    + '   <input id="phone" name="date_end" type="text" class="form-control floating-input" value="' + date_entreFormated + '" readonly>'
+                                    + '   <label class="floating-label">Date de retour</label>'
+                                    + '</div>'
+                                    + '</div>'
+                            } else {
+                                card += '<div class="col-6 p-0">'
+                                    + '<div class="form-group floating-form-group active" >'
+                                    + '   <input id="phone" name="date_end" type="text" class="form-control floating-input" value="aucune" readonly>'
+                                    + '   <label class="floating-label">Date de retour</label>'
+                                    + '</div>'
+                                    + '</div>'
+                                dateEntreFormated = "aucun"
+                                duree = dateDiffToString(sorties[i].sorti, new Date(Date.now()));
+                            }
+                            card += '<div class="col-6 p-0">'
+                                + '<div class="form-group floating-form-group active" >'
+                                + '   <input id="phone" name="date_end" type="text" class="form-control floating-input" value="' + duree + '" readonly>'
+                                + '   <label class="floating-label">Durée</label>'
+                                + '</div>'
+                                + '</div>'
+
+                            card += '</div>'
+                                + '</div>'
+                                + '</div>'
+
+                            document.getElementById("sorties").innerHTML += card
+                        }
+                        document.getElementById("challengesCount").innerHTML = challengesCount;
+                        document.getElementById("nbSorties").innerHTML = sorties.length + 1;
+                    }
+                } else {
+                    document.getElementById("challengesCount").innerHTML = 0;
+                    document.getElementById("nbSorties").innerHTML = 0;
+                    document.getElementById("sorties").innerHTML = "<p>Réalisez des sorties d'une heure minimum pour avoir des challenges, pour 15 sorties entre le 01/01 - 15/04 & 01/10-31/12 vous obtenez -25% sur votre abonnement annuel. Maximum deux challenges par jour.</p>";
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
+
+            /*
+            fetch("/api/getuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
+                user = _data.data;
+                //document.getElementById("user_id").value = user.id;
+                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
+                    var boat = _data.data[0]
+                    //document.getElementById("boat_id").value = boat.id;
+                    updateAbsenceList();
+                }).catch((error) => {
+                    console.log(error);
+                });
+            }).catch((error) => {
+                console.log(error);
+            });
+*/
+
+        });
+
+        function dateDiffToString(a, b) {
+
+            // make checks to make sure a and b are not null
+            // and that they are date | integers types
+
+            diff = Math.abs(a - b);
+
+            ms = diff % 1000;
+            diff = (diff - ms) / 1000
+            ss = diff % 60;
+            diff = (diff - ss) / 60
+            mm = diff % 60;
+            diff = (diff - mm) / 60
+            hh = diff % 24;
+            days = (diff - hh) / 24
+
+            return days + " jours et " + hh + ":" + mm + ":" + ss;
+
+        }
+
+        var dynamicSort = function (property) {
+            var sortOrder = 1;
+            if (property[0] === "-") {
+                sortOrder = -1;
+                property = property.substr(1);
+            }
+            return function (a, b) {
+                /* next line works with strings and numbers,
+                 * and you may want to customize it to your needs
+                 */
+                var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+                return result * sortOrder;
+            }
+        }
+
+    </script>
+    {{element->footer_app.html}}
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/setting.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
+</html>

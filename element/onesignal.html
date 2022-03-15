@@ -1,0 +1,70 @@
+
+<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+    /* window.OneSignal = window.OneSignal || [];
+     OneSignal.push(function () {
+
+
+
+         OneSignal.init({
+             /*prod */
+    // appId: "a1c891a4-8493-459f-b06a-d097e5c4c08e",
+    //  safari_web_id: "web.onesignal.auto.0d8cfe1b-addf-4fe0-8094-42e4bf6360cd"
+
+
+
+    /*local
+    appId: "7965cc10-a135-4392-87cb-f5b285e4f239",
+    safari_web_id: "web.onesignal.auto.2e1b0bc4-2845-4ea5-bb2f-59e722cf7b3c"
+
+});
+*/
+    /*
+                    OneSignal.getUserId(function (userId)
+                        console.log(userId);
+                        */
+    let osid = "";
+    if (localStorage['onesignal_userid']) {
+        osid = localStorage['onesignal_userid'];
+    } else if (localStorage["entity_id"]) {
+        fetch("/api/entity/get/" + localStorage["entity_id"]).then(response => response.json()).then(data => {
+            if(data.success) {
+                let entity = data.data;
+                window.OneSignal = window.OneSignal || [];
+                OneSignal.push(function () {
+                    OneSignal.init({
+                        appId: entity.onesignal_app_id,
+                    });
+                    OneSignal.getUserId().then(function(userId) {
+                    osid = userId;
+                  });
+                });
+            }
+        }).catch((e) => console.error(e))
+    }
+    
+    if(osid != "") {
+        if (localStorage['user']) {
+            fetch("/api/register/onesignal/userid?userid=" + localStorage['user'] + "&onesignal_userid=" + osid + "&harbourid=" + localStorage["harbourid"]).then(response => response.json()).then(data => {
+                console.log(data);
+                if (data.data[0].onesignal_userid) {
+                    localStorage['onesignal_userid'] = osid;
+                    localStorage['user'] = data.data[0].id;
+                }
+            }).catch((error) => {console.log(error);});
+        }
+        else {
+            fetch("/api/register/onesignal/userid?onesignal_userid=" + osid + "&harbourid=" + localStorage["harbourid"]).then(response => response.json()).then(data => {
+                console.log(data);
+                if (data.data[0].onesignal_userid) {
+                    localStorage['onesignal_userid'] = osid;
+                    localStorage['user'] = data.data[0].id;
+                }
+            }).catch((error) => {console.log(error);});
+        }
+    }
+                /*});
+});
+*/
+</script>
+

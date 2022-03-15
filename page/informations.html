@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+    <!-- screen loader -->
+    {{element->loader.html}}
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        <!-- Fixed navbar -->
+        {{element->navheader.html}}
+        <nav class="navbar navbar-light fixed-top" style="margin-top:35px;">
+            <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
+        </nav>
+        <div class="product-image-top">
+            <img id="img" class="background" src="" alt="">
+        </div>
+        <!-- page content start -->
+        <div class="container top-30" id="container">
+            <div class="card" style="border-radius: 25px;" id="menuInfo">
+                <div class="card-body" style="margin: 0 20px 0 20px">
+                    <div class="row">
+                        <div class="col" id="harbourname" style="text-align: center; font-weight: bold; color: #222">
+                        </div>
+                    </div>
+                </div>
+                <center>
+                    <div class="row">
+                        <div class="col" style="margin-right: -50px;">
+                            <a id="telcapitainerie" style="border-radius: 8px; background-color: #0C5BCC; border-color: #FFF0;width: 130px; height: 50px" class="btn"><img class="fit-picture" src="/library/call.png" style="width: 22px; position: relative; top: 2px;"></a>
+                        </div>
+                        <div class="col">
+                            <a id="mail" style="border-radius: 8px; background-color: #0C5BCC; border-color: #FFF0;width: 130px; height: 50px" class="btn"><img class="fit-picture" src="/library/mail.png" style="width: 27px; position: relative; top: 2px;"></a>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 10px">
+                        <div class="col" style="margin-right: -50px;">
+                            <a id="telurgence" style="border-radius: 8px; background-color: #0C5BCC; border-color: #FFF0;width: 130px; height: 50px" class="btn"><img class="fit-picture" src="/library/sos.png" style="width: 35px; position: relative; top: 2px;"></a>
+                        </div>
+                        <div class="col">
+                            <a id="hours" style="border-radius: 8px; background-color: #0C5BCC; border-color: #FFF0;width: 130px; height: 50px" class="btn" onclick="showHours();"><img class="fit-picture" src="/library/clock.png" style="width: 27px; position: relative; top: 2px;"></a>
+                        </div>
+                    </div>
+                </center>
+
+                <div id="gps_adress" class="card-body border-bottom border-color" style="margin: 0 20px 0 20px">
+                    <img class="fit-picture" src="/library/loc.png" style="width: 10px">
+                </div>
+                <div class="row" style="margin: 20px">
+                    <div class="col-6">
+                        <a id="website" target="_blank" class="small vm"><span style="font-size: 12px; color: ##1D68D5">Site web</span></a>
+                    </div>
+                    <div class="col-6">
+                        <a id="touristwebsite" target="_blank" class="small vm"><span style="font-size: 12px; color: ##1D68D5; text-align: right">Office de tourisme</span></a>
+                    </div>
+                    <div class="col-6">
+                        <a id="harbour_map" target="_blank" class="small vm"><span style="font-size: 12px; color: ##1D68D5">Plan du port</span></a>
+                    </div>
+                    <div class="col-6">
+                        <a id="price_list" target="_blank" class="small vm"><span style="font-size: 12px; color: ##1D68D5; text-align: right">Grille tarifaire</span></a>
+                    </div>
+                    <div class="col-6" id="erp">
+                        <a id="erp_link" target="_blank" class="small vm"><span style="font-size: 12px; color: ##1D68D5">Portail ERP</span></a>
+                    </div>
+                    <div class="col-6" id="pj">
+                        <a id="pj_link" target="_blank" class="small vm"><span style="font-size: 12px; color: ##1D68D5" id="pj_name"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="border-radius: 25px;" id="hoursInfo" onclick="showMenu();" hidden>
+                <div class="card-header" style="margin: 0 20px 0 20px">
+                    <div class="row">
+                        <div class="col"><h6><i style="color: #0C5BCC !important;" class="bi bi-arrow-left"></i> Horaires - Bureau du port</h6></div>
+                    </div>
+
+                </div>
+                <div class="card-body" style="margin: 0 20px 0 20px">
+                    <div class="row">
+                        <div class="col-6">Lundi</div>
+                        <div class="col-6" id="lundi" style="font-size: 15px"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Mardi</div>
+                        <div class="col-6" id="mardi" style="font-size: 15px"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Mercredi</div>
+                        <div class="col-6" id="mercredi" style="font-size: 15px"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Jeudi</div>
+                        <div class="col-6" id="jeudi" style="font-size: 15px"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Vendredi</div>
+                        <div class="col-6" id="vendredi" style="font-size: 15px"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Samedi</div>
+                        <div class="col-6" id="samedi" style="font-size: 15px"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Dimanche</div>
+                        <div class="col-6" id="dimanche" style="font-size: 15px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border-top border-color small text-secondary">
+                <br>
+                <center>
+
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="border-bottom border-color" style="font-weight: bold; color: #222; padding-bottom: 10px;">Services au port</h6><br>
+                        </div>
+                    </div>
+                    <div class="row" id="sanitaryButtons">
+                        <div class="col">
+                            <button id="sanitaryCodeButton" onclick="showSanitaryCode();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0;width: 175px; height: 50px; box-shadow: 0px 2px 16px #999">
+                                <span style="color: #0C5BCC">Code sanitaire</span>  <img class="fit-picture" src="/library/eye.png" style="width: 27px; padding-left: 10px;">
+                            </button>
+                            <button id="sanitaryCode" onclick="showSanitaryButton();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0;width: 100%; height: 50px; box-shadow: 0px 2px 16px #999" hidden>
+                                <span style="color: #0C5BCC" id="sanitary_code"></span>  <i style="color: #0C5BCC !important; font-size: 27px;" class="bi bi-unlock-fill"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row" id="wifiButtons">
+                        <div class="col" style="margin-top: 10px; margin-bottom: 40px">
+                            <button id="wifiButton" onclick="showWifiCode();" style="border-radius: 50px; background-color: #0C5BCC; border-color: #FFF0;width: 175px; height: 50px; box-shadow: 0px 2px 16px #999">
+                                <span style="color: #FFF">Mot de passe Wi-Fi</span>
+                                <img class="fit-picture" src="/library/eyew.png" style="width: 27px; padding-left: 10px;">
+                            </button>
+                            <button id="wifiCopyButton" onclick="copyWifiCode();" style="border-radius: 50px; background-color: #0C5BCC; border-color: #FFF0; width: 100%; height: 50px; box-shadow: 0px 2px 16px #999" hidden>
+                                <span style="color: #FFF" id="wifi"></span>
+                                <img class="fit-picture" src="/library/copy.png" style="width: 27px; padding-left: 10px;">
+                            </button>
+                            <button id="wifiCopiedButton" onclick="showWifiButton();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0; width: 100%; height: 50px; box-shadow: 0px 2px 16px #999" hidden>
+                                <span style="color: #0C5BCC">Mot de passe Copié</span>
+                                <i style="width: 27px; padding-left: 10px;color:#0C5BCC;" class="bi bi-check-lg"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                    <script>
+                    </script>
+                    <div class="row">
+                        <div class="col">
+                            <div id="vfh"><img class="fit-picture" src="/library/vhf.png" style="width: 40px; margin-right: 10px;"></div>
+                        </div>
+                        <div class="col">
+                            <div id="places"><img class="fit-picture" src="/library/place.png" style="width: 30px; margin-right: 10px;"></div>
+                        </div>
+                        <div class="col">
+                            <div id="buoy"><img class="fit-picture" src="/library/boue.png" style="width: 30px; margin-right: 10px;"></div>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col">
+                            <div id="tirantdeau"><img class="fit-picture" src="/library/tirant.png" style="width: 30px; margin-right: 5px;"></div>
+                        </div>
+                        <div class="col">
+                            <div id="longmax"><img class="fit-picture" src="/library/longueur.png" style="width: 30px; margin-right: 5px;"></div>
+                        </div>
+                        <div class="col">
+                            <div id="electricity"><img class="fit-picture" src="/library/elec.png" style="width: 25px; margin-right: 10px;"></div>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col">
+                            <div id="water"><img class="fit-picture" src="/library/eau.png" style="width: 25px; margin-right: 10px;"></div>
+                        </div>
+                        <div class="col">
+                            <div id="shower"><img class="fit-picture" src="/library/douche.png" style="width: 30px; margin-right: 10px;"></div>
+                        </div>
+                        <div class="col">
+                            <div id="toilet"><img class="fit-picture" src="/library/toilet.png" style="width: 30px; margin-right: 10px;"></div>
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col">
+                            <div id="fuel"><img class="fit-picture" src="/library/fuel.png" style="width: 30px; margin-right: 10px;"></div>
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+        </div>
+
+        <script>
+            fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+                console.log(_data);
+                var harbour = _data.data;
+                var sBrowser, sUsrAg = navigator.userAgent;
+                if (sUsrAg.indexOf("Safari") > -1) {
+                    sBrowser = "Apple Safari";
+                    document.getElementById("gps_adress").insertAdjacentHTML('beforeend', '<a href="http://maps.apple.com/?q=' + harbour.address + '" class="small text-secondary">' + harbour.address + '</a>')
+                } else {
+                    document.getElementById("gps_adress").insertAdjacentHTML('beforeend', '<a href="geo:0,0?q=' + harbour.address + '" class="small text-secondary">' + harbour.address + '</a>')
+                }
+
+
+                if (harbour.img) {
+                    document.getElementById('img').src = harbour.img;
+                } else {
+                    document.getElementById('img').src = localStorage['entity_logo'];
+                }
+                //<div class="col-6" id="pj">
+                //    <a id="pj_link" target="_blank" class="small vm"><span class=" text-secondary" id="pj_name"></span></a>
+                //</div>
+
+
+
+                //document.getElementById("address").insertAdjacentHTML('beforeend', harbour.address);
+                document.getElementById("buoy").insertAdjacentHTML('beforeend', harbour.buoy);
+                document.getElementById("electricity").insertAdjacentHTML('beforeend', harbour.electricity);
+                //document.getElementById("email").insertAdjacentHTML('beforeend', harbour.email);
+                document.getElementById("fuel").insertAdjacentHTML('beforeend', harbour.fuel);
+                //document.getElementById("hours").insertAdjacentHTML('beforeend', harbour.hours);
+                //document.getElementById("latitude").insertAdjacentHTML('beforeend', harbour.latitude);
+                //document.getElementById("longitude").insertAdjacentHTML('beforeend', harbour.longitude);
+                document.getElementById("longmax").insertAdjacentHTML('beforeend', harbour.longmax);
+                document.getElementById("harbourname").insertAdjacentHTML('beforeend', '<h5>' + harbour.name + '<h5>');
+                //document.getElementById("telcapitainerie").insertAdjacentHTML('beforeend', harbour.phone);
+                document.getElementById("telcapitainerie").href = 'tel:' + harbour.prefixed_phone;
+                //document.getElementById("telurgence").insertAdjacentHTML('beforeend', harbour.phone_urgency);
+                document.getElementById("telurgence").href = 'tel:' + harbour.phone_urgency;
+                //document.getElementById("mail").insertAdjacentHTML('beforeend', harbour.email);
+                document.getElementById("mail").href = 'mailto:' + harbour.email;
+                document.getElementById("places").insertAdjacentHTML('beforeend', harbour.places);
+                document.getElementById("shower").insertAdjacentHTML('beforeend', harbour.showers);
+                //document.getElementById("technical_informations").insertAdjacentHTML('beforeend', harbour.technical_informations);
+                document.getElementById("tirantdeau").insertAdjacentHTML('beforeend', harbour.tirantdeau);
+                document.getElementById("toilet").insertAdjacentHTML('beforeend', harbour.toilet);
+                document.getElementById("website").href = harbour.website;
+                document.getElementById("touristwebsite").href = harbour.touristwebsite;
+                document.getElementById("vfh").insertAdjacentHTML('beforeend', harbour.vfh);
+                document.getElementById("water").insertAdjacentHTML('beforeend', harbour.water);
+                document.getElementById("wifi").insertAdjacentHTML('beforeend', harbour.wifi);
+                document.getElementById("lundi").insertAdjacentHTML('beforeend', harbour.lundi);
+                document.getElementById("mardi").insertAdjacentHTML('beforeend', harbour.mardi);
+                document.getElementById("mercredi").insertAdjacentHTML('beforeend', harbour.mercredi);
+                document.getElementById("jeudi").insertAdjacentHTML('beforeend', harbour.jeudi);
+                document.getElementById("vendredi").insertAdjacentHTML('beforeend', harbour.vendredi);
+                document.getElementById("samedi").insertAdjacentHTML('beforeend', harbour.samedi);
+                document.getElementById("dimanche").insertAdjacentHTML('beforeend', harbour.dimanche);
+
+                if (!harbour.erp_link)
+                    document.getElementById("erp").hidden = true;
+                else
+                    document.getElementById("erp_link").href = harbour.erp_link;
+
+                if (harbour.pj) {
+                    document.getElementById("pj_link").href = harbour.pj;
+                    document.getElementById("pj_name").innerHTML = harbour.pj_name;
+                }
+                else {
+                    document.getElementById("pj").hidden = true;
+                }
+
+
+
+                document.getElementById("harbour_map").href = harbour.harbour_map;
+                document.getElementById("price_list").href = harbour.price_list;
+
+                var data = new FormData();
+                data.append("token", localStorage["token"]);
+                if (localStorage['token']) {
+                    fetch("/api/user/session", { method: "post", body: data }).then(response => response.json()).then(_data => {
+                        if (_data.success) {
+                            document.getElementById("sanitary_code").insertAdjacentHTML('beforeend', harbour.sanitary_code);
+                        } else {
+                            document.getElementById("wifiButtons").hidden = true;
+                            document.getElementById("sanitaryButtons").hidden = true;
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+                } else {
+                    document.getElementById("wifiButtons").hidden = true;
+                    document.getElementById("sanitaryButtons").hidden = true;
+                }
+                document.getElementById("container").innerHTML = document.getElementById("container").innerHTML.replace(/undefined/g, " ");
+
+
+            }).catch((error) => {
+                console.log(error);
+            });
+
+            function showHours() {
+                document.getElementById("menuInfo").hidden = true;
+                document.getElementById("hoursInfo").hidden = false;
+            }
+            function showMenu() {
+                document.getElementById("menuInfo").hidden = false;
+                document.getElementById("hoursInfo").hidden = true;
+            }
+
+            function showSanitaryCode() {
+                document.getElementById("sanitaryCodeButton").hidden = true;
+                document.getElementById("sanitaryCode").hidden = false;
+            }
+            function showSanitaryButton() {
+                document.getElementById("sanitaryCodeButton").hidden = false;
+                document.getElementById("sanitaryCode").hidden = true;
+            }
+
+            function showWifiCode() {
+                document.getElementById("wifiButton").hidden = true;
+                document.getElementById("wifiCopyButton").hidden = false;
+            }
+            function showWifiButton() {
+                document.getElementById("wifiButton").hidden = false;
+                document.getElementById("wifiCopyButton").hidden = true;
+                document.getElementById("wifiCopiedButton").hidden = true;
+
+            }
+            function copyWifiCode() {
+
+                var data = new FormData();
+                data.append("token", localStorage["token"]);
+                if (localStorage['token']) {
+                    fetch("/api/user/session", { method: "post", body: data }).then(response => response.json()).then(_data => {
+                        if (_data.success) {
+                            //document.getElementById("sanitary_code").insertAdjacentHTML('beforeend', harbour.sanitary_code);
+                            //document.getElementById("wifi_pass").insertAdjacentHTML('beforeend', );
+                            fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+                                navigator.clipboard.writeText(_data.data.wifi_pass);
+                                document.getElementById("wifiCopyButton").hidden = true;
+                                document.getElementById("wifiCopiedButton").hidden = false;
+
+                            }).catch((error) => {
+                                console.log(error);
+                            })
+                        }
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+                }
+            }
+
+        </script>
+
+        <div class="container py-3">
+            {{element->navbar.html}}
+        </div>
+
+
+    </main>
+    <!-- color settings style switcher
+    <button type="button" class="btn btn-info colorsettings">
+        <span class="text-white">
+            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                <title>ionicons-v5-m</title>
+                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
+                <circle cx='144' cy='208' r='32' />
+                <circle cx='152' cy='311' r='32' />
+                <circle cx='224' cy='144' r='32' />
+                <circle cx='256' cy='367' r='48' />
+                <circle cx='328' cy='144' r='32' />
+            </svg>
+        </span>
+    </button>-->
+    <div class="sidebar-right">
+        <div class="selectoption">
+            <input type="checkbox" id="darklayout" name="darkmode">
+            <label for="darklayout">Dark</label>
+        </div>
+        <div class="selectoption mb-0">
+            <input type="checkbox" id="rtllayout" name="layoutrtl">
+            <label for="rtllayout">RTL</label>
+        </div>
+        <hr>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
+            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
+            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
+            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
+            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
+            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
+            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
+            <label for="templatecolor8" class="bg-red" data-title="red"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
+            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
+            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
+            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
+            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
+            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
+            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
+            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+        </div>
+
+    </div>
+
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  js-->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- nouislider js -->
+    <script src="vendor/nouislider/nouislider.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        "use strict"
+        $(window).on('load', function () {
+
+        });
+    </script>
+
+    <style>
+        @font-face {
+            font-family: 'Poppins Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+        }
+
+        * {
+            font-family: 'Poppins Regular' !important;
+        }
+
+        body {
+            background: url("../background2.png") #FFF fixed;
+            font-family: 'Poppins Regular' !important;
+        }
+    </style>
+    {{element->footer_app.html}}
+
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/property-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:04 GMT -->
+</html>

@@ -1,0 +1,892 @@
+<html data-lt-installed="true">
+<head>
+    <script src="/js/date.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+
+</head>
+<body>
+    <nav class="navbar navbar-light fixed-top mt-5">
+        <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;color:white;" class="bi bi-arrow-left-circle-fill"></i></a>
+    </nav>
+    <div class="info-meteo" id="infometeo">
+            <div class="">
+                <div class="col">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col" id="meteo_desc">
+                                            <p id="date_heure"></p>
+                                            <script type="text/javascript">window.onload = date_heure('date_heure');</script>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col" id="temperature">
+                                                    <p class="temp"> <span id="val_temperature">15.6</span><span>°C</span></p>                                                    
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="text1" id="condition" style="display: none"></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <p class="text1 humidity desc" id="desc">Partiellement nuageux</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+
+                                                    <p class="text1">Précipitation</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="text1 pressure"><span id="humidite">0</span><span>mm/h</span></p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <p class="text1">Préssion</p>
+                                                </div>
+                                                <div class="col-6">
+                                                    <p class="text1"> <span class="pression">1014</span> <span>hPa</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col" id="wind_direction">
+                                                    <div class="bg-boussole">
+                                                     <div id='compassContainervent'>
+                                                        <div id='compassRingvent'>   
+                                                            <div id='pointerContainvent'>
+                                                                <p style="margin: auto; text-align: center;">
+                                                                    <span class="vitesse_vent">15</span><br>
+                                                                    <span>noeuds</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <div id='compassRingventjaune'> 
+                                                                
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="content-btn">
+                                        <div class="row">
+                                            <div class="col col-lg-6 col-md-6 col-sm-6 p-1">
+                                                <a href="" class="btn btn-block btn-info btn-lg btn-lgft" data-toggle="modal" data-target="#exampleModalLong">Détails</a>
+                                            </div>
+                                            <div class="col col-lg-6 col-md-6 col-sm-6 p-1">
+                                                <a href="" class="btn btn-block btn-warning btn-lg btn-lgft">Bulletin météo</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="col-md-12 col-12 p-0"> 
+        <div class="ligne">
+            <div class="col">
+                <div class="content-btn">
+                    <div class="row">
+                        <div class="col col-lg-6 col-md-6 col-sm-6 p-1">
+                            <a href="" class="btn btn-block btn-warning btn-lg btn-lgft btn-meteo">
+                            <img src="/img/img-meteo/camera-icon.webp" style="height:80px;width:auto;">
+                            <p>Caméras</p>
+                            </a>
+                        </div>
+                        <div class="col col-lg-6 col-md-6 col-sm-6 p-1">
+                            <a href="" class="btn btn-block btn-warning btn-lg btn-lgft btn-meteo">
+                                <img src="/img/img-meteo/give-hand.png" style="height:80px;width:auto;">
+                            <p>Services</p>
+                            </a>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+        <div class="ligne">
+            <div class="col">
+                <div class="content-btn">
+                    <div class="row">
+                        <div class="col col-lg-6 col-md-6 col-sm-6 p-1">
+                            <a href="" class="btn btn-block btn-warning btn-lg btn-lgft btn-meteo">
+                                <img src="/img/img-meteo/phone.png" style="height:80px;width:auto;">
+                            <p>SOS</p>
+                            </a>
+                        </div>
+                        <div class="col col-lg-6 col-md-6 col-sm-6 p-1">
+                            <a href="" class="btn btn-block btn-warning btn-lg btn-lgft btn-meteo">
+                                <img src="/img/img-meteo/ancre.png" style="height:80px;width:auto;">
+                            <p>Capitainerie</p>
+                            </a>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+   </div>
+   <div class="col-md-12 col-12 p-0"> 
+        <div class="ligne">
+            <div class="col">
+                <div class="content-btn">
+                    <div class="row text-center">
+                        <div class="col col-lg-12 col-md-12 col-sm-12 p-1">
+                            <div class="hr-theme-slash-2">
+                              <div class="hr-line"></div>
+                              <div class="hr-icon"><span style="font-size: 20px">ACTUALITES</span></div>
+                              <div class="hr-line"></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-12 p-0"> 
+        <div class="ligne">
+            <div class="col">
+                <div class="content-btn pb-3">
+                    <div class="row">
+                        <div class="col-3  p-1">
+                            <div class="text-center">
+                                <img src="/img/img-meteo/icon-nauticspot.png" style="height:80px;width:auto;">
+                            </div> 
+                        </div>
+                        <div class="col-9  p-1">
+                            <div style="background-color: #F5F5F5; padding-bottom: 20px">
+                                <p style="font-size: 18px; font-weight: 600;">Documentation Camera</p>
+                                <span>Doc Technique Camera Portuaire</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-12 p-0"> 
+        <div class="ligne">
+            <div class="col">
+                <div class="content-btn">
+                    <div class="row">
+                        <div class="col col-lg-3 col-md-3 col-sm-3 p-1">
+                            
+                        </div>
+                        <div class="col col-lg-9 col-md-9 col-sm-9 p-1">
+                            
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+        <div class="text-center p-0">
+            <div class="py-3">
+                <div class="row">
+                    <nav class="navbar fixed-bottom navbar-light nav-pills nav-fill nav-bg" style="z-index:9999">
+
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/index">
+                                <img id="navbar-index" src="/img/img-meteo/home.png" style="height:24px;width:24px;color: #fff">
+                            </a>
+                        </div>
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/index">
+                                <img id="navbar-map" src="/img/img-meteo/calendrier.png" style="height:24px;width:24px;">
+                            </a>
+                        </div>
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/notifications">
+                                <img id="navbar-notif" src="/img/img-meteo/alert-icon.png" style="height:24px;width:24px;color: #fff">
+                            </a>
+                        </div>
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/profil">
+                                <img id="navbar-profil" src="/img/img-meteo/user.png" style="height:24px;width:24px;">
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+
+            <script>
+                var url = window.location.href;
+                url = url.split('/');
+                var currentLocation = url[url.length - 1];
+                console.log(currentLocation);
+                if (currentLocation == "index")
+                    document.getElementById('navbar-index').src = "/library/toolbar-anchor-blue-48.png";
+                else if (currentLocation == "map")
+                    document.getElementById('navbar-map').src = "/library/toolbar-map-blue-48.png";
+                else if (currentLocation == "notifications")
+                    document.getElementById('navbar-notif').src = "/library/toolbar-bell-blue-48.png";
+                else if (currentLocation == "profil")
+                    document.getElementById('navbar-profil').src = "/library/toolbar-profile-blue-48.png";
+
+            </script>
+        </div>
+        </div>
+    </div>
+</div>				                            
+<!--------MODAL DETAIL------>
+<div class="modal fade show" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="padding-right: 0px;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" id="detail">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="">
+    <div class="col-md-12 col-12 mt-3 p-0"> 
+        <div>
+            <h1 class="text-center text1" id="ville" style="margin-top: -90px; margin-bottom:50px; font-size: 30px">Menton</h1>
+        </div>
+
+        <div class=" line2 card-title d-flex px-4">
+            <div class="col-6 text-center">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div class="half-circle row align-bottom">
+                            <div class="col-4 text-left">
+                                <p class="item text1" style="margin-left: -30px;"><span id="lever">06:15</span></p>
+                                
+                            </div>
+                            <div class="col-4 text-center">
+                                <p class="item text1" id="sol_haut">13:42</p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <p class="item text1"  style="margin-right: -30px;"><span id="coucher">21:09</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-6 text-center">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <img src="/img/img-meteo/pleine-lune.png" id="imglune" width="90" height="auto">
+                        <p id="textlune" class="text1"> Pleine lune</p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+
+        <div class=" line2 card-title d-flex px-4">
+            <div class="col-2 text-center"><p class="text1">Min</p><p class="text1"> <span class="temp-min ">15</span><span>°</span></p></div>
+            <div class="col-8 text-center"><p class="text1 temperature"><span id="temp_detail"> 15</span> <span>°C</span></p></div>
+            <div class="col-2 text-center"><p class="text1">Max</p><p class="text1"><span class="temp-max ">16</span><span>°</span></p></div>
+        </div>
+        <div class=" line2 card-title d-flex px-4">
+            <div class="col-6 text-center">
+                    <div class="row">
+                        <div class="col" id="wind_direction">
+                            <div class="bg-boussole">
+                                 <div id='compassContainervent'>
+                                    <div id='compassRingvent'>   
+                                        <div id='pointerContainvent'>
+                                            <p style="margin: auto; text-align: center;">
+                                                <span id="vitesse_vent_detail">12</span><br>
+                                                <span>noeuds</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div id='compassRingventjaunedetail'> 
+                                            
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-6 text-center">
+                <p class="text1 text-center">1 heure</p>
+                <div class="row">
+                    <div class="col-6 text-center">
+                        <p class="text1">Moyenne</p>
+                        <p class="item text1">12</p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <p class="text1">Max</p>
+                        <p class="item text1">15</p>
+                    </div>
+                </div>
+                <p class="text1 text-center">3 heure</p>
+                <div class="row">
+                    <div class="col-6 text-center">
+                        <p class="text1">Moyenne</p>
+                        <p class="item text1">12</p>
+                    </div>
+                    <div class="col-6 text-center">
+                        <p class="text1">Max</p>
+                        <p class="item text1">15</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" line2 card-title d-flex px-4">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col" id="wind_direction">
+                        <div class="bg-boussolevague">
+                             <div id='compassContainervague'>                              
+                                <div id='compassRingvague'>   
+                                    <div id='pointerContainvague'>
+                                    </div>
+                                    <div id='compassRingvaguejaune'>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text1">Hauteur</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="hauteur-vague text1" style="align:right; float:right;">0,5m</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text1 ">Période</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="periode-vague text1" style="align:right; float:right;">4s</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text1">Température</p>
+                            </div>
+                            <div class="col-6">
+                                <p class="temp-vague text1" style="align:right; float:right;">14,4°C</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" line2 card-title d-flex px-4">
+            <div class="col-3 text-center">
+                <p class="text1">Marée H</p>
+                <p class="text1">04h50</p>
+                <p class="text1">0,54m</p>
+            </div>
+            <div class="col-3 text-center">
+                <p class="text1">Marée B</p>
+                <p class="text1">10h58</p>
+                <p class="text1">0,33m</p>
+            </div>
+            <div class="col-3 text-center">
+                <p class="text1">Marée H</p>
+                <p class="text1">17h22</p>
+                <p class="text1">0,5m</p>
+            </div>
+            <div class="col-3 text-center">
+                <p class="text1">Marée B</p>
+                <p class="text1">23h37</p>
+                <p class="text1">0,29m</p>
+            </div>
+        </div>
+        <div class=" line2 card-title d-flex px-4">
+            <div class="col-6">
+                <p class="text1 text-center">Pression atmosphérique</p>
+                <p class="texth3 text-center pression-atmos"><span id="pression_detail">1015</span><span class="text1">hPs</span></p>
+
+            </div>
+            <div class="col-6">
+                <p class="text1 text-center">Variation sur 24h</p>
+                <p class="texth3 text-center variation">+8</p>
+                
+            </div>
+        </div>
+        <div class=" line2 card-title d-flex px-4">
+            <div class="col-6">
+                <p class="text1 text-center">Précipitation</p>
+                <p class="texth3 text-center precipitation">0<span class="text1">mm/h</span></p>
+            </div>
+            <div class="col-6">
+                <p class="text1 text-center">Cumul sur 24h</p>
+                <p class="texth3 text-center cumul">0<span class="text1">mm</span></p>
+                
+            </div>
+        </div>
+        <div class="  card-title d-flex px-4">
+            <div class="col-6">
+                <p class="text1 text-center"></p>
+                <p class="texth3 text-center precipitation"></p>
+            </div>
+            <div class="col-6">
+                <p class="text1 text-center"></p>
+                <p class="texth3 text-center cumul"></p>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+    <style>
+
+#infometeo {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    width: 100%;
+}
+
+.container {
+    margin-top: 40px;
+    margin-bottom: 40px
+}
+
+.card-title {
+    justify-content: space-between;
+    margin-top: 25px
+}
+
+.btn-lgft, .dates, .temp{
+    color: #fff;
+}
+.btn-lgft:hover{
+    color: #fff;
+}
+#date_heure{
+    font-size: 30px;
+    color: #fff;
+}
+.temp{
+    font-size: 50px;
+}
+.texth3{
+ font-size: 30px;
+ color: #1A73E8;
+}
+.fa-lock {
+    margin-right: 10px
+}
+
+.order {
+    margin-top: 10px
+}
+.text1
+{
+    color: #fff;
+    font-size: 16px;
+    }
+.temperature
+{
+   font-size: 40px;
+    }
+.nav-bg, .nav-menu-item{
+    background-color:#003699;
+}
+.nav-menu-item:hover{
+    background-color:#437de8;
+}
+.btn-meteo{
+    background-color: #ffc107;
+    height: 140px;
+     display: block;
+    vertical-align: middle;
+    align-items:center;
+}
+.ligne{
+    background-color: #fff;
+}
+.hr-theme-slash-2 {
+  display: flex;
+}
+.hr-line {
+    width: 100%;
+    position: relative;
+    margin: 15px;
+    border-bottom: 1px solid #1A73E8;
+  }
+  .hr-icon {
+    position: relative;
+    top: 3px;
+    color: #1A73E8;
+  }
+  .modal-dialog {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+  /* style modal detail*/
+  #detail{
+    height: all;
+    border: 0;
+    border-radius: 0;
+    background-image:linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url(/img/img-meteo/bg-ocean.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-attachment: scroll;
+
+  }
+  .modal-title {
+    text-align: center;
+    color: #fff;
+    display:inline-block;
+}
+.modal-header  {
+    display:inline-block;
+}
+.modal-header .close {
+    padding: 1rem 1rem;
+    margin-left:0px;
+    color: #fff;
+    display:inline-block;
+    font-size: 50px;
+    font-weight: 300;
+}
+.modal-body {
+
+    padding-right: 0px;
+    padding-left: 0px;
+}
+p {
+    margin-bottom:5px;
+}
+
+.container {
+    margin-top: 40px;
+    margin-bottom: 40px
+}
+
+.card-title {
+    justify-content: space-between;
+    margin-top: 25px
+}
+
+.line2 {
+    border-bottom: 1px solid #c1bcbc;
+    padding-bottom: 0px;
+    padding-left: 0px
+}
+
+.texth3{
+ font-size: 30px;
+ color: #fff;
+}
+.text1
+{
+    color: #fff;
+    font-size: 16px;
+    }
+.temperature
+{
+   font-size: 40px;
+    }
+#color-overlay {
+   top: 0;
+   left: 0;
+   bottom: 0;
+   right: 0;
+   width:100%;
+   height:100%;
+   background-color: black;
+   opacity: 0.2;
+   position: fixed;
+}
+.nav-bg, .nav-menu-item{
+    background-color:#003699;
+}
+.nav-menu-item:hover{
+    background-color:#437de8;
+}
+.navbar{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 20px;
+}
+.half-circle {
+    width: 100%;
+    height:200px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-top: 2px solid #fff;
+    border-bottom: 0;
+    align-items: center;
+    vertical-align: bottom;
+    color:#fff;
+    margin: auto;
+    display: flex; 
+    }
+}
+</style>
+<style type="text/css">
+                        /* boussole vent */
+                        .bg-boussole{
+                            background-image: url(/img/img-meteo/bg-bssl.png);
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            background-position:center;
+                            padding: 15px;
+                            width: 100%;
+                            height: 100%;
+
+                        }
+                        .bg-boussolevague{
+                            background-image: url(/img/img-meteo/bg-bssl-vg.png);
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            background-position:center;
+                            padding: 7px;
+                            width: 100%;
+                            height: 100%;
+
+                        }
+                        #compassContainervent {
+                            width: 100px;
+                            height: 100px;
+                            margin: 0 auto;
+                            position: relative;
+                            
+                        }
+                        #compassRingvent {
+
+                            height: 100px;
+                            width: 100px;
+                            border: 4px solid #fff;
+                            border-radius: 50%;
+                        }
+
+                        #compassRingventjaune {
+                            height: 100px;
+                            width: 100px;
+                            border-left: 20px solid transparent;
+                            border-right: 20px solid transparent;
+                            border-bottom: 6px solid transparent;
+                            border-bottom-color:#ffc107;
+                            border-radius: 50%;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            z-index:9;
+                            -webkit-transform-origin: bottom;
+                            /*transform: rotate(330deg);
+                            -webkit-transform: rotate(20deg);*/
+                            transform-origin: center;
+
+                        }
+                        #compassRingventjaunedetail {
+                            height: 100px;
+                            width: 100px;
+                            border-left: 20px solid transparent;
+                            border-right: 20px solid transparent;
+                            border-bottom: 6px solid transparent;
+                            border-bottom-color:#ffc107;
+                            border-radius: 50%;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            z-index:9;
+                            -webkit-transform-origin: bottom;
+                            /*transform: rotate(330deg);
+                            -webkit-transform: rotate(20deg);*/
+                            transform-origin: center;
+
+                        }
+                        
+                        #pointerContainvent{
+                             display: flex;
+                            vertical-align: middle;
+                            color:#fff;
+                            margin: auto;
+                            width: 100%; 
+                            height: 100%;
+                        }
+                        /* boussole vague */
+                        #compassContainervague {
+                            width: 50px;
+                            height: 50px;
+                            margin: 0 auto;
+                            position: relative;
+                        }
+
+                        #compassRingvague {
+                            height: 50px;
+                            width: 50px;
+                            border: 15px solid #FFF;
+                            border-radius: 50%;
+                        }
+                        #compassRingvaguejaune {
+                            height: 50px;
+                            width: 50px;
+                            border-left: 20px solid transparent;
+                            border-right: 20px solid transparent;
+                            border-bottom: 15px solid transparent;
+                            border-bottom-color:#ffc107;
+                            border-radius: 50%;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            z-index:9;
+                            -webkit-transform: rotate(20deg);
+                            -webkit-transform-origin: bottom;
+                            transform: rotate(320deg);
+                            transform-origin: center;
+
+                        }
+
+
+                        #pointerContainvague{
+                            align-items: center;
+                            vertical-align: middle;
+                            color:#fff;
+                            margin: auto;
+                            width: 100%; 
+                            height: 100%;
+                            display: flex; 
+                        }
+                        #quatrepointvague
+                        {
+                            height: 60px;
+                            width: 60px;
+                            border: 2px solid #FFF;
+                            border-radius: 50%;
+                        }  
+</style>
+<script type="text/javascript">
+
+var ville = document.getElementById('ville').innerText;
+/*let ville = 'menton';*/
+recevoirMeteo(ville);
+
+
+function recevoirMeteo(ville) {
+  const url = 'https://api.openweathermap.org/data/2.5/weather?q='+ ville +'&lang=fr&appid=eb3e55ca0093756f2541d5ad27c5021c&units=metric';
+  
+  let requete = new XMLHttpRequest();
+  requete.open('GET', url);
+  requete.responseType = 'json';
+  requete.send();
+
+  requete.onload = function() {
+    if (requete.readyState === XMLHttpRequest.DONE) {
+      if (requete.status === 200) {
+        let reponse = requete.response;
+        let ville = reponse.name;
+        let condition = reponse.weather[0].main;
+        let description = reponse.weather[0].description;
+        let temperature = reponse.main.temp;
+        let temper_min= reponse.main.temp_min;
+        let temper_max= reponse.main.temp_max;
+        let humidite= reponse.main.humidity;
+        let pressure = reponse.main.pressure;
+        let leve_soleil = reponse.sys.sunrise;
+        let couche_soleil = reponse.sys.sunset;
+        let vitesse_vent = reponse.wind.speed;
+        let degre_vent = reponse.wind.deg;
+        let vitesse_ventkm = reponse.wind.speed;
+
+            //convertir timestamp
+            lever = new Date(leve_soleil * 1000);
+            coucher = new Date(couche_soleil * 1000);
+  
+            // HEURE
+            hourslever = lever.getUTCHours();
+            hourscoucher = coucher.getUTCHours();
+  
+            //MINUTE
+            minuteslever = lever.getUTCMinutes();
+            minutescoucher = coucher.getUTCMinutes();
+  
+            Timelever = hourslever.toString().padStart(2, '0') + ':' + minuteslever.toString().padStart(2, '0');
+            Timecoucher = hourscoucher.toString().padStart(2, '0') + ':' + minutescoucher.toString().padStart(2, '0');
+
+
+            //changement du background par rapport à l'etat du météo
+
+            if(condition=="Clouds"){
+              document.getElementById("infometeo").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/nuageux.jpg')";
+              document.getElementById("detail").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/nuageux.jpg')";
+            }
+            else if (condition=="Rain") {
+              document.getElementById("infometeo").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/pluie.jpg')";
+              document.getElementById("detail").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/pluie.jpg')";
+            }
+            else if (condition=="Clear") {
+              document.getElementById("infometeo").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/ensoleille.jpg')";
+              document.getElementById("detail").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/ensoleille.jpg')";
+            }
+            else if (condition=="Drizzle") {
+              document.getElementById("infometeo").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/nuageux.jpg')";
+              document.getElementById("detail").style.backgroundImage = "linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),url('/img/img-meteo/nuageux.jpg')";
+            }
+
+            //Direction du vent dans le boussole
+            document.getElementById('compassRingventjaune').setAttribute("style", "transform: rotate("+degre_vent+"deg);");
+            document.getElementById('compassRingventjaunedetail').setAttribute("style", "transform: rotate("+degre_vent+"deg);");
+
+
+        document.querySelector('#ville').textContent = ville;
+        document.querySelector('#val_temperature').textContent = temperature;
+        document.querySelector('#temp_detail').textContent = temperature; 
+        document.querySelector('#lever').textContent = Timelever;
+        document.querySelector('#coucher').textContent = Timecoucher;
+        
+        document.querySelector('.temp-min').textContent = temper_min;
+        document.querySelector('.temp-max').textContent = temper_max;
+        document.querySelector('.pression').textContent = pressure;
+        document.querySelector('#pression_detail').textContent = pressure;
+        document.querySelector('#desc').textContent =(description.charAt(0).toUpperCase() + description.substring(1).toLowerCase());
+        document.querySelector('#condition').textContent = condition;
+        document.querySelector('.vitesse_vent').textContent = Math.round((vitesse_vent*1.95));
+        document.querySelector('#vitesse_vent_detail').textContent = Math.round((vitesse_vent*1.95)); 
+        document.querySelector('#degre_vent').textContent = degre_vent;
+        document.querySelector('#vitesse_ventkm').textContent = vitesse_vent;
+
+   
+
+      } else {
+        alert('Un problème est intervenu, merci de revenir plus tard.');
+      }
+
+    }
+
+  }
+}
+            
+</script>
+</html>

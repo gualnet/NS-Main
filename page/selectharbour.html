@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="d-flex flex-column h-100">
+    <!-- screen loader -->
+    {{element->loader.html}}
+    <!-- Fixed navbar -->
+    <header class="header">
+        <div class="row">
+            <div class="col-auto px-0">
+                <h1><h1>
+            </div>
+            <div class="text-left col">
+
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+
+        <div class="container">
+            <div class="row text-center text-lg-left" id="harbourlist">
+                <div class="col-12">
+                    <img id="logo" style="width:100%;height:auto" class="pb-4" src="" alt="">
+                </div>
+                <div class="col-12">
+                    <p class="text-secondary pd-4">Sélectionnez un port<p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <style>
+        @font-face {
+            font-family: 'Poppins Regular';
+            font-style: normal;
+            font-weight: normal;
+            src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+        }
+
+        * {
+            font-family: 'Poppins Regular';
+        }
+
+        body {
+            font-family: 'Poppins Regular' !important;
+        }
+    </style>
+
+    <script>
+        var harbours;
+        fetch("/api/getharbours/" + localStorage['entity_id'], {
+            method: "get"
+        }).then(response => response.json()).then(_data => {
+            harbours = _data.data;
+            console.log(harbours.length);
+            if (harbours.length < 2) {
+                selectHarbour(harbours[0].id, harbours[0].name)
+            }
+            for (var i = 0; i < harbours.length; i++) {
+                console.log(harbours[i].name);
+                console.log(harbours[i].id);
+                var img;
+                if (harbours[i].img) {
+                    img = harbours[i].img;
+                } else {
+                    img = localStorage['entity_logo'];
+                }
+                document.getElementById("logo").src = localStorage['entity_logo'];
+                document.getElementById("harbourlist").insertAdjacentHTML("beforeend", '<div class="col-lg-4 col-md-6 col-6 pb-4" onclick="selectHarbour(\'' + harbours[i].id + '\',\'' + harbours[i].name + '\');">'
+                    + '<div class="contentport text-center" >'
+                    + '<div class="d-block mb-2 h-100">'
+                    + '<img class="shadow" style="width:125px;height:125px;border-radius:22px;" src="' + img + '" alt="">'
+                    + '</div>'
+                    + '<span>' + harbours[i].name + '</span>'
+                    + '</div>'
+                    + '</div>');
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        function selectHarbour(harbourid, harbourname) {
+            localStorage['harbourid'] = harbourid;
+            for (var i = 0; i < harbours.length; i++) {
+                if (harbours[i].id == localStorage['harbourid']) {
+                    console.log(harbours[i].name);
+                    localStorage['harbourname'] = harbourname;
+                    i = harbours.length;
+                }
+            }
+            const url = new URLSearchParams(window.location.search);
+            if (url.get('account') == "false")
+                window.location.href = ("/index");
+            else {
+                window.location.href = ("/signup");
+            }
+        }
+    </script>
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  -->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        "use strict"
+        $(window).on('load', function () {
+            var swiper = new Swiper('.swiper-container', {
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+            });
+        });
+    </script>
+    {{element->footer_app.html}}
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/landing.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:16 GMT -->
+</html>

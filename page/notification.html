@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+    <!-- screen loader -->
+    {{element->loader.html}}
+
+    <!-- Begin page content -->
+    <main class="flex-shrink-0">
+        <!-- Fixed navbar -->
+        {{element->navheader.html}}
+        <nav class="navbar navbar-light fixed-top" style="margin-top:35px;">
+            <a id="return_link" class="navbar-brand" href="/notifications"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
+        </nav>
+
+        <div class="product-image-top" style="background-color:white;">
+            <img id="img" style="width:100%;height:auto" src="img/image-3.png" alt="">
+        </div>
+        <!-- page content start -->
+        <div class="container top-30" id="container">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 id="title"></h5>
+                        </div>
+                        <div class="col-auto">
+                            <p class="small text-secondary" id="date"></p>
+                        </div>
+
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col">
+                            <div class="text-muted small" id="description"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="small vm">
+                                <span class=" text-secondary" id="category"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row" id="link"></div>
+                    <div class="row" id="pj"></div>
+                </div>
+                <div class="card-body border-top border-color">
+                    <p class="small text-secondary" id="message">
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var url = new URLSearchParams(window.location.search);
+            fetch("/api/com?comid=" + url.get('id') + "&userid=" + localStorage["user"]).then(response => response.json()).then(_data => {
+                console.log(_data);
+                var notification = _data.data;
+                var date = new Date(notification.date);
+                var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
+                //                var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
+
+                //if (communication.category == "news")
+                //    communication.category = "Article";
+                document.getElementById("title").innerHTML = '<strong>' + notification.title + '</strong>';
+                //document.getElementById("category").innerHTML = communication.category;
+                document.getElementById("date").innerHTML = dateFormated;
+                document.getElementById("message").innerHTML = notification.message;
+                if (notification.img) {
+                    document.getElementById("img").src = notification.img;
+                } else {
+                    document.getElementById("img").src = '/library/toolbar-bell-48.png';
+                    document.getElementById("img").style.height = 'auto';
+                    document.getElementById("img").style.width = '50%';
+                    document.getElementById("img").style.paddingTop = '30px';
+                    document.getElementById("img").style.display = 'block';
+                    document.getElementById("img").style.marginLeft = 'auto';
+                    document.getElementById("img").style.marginRight = 'auto';
+                }
+
+                if (notification.pj) {
+                    document.getElementById("pj").innerHTML = '<div class="border-top border-color col pt-2"><a  href="' + notification.pj + '"><i class="bi bi-paperclip" style="font-size:20px;"></i><span class="small">' + notification.pjname + '</span></a></div>'
+                }
+                if (notification.link) {
+                    document.getElementById("link").innerHTML = '<div class="border-top border-color col pb-2 pt-2"><a  href="' + notification.link + '"><i class="bi bi-forward" style="font-size:20px;"></i><span class="small">' + notification.link_name + '</span></a></div>'
+
+                    document.getElementById("container").innerHTML = document.getElementById("container").innerHTML.replace(/undefined/g, " ");
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+
+        </script>
+
+        <div class="container py-3">
+            {{element->navbar.html}}
+        </div>
+
+    </main>
+    <!-- color settings style switcher
+    <button type="button" class="btn btn-info colorsettings">
+        <span class="text-white">
+            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+                <title>ionicons-v5-m</title>
+                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
+                <circle cx='144' cy='208' r='32' />
+                <circle cx='152' cy='311' r='32' />
+                <circle cx='224' cy='144' r='32' />
+                <circle cx='256' cy='367' r='48' />
+                <circle cx='328' cy='144' r='32' />
+            </svg>
+        </span>
+    </button>-->
+    <div class="sidebar-right">
+        <div class="selectoption">
+            <input type="checkbox" id="darklayout" name="darkmode">
+            <label for="darklayout">Dark</label>
+        </div>
+        <div class="selectoption mb-0">
+            <input type="checkbox" id="rtllayout" name="layoutrtl">
+            <label for="rtllayout">RTL</label>
+        </div>
+        <hr>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
+            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
+            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
+            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
+            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
+            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
+            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
+            <label for="templatecolor8" class="bg-red" data-title="red"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
+            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
+            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
+            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
+            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
+            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
+            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+        </div>
+        <div class="colorselect">
+            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
+            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+        </div>
+
+    </div>
+
+
+
+    <!-- Required jquery and libraries -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- cookie js -->
+    <script src="js/jquery.cookie.js"></script>
+
+    <!-- Swiper slider  js-->
+    <script src="vendor/swiper/js/swiper.min.js"></script>
+
+    <!-- Masonry js -->
+    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+    <!-- nouislider js -->
+    <script src="vendor/nouislider/nouislider.min.js"></script>
+
+    <!-- Customized jquery file  -->
+    <script src="js/main.js"></script>
+    <script src="js/color-scheme-demo.js"></script>
+
+    <!-- page level custom script -->
+    <script>
+        "use strict"
+        $(window).on('load', function () {
+
+        });
+    </script>
+    {{element->footer_app.html}}
+</body>
+<!-- Mirrored from maxartkiller.com/website/Nauticspot/property-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:04 GMT -->
+</html>

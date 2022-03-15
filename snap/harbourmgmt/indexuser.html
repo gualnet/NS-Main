@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Language" content="en" />
+    <meta name="msapplication-TileColor" content="#2d89ef">
+    <meta name="theme-color" content="#4188c9">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <link rel="icon" href="/fortpress_admin_assets/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" type="image/x-icon" href="/fortpress_admin_assets/favicon.ico" />
+
+
+    <title>Vendors management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <script src="/fortpress_admin_assets/assets/js/require.min.js"></script>
+    <script>
+        requirejs.config({
+            baseUrl: '/'
+        });
+    </script>
+    <!-- Dashboard Core -->
+    <link href="/fortpress_admin_assets/assets/css/dashboard.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/js/dashboard.js"></script>
+    <!-- c3.js Charts Plugin -->
+    <link href="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.css" rel="stylesheet" />
+    <script src="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.js"></script>
+    <!-- Input Mask Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/input-mask/plugin.js"></script>
+    <!-- Datatables Plugin -->
+    <script src="/fortpress_admin_assets/assets/plugins/datatables/plugin.js"></script>
+</head>
+<body class="">
+    <div class="page">
+        <div class="flex-fill">
+            <div class="my-3 my-md-5">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Gestion des ports</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="harbourError"></div>
+
+                                <div class="table-responsive">
+                                    <table class="table card-table table-vcenter text-nowrap datatable dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>ID Groupe</th>
+                                                <th>Nom</th>
+                                                <th>Email</th>
+                                                <th>Téléphone</th>
+                                                <th>Téléphone urgence</th>
+                                                <th>Adresse</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th>Horaires lundi</th>
+                                                <th>Horaires mardi</th>
+                                                <th>Horaires mercredi</th>
+                                                <th>Horaires jeudi</th>
+                                                <th>Horaires vendredi</th>
+                                                <th>Horaires samedi</th>
+                                                <th>Horaires dimanche</th>
+                                                <th>Site vitrine</th>
+                                                <th>Site office de tourisme</th>
+                                                <th>Infos Techniques / Équipements</th>
+                                                <th>VFH</th>
+                                                <th>Places</th>
+                                                <th>Bouées</th>
+                                                <th>Tirant d'eau</th>
+                                                <th>Longueur Max</th>
+                                                <th>Électricité</th>
+                                                <th>Eau</th>
+                                                <th>Douches</th>
+                                                <th>Toilettes</th>
+                                                <th>Code Sanitaires</th>
+                                                <th>Carburant</th>
+                                                <th>WiFi</th>
+                                                <th>Code WiFi</th>
+                                                <th>Lien ERP</th>
+                                                <th>Image</th>
+                                                <th>Remplacer Image</th>
+                                                <th>Plan du port</th>
+                                                <th>Remplacer le plan du port</th>
+                                                <th>Grille tarifaire</th>
+                                                <th>Remplacer la grille tarifaire</th>
+                                                <th>Email conciergerie</th>
+                                                <th>ID Navily</th>
+                                                <th></th>
+                                            </tr>
+                                        <thead>
+                                        <tbody id="result">
+                                            __HARBOURS__
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function () {
+            require(['datatables', 'jquery'], function (datatable, $) {
+                $('.datatable').DataTable(
+                    {
+                        language: {
+                            search: '<span></span>',
+                            searchPlaceholder: 'Votre recherche'
+                        },
+                        paging: false,
+                        "order": [[2, "desc"]],
+                        "info": false,
+                    });
+            });
+        }
+        function sendCreateForm() {
+            var form = document.getElementById("createForm");
+            var formData = new FormData(form);
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                });
+        }
+
+        function sendUpdateForm(id) {
+            var form = document.getElementById(id);
+            console.log(form);
+            var formData = new FormData(form);
+
+            fetch(form.action,
+                {
+                    method: form.method,
+                    body: formData
+                }).then(response => response.json()).then(_data => {
+                    console.log(_data);
+                    if (_data.success) {
+                        location.reload();
+                    }
+                    else {
+                        if (document.getElementById("error"))
+                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                        alert(_data.message);
+                    }
+                }).catch((error) => {
+                    if (document.getElementById("error"))
+                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                });
+        }
+    </script>
+</body>
+</html>

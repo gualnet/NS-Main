@@ -1,0 +1,325 @@
+<html data-lt-installed="true">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css">
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.0/font/bootstrap-icons.css">
+
+</head>
+<body>
+    <div class="col-md-12 col-12 mt-0 p-0 tete"> 
+        <div>
+            <h1 class="text-center text1"></h1>
+        </div>
+        <div class="  card-title d-flex px-4">
+            <div class="col-12 text-center" style="position:relative; bottom:0px; margin-top: 150px;">
+                <p class="text1" style="color: #ffc107; font-size: 28px">Port de Menton</p>
+            </div>
+
+        </div>
+        
+    </div>
+    <div class="container-fluid px-1 px-md-4 mx-auto">
+    <div class="row d-flex justify-content-center px-3">
+        <div class="cardmeteo">
+            <div class="justify-content-center">
+                <p class="text-center text1" id="temps">Partiellement nuageux</p>
+            </div>
+            <div id="content-wth">
+            <div class="row">
+
+                <div class="col-6">
+                    <div>
+                        <h2 class="mr-2 mt-0 ml-2 mb-4" id="temperature">
+                            <i class="large-font wi wi-thermometer">&nbsp;</i>
+                            <span class="large-font">18</span><span class="time-font">°C</span>
+                        </h2>
+                    </div>
+                    <div>
+                        <p class="ml-auto mr-4 mb-0 med-font">
+                            <i class="med-font wi wi-raindrops">&nbsp;</i>
+                            <span class="med-font">0</span><span class="med-font">mm</span>
+
+                        </p>
+                    </div>
+                    <div>
+                        <p class="ml-auto mr-4 mb-0 med-font">
+                            <i class="med-font wi wi-barometer">&nbsp;</i>
+                            <span class="med-font">1024 </span><span class="med-font">hPa</span>
+
+                        </p>
+                    </div>
+                    
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col" id="wind_direction">
+                            <div class="bg-bssl-index">
+                                <div id="compassContainer">
+                                    <div id="compassRing">   
+                                        <div id="pointerContain">
+                                            <p style="margin: auto; text-align: center;">
+                                                <i class="wi wi-strong-wind"></i>
+                                                <br>
+                                                <span>5</span>
+                                                <span>nd</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div id='compassRingventjaune'> 
+                                                                
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                                
+                    </div>
+                    
+                </div>
+                
+            </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<div class="container mt-4">
+            <div class="row">
+                <div class="col">
+                    <a class="link-dark" style="text-decoration:none;color:black;" href=""><h4>Bureau du port<i style="float:right;" class="bi bi-arrow-right"></i></h4></a>
+                </div>
+            </div>
+
+        </div>
+<div class="container mt-4">
+            <div class="row">
+                <div class="card col-12">
+                    <div class="card-body" style="font-size:11px;">
+                        <div class="row px-2">
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 px-2" onclick="window.location.href = ('/informations');">
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        <span style="background-color:#1377bf;width:80px; height:80px;border-radius: 20px;" class="d-flex justify-content-center shadow">
+                                            <img style="align-self:center;" class="image-boxed" src="/img/img-meteo/info.png" width="50" height="50">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 px-2" onclick="window.location.href = ('/camera');">
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        <span style="background-color:#1377bf;width:80px; height:80px;border-radius: 20px;" class="d-flex justify-content-center shadow">
+                                            <img style="align-self:center;" class="image-boxed" src="/img/img-meteo/camera-surv.png" width="50" height="50">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4 col-lg-4 px-2" onclick="window.location.href = ('/index');">
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        <span style="background-color:#1377bf;width:80px; height:80px;border-radius: 20px;" class="d-flex justify-content-center shadow">
+                                            <img style="align-self:center;" class="image-boxed" src="img/img-meteo/plan.png" width="50" height="50">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class=" text-center p-0">
+            <div class="container py-3">
+                <div class="row">
+                    <nav class="navbar fixed-bottom navbar-light nav-pills nav-fill nav-bg">
+
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/index">
+                                <img id="navbar-index" src="/img/img-meteo/home.png" style="height:24px;width:24px;color: #fff">
+                            </a>
+                        </div>
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/index">
+                                <img id="navbar-map" src="/img/img-meteo/calendrier.png" style="height:24px;width:24px;">
+                            </a>
+                        </div>
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/notifications">
+                                <img id="navbar-notif" src="/img/img-meteo/alert-icon.png" style="height:24px;width:24px;color: #fff">
+                            </a>
+                        </div>
+                        <div class="nav-item nav-menu-item text-center">
+                            <a class="navbar-brand" href="/profil">
+                                <img id="navbar-profil" src="/img/img-meteo/user.png" style="height:24px;width:24px;">
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+        </div>
+        </div>
+    </div>			                            
+<script type="text/javascript"></script>
+<style type="text/css">
+head,
+body {
+    
+}
+.tete{
+    background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(/img/img-meteo/toulon3.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    height: 200px
+}
+
+.container {
+    margin-top: 40px;
+    margin-bottom: 40px
+}
+
+.card-title {
+    justify-content: space-between;
+
+}
+
+.line2 {
+    border-bottom: 1px solid #c1bcbc;
+    padding-bottom: 0px;
+    padding-left: 0px
+}
+
+.texth3{
+ font-size: 30px;
+ color: #fff;
+}
+.text1
+{
+    color: #fff;
+    font-size: 16px;
+    }
+.temperature
+{
+   font-size: 40px;
+    }
+.nav-bg, .nav-menu-item{
+    background-color:#003699;
+}
+.nav-menu-item:hover{
+    background-color:#437de8;
+}
+body {
+    color: #fff;
+    overflow-x: hidden;
+    height: 100%;
+    background-repeat: no-repeat
+}
+
+.cardmeteo {
+    background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("/img/img-meteo/bg-plage2.jpg");
+    background-size: cover;
+    background-position: 50% 50%;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0px 8px 16px 4px;
+    margin-top: 20px;
+    margin-bottom:20px;
+    padding-top:10px;
+    padding-bottom:10px;
+}
+.time-font {
+    font-size: 40px
+}
+
+.sm-font {
+    font-size: 18px
+}
+
+.med-font {
+    font-size: 22px
+}
+
+.large-font {
+    font-size:50px
+}
+
+/*boussole index*/
+#compassContainer {
+                            width: 100px;
+                            height: 100px;
+                            margin: 0 auto;
+                            position: relative;
+                            
+                        }
+                        #compassRing{
+
+                            height: 100px;
+                            width: 100px;
+                            border: 4px solid #fff;
+                            border-radius: 50%;
+                        }
+
+                        #compassRingventjaune {
+                            height: 100px;
+                            width: 100px;
+                            border-left: 20px solid transparent;
+                            border-right: 20px solid transparent;
+                            border-bottom: 10px solid transparent;
+                            border-bottom-color:#ffc107;
+                            border-radius: 50%;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            z-index:9;
+                            -webkit-transform: rotate(20deg);
+                            -webkit-transform-origin: bottom;
+                            transform: rotate(90deg);
+                            transform-origin: center;
+
+                        }
+                        
+                        #pointerContain{
+                             display: flex;
+                            vertical-align: middle;
+                            color:#fff;
+                            margin: auto;
+                            width: 100%; 
+                            height: 100%;
+                        }
+                        #content-wth{
+                            padding-left: 20px;
+                            padding-right: 20px;
+                        }
+                        .bg-bssl-index{
+                            background-image: url(/img/img-meteo/bg-bssl-index.png);
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            background-position:center;
+                            padding: 12px;
+                            width: 100%;
+                            height: 100%;
+                        }
+</style>
+</body>
+</html>
