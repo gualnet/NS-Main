@@ -1,0 +1,15 @@
+# Directories
+**/**/node_modules
+node_modules/
+.cache/
+dist/
+dist_*/
+out/
+.vscode/
+
+# Files
+.DS_Store
+
+#temp
+untrack_/
+untrack_*
