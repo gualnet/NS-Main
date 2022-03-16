@@ -207,7 +207,8 @@ __TPL_ONESIGNAL__
 
                         -->
                     <!--<img style="width:100%;" src="/img/fakeweather.png">-->
-                    <div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="window.location.href = '/previsions';">
+                    <!-- <div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="window.location.href = '/previsions';"> -->
+                    <div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="weatherOnClickHandler()">
                         <div class="card-body rounded" style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
                             <div class="row">
                                 <div class="col">
@@ -1050,9 +1051,19 @@ __TPL_ONESIGNAL__
     </div>
 
     <script>
-        if(localStorage["entity_id"] == "4eqv44307K"){
-            document.getElementById("weather_card").onclick = function () { console.log("disabled")};
-        }
+        const weatherOnClickHandler = () => {
+            const weatherDisableList = [
+                '4eqv44307K', // les sablons
+                'Ex3ADuoAmY', // la napoule
+            ];
+            if (weatherDisableList.includes(localStorage["entity_id"])) {
+                console.log('disabled');
+            } else {
+                window.location.href = '/previsions';
+            }
+        };
+        
+        
         fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
             let weather_api = "wwo";
             let entity = _data.data;
