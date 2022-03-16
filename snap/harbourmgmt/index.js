@@ -360,8 +360,8 @@ exports.plugin =
                         }
                     }
 
+                    if (!req.post.email_concierge) req.post.email_concierge = '';
                     var harbour = await updateHarbour(req.post);
-                    console.log(harbour);
                     if (harbour[0].id) {
                         UTILS.httpUtil.dataSuccess(req, res, "Success", "Port mis à jour", "1.0");
                         return;
