@@ -2,14 +2,14 @@
 <html lang="en" class="h-100">
 
 
-{{element->header_app.html}}
+__TPL_HEADER_APP__
 
 <body class="d-flex flex-column h-100 menu-overlay">
     <nav class="navbar navbar-light fixed-top mt-2">
         <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
     </nav>
     <!-- screen loader -->
-    {{element->loader.html}}
+    __TPL_LOADER__
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <!-- Fixed navbar -->
@@ -52,7 +52,7 @@
         <br />
         <br />
         <div class="container py-3">
-            {{element->navbar.html}}
+            __TPL_NAVBAR__
         </div>
     </main>
     <!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
@@ -226,7 +226,7 @@
                         var ticket = "";
 
                         ticket += '<div class="card mt-3 mb-4">'
-                            + '<div class="card-header justify-content-center"><h6>Incident N° ' + securites[i].id + '</h6></div>'
+                            + '<div class="card-header justify-content-center"><h6>Incident N° ' + (i+1) + '</h6></div>'
                             + '<div class="card-body">'
 
                             + '<div class="row">'
@@ -307,7 +307,7 @@
             });
         }
     </script>
-    {{element->footer_app.html}}
+    __TPL_FOOTER_APP__
 </body>
 <!-- Mirrored from maxartkiller.com/website/Nauticspot/setting.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
 </html>
