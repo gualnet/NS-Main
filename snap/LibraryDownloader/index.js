@@ -4,8 +4,8 @@ const child_process = require('child_process');
 exports.setup = {
   on: true,
   title: 'LibraryDownloader',
-  description: 'download the library folder',
-  version: '0.0.1',
+  description: 'some endpoints to download folders',
+  version: '0.0.2',
   api: true,
 }
 
@@ -97,6 +97,45 @@ const getVarFolderZip = (req, res) => {
   }
 };
 
+const getLibraryFolderZip = (req, res) => {
+  try {
+
+    // ZIP project folder
+    const dirPath = `./var/library`;
+    const archiveName = 'library.tar';
+    try {
+      child_process.exec(
+        `tar -cf ${dirPath}.tar ${dirPath}/*`,
+        (err, stdout, stderr) => {
+          if (err) {
+            res.end('[ERR-1]' + err.message);
+          } else if (stderr) {
+            res.end('[ERR-2]' + stderr);
+          } else {
+            console.log(`[INFO] - Zip ${archiveName} OK`)
+            console.log(`[INFO] -`, stdout);
+            // SEND ARCHIVE TO CLIENT
+            try {
+              console.log('ARCH', `${dirPath}/../${archiveName}`);
+              const fileData = fs.readFileSync(`${dirPath}/../${archiveName}`);
+              res.end(fileData);
+            } catch (error) {
+              res.end('[ERROR]' + error.message);
+            }
+          }
+        }
+      );
+
+    } catch (error) {
+      res.end('[ERR]' + error.message);
+      return;
+    }
+
+  } catch (error) {
+    res.end(error.message);
+  }
+};
+
 exports.router = [
   {
     on: true,
@@ -108,6 +147,11 @@ exports.router = [
     route: '/api/zip/var',
     method: 'GET',
     handler: getVarFolderZip
+  }, {
+    on: true,
+    route: '/api/zip/library',
+    method: 'GET',
+    handler: getLibraryFolderZip
   }
 ]
 
