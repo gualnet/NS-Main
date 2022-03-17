@@ -73,7 +73,7 @@
                                         </div>
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="form-label">Sous catégorie</label>
+                                                <label class="form-label">Sous-catégorie</label>
                                                 <select class="form-control" id="subcategory_select" name="subcategory">
                                                 </select>
                                             </div>
@@ -137,7 +137,7 @@
                                                 <th>ID</th>
                                                 <th>Nom du Port</th>
                                                 <th>Catégorie</th>
-                                                <th>Sous catégorie</th>
+                                                <th>Sous-catégorie</th>
                                                 <th>Nom</th>
                                                 <th>Description</th>
                                                 <th>Email</th>
@@ -407,6 +407,51 @@
                     document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
                 });
         }
+
+        const subcategoriesObj = {
+        harbourlife: {
+            sos: 'S.O.S.',
+            maintenance: 'Maintenance',
+            bricolage: 'Bricolage',
+            sante: 'Santé',
+            annonce: 'Annonce',
+            laverie: 'Laverie',
+            transport: 'Transport',
+            alimentation: 'Alimentation',
+            boutique: 'Boutique',
+            'Vendeur/Loueur': 'Vendeur / Loueur',
+            vieportautre: 'Autre<',
+        },
+        experience: {
+            nautic: 'Activités nautiques',
+            terrestres: 'Activités terrestres',
+            association: 'Association',
+            equipbourse: 'Bourse aux équipiers',
+            'Vendeur/Loueur': 'Vendeur / Loueur',
+            experienceautre: 'Autre',
+        },
+        discovery: {
+            restaurant: 'Restaurants',
+            bar: 'Bar',
+            culture: 'Culture',
+            divertissement: 'Loisirs',
+            detente: 'Détente',
+            decouverteautre: 'Autre',
+        }
+    };
+
+    function updateSubcategories(target) {
+        const targetId = target.id.split('_')[1];
+        const newCategory = target.value;
+        const subcategoryElem = document.getElementById(`subcategory_${targetId}`);
+        while (subcategoryElem.options.length > 0) {
+            subcategoryElem.remove(0);
+        };
+        Object.entries(subcategoriesObj[newCategory]).map(([subKey, subValue]) => {
+            const newOption = new Option(subValue, subKey);
+            subcategoryElem.add(newOption, undefined);
+        });
+    };
     </script>
 </body>
 

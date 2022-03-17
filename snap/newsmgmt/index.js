@@ -328,7 +328,7 @@ exports.plugin =
             if (_role == "user") {
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
-                    + '<label class="form-label">Séléction du port</label>'
+                    + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
                 for (var i = 0; i < _harbour_id.length; i++) {
                     userHarbours[i] = await STORE.harbourmgmt.getHarbourById(_harbour_id[i]);
@@ -338,7 +338,7 @@ exports.plugin =
             } else if (_role == "admin") {
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
-                    + '<label class="form-label">Séléction du port</label>'
+                    + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
                 userHarbours = await STORE.harbourmgmt.getHarbour();
                 console.log("ici");
