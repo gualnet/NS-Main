@@ -242,7 +242,7 @@
                     for (var i = 0; i < absences.length; i++) {
 
                         document.getElementById("absences").innerHTML += '<div class="card mt-3 mb-4">'
-                            + '<div class="card-header justify-content-center"><h6>Absence N° ' + (i+1) + '</h6></div>'
+                            + '<div class="card-header justify-content-center"><h6>Absence N° ' + (absences.length - i) + '</h6></div>'
                             + '<div class="card-body">'
 
                             + '<div class="row">'
@@ -268,6 +268,7 @@
         }
 
         function sendForm() {
+            console.log('COUCOU')
             var form = document.getElementById("absence_form");
             var formData = new FormData(form);
             formData.append("token", localStorage["token"])
