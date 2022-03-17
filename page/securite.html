@@ -2,14 +2,16 @@
 <html lang="en" class="h-100">
 
 
-__TPL_HEADER_APP__
+<!-- __TPL_HEADER_APP__ -->
+{{element->header_app.html}}
 
 <body class="d-flex flex-column h-100 menu-overlay">
     <nav class="navbar navbar-light fixed-top mt-2">
         <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
     </nav>
     <!-- screen loader -->
-    __TPL_LOADER__
+    <!-- __TPL_LOADER__ -->
+    {{element->loader.html}}
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <!-- Fixed navbar -->
@@ -52,7 +54,8 @@ __TPL_HEADER_APP__
         <br />
         <br />
         <div class="container py-3">
-            __TPL_NAVBAR__
+            <!-- __TPL_NAVBAR__ -->
+            {{element->navbar.html}}
         </div>
     </main>
     <!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
@@ -307,7 +310,8 @@ __TPL_HEADER_APP__
             });
         }
     </script>
-    __TPL_FOOTER_APP__
+    <!-- __TPL_FOOTER_APP__ -->
+    {{element->footer_app.html}}
 </body>
 <!-- Mirrored from maxartkiller.com/website/Nauticspot/setting.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
 </html>
