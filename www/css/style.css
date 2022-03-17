@@ -972,7 +972,7 @@ textarea:focus,
   position: relative;
 }
 
-.product-image-top:before {
+/* .product-image-top:before {
   content: "";
   position: absolute;
   left: 0;
@@ -983,7 +983,7 @@ textarea:focus,
   background: -webkit-linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, white 100%);
   background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, white 100%);
   z-index: 1;
-}
+} */
 
 */
 .product-image-top .tag-images-count {
