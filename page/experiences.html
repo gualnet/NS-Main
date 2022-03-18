@@ -29,6 +29,9 @@
                     <a href="/experiences?select=bourses" id="equipbourse" class="text-secondary">Bourses</a>
                 </div>
                 <div class="nav-item">
+                    <a href="/experiences?select=bourses" id="vendeur-loueur-ex" class="text-secondary">Vendeur / Loueur</a>
+                </div>
+                <div class="nav-item">
                     <a href="/experiences?select=experienceautre" id="experienceautre" class="text-secondary">Autres</a>
                 </div>
             </div>
@@ -190,6 +193,8 @@
                     document.getElementById('equipbourse').hidden = true;
                 if (!activeSubCategories.experienceautre)
                     document.getElementById('experienceautre').hidden = true;
+                if (!activeSubCategories.vendeurLoueurEx)
+                    document.getElementById('vendeur-loueur-ex').hidden = true;
             }).catch((error) => {
                 console.log(error);
             });
@@ -267,6 +272,9 @@
                                 break;
                             case "experienceautre":
                                 currentRow = currentRow.replace("__IMG__", "/library/autres-500.png");
+                                break;
+                            case "vendeurLoueurEx":
+                                currentRow = currentRow.replace("__IMG__", "/library/vendeur-loueur-ex.png");
                                 break;
                             default:
                                 currentRow = currentRow.replace("__IMG__", "/library/autres-500.png");

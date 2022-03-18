@@ -46,6 +46,9 @@
 					<div class="nav-item" id="boutique">
 					<a href="/harborlife?select=boutique"><img style="height:25px;width:25px;" src="/library/bouton-boutiques-64.png"></a>
 					</div>
+					<div class="nav-item" id="vendeur-loueur-hl">
+						<a href="/harborlife?select=vendeurLoueurHl"><img style="height:25px;width:25px;" src="/library/vendeur-loueur-hl.png"></a>
+						</div>
 					<div class="nav-item" id="vieportautre">
 					<a href="/harborlife?select=vieportautre"><img style="height:25px;width:25px;" src="/library/autres-64.png"></a>
 					</div>
@@ -218,6 +221,8 @@
 					document.getElementById('alimentation').hidden = true;
 				if (!activeSubCategories.vieportautre)
 					document.getElementById('vieportautre').hidden = true;
+				if (!activeSubCategories.vendeurLoueurHl)
+					document.getElementById('vendeur-loueur-hl').hidden = true;
 			}).catch((error) => {
 				console.log(error);
 			});
@@ -314,6 +319,9 @@
 								break;
 							case "boutique":
 								currentRow = currentRow.replace("__IMG__", "/library/bouton-boutiques-64.png");
+								break;
+							case "vendeurLoueurHl":
+								currentRow = currentRow.replace("__IMG__", "/library/vendeur-loueur-hl.png");
 								break;
 							case "vieportautre":
 								currentRow = currentRow.replace("__IMG__", "/library/autres-64.png");

@@ -10,7 +10,7 @@ function makeid(length) {
     for (var i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    console.log(result);
+    // console.log(result);
     return result;
 }
 
@@ -26,13 +26,13 @@ function validatePhone(phone) {
 
 function addProtocolToUrl(url) {
     var patternProtocol = new RegExp('^(https?:\\/\\/)') // protocol
-    console.log(url);
-    console.log(patternProtocol.test(url));
+    // console.log(url);
+    // console.log(patternProtocol.test(url));
     if (patternProtocol.test(url)) {
-        console.log(url);
+        // console.log(url);
         return url;
     } else {
-        console.log(url);
+        // console.log(url);
         return ("https://" + url);
     }
 }
@@ -111,11 +111,11 @@ function verifyPostReq(_req, _res) {
 }
 
 async function getPartnerById(_id) {
-    console.log(_id);
+    // console.log(_id);
     return new Promise(resolve => {
         STORE.db.linkdb.FindById(_partnerCol, _id, null, function (_err, _data) {
             if (_data) {
-                console.log(_data);
+                // console.log(_data);
                 resolve(_data);
             }
             else
@@ -182,7 +182,7 @@ async function createPartner(_obj) {
 }
 
 async function updatePartner(_obj) {
-    console.log('updatePartner', _obj);
+    // console.log('updatePartner', _obj);
     return new Promise(resolve => {
         STORE.db.linkdb.Update(_partnerCol, { id: _obj.id }, _obj, function (_err, _data) {
             if (_data)
@@ -205,6 +205,7 @@ async function getAdminById(_id) {
 //route handlers
 async function getPartnerBySearchHandler(_req, _res) {
     var partner = await getPartnerBySearch({ harbour_id: _req.param.harbour_id, category: _req.param.category, subcategory: _req.param.subcategory })
+    // console.log('partner>', partner);
     if (partner) {
         UTILS.httpUtil.dataSuccess(_req, _res, "success", partner, "1.0");
         return;
@@ -216,8 +217,8 @@ async function getPartnerBySearchHandler(_req, _res) {
 
 async function getPartnerByIdHandler(_req, _res) {
     var partner = await getPartnerById(_req.param.id);
-    console.log(_req.param.id);
-    console.log(partner);
+    // console.log(_req.param.id);
+    // console.log(partner);
     if (partner.id) {
         UTILS.httpUtil.dataSuccess(_req, _res, "success", partner, "1.0");
         return;
@@ -233,9 +234,9 @@ async function getPartnersByHarbourHandler(_req, _res) {
         var _partners = await getPartnerByHarbourId(_req.get.harbour_id);
 
         if (_partners[0]) {
-            for (var i = 0; i > _partners[i].length; i++) {
-                console.log('ici' + _partners[i]);
-            }
+            // for (var i = 0; i > _partners[i].length; i++) {
+            //     // console.log('ici' + _partners[i]);
+            // }
             var _harbour = await STORE.harbourmgmt.getHarbourById(_req.get.harbour_id);
             var _partnerHtml = fs.readFileSync(path.join(__dirname, "partner.html")).toString();
             UTILS.httpUtil.dataSuccess(_req, _res, "success", { html: _partnerHtml, partners: _partners, harbour: _harbour }, "1.0");
@@ -248,6 +249,7 @@ async function getPartnersByHarbourHandler(_req, _res) {
 
 async function getActivePartnersCategoryHandler(_req, _res) {
     var partners = await getPartnerByHarbourId(_req.param.harbour_id);
+    // console.log('Partners00', partners)
     var data = { activeCategories: {}, activeSubCategories: {} };
     for (var i = 0; i < partners.length; i++) {
         switch (partners[i].category) {
@@ -328,6 +330,12 @@ async function getActivePartnersCategoryHandler(_req, _res) {
             case "decouverteautre":
                 data.activeSubCategories.decouverteautre = true;
                 break;
+            case 'vendeurLoueurHl':
+                data.activeSubCategories.vendeurLoueurHl = true;
+                break;
+            case 'vendeurLoueurEx':
+                data.activeSubCategories.vendeurLoueurEx = true;
+                break;
         }
     }
     UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
@@ -391,7 +399,7 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
-            console.log("ici meme");
+            console.log("ici meme 0");
             console.log(req.post);
             if (req.post.id) {
                 if (req.post.website)
@@ -404,13 +412,13 @@ exports.plugin =
                     if (_FD.prefix && _FD.phone) {
                         _FD.prefix = completePhonePrefix(_FD.prefix);
                         _FD.prefixed_phone = _FD.prefix + _FD.phone.replace(/^0/, '');
-                        console.log(_FD.prefixed_number);
+                        // console.log(_FD.prefixed_number);
                     }
 
                     //img gesture
                     if (_FD.img) {
                         var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-                        console.log(upload);
+                        // console.log(upload);
                         _FD.img = upload.secure_url;
                         _FD.cloudinary_img_public_id = upload.public_id;
                         if (currentPartner.cloudinary_img_public_id) {
@@ -419,7 +427,7 @@ exports.plugin =
                     }
 
                     var partner = await updatePartner(_FD);
-                    console.log(partner);
+                    // console.log(partner);
                     if (partner[0].id) {
                         UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire mis à jour", "1.0");
                         return;
@@ -439,7 +447,7 @@ exports.plugin =
                     if (_FD.prefix && _FD.phone) {
                         _FD.prefix = completePhonePrefix(_FD.prefix);
                         _FD.prefixed_phone = _FD.prefix + _FD.phone.replace(/^0/, '');
-                        console.log(_FD.prefixed_number);
+                        // console.log(_FD.prefixed_number);
                     }
 
                     //img gesture
@@ -451,7 +459,7 @@ exports.plugin =
                     }
 
                     var partner = await createPartner(_FD);
-                    console.log(partner);
+                    // console.log(partner);
                     if (partner.id) {
                         UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire créé", "1.0");
                         return;
@@ -485,8 +493,8 @@ exports.plugin =
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" id="sharbour_id" name="harbour_id">';
                 userHarbours = await STORE.harbourmgmt.getHarbour();
-                console.log("ici");
-                console.log(userHarbours);
+                // console.log("ici");
+                // console.log(userHarbours);
                 for (var i = 0; i < userHarbours.length; i++) {
                     harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
                 }
@@ -521,13 +529,13 @@ exports.plugin =
                     + '<option value="transport">Transport</option>'
                     + '<option value="alimentation">Alimentation</option>'
                     + '<option value="boutique">Boutique</option>'
-                    + '<option value="Vendeur/Loueur">Vendeur / Loueur</option>'
+                    + '<option value="vendeurLoueurHl">Vendeur / Loueur</option>'
                     + '<option value="vieportautre">Autre</option>',
                 experience: '<option value="nautic">Activités nautiques</option>'
                     + '<option value="terrestres">Activités terrestres</option>'
                     + '<option value="association">Association</option>'
                     + '<option value="equipbourse">Bourse aux équipiers</option>'
-                    + '<option value="Vendeur/Loueur">Vendeur / Loueur</option>'
+                    + '<option value="vendeurLoueurEx">Vendeur / Loueur</option>'
                     + '<option value="experienceautre">Autre</option>',
                 discovery: '<option value="restaurant">Restaurants</option>'
                     + '<option value="bar">Bar</option>'
