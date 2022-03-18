@@ -628,6 +628,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="swiper-slide" id="vendeurLoueurHl">
+                        <div class="row">
+                            <div class="col" onclick="window.location.href = ('/harborlife?select=vendeurLoueurHl')">
+                                <div class="row">
+                                    <div class="col">
+                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/vendeur-loueur-hl.png">
+                                    </div>
+                                </div>
+                                <div class="row text-center pd-2 pt-2">
+                                    <div class="col">
+                                        <span class="text-muted small">Vendeur / Loueur</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="swiper-slide" id="vieportautre">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=vieportautre')">
@@ -719,6 +735,22 @@
                                 <div class="row text-center pd-2 pt-2">
                                     <div class="col">
                                         <span class="text-muted small">Bourse aux équipiers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" id="vendeurLoueurEx">
+                        <div class="row">
+                            <div class="col" onclick="window.location.href = ('/experiences?select=vendeurLoueurEx')">
+                                <div class="row">
+                                    <div class="col">
+                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/vendeur-loueur-ex.png">
+                                    </div>
+                                </div>
+                                <div class="row text-center pd-2 pt-2">
+                                    <div class="col">
+                                        <span class="text-muted small">Vendeur / Loueur</span>
                                     </div>
                                 </div>
                             </div>
@@ -1396,6 +1428,8 @@
                     document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=boutique')");
                 else if (activeSubCategories.vieportautre)
                     document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vieportautre')");
+                else if (activeSubCategories.vendeurLoueurHl)
+                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vendeurLoueurHl')");
 
 
                 if (!activeSubCategories.bricolage)
@@ -1433,6 +1467,8 @@
                     document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=association')");
                 else if (activeSubCategories.equipbourse)
                     document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=equipbourse')");
+                else if (activeSubCategories.vendeurLoueurEx)
+                    document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=vendeurLoueurEx')");
                 else if (activeSubCategories.experienceautre)
                     document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=experienceautre')");
 
@@ -1445,6 +1481,8 @@
                     document.getElementById('association').hidden = true;
                 if (!activeSubCategories.equipbourse)
                     document.getElementById('equipbourse').hidden = true;
+                if (!activeSubCategories.vendeurLoueurEx)
+                    document.getElementById('vendeurLoueurEx').hidden = true;
                 if (!activeSubCategories.experienceautre)
                     document.getElementById('experienceautre').hidden = true;
             } else {
