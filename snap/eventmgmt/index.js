@@ -42,10 +42,10 @@ function verifyPostReq(_req, _res) {
         UTILS.httpUtil.dataError(_req, _res, "Error", "Date de début requise", "100", "1.0");
         return false;
     }
-    if (!_req.post.date_end) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Date de fin requis", "100", "1.0");
-        return false;
-    }
+    // if (!_req.post.date_end) {
+    //     UTILS.httpUtil.dataError(_req, _res, "Error", "Date de fin requis", "100", "1.0");
+    //     return false;
+    // }
     /*
     if (!_req.post.category == "events" || !_req.post.category == "event") {
         UTILS.httpUtil.dataError(_req, _res, "Error", "Catégorie invalide", "100", "1.0");
