@@ -241,6 +241,9 @@
 
             fetch('/api/partner/' + localStorage['harbourid'] + '/discovery/' + urlParams.get('select')).then(response => response.json()).then(_data => {
                 console.log(_data);
+                // sort partners by name alphabetical order
+				_data.data.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+
                 var partners = _data.data;
 
                 var sBrowser, sUsrAg = navigator.userAgent;
