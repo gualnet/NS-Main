@@ -417,21 +417,24 @@ exports.plugin =
             if (_role == "user") {
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
-                    + '<label class="form-label">Séléction du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id" id="harbour_id">';
-                for (var i = 0; i < _harbour_id.length; i++) {
-                    userHarbours[i] = await STORE.harbourmgmt.getHarbourById(_harbour_id[i]);
-                    harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
-                }
+                    + '<label class="form-label">Sélection du port</label>'
+                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
+
+                const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
+                const userHarbours = await Promise.all(getHarbourPromises);
+                userHarbours.map(userHarbour => {
+                    harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
+                });
+
                 harbour_select += '</select></div></div>';
             } else if (_role == "admin") {
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
-                    + '<label class="form-label">Séléction du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id" id="harbour_id">';
+                    + '<label class="form-label">Sélection du port</label>'
+                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
                 userHarbours = await STORE.harbourmgmt.getHarbour();
-                console.log("ici");
-                console.log(userHarbours);
+                userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+
                 for (var i = 0; i < userHarbours.length; i++) {
                     harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
                 }

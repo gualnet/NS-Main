@@ -347,7 +347,9 @@ exports.plugin =
             
             //set entity and harbour lists <
             var entites = await getEntity();
+            entites.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
             var harbours = await getHarbour();
+            harbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
             if (entites[0] && harbours[0]) {
                 var entitesOption;
                 for (var i = 0; i < entites.length; i++) {
