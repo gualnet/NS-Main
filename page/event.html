@@ -75,7 +75,11 @@
                 document.getElementById("date").innerHTML = dateFormated;
                 document.getElementById("content").innerHTML = event.content;
                 document.getElementById("description").innerHTML = event.description;
-                document.getElementById("duree").innerHTML = "Du " + startDateFormated + " au " + endDateFormated;
+                if (event.date_start && event.date_end) {
+                    document.getElementById("duree").innerHTML = "Du " + startDateFormated + " au " + endDateFormated;
+                } else if (event.date_start && !event.date_end) {
+                    document.getElementById("duree").innerHTML = "A partir du " + startDateFormated;
+                }
                 if (event.img)
                     document.getElementById("img").src = event.img;
                 else
