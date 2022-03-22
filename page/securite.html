@@ -179,7 +179,10 @@
             formData.append("token", localStorage["token"])
             fetch("/api/zones?harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
                 if (_data.success) {
-                    let zones = _data.data;
+                    const zones = _data.data;
+                    if (zones?.length > 1) {
+                        zones.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+                    }
                     for (var i = 0; i < zones.length; i++) {
                         document.getElementById("zones").innerHTML += '<option value="' + zones[i].id + '">' + zones[i].name + '</option>'
                     }
