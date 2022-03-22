@@ -234,49 +234,45 @@
 
         function updateAbsenceList() {
             fetch("/api/get/absence?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
-                var absences = _data.data.sort(dynamicSort("date")).reverse();
+                var absences = _data.data?.sort(dynamicSort("date")).reverse();
                 ;
-
                 document.getElementById("absences").innerHTML = "";
-                if (absences[0].id) {
-                    for (var i = 0; i < absences.length; i++) {
+                for (var i = 0; i < absences.length; i++) {
 
-                        document.getElementById("absences").innerHTML += '<div class="card mt-3 mb-4">'
-                            + '<div class="card-header justify-content-center"><h6>Absence N° ' + (absences.length - i) + '</h6></div>'
-                            + '<div class="card-body">'
+                    document.getElementById("absences").innerHTML += '<div class="card mt-3 mb-4">'
+                        + '<div class="card-header justify-content-center"><h6>Absence N° ' + (absences.length - i) + '</h6></div>'
+                        + '<div class="card-body">'
 
-                            + '<div class="row">'
-                            + '<div class="col-6">'
-                            + '<div class="form-group floating-form-group active" >'
-                            + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_start + '" readonly>'
-                            + '   <label class="floating-label">Date de départ</label>'
-                            + '</div>'
-                            + '</div>'
-                            + '<div class="col-6">'
-                            + '<div class="form-group floating-form-group active" >'
-                            + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_end + '" readonly>'
-                            + '   <label class="floating-label">Date de retour</label>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>'
-                            + '</div>'
+                        + '<div class="row">'
+                        + '<div class="col-6">'
+                        + '<div class="form-group floating-form-group active" >'
+                        + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_start + '" readonly>'
+                        + '   <label class="floating-label">Date de départ</label>'
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="col-6">'
+                        + '<div class="form-group floating-form-group active" >'
+                        + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_end + '" readonly>'
+                        + '   <label class="floating-label">Date de retour</label>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
+                        + '</div>'
 
-                    }
                 }
             }).catch((e) => { console.error(e) });
         }
 
         function sendForm() {
-            console.log('COUCOU')
             var form = document.getElementById("absence_form");
             var formData = new FormData(form);
             formData.append("token", localStorage["token"])
             formData.append("harbour_id", localStorage["harbourid"])
             fetch("/api/create/absence", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log(_data);
+                console.log('_data:', _data);
                 if (_data.success) {
-                    console.log(_data);
+                    // console.log(_data);
                     updateAbsenceList();
                 } else {
                     if (document.getElementById("error"))
