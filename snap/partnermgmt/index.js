@@ -551,6 +551,16 @@ exports.plugin =
             var _partnerGen = "";
             for (var i = 0; i < _partners.length; i++) {
                 var currentHarbour = await STORE.harbourmgmt.getHarbourById(_partners[i].harbour_id);
+
+                let formatedDate = '-';
+                if (_partners[i].date) {
+                    const dateObj = new Date(_partners[i].date)
+                    const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
+                    const date = splited[0]; 
+                    const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
+                    formatedDate = `${date} à ${heure}`;
+                }
+
                 _partnerGen += _partnerHtml.replace(/__ID__/g, _partners[i].id)
                     .replace(/__FORMID__/g, _partners[i].id.replace(/\./g, "_"))
                     .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
@@ -568,6 +578,7 @@ exports.plugin =
                     .replace(/__IMG__/g, _partners[i].img)
                     .replace(/__WEBSITE__/g, _partners[i].website)
                     .replace(/__ADDRESS__/g, _partners[i].address)
+                    .replace(/__DATE_CREATION__/g, formatedDate)
             }
             _indexHtml = _indexHtml.replace("__PARTNERS__", _partnerGen).replace(/undefined/g, '');
 
