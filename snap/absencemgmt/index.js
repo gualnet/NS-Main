@@ -132,14 +132,11 @@ exports.handler = async (req, res) => {
 
 //handler that return absence by user id and harbour id
 async function getAbsenceHandler(req, res) {
-    var _data = await getAbsenceByUserIdAndHarbourId(req.get.user_id, req.get.harbour_id);
-    if (_data[0].id) {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
+    try {
+        const data = await getAbsenceByUserIdAndHarbourId(req.get.user_id, req.get.harbour_id);
+        UTILS.httpUtil.dataSuccess(req, res, "success", data, "1.0");
+    } catch (error) {
         UTILS.httpUtil.dataError(req, res, "Error", "Aucune absence trouvé", "100", "1.0");
-        return;
     }
 }
 
@@ -170,7 +167,7 @@ async function createAbsenceHandler(req, res) {
                 + "<br/>Absence du " + absence.date_start + " au " + absence.date_end;
                 
             //send mail
-            await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
+            const mailJetResponse = await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
             
             
             UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
