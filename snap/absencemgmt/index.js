@@ -290,8 +290,14 @@ exports.plugin =
                     _Absences[i].category = "événement";
                 }
 
-                var date = new Date(_Absences[i].date);
-                var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
+                let formatedDate = '-';
+                if (_Absences[i].date) {
+                    const dateObj = new Date(_Absences[i].date)
+                    const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
+                    const date = splited[0]; 
+                    const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
+                    formatedDate = `${date} à ${heure}`;
+                }
 
                 date = new Date(_Absences[i].date_start);
                 var startDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
@@ -310,7 +316,7 @@ exports.plugin =
                     .replace(/__PLACE_NUMBER__/g, currentPlace.number)
                     .replace(/__DATE_START__/g, startDateFormated)
                     .replace(/__DATE_END__/g, endDateFormated)
-                    .replace(/__DATE__/g, dateFormated)
+                    .replace(/__DATE__/g, formatedDate)
                     .replace(/__DATETIMEORDER__/g, _Absences[i].date)
             }
             _indexHtml = _indexHtml.replace("__ABSENCES__", _absenceGen).replace(/undefined/g, '');
