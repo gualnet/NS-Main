@@ -14,10 +14,11 @@
 <header class="masthead">
 	<div class="wrap">
 
-  		<a href="__INSTANCE_URL__" class="site-logo" rel="home" title="__INSTANCE_TITLE__"><img src="__INSTANCE_LOGO__" width="200" height="200" title="__INSTANCE_LOGO_TITLE__" alt="__INSTANCE_LOGO_TITLE__ logo" class="animated fadeInDown" style="__INSTANCE_LOGO_STYLE__"></a>
+  		<a href="__INSTANCE_URL__" class="site-logo" rel="home" title="{{instance->title}}"><img src="{{instance->logo}}" width="200" height="200" title="{{instance->logo-title}}" alt="logo-title" class="animated fadeInDown" style="__INSTANCE_LOGO_STYLE__"></a>
 
-      <h1 class="site-title animated fadeIn"><a href="__INSTANCE_URL__">__INSTANCE_TITLE__</a></h1>
-		<h2 class="site-description animated fadeIn" itemprop="description">__INSTANCE_SUBTITLE__</h2>
+      <!-- <h1 class="site-title animated fadeIn"><a href="__INSTANCE_URL__">__INSTANCE_TITLE__</a></h1> -->
+      <h1 class="site-title animated fadeIn"><a href="__INSTANCE_URL__">{{instance->title}}</a></h1>
+		<h2 class="site-description animated fadeIn" itemprop="description">{{instance->subtitle}}</h2>
 	</div>
 </header><!-- /.masthead -->
 
