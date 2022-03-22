@@ -146,6 +146,7 @@
                                                 <th>Adresse</th>
                                                 <th>Image</th>
                                                 <th>Remplacer l'image</th>
+                                                <th>Date de creation</th>
                                                 <th></th>
                                             </tr>
                                             <thead>
@@ -177,12 +178,12 @@
                             searchPlaceholder: 'Votre recherche'
                         },
                         paging: false,
-                        "order": [[4, "asc"]],
+                        "order": [[12, "desc"]], // date de creation
                         "info": false,
                     });
             });
         }
-        document.getElementById('sharbour_id').addEventListener('change', function (e) {
+        document.getElementById('sharbour_id')?.addEventListener('change', function (e) {
             var ids = []
             if (ids[0]) {
                 for (var i = 0; i < ids.length; i++) {

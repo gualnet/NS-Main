@@ -436,10 +436,16 @@ exports.plugin =
                 _harbourHtml = fs.readFileSync(path.join(__dirname, "harbour.html")).toString();
                 _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             }
-            console.log(_harbours);
-
             var _harbourGen = "";
             for (var i = 0; i < _harbours.length; i++) {
+                let formatedDate = '-';
+                if (_harbours[i].date) {
+                    const dateObj = new Date(_harbours[i].date)
+                    const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
+                    const date = splited[0]; 
+                    const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
+                    formatedDate = `${date} à ${heure}`;
+                }
                 _harbourGen += _harbourHtml.replace(/__ID__/g, _harbours[i].id)
                     .replace(/__FORMID__/g, _harbours[i].id.replace(/\./g, "_"))
                     .replace(/__ID_ENTITY__/g, _harbours[i].id_entity)
@@ -483,6 +489,7 @@ exports.plugin =
                     .replace(/__PJ_NAME__/g, _harbours[i].pj_name)
                     .replace(/__EMAIL_CONCIERGE__/g, _harbours[i].email_concierge)
                     .replace(/__NAVILY_ID__/g, _harbours[i].navily_id)
+                    .replace(/__DATE_CREATION__/g, formatedDate)
             }
             _indexHtml = _indexHtml.replace("__HARBOURS__", _harbourGen).replace(/undefined/g, '');
             res.setHeader("Content-Type", "text/html");
