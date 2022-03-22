@@ -575,16 +575,22 @@ exports.plugin =
             else if (_role == "admin")
                 _users = await getUser();
 
+            console.log('USER LEN', _users.length);
+            console.log('USER[0]', _users[0]);
 
-
-            console.log(_users);
             var _userGen = "";
             for (var i = 0; i < _users.length; i++) {
                 if (_users[i].category != "visitor") {
-                    var date = new Date(_users[i].date);
-                    var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
                     var currentHarbour = await STORE.harbourmgmt.getHarbourById(_users[i].harbour_id);
 
+                    let formatedDate = '-';
+                    if (_users[i].date) {
+                        const dateObj = new Date(_users[i].date)
+                        const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
+                        const date = splited[0];
+                        const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
+                        formatedDate = `${date} à ${heure}`;
+                    }
 
                     _userGen += _userHtml.replace(/__ID__/g, _users[i].id)
                         .replace(/__FORMID__/g, _users[i].id.replace(/\./g, "_"))
@@ -594,7 +600,7 @@ exports.plugin =
                         .replace(/__EMAIL__/g, _users[i].email)
                         .replace(/__PHONE__/g, _users[i].prefixed_phone)
                         .replace(/__DATETIMEORDER__/g, _users[i].date)
-                        .replace(/__DATE__/g, dateFormated)
+                        .replace(/__DATE__/g, formatedDate)
                         .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
                         .replace(/__HARBOUR_ID__/g, currentHarbour.id)
                         .replace(/__CONTRACT_NUMBER__/g, _users[i].contract_number)
@@ -642,8 +648,6 @@ exports.plugin =
                     + '<label class="form-label">Séléction du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
                 userHarbours = await STORE.harbourmgmt.getHarbour();
-                console.log("ici");
-                console.log(userHarbours);
                 for (var i = 0; i < userHarbours.length; i++) {
                     harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
                 }
