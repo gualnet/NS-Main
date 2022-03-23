@@ -575,13 +575,10 @@ exports.plugin =
             else if (_role == "admin")
                 _users = await getUser();
 
-            console.log('USER LEN', _users.length);
-            console.log('USER[0]', _users[0]);
-
             var _userGen = "";
             for (var i = 0; i < _users.length; i++) {
                 if (_users[i].category != "visitor") {
-                    var currentHarbour = await STORE.harbourmgmt.getHarbourById(_users[i].harbour_id);
+                    var currentHarbour = await STORE.harbourmgmt.getHarbourById(_users[i].harbourid);
 
                     let formatedDate = '-';
                     if (_users[i].date) {
@@ -591,7 +588,6 @@ exports.plugin =
                         const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
                         formatedDate = `${date} à ${heure}`;
                     }
-
                     _userGen += _userHtml.replace(/__ID__/g, _users[i].id)
                         .replace(/__FORMID__/g, _users[i].id.replace(/\./g, "_"))
                         .replace(/__CATEGORY__/g, _users[i].category)
@@ -635,7 +631,7 @@ exports.plugin =
             if (_role == "user") {
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
-                    + '<label class="form-label">Séléction du port</label>'
+                    + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
                 for (var i = 0; i < _harbour_id.length; i++) {
                     userHarbours[i] = await STORE.harbourmgmt.getHarbourById(_harbour_id[i]);
@@ -645,7 +641,7 @@ exports.plugin =
             } else if (_role == "admin") {
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
-                    + '<label class="form-label">Séléction du port</label>'
+                    + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
                 userHarbours = await STORE.harbourmgmt.getHarbour();
                 for (var i = 0; i < userHarbours.length; i++) {
