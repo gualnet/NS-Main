@@ -481,7 +481,7 @@ exports.plugin =
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
+                    + '<select class="form-control" id="harbour_id" style="width:250px;" name="harbour_id">';
 
                 const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
                 const userHarbours = await Promise.all(getHarbourPromises);
@@ -494,7 +494,7 @@ exports.plugin =
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
+                    + '<select class="form-control" id="harbour_id" style="width:250px;" name="harbour_id">';
                 userHarbours = await STORE.harbourmgmt.getHarbour();
                 userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
@@ -515,7 +515,8 @@ exports.plugin =
                 }
             }
             else if (_role == "admin")
-                _partners = await getPartnerByHarbourId(userHarbours[0].id);
+                _partners = await getPartner();
+                // _partners = await getPartnerByHarbourId(userHarbours[0].id);
 
             var categories = `
                 <option value="harbourlife">Vie au port</option>
