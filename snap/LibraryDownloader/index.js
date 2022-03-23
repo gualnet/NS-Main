@@ -105,7 +105,7 @@ const getLibraryFolderZip = (req, res) => {
     const archiveName = 'library.tar';
     try {
       child_process.exec(
-        `tar -cf ${dirPath}.tar ${dirPath}/*`,
+        `tar -cf ${dirPath}/${archiveName} ${dirPath}/*`,
         (err, stdout, stderr) => {
           if (err) {
             res.end('[ERR-1]' + err.message);
@@ -116,8 +116,8 @@ const getLibraryFolderZip = (req, res) => {
             console.log(`[INFO] -`, stdout);
             // SEND ARCHIVE TO CLIENT
             try {
-              console.log('ARCH', `${dirPath}/../${archiveName}`);
-              const fileData = fs.readFileSync(`${dirPath}/../${archiveName}`);
+              console.log('ARCH', `${dirPath}/${archiveName}`);
+              const fileData = fs.readFileSync(`${dirPath}/${archiveName}`);
               res.end(fileData);
             } catch (error) {
               res.end('[ERROR]' + error.message);
