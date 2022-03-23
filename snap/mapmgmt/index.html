@@ -195,7 +195,6 @@
 
         function getPlan() {
             fetch("/admin/plugin/mapmgmt?harbour_id=" + document.getElementById("harbour_id").value, { method: "GET" }).then(response => response.json()).then(_data => {
-
                 places = {};
                 zones = {};
                 bouees = {};
