@@ -183,7 +183,7 @@
                     });
             });
         }
-        document.getElementById('sharbour_id')?.addEventListener('change', function (e) {
+        document.getElementById('sharbour_id').addEventListener('change', function (e) {
             var ids = []
             if (ids[0]) {
                 for (var i = 0; i < ids.length; i++) {
@@ -193,15 +193,11 @@
             console.log("preuve : " + e.target.value);
             require(['datatables', 'jquery'], function (datatable, $) {
                 fetch("/api/partners/?harbour_id=" + e.target.value).then(response => response.json()).then(_data => {
-                    console.log(_data);
                     if (_data.success) {
                         dataTable.destroy();
                         var _partners = _data.data.partners;
                         var _partnerGen = "";
                         var gen = "";
-                        console.log(_partnerHtml);
-                        console.log("la");
-                        console.log(_partnerGen);
 
                         for (var i = 0; i < _partners.length; i++) {
                             var _partnerHtml = _data.data.html;
@@ -222,17 +218,11 @@
                                 .replace(/__ADDRESS__/g, _partners[i].address)
 
                             ids.push(_partners[i].id.replace(/\./g, "_"));
-
-                            console.log(gen);
-                            console.log('ici');
-                            console.log(_partnerGen);
                             gen += _partnerGen;
                         }
-                        console.log(gen);
 
                         document.getElementById("result").innerHTML = "";
                         document.getElementById("result").insertAdjacentHTML('beforeend', gen);
-                        console.log(ids);
                         dataTable = $('.datatable').DataTable(
                             {
                                 language: {
@@ -259,7 +249,6 @@
                         */
 
                     } else {
-
                         document.getElementById("result").innerHTML = "";
                     }
                 }).catch((error) => {
