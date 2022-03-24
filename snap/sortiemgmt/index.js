@@ -222,13 +222,13 @@ async function getSortieUserHandler(req, res) {
         let user = await STORE.usermgmt.getUserByToken(req.post.token);
         let date = new Date(Date.now());
         
-        console.log(user);
+        // console.log(user);
         if(user[0]) {
             user = user[0];
             let userSorties = [];
             
             const _sorties = await getSortieQuery({year: date.getFullYear()});
-            console.log(_sorties);
+            // console.log(_sorties);
             for(var i = 0; i < _sorties.length; i++) {
                 if(_sorties[i].user_ids[0]) {
                     for (var u = 0; u < _sorties[i].user_ids.length; u++) {
@@ -236,7 +236,7 @@ async function getSortieUserHandler(req, res) {
                             _sorties[i].place = await STORE.mapmgmt.getPlaceById(_sorties[i].place_id);
                             for(var b = 0; b < _sorties[i].boat_ids.length; b++){
                                 let boat = await STORE.boatmgmt.getBoatById(_sorties[i].boat_ids[b]);
-                                console.log(boat)
+                                // console.log(boat)
                                if(boat.user == user.id) {
                                     _sorties[i].boat = boat;
                                     break;
@@ -404,9 +404,7 @@ exports.plugin =
                     currentUser = "aucun";
                     boat = "aucun bateau attaché à cette place";
                 }
-                    console.log(_Sorties[i].sorti + " " + _Sorties[i].entre);
                 var dateSortie = new Date(_Sorties[i].sorti);
-                console.log(dateSortie);
                 var dateSortieFormated = [("0" + (dateSortie.getDate())).slice(-2), ("0" + (dateSortie.getMonth() + 1)).slice(-2), dateSortie.getFullYear()].join('-') + ' ' + [("0" + (dateSortie.getHours())).slice(-2), ("0" + (dateSortie.getMinutes())).slice(-2), ("0" + (dateSortie.getSeconds())).slice(-2)].join(':');
 
                 
