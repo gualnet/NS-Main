@@ -50,7 +50,7 @@
                             <div class="card-body">
                                 <div id="userError"></div>
                                 <div class="table-responsive">
-                                    <table class="table card-table table-vcenter text-nowrap datatable dataTable">
+                                    <table class="table card-table table-vcenter text-nowrap datatable dataTable" id="datatable_0">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -96,7 +96,7 @@
                                     <button class="btn btn-primary" type="button" onclick="sendCreateForm();">ajouter base mail</button>
                                 </form>
                                 <div class="table-responsive">
-                                    <table class="table card-table table-vcenter text-nowrap datatable dataTable">
+                                    <table class="table card-table table-vcenter text-nowrap datatable dataTable" id="datatable_1">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -123,7 +123,7 @@
     <script>
         window.onload = function () {
             require(['datatables', 'jquery'], function (datatable, $) {
-                $('.datatable').DataTable(
+                $('#datatable_0').DataTable(
                     {
                         language: {
                             search: '<span></span>',
