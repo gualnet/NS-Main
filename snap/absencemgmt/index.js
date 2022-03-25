@@ -171,7 +171,6 @@ async function createAbsenceHandler(req, res) {
             //send mail
             await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
 
-
             UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
             return;
         }

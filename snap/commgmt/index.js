@@ -308,10 +308,9 @@ async function sendNotification(_notification) {
     var harbour = await getHarbourById(_notification.harbour_id);
     var entity = await getEntityById(harbour.id_entity);
 
-
     var headers = {
         "Content-Type": "application/json; charset=utf-8",
-        "Authorization": entity.onesignal_auth
+        "Authorization": entity.onesignal_auth || '', // specify an empty string or crash the httpRequest
     };
 
 
@@ -409,8 +408,7 @@ async function sendNotification(_notification) {
         data: JSON.stringify(message)
     };
     var promise = await UTILS.httpsUtil.httpReqPromise(options);
-    
-    
+
     if (users)
         return { response: promise, users: _notification.users_id };
     else

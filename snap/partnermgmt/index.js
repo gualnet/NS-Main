@@ -400,7 +400,7 @@ exports.plugin =
         }
         if (req.method == "POST") {
             console.log("ici meme 0");
-            console.log(req.post);
+            // console.log(req.post);
             if (req.post.id) {
                 if (req.post.website)
                     req.post.website = addProtocolToUrl(req.post.website);
@@ -514,9 +514,12 @@ exports.plugin =
                     _partners = _partners.concat(await getPartnerByHarbourId(_harbour_id[i]));
                 }
             }
-            else if (_role == "admin")
+            else if (_role == "admin") {
                 _partners = await getPartner();
+                _partners = _partners.slice(0, 50);
+                // console.log('LEN', _partners.length);
                 // _partners = await getPartnerByHarbourId(userHarbours[0].id);
+            }
 
             var categories = `
                 <option value="harbourlife">Vie au port</option>
