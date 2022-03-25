@@ -517,7 +517,7 @@ exports.plugin =
             else if (_role == "admin") {
                 _partners = await getPartner();
                 _partners = _partners.slice(0, 50);
-                console.log('LEN', _partners.length);
+                // console.log('LEN', _partners.length);
                 // _partners = await getPartnerByHarbourId(userHarbours[0].id);
             }
 
