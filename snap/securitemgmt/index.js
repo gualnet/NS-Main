@@ -144,12 +144,16 @@ async function createSecuriteHandler(req, res) {
         var harbour = await STORE.harbourmgmt.getHarbourById(securite.harbour_id);
         var user = await STORE.usermgmt.getUserById(securite.user_id);
         var zone = await STORE.mapmgmt.getZoneById(securite.zone);
-        var subject = "Incident N° " + securite.id + " " + user.first_name + " " + user.last_name + " déclaré le " + dateFormated;
-                var body = "Incident N° " + securite.id
-            + "<br/>Déclaré le : " + dateFormated
-            + "<br/>Utilisateur : " + user.first_name + " " + user.last_name
-            + "<br/>Zone : " + zone.name
-            + "<br/>Déscription : <br/><br/>" + securite.description;
+
+        var subject = `Declaration d'incident le ${dateFormated}`;
+        var body = `
+            <img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
+            <h1>Bonjour</h1>
+            <p style="font-size: 12pt">Le plaisancier <B>${user.first_name || ''} ${user.last_name || ''}</B>, a déclaré un incident <B>${securite.description || 'pas de description'}</B> dans la zone <B>${zone.name || 'zone non renseignée'}</></p>
+            <p style="font-size: 10pt">À bientôt,</p>
+            <p style="font-size: 10pt">L'équipe Nauticspot</p>
+            `;
+
         await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
         UTILS.httpUtil.dataSuccess(req, res, "success", securite, "1.0");
         return;
@@ -188,7 +192,6 @@ exports.plugin =
 
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.securite_id) {
-                console.log("eeeeeeeeeeeeeeeeeeeeeeeee");
                 await delSecurite(req.get.securite_id);
             }
             else if (req.get.securite_id) {

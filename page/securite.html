@@ -212,7 +212,7 @@
         var statusoptions = "";
         function updateTicketList() {
             fetch("/api/get/securite?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
-                var securites = _data.data.sort(dynamicSort("date"));
+                var securites = _data.data.sort(dynamicSort("date")).reverse();
                 console.log(securites);
 
                 document.getElementById("tickets").innerHTML = "";

@@ -144,30 +144,33 @@ async function getAbsenceHandler(req, res) {
 async function createAbsenceHandler(req, res) {
     verifyPostReq(req);
     req.post.date = Date.now();
-    
+
     var harbour = await STORE.harbourmgmt.getHarbourById(req.post.harbour_id);
 
     if (harbour) {
         var absence = await createAbsence(req.post);
         if (absence.id) {
-            
+
             //get data from db
             var user = await STORE.usermgmt.getUserById(absence.user_id);
             var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
             var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
-            
+
+
+
             //prepare mail
-            var subject =  "Absence N° " + absence.id + " " + user.first_name + " " + user.last_name + " déclaration d'absence du " + absence.date_start + " au " + absence.date_end;
-            var body = "Absence N° " + absence.id 
-                + "<br/>plaisancier : " + user.first_name + " " + user.last_name
-                + "<br/>bateau : " + boat.name + ", immatriculé : " + boat.immatriculation
-                + "<br/>numéro de place : " + place.number
-                + "<br/>Absence du " + absence.date_start + " au " + absence.date_end;
-                
+            var subject = "Declaration d'absence";
+            var body = `
+            <img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
+            <h1>Bonjour</h1>
+            <p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} a déclaré une absence du ${absence.date_start} au ${absence.date_end}.</p>
+            <p style="font-size: 10pt">À bientôt,</p>
+            <p style="font-size: 10pt">L'équipe Nauticspot</p>
+            `;
+
             //send mail
             await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
-            
-            
+
             UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
             return;
         }
@@ -207,7 +210,7 @@ exports.plugin =
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
         // >
-        
+
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.absence_id) {
                 console.log("eeeeeeeeeeeeeeeeeeeeeeeee");
@@ -267,7 +270,7 @@ exports.plugin =
             //get html files
             var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             var _absenceHtml = fs.readFileSync(path.join(__dirname, "absence.html")).toString();
-            
+
             //get absences from user role
             var _Absences = [];
             if (_role == "user") {
@@ -289,7 +292,7 @@ exports.plugin =
                 if (_Absences[i].date) {
                     const dateObj = new Date(_Absences[i].date)
                     const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
-                    const date = splited[0]; 
+                    const date = splited[0];
                     const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
                     formatedDate = `${date} à ${heure}`;
                 }
@@ -316,7 +319,7 @@ exports.plugin =
             }
             _indexHtml = _indexHtml.replace("__ABSENCES__", _absenceGen).replace(/undefined/g, '');
             // >
-            
+
             //set harbour lists from user role <
             var userHarbours = [];
             var harbour_select;
