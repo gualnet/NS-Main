@@ -2,8 +2,6 @@
 
 async function sendEmail(_entityId, _toEmail, _toName, _subject, _msg) {
     var entity = await STORE.enititymgmt.getEntityById(_entityId);
-    console.log("entity");
-        console.log(entity);
     if (entity) {
         var mailjet = require("node-mailjet").connect(entity.mailjet_apikey, entity.mailjet_secretkey);
         const request = mailjet
@@ -12,7 +10,7 @@ async function sendEmail(_entityId, _toEmail, _toName, _subject, _msg) {
                 "Messages": [
                     {
                         "From": {
-                            "Email": entity.mailjet_mail,
+                            "Email": 'noreply@nauticspot.fr',
                             "Name": entity.name 
                         },
                         "To": [
@@ -28,13 +26,10 @@ async function sendEmail(_entityId, _toEmail, _toName, _subject, _msg) {
             })
         request
             .then((result) => {
-                console.log("result")
-                console.log(result)
-                console.log(result.body.Messages[0])
+                console.log('[MAILJET INFO]', result.body);
             })
             .catch((err) => {
-                console.log("error")
-                console.log(err.statusCode)
+                console.log('[MAILJET ERROR]', err);
             })
     }
 }
@@ -49,7 +44,8 @@ async function sendHTMLEmail(_entityId, _toEmail, _toName, _subject, _msg) {
                 "Messages": [
                     {
                         "From": {
-                            "Email": entity.mailjet_mail,
+                            // "Email": entity.mailjet_mail
+                            "Email": 'noreply@nauticspot.fr',
                             "Name": entity.name
                             },
                         "To": [
@@ -65,10 +61,10 @@ async function sendHTMLEmail(_entityId, _toEmail, _toName, _subject, _msg) {
             })
         request
             .then((result) => {
-                console.log(result)
+                console.log('[MAILJET INFO]', result.body);
             })
             .catch((err) => {
-                console.log(err.statusCode)
+                console.log('[MAILJET ERROR]', err)
             })
     }
 }

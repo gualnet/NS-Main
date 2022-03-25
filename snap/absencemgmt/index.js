@@ -142,13 +142,11 @@ async function getAbsenceHandler(req, res) {
 
 //handle absence declaration
 async function createAbsenceHandler(req, res) {
-    
     verifyPostReq(req);
     req.post.date = Date.now();
     
     var harbour = await STORE.harbourmgmt.getHarbourById(req.post.harbour_id);
 
-    
     if (harbour) {
         var absence = await createAbsence(req.post);
         if (absence.id) {
@@ -167,7 +165,7 @@ async function createAbsenceHandler(req, res) {
                 + "<br/>Absence du " + absence.date_start + " au " + absence.date_end;
                 
             //send mail
-            const mailJetResponse = await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
+            await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
             
             
             UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
