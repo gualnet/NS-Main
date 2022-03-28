@@ -15,9 +15,10 @@
     });
 </script>
 -->
+
 <body class="body-scroll d-flex flex-column h-100 menu-overlay">
-<!-- __TPL_ONESIGNAL__ -->
-{{element->onesignal.html}}
+    <!-- __TPL_ONESIGNAL__ -->
+    {{element->onesignal.html}}
     <!-- screen loader -->
     <!-- __TPL_LOADER__ -->
     {{element->loader.html}}
@@ -121,7 +122,7 @@
 
 
                         .cardmeteo {
-                            background: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url("/img/img-meteo/bg-plage2.jpg");
+                            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/img-meteo/bg-plage2.jpg");
                             background-position-x: 0%, 0%;
                             background-position-y: 0%, 0%;
                             background-size: auto, auto;
@@ -212,8 +213,10 @@
                         -->
                     <!--<img style="width:100%;" src="/img/fakeweather.png">-->
                     <!-- <div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="window.location.href = '/previsions';"> -->
-                    <div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="weatherOnClickHandler()">
-                        <div class="card-body rounded" style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
+                    <div class="card text-white bg-light mb-3 rounded" id="weather_card"
+                        onclick="weatherOnClickHandler()">
+                        <div class="card-body rounded"
+                            style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
                             <div class="row">
                                 <div class="col">
                                     <div class="justify-content-center">
@@ -225,19 +228,22 @@
                                                 <div>
                                                     <h2 class="mr-2 mt-0 ml-2 mb-4" id="temperature">
                                                         <i class="large-font wi wi-thermometer"></i>
-                                                        <span class="large-font" id="temperature"></span><span class="time-font">°C</span>
+                                                        <span class="large-font" id="temperature"></span><span
+                                                            class="time-font">°C</span>
                                                     </h2>
                                                 </div>
                                                 <div>
                                                     <p class="ml-auto mr-4 mb-0 med-font">
                                                         <i class="med-font wi wi-raindrops"></i>
-                                                        <span class="med-font" id="humidity"></span><span class="med-font">mm</span>
+                                                        <span class="med-font" id="humidity"></span><span
+                                                            class="med-font">mm</span>
                                                     </p>
                                                 </div>
                                                 <div>
                                                     <p class="ml-auto mb-0 med-font">
                                                         <i class="med-font bi bi-speedometer2"></i>
-                                                        <span class="med-font" id="pressure"></span><span class="med-font">hPa</span>
+                                                        <span class="med-font" id="pressure"></span><span
+                                                            class="med-font">hPa</span>
                                                     </p>
                                                 </div>
                                             </div>
@@ -245,9 +251,11 @@
                                                 <div class="row">
                                                     <div class="col" id="wind_direction">
                                                         <div class="bg-bssl-index">
-                                                            <div id="compassContainer" style="transform: rotate(180deg);">
+                                                            <div id="compassContainer"
+                                                                style="transform: rotate(180deg);">
                                                                 <div id="compassRing">
-                                                                    <div id="pointerContain" style="transform: rotate(180deg);">
+                                                                    <div id="pointerContain"
+                                                                        style="transform: rotate(180deg);">
                                                                         <p style="margin: auto; text-align: center;">
                                                                             <i class="bi bi-wind"></i>
                                                                             <br>
@@ -276,7 +284,9 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="col">
-                    <a class="link-dark" style="text-decoration:none;color:black;" href="/informations"><h4>Bureau du port<i style="float:right;" class="bi bi-arrow-right"></i></h4></a>
+                    <a class="link-dark" style="text-decoration:none;color:black;" href="/informations">
+                        <h4>Bureau du port<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+                    </a>
                 </div>
             </div>
 
@@ -284,14 +294,17 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="col">
-                    <div class="card" style="width:100%; height: 95%; background-color: #FFF0;box-shadow: 0 3px 10px rgba(0, 0, 0, 0);">
+                    <div class="card"
+                        style="width:100%; height: 95%; background-color: #FFF0;box-shadow: 0 3px 10px rgba(0, 0, 0, 0);">
                         <div class="card-body" style="padding: 0px 0px; font-size:11px;">
                             <div class="row px-2">
                                 <div class="col-4 px-2" onclick="window.location.href = ('/informations');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px; border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/information-icon.png">
+                                            <span style="width:80px; height:80px; border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/information-icon.png">
                                             </span>
                                         </div>
                                     </div>
@@ -304,8 +317,10 @@
                                 <div class="col-4 px-2" onclick="window.location.href = ('/camera');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/camera-icon.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/camera-icon.png">
                                             </span>
                                         </div>
                                     </div>
@@ -318,8 +333,10 @@
                                 <div id="map_pdf" class="col-4 px-2" onclick="window.location.href = ('/map');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/map-icon.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/map-icon.png">
                                             </span>
                                         </div>
                                     </div>
@@ -332,8 +349,10 @@
                                 <div class="col-4 px-2" onclick="window.location.href = ('/weather');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/meteo-icon.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/meteo-icon.png">
                                             </span>
                                         </div>
                                     </div>
@@ -363,22 +382,27 @@
                                 <div id="absences" class="col-4 px-2" onclick="window.location.href = ('/absence');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/navigation-icon.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/navigation-icon.png">
                                             </span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2" style="text-align: center;">Déclaration d'absences</span>
+                                            <span class="text-secondary pb-2 pt-2"
+                                                style="text-align: center;">Déclaration d'absences</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="securites" class="col-4 px-2" onclick="window.location.href = ('/securite');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;border-radius: 15px;" class="image-boxed" src="/library/securite-icon.jpg">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;border-radius: 15px;"
+                                                    class="image-boxed" src="/library/securite-icon.jpg">
                                             </span>
                                         </div>
                                     </div>
@@ -388,11 +412,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="conciergerie_button" class="col-4 px-2" onclick="window.location.href = ('/conciergerie');">
+                                <div id="conciergerie_button" class="col-4 px-2"
+                                    onclick="window.location.href = ('/conciergerie');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/bell-icon.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/bell-icon.png">
                                             </span>
                                         </div>
                                     </div>
@@ -402,11 +429,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="marees" class="col-4 px-2" onclick="window.open('https://maree.info/','_blank');">
+                                <div id="marees" class="col-4 px-2"
+                                    onclick="window.open('https://maree.info/','_blank');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/mare-icon.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/mare-icon.png">
                                             </span>
                                         </div>
                                     </div>
@@ -416,11 +446,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="reservation" class="col-4 px-2" onclick="window.location.href = ('/reservation');">
+                                <div id="reservation" class="col-4 px-2"
+                                    onclick="window.location.href = ('/reservation');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/resa-icon.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/resa-icon.png">
                                             </span>
                                         </div>
                                     </div>
@@ -430,11 +463,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="challenges" class="col-4 px-2" onclick="window.location.href = ('/challenges');">
+                                <div id="challenges" class="col-4 px-2"
+                                    onclick="window.location.href = ('/challenges');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/icon-challenge.png">
+                                            <span style="width:80px; height:80px;border-radius: 25px;"
+                                                class="d-flex justify-content-center shadow">
+                                                <img style="width:80px; height:80px;align-self:center;"
+                                                    class="image-boxed" src="/library/icon-challenge.png">
                                             </span>
                                         </div>
                                     </div>
@@ -454,7 +490,9 @@
         <div class="container mt-4" id="articles_link">
             <div class="row">
                 <div class="col">
-                    <a class="link-dark" style="text-decoration:none;color:black;" href="/articles"><h4>Actualités<i style="float:right;" class="bi bi-arrow-right"></i></h4></a>
+                    <a class="link-dark" style="text-decoration:none;color:black;" href="/articles">
+                        <h4>Actualités<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+                    </a>
                 </div>
             </div>
         </div>
@@ -465,7 +503,9 @@
         <div class="container mt-4" id="event_link">
             <div class="row">
                 <div class="col">
-                    <a class="link-dark" style="text-decoration:none;color:black;" href="/events"><h4>Evénements<i style="float:right;" class="bi bi-arrow-right"></i></h4></a>
+                    <a class="link-dark" style="text-decoration:none;color:black;" href="/events">
+                        <h4>Evénements<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+                    </a>
                 </div>
             </div>
         </div>
@@ -489,7 +529,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=sos')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 100px; height: 100px;" src="/library/bouton-sos-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 100px; height: 100px;"
+                                            src="/library/bouton-sos-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -505,7 +546,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=maintenance')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/bouton-maintenance-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/bouton-maintenance-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -521,7 +563,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=bricolage')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/bouton-tool-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/bouton-tool-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center small pt-2 pd-2">
@@ -537,7 +580,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=alimentation')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/bouton-alimentation-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/bouton-alimentation-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -553,7 +597,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=sante')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/bouton-sante-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/bouton-sante-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -569,7 +614,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=annonce')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/bouton-annonce-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/bouton-annonce-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -585,7 +631,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=laverie')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/laverie-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/laverie-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -601,7 +648,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=transport')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/transports-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/transports-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -617,7 +665,8 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=boutique')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;" src="/library/bouton-boutiques-64.png">
+                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/bouton-boutiques-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pt-2 pd-2">
@@ -633,7 +682,9 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=vendeurLoueurHl')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/vendeur-loueur-hl.png">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/vendeur-loueur-hl.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -649,7 +700,9 @@
                             <div class="col" onclick="window.location.href = ('/harborlife?select=vieportautre')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color: #f2f2f2; border-radius: 20px; width: 125px; height: 125px;" src="/library/autres-64.png">
+                                        <img class="shadow"
+                                            style="background-color: #f2f2f2; border-radius: 20px; width: 125px; height: 125px;"
+                                            src="/library/autres-64.png">
                                     </div>
                                 </div>
                                 <div class="row text-center">
@@ -681,7 +734,9 @@
                             <div class="col" onclick="window.location.href = ('/experiences?select=nautic')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/Activitenautiques.jpg">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/Activitenautiques.jpg">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -697,7 +752,9 @@
                             <div class="col" onclick="window.location.href = ('/experiences?select=terrestres')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/Activiteterrestres.jpg">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/Activiteterrestres.jpg">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -713,7 +770,9 @@
                             <div class="col" onclick="window.location.href = ('/experiences?select=association')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/gererassociation.png">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/gererassociation.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -729,7 +788,9 @@
                             <div class="col" onclick="window.location.href = ('/experiences?select=equipbourse')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/Bourse-aux-equipiers.jpg">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/Bourse-aux-equipiers.jpg">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -745,7 +806,9 @@
                             <div class="col" onclick="window.location.href = ('/experiences?select=vendeurLoueurEx')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/vendeur-loueur-ex.png">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/vendeur-loueur-ex.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -761,7 +824,9 @@
                             <div class="col" onclick="window.location.href = ('/experiences?select=experienceautre')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/autres-500.png">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/autres-500.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -792,7 +857,9 @@
                             <div class="col" onclick="window.location.href = ('/discovery?select=restaurant')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/Restaurant.jpg">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/Restaurant.jpg">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -808,7 +875,9 @@
                             <div class="col" onclick="window.location.href = ('/discovery?select=bar')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/Bars.jpg">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/Bars.jpg">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -824,7 +893,9 @@
                             <div class="col" onclick="window.location.href = ('/discovery?select=culture')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/Culture.jpg">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/Culture.jpg">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -840,7 +911,9 @@
                             <div class="col" onclick="window.location.href = ('/discovery?select=detente')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/bien-etre.jpg">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/bien-etre.jpg">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -856,7 +929,9 @@
                             <div class="col" onclick="window.location.href = ('/discovery?select=divertissement')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/divertissement.png">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/divertissement.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -872,7 +947,9 @@
                             <div class="col" onclick="window.location.href = ('/discovery?select=decouverteautre')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;" src="/library/autres-500.png">
+                                        <img class="shadow"
+                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
+                                            src="/library/autres-500.png">
                                     </div>
                                 </div>
                                 <div class="row text-center pd-2 pt-2">
@@ -917,8 +994,10 @@
             <button class="btn btn-danger small-btn filter-btn close text-white">
                 <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
                     <title>ionicons-v5-l</title>
-                    <line x1='368' y1='368' x2='144' y2='144' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                    <line x1='368' y1='144' x2='144' y2='368' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
+                    <line x1='368' y1='368' x2='144' y2='144'
+                        style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
+                    <line x1='368' y1='144' x2='144' y2='368'
+                        style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
                 </svg>
             </button>
 
@@ -937,11 +1016,13 @@
             <div class="form-group floating-form-group pt-0">
                 <div class="row">
                     <div class="col">
-                        <input type="number" min="0" max="500" value="100" step="1" id="input-select" class="floating-input form-control">
+                        <input type="number" min="0" max="500" value="100" step="1" id="input-select"
+                            class="floating-input form-control">
                     </div>
                     <div class="col-auto pt-2"> to </div>
                     <div class="col">
-                        <input type="number" min="0" max="500" value="100" step="1" id="input-number" class="floating-input form-control">
+                        <input type="number" min="0" max="500" value="100" step="1" id="input-number"
+                            class="floating-input form-control">
                     </div>
                 </div>
             </div>
@@ -1099,8 +1180,8 @@
                 window.location.href = '/previsions';
             }
         };
-        
-        
+
+
         fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
             let weather_api = "wwo";
             let entity = _data.data;
@@ -1132,17 +1213,17 @@
 
             fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
                 let harbour = _data.data;
-                
+
                 if (harbour.email_concierge === ' ') delete harbour.email_concierge;
-                
+
                 if (!harbour.navily_id) {
                     document.getElementById("reservation").hidden = true;
                 }
-                if(harbour.harbour_map)
-                document.getElementById("map_pdf").onclick = function () {window.open(harbour.harbour_map)}
+                if (harbour.harbour_map)
+                    document.getElementById("map_pdf").onclick = function () { window.open(harbour.harbour_map) }
                 else
                     document.getElementById("map_pdf").hidden = true;
-                    
+
                 if (!harbour.email_concierge) {
                     document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
                 }
@@ -1677,22 +1758,22 @@
 
 
     <!-- Required jquery and libraries -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- cookie js -->
-    <script src="js/jquery.cookie.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
 
     <!-- Swiper slider  js-->
-    <script src="vendor/swiper/js/swiper.min.js"></script>
+    <script src="/vendor/swiper/js/swiper.min.js"></script>
 
     <!-- nouislider js -->
-    <script src="vendor/nouislider/nouislider.min.js"></script>
+    <script src="/vendor/nouislider/nouislider.min.js"></script>
 
     <!-- Customized jquery file  -->
-    <script src="js/main.js"></script>
-    <script src="js/color-scheme-demo.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/color-scheme-demo.js"></script>
 
     <!-- PWA app service registration and works -->
     <script src="/library/pwa-services.js"></script>
@@ -1765,4 +1846,5 @@
     {{element->footer_app.html}}
 </body>
 <!-- Mirrored from maxartkiller.com/website/Nauticspot/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:07 GMT -->
+
 </html>
