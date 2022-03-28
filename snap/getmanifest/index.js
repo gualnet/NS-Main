@@ -24,7 +24,6 @@ exports.handler = async (req, res) => {
     theme_color: "#fff",
     description: entity.name + " Nauticspot app"
   }
-  console.log(manifest);
   res.setHeader('Content-Type', 'application/manifest+json');
   res.end(JSON.stringify(manifest));
   return;
@@ -33,8 +32,9 @@ exports.handler = async (req, res) => {
 async function fakeScopeGetHandler(_req, _res) {
   // console.log('fakeScopeGetHandler');
   let uriRequested = _req.rawUrl.replace("/app/" + _req.uriParts[2], "");
-  
-  const requestMaker = (_req.SERVER.type === 'https') ? UTILS.httpUtil.httpsReqPromise : UTILS.httpUtil.httpReqPromise
+
+  const requestMaker = (_req.SERVER.type === 'https') ? UTILS.httpsUtil.httpReqPromise : UTILS.httpUtil.httpReqPromise
+
   const requestParam = {
     "host": OPTION.HOST_NAME,
     "port": OPTION.HOST_PORT || ((_req.SERVER.type === 'https') ? 443 : 80),
