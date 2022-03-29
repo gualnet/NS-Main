@@ -308,13 +308,12 @@
             var form = document.getElementById("addPlacesCsv");
             var formData = new FormData(form);
             formData.append("type", 'csvplace');
-            formData.append("harbour_id", document.getElementById("habour_id").value);
+            formData.append("harbour_id", document.getElementById("harbourid_place").value);
             fetch(window.location.href,
                 {
                     method: "post",
                     body: formData
                 }).then(response => response.json()).then(_data => {
-                    console.log(_data);
                     if (_data.success) {
                         location.reload();
                     }
