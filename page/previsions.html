@@ -628,7 +628,6 @@
 
         fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
             fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
-                console.log("météo");
                 _data = JSON.parse(_data.data.data);
                 var weather = _data.data.weather;
                 console.log(weather);
@@ -869,9 +868,6 @@
                 var humidityTotal = 0;
                 var lowestPressure = 0;
                 var highiestPressure = 0;
-                //var test = weather[0].hourly.sort((a, b) => parseInt(a.pressure) - parseInt(b.pressure));
-                console.log("coucou");
-                //console.log(test);
                 var pressures = [];
                 for (var i = 0; i < weather[0].hourly.length; i++) {
                     humidityTotal += parseInt(weather[0].hourly[i].precipMM);
@@ -900,8 +896,6 @@
                     pastOneHour = hour - 1;
                 }
 
-                console.log(pastTwoHour);
-                console.log(pastOneHour);
                 var windSpeeds = [];
                 windSpeeds[0] = Math.trunc(parseInt(weather[0].hourly[pastTwoHour].windspeedKmph) / 1.852);
                 windSpeeds[1] = Math.trunc(parseInt(weather[0].hourly[pastOneHour].windspeedKmph) / 1.852);
@@ -954,7 +948,6 @@
                         fetch("/api/weather/wlink/vone?entity_id=" + entity.id).then(response => response.json()).then(_data => {
                             if (_data.success) {
                                 let _wlData = JSON.parse(_data.data.data);
-                                console.log(_wlData);
                                 document.getElementById("temperature").innerHTML = parseFloat(_wlData.temp_c).toFixed(0);
                                 document.getElementById("humidity").innerHTML = (parseFloat(_wlData.davis_current_observation.rain_rate_in_per_hr).toFixed(2));
                                 document.getElementById("humidity_total").innerHTML = (parseFloat(_wlData.davis_current_observation.rain_day_in).toFixed(2));
@@ -979,10 +972,12 @@
                     } else if (weather_api == "wlv2") {
                         fetch("/api/weather/wlink/vtwo?entity_id=" + entity.id).then(response => response.json()).then(_data => {
                             if (_data.success) {
-                                let _wlData = _data.data.sensors[0].data[0];
-                                let _wlDataTwo = _data.data.sensors[0].data[3];
-                                console.log(_data.data);
-                                console.log(_wlData);
+                                let _wlData;
+                                for (let sensor of _data.data.sensors) {
+                                    if (sensor.category === 'ISS') { // ISS => Integrated Sensor Suite
+                                        _wlData = sensor.data[0];
+                                    }
+                                }
                                 document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlData.temp - 32) / 1.8000).toFixed(0));
                                 document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.rainfall_last_60_min_mm).toFixed(2));
                                 document.getElementById("humidity_total").innerHTML = (parseFloat(_wlData.rainfall_daily_mm).toFixed(2));
