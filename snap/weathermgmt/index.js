@@ -229,8 +229,6 @@ async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
             stations = JSON.parse(promise.data);
             stations = stations.stations;
         }
-        // console.log('weather stations', stations);
-
 
         date = Math.floor(Date.now() / 1000);
         message = "api-key" + entity.wlink_vtwo_apikey + "t" + date;
