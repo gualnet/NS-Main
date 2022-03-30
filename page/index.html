@@ -1412,9 +1412,9 @@
                     document.getElementById("meteo_desc").innerHTML = (weather[0].hourly[hour].lang_fr[0].value);
                     if (weather_api == "wlv1") {
                         fetch("/api/weather/wlink/vone?entity_id=" + entity.id).then(response => response.json()).then(_data => {
+                            console.log('/api/weather/wlink/vone', _data);
                             if (_data.success) {
                                 let _wlData = JSON.parse(_data.data.data);
-                                console.log(_wlData);
                                 document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat(_wlData.temp_c).toFixed(0) + "°C");
                                 document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.davis_current_observation.rain_day_in).toFixed(2));
                                 document.getElementById("pressure").innerHTML = (parseFloat(_wlData.pressure_mb).toFixed(2));
@@ -1426,11 +1426,15 @@
                         }).catch((e) => console.error(e));
                     } else if (weather_api == "wlv2") {
                         fetch("/api/weather/wlink/vtwo?entity_id=" + entity.id).then(response => response.json()).then(_data => {
+                            console.log('/api/weather/wlink/vtwo', _data);
                             if (_data.success) {
-                                let _wlData = _data.data.sensors[0].data[0];
-                                let _wlDataTwo = _data.data.sensors[0].data[3];
-                                console.log(_data.data);
-                                console.log(_wlData);
+                                let _wlData;
+                                // sensors list are not allways sorted the same way, we need to find the correct type
+                                for (let sensor of _data.data.sensors) {
+                                    if (sensor.category === 'ISS') { // ISS => Integrated Sensor Suite
+                                        _wlData = sensor.data[0];
+                                    }
+                                }
                                 document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlData.temp - 32) / 1.8000).toFixed(0) + "°C");
                                 document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.rainfall_daily_mm).toFixed(2));
                                 document.getElementById("pressure").innerHTML = (weather[0].hourly[hour].pressure);
