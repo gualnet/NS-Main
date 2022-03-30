@@ -229,7 +229,24 @@ async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
             stations = JSON.parse(promise.data);
             stations = stations.stations;
         }
-        console.log(stations);
+        // console.log('weather stations', stations);
+
+
+        date = Math.floor(Date.now() / 1000);
+        message = "api-key" + entity.wlink_vtwo_apikey + "t" + date;
+        api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
+        let sensorsDetails;
+        if (entity.weather_api == "wlv2") {
+            var promise = await UTILS.httpsUtil.httpReqPromise({
+                "host": "api.weatherlink.com",
+                "path": "/v2/sensors?api-key=" + entity.wlink_vtwo_apikey + "&t=" + date + "&api-signature=" + api_signature,
+                "method": "GET"
+            });
+            const sensors = JSON.parse(promise.data);
+            sensorsDetails = sensors.sensors;
+        }
+        // console.log('weather sensors', sensorsDetails);
+
 
         let weather;
         date = Math.floor(Date.now() / 1000);
@@ -244,10 +261,16 @@ async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
                 "method": "GET"
             });
             weather = JSON.parse(promise.data);
-            
+            // Add sensor category next to sensor type
+            weather.sensors.map(sensor => {
+                sensorsDetails.map(sensorsDetails => {
+                    if (sensorsDetails.lsid === sensor.lsid) {
+                        sensor.category = sensorsDetails.category
+                    }
+                })
+            })
         }
-        console.log(promise);
-        //_res.setHeader("Content-Type", "application/json");
+        // console.log('weather current', weather);
         UTILS.httpUtil.dataSuccess(_req, _res, "success", weather);
         return;
     }
