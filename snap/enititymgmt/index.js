@@ -193,6 +193,66 @@ async function getEntityByCookieIdHandler(_req, _res) {
     return;
 }
 
+const getEntityHandler = async (req, res) => {
+    console.log('req.get', req.get)
+    console.log('req.param', req.param)
+    try {
+        const entityId = req.param.id;
+        if (!entityId) throw new Error({ code: 404, message: 'param error' });
+
+        const result = await getEntityById(entityId);
+        res.end(JSON.stringify(result));
+    } catch (error) {
+        res.writeHeader(error.code);
+        res.end(JSON.stringify({message: error.message}));
+    }
+}
+
+const createEntityHandler = async (req, res) => {
+    try {
+        const entityData = req.body;
+        if (!entityData) throw new Error({ code: 400, message: 'request body error' });
+
+        // TODO - check for requested fields
+
+        const result = await createEntity(entityData);
+        res.end(JSON.stringify(result));
+    } catch (error) {
+        res.writeHeader(error.code);
+        res.end(JSON.stringify({message: error.message}));
+    }
+}
+
+const updateEntityHandler = async (req, res) => {
+    console.log('req.body', req.body);
+    try {
+        const entityData = req.body;
+        if (!entityData.id) throw new Error({ code: 400, message: 'request body error' });
+
+        // TODO - check for requested fields
+
+        const result = await updateEntity(entityData);
+        res.end(JSON.stringify(result));
+    } catch (error) {
+        console.error('ERROR', error)
+        res.writeHeader(500);
+        res.end(JSON.stringify(error));
+    }
+}
+
+const deleteEntityHandler = async (req, res) => {
+    try {
+        const entityId = req.param.id;
+        if (!entityId) throw new Error({ code: 404, message: 'param error' });
+
+        const result = await delEntity(entityId);
+        res.end(JSON.stringify("ok"));
+    } catch (error) {
+        res.writeHeader(error.code);
+        res.end(JSON.stringify({message: error.message}));
+    }
+}
+
 exports.router =
     [
         {
@@ -206,7 +266,32 @@ exports.router =
             route: "/admin/api/entity/get",
             handler: getEntityByCookieIdHandler,
             method: 'post'
-        }
+        },
+        // NEW CRUD
+        {
+            on: true,
+            route: "/api/crud/entity/:id",
+            handler: getEntityHandler,
+            method: 'GET'
+        },
+        {
+            on: true,
+            route: "/api/crud/entity",
+            handler: createEntityHandler,
+            method: 'POST'
+        },
+        {
+            on: true,
+            route: "/api/crud/entity",
+            handler: updateEntityHandler,
+            method: 'PUT'
+        },
+        {
+            on: true,
+            route: "/api/crud/entity/:id",
+            handler: deleteEntityHandler,
+            method: 'DELETE'
+        },
     ];
 
 exports.handler = async (req, res) => {
@@ -454,15 +539,15 @@ exports.plugin =
 
                     }
                     else if (_entities[i].weather_api == "wlv2") {
-                        weather_api = '<option class="form-control" name="weather_api" value="wlv1">WeatherLink v1</option>' + '<option class="form-control" name="weather_api" value="wlv2" selected>WeatherLink v2</option>' +  '<option class="form-control" name="weather_api" value="wwo"">world weather online</option>'
+                        weather_api = '<option class="form-control" name="weather_api" value="wlv1">WeatherLink v1</option>' + '<option class="form-control" name="weather_api" value="wlv2" selected>WeatherLink v2</option>' + '<option class="form-control" name="weather_api" value="wwo"">world weather online</option>'
                     }
                     else if (_entities[i].weather_api == "wwo") {
-                        weather_api = '<option class="form-control" name="weather_api" value="wlv1">WeatherLink v1</option>' + '<option class="form-control" name="weather_api" value="wlv2">WeatherLink v2</option>' +  '<option class="form-control" name="weather_api" value="wwo"" selected>world weather online</option>'
+                        weather_api = '<option class="form-control" name="weather_api" value="wlv1">WeatherLink v1</option>' + '<option class="form-control" name="weather_api" value="wlv2">WeatherLink v2</option>' + '<option class="form-control" name="weather_api" value="wwo"" selected>world weather online</option>'
                     }
 
                 }
                 else
-                    weather_api = '<option class="form-control" name="weather_api" value="wlv1">WeatherLink v1</option>' + '<option class="form-control" name="weather_api" value="wlv2">WeatherLink v2</option>' +  '<option class="form-control" name="weather_api" value="wwo"" selected>world weather online</option>'
+                    weather_api = '<option class="form-control" name="weather_api" value="wlv1">WeatherLink v1</option>' + '<option class="form-control" name="weather_api" value="wlv2">WeatherLink v2</option>' + '<option class="form-control" name="weather_api" value="wwo"" selected>world weather online</option>'
 
                 if (_entities[i].wlink_vone_pw) {
                     _entities[i].wlink_vone_pw = UTILS.Crypto.decryptText(_entities[i].wlink_vone_pw, "AJtWbggDUidBESek3fIc");
