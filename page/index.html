@@ -1415,12 +1415,12 @@
                             console.log('/api/weather/wlink/vone', _data);
                             if (_data.success) {
                                 let _wlData = JSON.parse(_data.data.data);
-                                document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat(_wlData.temp_c).toFixed(0) + "°C");
+                                document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat(_wlData.temp_c).toFixed(1) + "°C");
                                 document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.davis_current_observation.rain_day_in).toFixed(2));
-                                document.getElementById("pressure").innerHTML = (parseFloat(_wlData.pressure_mb).toFixed(2));
+                                document.getElementById("pressure").innerHTML = (parseFloat(_wlData.pressure_mb).toFixed(0));
                                 document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlData.wind_degrees + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
                                 //document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-                                document.getElementById("wind_speed").innerHTML = parseFloat(_wlData.wind_kt).toFixed(2);
+                                document.getElementById("wind_speed").innerHTML = parseFloat(_wlData.wind_kt).toFixed(0);
 
                             }
                         }).catch((e) => console.error(e));
@@ -1428,19 +1428,26 @@
                         fetch("/api/weather/wlink/vtwo?entity_id=" + entity.id).then(response => response.json()).then(_data => {
                             console.log('/api/weather/wlink/vtwo', _data);
                             if (_data.success) {
-                                let _wlData;
+                                let _wlDataISS;
+                                let _wlDataBaro;
                                 // sensors list are not allways sorted the same way, we need to find the correct type
                                 for (let sensor of _data.data.sensors) {
                                     if (sensor.category === 'ISS') { // ISS => Integrated Sensor Suite
-                                        _wlData = sensor.data[0];
+                                        _wlDataISS = sensor.data[0];
+                                    }
+                                    if (sensor.category === 'Barometer') {
+                                        _wlDataBaro = sensor.data[0];
                                     }
                                 }
-                                document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlData.temp - 32) / 1.8000).toFixed(0) + "°C");
-                                document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.rainfall_daily_mm).toFixed(2));
-                                document.getElementById("pressure").innerHTML = (weather[0].hourly[hour].pressure);
-                                document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlData.wind_dir_last + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
+                                document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlDataISS.temp - 32) / 1.8000).toFixed(1) + "°C");
+                                document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlDataISS.rainfall_daily_mm).toFixed(2));
+                                const convertionFactor = 0.02953; // 1 Hectopascal [hPa] = 0,029 529 980 164 712 Inch of mercury [inHg]
+                                const pressureInHpa = Math.round(_wlDataBaro.bar_absolute / convertionFactor); 
+                                document.getElementById("pressure").innerHTML = (pressureInHpa);
+                                document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir_last + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
                                 //document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-                                document.getElementById("wind_speed").innerHTML = parseFloat(_wlData.wind_speed_avg_last_1_min).toFixed(2);
+                                // document.getElementById("wind_speed").innerHTML = parseFloat(_wlDataISS.wind_speed_avg_last_1_min).toFixed(2);
+                                document.getElementById("wind_speed").innerHTML = parseInt(Math.round(_wlDataISS.wind_speed_avg_last_1_min));
 
                             }
                         }).catch((e) => console.error(e));
