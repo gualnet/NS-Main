@@ -344,7 +344,6 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
-            console.log(req.post);
             if (req.post.mode == "getEntity") {
                 console.log(_entity_id);
                 console.log("test");
