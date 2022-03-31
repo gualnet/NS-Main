@@ -16,6 +16,7 @@ if ("serviceWorker" in navigator) {
 var btnAdd = document.getElementById('addtohome')
 var defferedPrompt;
 window.addEventListener("beforeinstallprompt", function (event) {
+    console.log('beforeinstallprompt')
     event.preventDefault();
     defferedPrompt = event;
 
@@ -37,6 +38,7 @@ window.addEventListener("beforeinstallprompt", function (event) {
 });
 
 window.addEventListener("appinstalled", function (event) {
+    console.log('appinstalled')
     app.logEvent("a2hs", "Installed");
     document.getElementById('addtodevice').style.display = 'none';
 });

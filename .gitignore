@@ -6,6 +6,7 @@ dist/
 dist_*/
 out/
 .vscode/
+option/
 
 # Files
 .DS_Store
@@ -13,3 +14,4 @@ out/
 #temp
 untrack_/
 untrack_*
+
