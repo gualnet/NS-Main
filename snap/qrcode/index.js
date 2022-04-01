@@ -80,13 +80,11 @@ exports.plugin =
 	desc: "Manage QRCODES",
 	role: "admin",
 	handler: async (req, res) => {
-		console.log('QR CODE HANDLER')
+		console.log('QRCODE HANDLER')
 		if (req.get.target && req.get.mode && req.get.mode == "delete") {
 			await delQRCODE(req.get.target);
 		}
 		if (req.method == "POST" && req.post && req.post.title && req.post.appLink) {
-			console.log('Req.post', req.posts)
-
 			const qrCodeObj = {
 				title: req.post.title,
 				appLink: req.post.appLink,
@@ -98,7 +96,6 @@ exports.plugin =
 			}
 			try {
 				const result = await saveQRCODE(qrCodeObj);
-				console.log('result', result)
 			} catch (error) {
 				console.error('[ERROR]', error);
 			}
@@ -107,8 +104,6 @@ exports.plugin =
 		var _return = _index;
 		var _list = "";
 		var _data = await getQRCODE();
-		console.clear();
-		console.log('DATA', _data);
 		for (var i = 0; i < _data.length; i++) {
 			var _tmp = _qr;
 			_tmp = _tmp.replace(/__ID__/g, _data[i].id);
