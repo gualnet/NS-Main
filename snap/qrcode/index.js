@@ -5,7 +5,7 @@ var _landing = fs.readFileSync(path.join(__dirname, "view", "landing.html")).toS
 var QRCode = require('qrcode')
 var _qrCol = "qrcode";
 
-var _qrURL = "https://prod.nauticspot.io";
+// var _qrURL = "https://prod.nauticspot.io";
 var _qrROUTE = "/qrcode/";
 
 exports.setup =
@@ -80,11 +80,15 @@ exports.plugin =
 	desc: "Manage QRCODES",
 	role: "admin",
 	handler: async (req, res) => {
-		console.log('QRCODE HANDLER')
+		const baseUrl = `${req.headers.referer.split('://')[0]}://${req.uriParts[0]}`
+		
 		if (req.get.target && req.get.mode && req.get.mode == "delete") {
 			await delQRCODE(req.get.target);
 		}
 		if (req.method == "POST" && req.post && req.post.title && req.post.appLink) {
+			if (req.post.appLink[0] !== '/') {
+				req.post.appLink = `/${req.post.appLink}`;
+			}
 			const qrCodeObj = {
 				title: req.post.title,
 				appLink: req.post.appLink,
@@ -105,12 +109,13 @@ exports.plugin =
 		var _list = "";
 		var _data = await getQRCODE();
 		for (var i = 0; i < _data.length; i++) {
+			const completeUrl = `${baseUrl}${_data[i].appLink}`;
 			var _tmp = _qr;
 			_tmp = _tmp.replace(/__ID__/g, _data[i].id);
 			_tmp = _tmp.replace(/__TITLE__/g, _data[i].title);
-			_tmp = _tmp.replace(/__APP_LINK__/g, _data[i].appLink || 'NOTHING');
-			_tmp = _tmp.replace(/__IMG__/g, await createImage(_qrURL + _qrROUTE + _data[i].id));
-			_tmp = _tmp.replace(/__URL__/g, _qrURL + _qrROUTE + _data[i].id);
+			_tmp = _tmp.replace(/__APP_LINK__/g, _data[i].appLink || '-');
+			_tmp = _tmp.replace(/__IMG__/g, await createImage(completeUrl));
+			_tmp = _tmp.replace(/__URL__/g, completeUrl);
 			_list += _tmp;
 		}
 
