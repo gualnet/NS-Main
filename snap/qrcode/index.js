@@ -79,7 +79,6 @@ exports.plugin =
 	desc: "Manage QRCODES",
 	role: "admin",
 	handler: async (req, res) => {
-		const baseUrl = `${req.headers.referer.split('://')[0]}://${req.uriParts[0]}`
 		
 		if (req.get.target && req.get.mode && req.get.mode == "delete") {
 			await delQRCODE(req.get.target);
@@ -108,13 +107,12 @@ exports.plugin =
 		var _list = "";
 		var _data = await getQRCODE();
 		for (var i = 0; i < _data.length; i++) {
-			const completeUrl = `${baseUrl}${_data[i].appLink}`;
 			var _tmp = _qr;
 			_tmp = _tmp.replace(/__ID__/g, _data[i].id);
 			_tmp = _tmp.replace(/__TITLE__/g, _data[i].title);
 			_tmp = _tmp.replace(/__APP_LINK__/g, _data[i].appLink || '-');
-			_tmp = _tmp.replace(/__IMG__/g, await createImage(completeUrl));
-			_tmp = _tmp.replace(/__URL__/g, completeUrl);
+			_tmp = _tmp.replace(/__IMG__/g, await createImage(`${OPTION.HOST_BASE_URL}/${_qrCol}/${_data[i].id}`));
+			_tmp = _tmp.replace(/__URL__/g, `${OPTION.HOST_BASE_URL}/${_qrCol}/${_data[i].id}`);
 			_list += _tmp;
 		}
 
@@ -131,6 +129,8 @@ exports.plugin =
 async function qrHandler(req, res) {
 	/**@type {qrcode} */
 	var [_result] = await getQRCODE(req.param.id);
+
+	console.log('QRCODE READIRECT TO', `${OPTION.HOST_BASE_URL}${_result.appLink}`)
 	if (_result) {
 		UTILS.Redirect(res, `${OPTION.HOST_BASE_URL}${_result.appLink}`);
 	}
