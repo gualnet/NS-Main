@@ -1,3 +1,4 @@
+require('../../types');
 var _index = fs.readFileSync(path.join(__dirname, "view", "index.html")).toString();
 var _qr = fs.readFileSync(path.join(__dirname, "view", "qr.html")).toString();
 var _landing = fs.readFileSync(path.join(__dirname, "view", "landing.html")).toString();
@@ -5,8 +6,6 @@ var _landing = fs.readFileSync(path.join(__dirname, "view", "landing.html")).toS
 var QRCode = require('qrcode')
 var _qrCol = "qrcode";
 
-// var _qrURL = "https://prod.nauticspot.io";
-var _qrROUTE = "/qrcode/";
 
 exports.setup =
 {
@@ -124,11 +123,16 @@ exports.plugin =
 	}
 }
 
+/**
+ * Handle old qrcode links and redirect to the pwa
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function qrHandler(req, res) {
-	var _result = await getQRCODE(req.param.id);
-	if (_result && _result[0]) {
-		res.setHeader("Content-Type", "text/html; charset=utf-8");
-		res.end(_landing.replace("__TITLE__", _result[0].title).replace("__APPLE__", _result[0].apple).replace("__ANDROID__", _result[0].android));
+	/**@type {qrcode} */
+	var [_result] = await getQRCODE(req.param.id);
+	if (_result) {
+		UTILS.Redirect(res, `${OPTION.HOST_BASE_URL}${_result.appLink}`);
 	}
 	else {
 		UTILS.Redirect(res, "/");
@@ -138,7 +142,7 @@ async function qrHandler(req, res) {
 exports.router =
 	[
 		{
-			route: _qrROUTE + ":id",
+			route: "/qrcode/:id", // old route to download native app from a qrcode
 			handler: qrHandler,
 			method: "GET",
 		},
