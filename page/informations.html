@@ -191,7 +191,6 @@
 
         <script>
             fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-                console.log(_data);
                 var harbour = _data.data;
                 var sBrowser, sUsrAg = navigator.userAgent;
                 if (sUsrAg.indexOf("Safari") > -1) {
@@ -258,6 +257,12 @@
                 }
                 else {
                     document.getElementById("pj").hidden = true;
+                }
+
+                if (harbour.if === '4e2cd2p6mt' && harbour?.wifi?.length === 0) {
+                    // if gruissan wifi field is empty hide wifi button
+                    // this is supposed to be a temporary fix
+                    document.getElementById("wifiButton").hidden = true;
                 }
 
 
