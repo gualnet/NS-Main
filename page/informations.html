@@ -259,13 +259,16 @@
                     document.getElementById("pj").hidden = true;
                 }
 
-                if (harbour.if === '4e2cd2p6mt' && harbour?.wifi?.length === 0) {
+                if (harbour.id === '4e2cd2p6mt' && harbour?.wifi?.length === 0) {
                     // if gruissan wifi field is empty hide wifi button
                     // this is supposed to be a temporary fix
                     document.getElementById("wifiButton").hidden = true;
                 }
-
-
+                if (harbour.id === '4e2cd2p6mt' && harbour?.sanitary_code?.length === 0) {
+                    // if gruissan sanitary field is empty hide sanitary button
+                    // this is supposed to be a temporary fix
+                    document.getElementById("sanitaryButtons").hidden = true;
+                }
 
                 document.getElementById("harbour_map").href = harbour.harbour_map;
                 document.getElementById("price_list").href = harbour.price_list;
