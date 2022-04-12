@@ -1,291 +1,301 @@
-<!doctype html>
-<html lang="en" class="h-100">
-
-
+<!DOCTYPE html>
+<html lang="fr">
 {{element->header_app.html}}
 
-<body class="d-flex flex-column h-100 menu-overlay">
-    <nav class="navbar navbar-light fixed-top mt-3">
-        <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
-    </nav>
+<body>
+  <div class="page-container">
+
+    <!-- <nav class="navbar navbar-light fixed-top mt-3">
+    <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;"
+        class="bi bi-arrow-left-circle-fill"></i></a>
+  </nav> -->
+
     <!-- screen loader -->
-    {{element->loader.html}}
-    <!-- Begin page content -->
-    <main class="flex-shrink-0">
-        <!-- Fixed navbar        <header class="header">
-                    <div class="row">
-                        <div class="col-auto px-0">
-                            <a href="/index" class="btn menu-btn btn-link text-dark">
-                                <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                                    <title>ionicons-v5-a</title>
-                                    <polyline points='244 400 100 256 244 112' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-                                    <line x1='120' y1='256' x2='412' y2='256' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-                                </svg>
-                            </a>
-                        </div>
-                        <div class="text-left col align-self-center">
-                            <h5>Profil</h5>
-                        </div>
-                        <div class="ml-auto col-auto align-self-center">
-
-                        </div>
-                    </div>
-                </header>
-
-                page content start
 
 
-                <div class="container mt-4 text-center">
-                    <div class="icon icon-100 position-relative">
-                        <figure class="background">
-                            <img src="img/" alt="">
-                        </figure>
-                    </div>
-                </div>
-        -->
-        <div class="container mt-4">
-            <form id="absence_form" method="post" autocomplete="off">
-                <input id="user_id" name="user_id" hidden />
-                <input id="boat_id" name="boat_id" hidden />
-                <div class="card mt-3 mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 col-md-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group floating-form-group active">
-                                            <input id="" name="date_start" type="date" class="form-control floating-input" required>
-                                            <label class="floating-label">Date de départ</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group floating-form-group active">
-                                            <input id="phone" name="date_end" type="date" class="form-control floating-input" required>
-                                            <label class="floating-label">Date de retour</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="updateError"> </div>
-                <button type="button" class="btn btn-block btn-info btn-lg" onclick="sendForm();">Envoyer</button>
-            </form>
-            <div id="absences">
-
-            </div>
-        </div>
-        <br />
-        <br />
-        <div class="container py-3">
-            {{element->navbar.html}}
-        </div>
-    </main>
-    <!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
-        <span class="text-white">
-            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                <title>ionicons-v5-m</title>
-                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
-                <circle cx='144' cy='208' r='32' />
-                <circle cx='152' cy='311' r='32' />
-                <circle cx='224' cy='144' r='32' />
-                <circle cx='256' cy='367' r='48' />
-                <circle cx='328' cy='144' r='32' />
-            </svg>
-        </span>
-    </button>
-         -->
-
-    <div class="sidebar-right">
-        <div class="selectoption">
-            <input type="checkbox" id="darklayout" name="darkmode">
-            <label for="darklayout">Dark</label>
-        </div>
-        <div class="selectoption mb-0">
-            <input type="checkbox" id="rtllayout" name="layoutrtl">
-            <label for="rtllayout">RTL</label>
-        </div>
-        <hr>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
-            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
-            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
-            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
-            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
-            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
-            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
-            <label for="templatecolor8" class="bg-red" data-title="red"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
-            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
-            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
-            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
-            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
-            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
-            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
-            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-        </div>
-
+    <div id="top-container">
+      <div class="page-title" id="title">Mes absences</div>
     </div>
 
 
-    <!-- Required jquery and libraries -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <div id="ongoing-container">
+      <div class="sub-title">Absences en cours</div>
+      <div class="items-container">
+        <label class="text-low-visibility" id="text">Aucune absence en cours</label>
+      </div>
+    </div>
 
-    <!-- cookie js -->
-    <script src="js/jquery.cookie.js"></script>
+    <div id="past-container">
+      <div class="sub-title">Absences passées</div>
+      <div class="items-container">
+        <div class="absence-item">
+          <div class="date-info" id="start-info">
+            <div class="start-label">Date de départ</div>
+            <div class="date-label">xx/xx/xxxx</div>
+            <!-- <input id="" name="date_start" type="date" class="form-control floating-input" required> -->
+          </div>
+          <div class="date-info" id="end-info">
+            <div class="end-label">Date de retour</div>
+            <div class="date-label">xx/xx/xxxx</div>
+            <!-- <input id="" name="date_end" type="date" class="form-control floating-input" required> -->
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Swiper slider  -->
-    <script src="vendor/swiper/js/swiper.min.js"></script>
-
-    <!-- Masonry js -->
-    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-    <!-- Customized jquery file  -->
-    <script src="js/main.js"></script>
-    <script src="js/color-scheme-demo.js"></script>
-
-    <!-- page level custom script -->
-    <script>
-        var user;
-        "use strict"
-        $(window).on('load', function () {
-            if (localStorage['entity_id'] == '4eqv44307K')
-                document.getElementById('validate_button')?.setAttribute("style", "background-color: #FB9101;");
-
-            var swiper = new Swiper('.swiper-container', {
-                pagination: {
-                    el: '.swiper-pagination',
-                },
-            });
-
-            var formData = new FormData();
-            formData.append("token", localStorage["token"])
-            fetch("/api/getuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                user = _data.data;
-                document.getElementById("user_id").value = user.id;
-                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
-                    var boat = _data.data[0]
-                    document.getElementById("boat_id").value = boat.id;
-                    updateAbsenceList();
-                }).catch((error) => {
-                    console.log(error);
-                });
-            }).catch((error) => {
-                console.log(error);
-            });
+    <div id="bottom-container">
+      <div id="new-absence-btn" onclick="openNewAbsenceModal()">Nouvelle Absence</div>
+      <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Launch modal</button>
+    </div>
+  </div>
 
 
-        });
-        var dynamicSort = function (property) {
-            var sortOrder = 1;
-            if (property[0] === "-") {
-                sortOrder = -1;
-                property = property.substr(1);
-            }
-            return function (a, b) {
-                /* next line works with strings and numbers,
-                 * and you may want to customize it to your needs
-                 */
-                var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-                return result * sortOrder;
-            }
-        }
 
-        function updateAbsenceList() {
-            fetch("/api/get/absence?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
-                var absences = _data.data?.sort(dynamicSort("date")).reverse();
-                ;
-                document.getElementById("absences").innerHTML = "";
-                for (var i = 0; i < absences.length; i++) {
+  <!-- MODAL -->
+  <div class="myModal" id="createAbsenceModal">
+    <div class="modal-card">
+      <div class="modal-card-header">
+        Modifiez votre absence
+      </div>
+      <div class="modal-card-content">
+        <div class="date-info">
+          <label>Date de départ</label>
+          <input id="" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
+        </div>
+        <div class="date-info">
+          <label>Date de retour</label>
+          <input id="" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
+        </div>
+      </div>
+      <div class="modal-card-footer">
+        <div class="footer-btn" id="modal-cancel-btn">Annuler</div>
+        <div class="footer-btn" id="modal-validate-btn">Valider</div>
+      </div>
+    </div>
 
-                    document.getElementById("absences").innerHTML += '<div class="card mt-3 mb-4">'
-                        + '<div class="card-header justify-content-center"><h6>Absence N° ' + (absences.length - i) + '</h6></div>'
-                        + '<div class="card-body">'
+  </div>
 
-                        + '<div class="row">'
-                        + '<div class="col-6">'
-                        + '<div class="form-group floating-form-group active" >'
-                        + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_start + '" readonly>'
-                        + '   <label class="floating-label">Date de départ</label>'
-                        + '</div>'
-                        + '</div>'
-                        + '<div class="col-6">'
-                        + '<div class="form-group floating-form-group active" >'
-                        + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_end + '" readonly>'
-                        + '   <label class="floating-label">Date de retour</label>'
-                        + '</div>'
-                        + '</div>'
-                        + '</div>'
-                        + '</div>'
-                        + '</div>'
 
-                }
-            }).catch((e) => { console.error(e) });
-        }
-
-        function sendForm() {
-            var form = document.getElementById("absence_form");
-            var formData = new FormData(form);
-            formData.append("token", localStorage["token"])
-            formData.append("harbour_id", localStorage["harbourid"])
-            fetch("/api/create/absence", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log('_data:', _data);
-                if (_data.success) {
-                    // console.log(_data);
-                    updateAbsenceList();
-                } else {
-                    if (document.getElementById("error"))
-                        document.getElementById("updateError").removeChild(document.getElementById("error"));
-
-                    document.getElementById("updateError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
-        }
-    </script>
-    {{element->footer_app.html}}
 </body>
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/setting.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
+
+<style>
+  body {
+    display: flex;
+    font-family: 'Poppins';
+  }
+
+  .page-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid-template-rows: 120px 150px auto 50px 50px;
+  }
+
+  #top-container {
+    grid-row: 1;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 40px 0px;
+  }
+
+  .page-title {
+    font-family: 'Poppins-SemiBold';
+    font-size: 20px;
+    align-self: center;
+  }
+
+  #ongoing-container {
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+    min-height: 100px;
+  }
+
+  .sub-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .text-low-visibility {
+    color: rgb(131, 131, 131);
+  }
+
+  #past-container {
+    grid-row: 3;
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+    padding-left: 30px;
+    padding-right: 30px;
+
+  }
+
+  /* ABSENCE ITEM */
+
+  .absence-item {
+    display: flex;
+    border-radius: 13px;
+    height: 100px;
+    padding: 20px 30px;
+    justify-content: space-between;
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, .16);
+    color: rgb(131, 131, 131);
+    font-size: 15px;
+  }
+
+  .date-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 45%;
+  }
+
+  .date-label {
+    border: 0px;
+    border-bottom: 1px solid rgb(131, 131, 131);
+  }
+
+  /* BOTTOM CONTAINER */
+  #bottom-container {
+    grid-row: 4;
+    display: flex;
+    padding: 0px 30px;
+    justify-content: flex-end;
+  }
+
+  #new-absence-btn {
+    border-radius: 50px;
+    background-color: rgb(3, 60, 138);
+    height: 50px;
+    width: 210px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+  }
+
+  #new-absence-btn::before {
+    content: '+';
+    font-size: 30px;
+    color: white;
+    transform: translate(-10px);
+  }
+
+
+  /* MODAL */
+  .myModal#createAbsenceModal {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    position: absolute;
+    background-color: rgba(131, 131, 131, .5);
+    justify-content: center;
+    align-items: center;
+
+
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+  }
+
+  .modal-card {
+    background-color: white;
+    border-radius: 13px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, .16);
+    margin: 0px 30px;
+    padding-top: 24px;
+    width: 100%;
+  }
+
+  .modal-card-header {
+    align-items: center;
+    display: flex;
+    font-family: 'Avenir-Medium', 'Poppins-SemiBold';
+    font-size: 21px;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 0px 34px;
+  }
+
+  .modal-card-content {
+    color: rgb(98, 88, 88);
+    display: flex;
+    font-family: 'Avenir-Medium', 'Poppins-SemiBold';
+    font-size: 15px;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 0px 34px;
+  }
+
+  .modal-card-footer {
+    border: 0px;
+    border-top: 1px solid rgba(178, 178, 178, .18);
+    display: flex;
+    height: 44px;
+
+  }
+
+  .modal-card .footer-btn {
+    align-items: center;
+    color: rgb(50, 129, 243);
+    display: flex;
+    font-family: 'Avenir-Black';
+    font-size: 15px;
+    height: 100%;
+    justify-content: center;
+    width: 50%;
+  }
+
+  .modal-card-footer :nth-child(1) {
+    border-right: 1px solid rgba(178, 178, 178, .18);
+  }
+
+  .modal-card .date-info label {
+    margin: 0px;
+  }
+
+  input[type=date].form-control.modal-date-input {
+    border: 0px;
+    border-radius: 0px;
+    width: 100%;
+    border-bottom: 1px solid rgb(131, 131, 131);
+    background-color: transparent;
+    margin-left: 0px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    color: rgb(131, 131, 131);
+  }
+</style>
+
+<script>
+
+  const closeNewAbsenceModal = (ev) => {
+    console.log('closeNewAbsenceModal', ev)
+    // const modalEl = document.getElementById('createAbsenceModal');
+    // modalEl.style.visibility = 'hidden';
+    // modalEl.style.opacity = 0;
+  }
+
+
+  const createAbsenceModal = document.getElementById('createAbsenceModal');
+
+
+  createAbsenceModal.addEventListener('onclick', closeNewAbsenceModal)
+
+  const openNewAbsenceModal = (ev) => {
+    console.log('createNewAbsence');
+
+    const modalEl = document.getElementById('createAbsenceModal');
+    modalEl.style.visibility = 'visible';
+    modalEl.style.opacity = 1;
+  }
+
+</script>
+
 </html>
