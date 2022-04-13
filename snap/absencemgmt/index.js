@@ -75,35 +75,7 @@ async function getAbsencesByHarbourId(_harbour_id) {
 		});
 	});
 };
-async function getAbsencesOfTheDayByHarbourId(_harbour_id) {
-	const startLimit = new Date;
-	startLimit.setHours(17);
-	startLimit.setMinutes(0);
-	startLimit.setSeconds(0);
-	startLimit.setMilliseconds(0);
-	const endLimit = new Date;
-	endLimit.setHours(23);
-	endLimit.setMinutes(59);
-	endLimit.setSeconds(59);
-	endLimit.setMilliseconds(999);
-	console.log(`startLimit ${startLimit} - endLimit ${endLimit}`);
 
-	const searchOptions = {
-		date: {
-			$gt: startLimit,
-			$lt: endLimit,
-		}
-	}
-
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_absenceCol, { harbour_id: _harbour_id }, searchOptions, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
 async function getAbsenceByUserIdAndHarbourId(_user_id, _harbour_id) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_absenceCol, { user_id: _user_id, harbour_id: _harbour_id }, null, function (_err, _data) {
@@ -174,9 +146,6 @@ async function getBoatById(boatId) {
 };
 
 
-
-//>
-
 exports.handler = async (req, res) => {
 	var _absence = await getAbsence();
 	res.end(JSON.stringify(_absence));
@@ -209,8 +178,6 @@ async function createAbsenceHandler(req, res) {
 			var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
 			var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
 
-
-
 			//prepare mail
 			var subject = "Declaration d'absence";
 			var body = `
@@ -237,34 +204,68 @@ async function createAbsenceHandler(req, res) {
 	}
 }
 
-const getAbsenceByHarbour = async (req, res) => {
-	// console.log('==>', req.param)
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns {Promis<{results: Array<T_absence>}>}
+ */
+const getAbsenceOfTheDayByHarbour = async (req, res) => {
 	const { harbourId } = req.param;
+	try {
+		const absences = await getAbsencesByHarbourId(harbourId);
+		// ASBSENCE SORT BY DATE
+		absences.sort((A, B) => A.date > B.date ? 1 : -1);
 
-	console.log('harbourId', harbourId);
+		const startLimit = new Date;
+		startLimit.setHours(0);
+		startLimit.setMinutes(0);
+		startLimit.setSeconds(0);
+		startLimit.setMilliseconds(0);
+		const endLimit = new Date;
+		endLimit.setHours(23);
+		endLimit.setMinutes(59);
+		endLimit.setSeconds(59);
+		endLimit.setMilliseconds(999);
 
-	// const absences = await getAbsencesByHarbourId(harbourId);
-	const absences = await getAbsencesOfTheDayByHarbourId(harbourId);
-	
-	console.log('absences', absences)
-	const boatsPromises = [];
-	absences.map(absence => {
-		boatsPromises.push(getBoatById(absence.boat_id))
-	});
+		// search the start + end idx of the interesting part
+		let startIdx = undefined;
+		let endIdx = undefined;
+		for (let i = 0; i < absences.length; i++) {
+			if (startIdx === undefined && absences[i].date >= startLimit) {
+				startIdx = i;
+			}
+			if (endIdx === undefined && absences[i].date > endLimit) {
+				endIdx = i;
+				break;
+			}
+		}
+		// set endIdx to take the last object of the absence array if not set
+		if (startIdx !== undefined && endIdx === undefined) endIdx = absences.length;
 
-	/**@type {Array<T_boat>} */
-	const boats = await Promise.all(boatsPromises);
+		const absencesOfTheDay = absences.slice(startIdx || 0, endIdx + 1 || 0);
 
-	const eprAbsences = [];
-	for (let i = 0; i < boats.length; i++) {
-		eprAbsences.push({
-			startDate: absences[i].date_start,
-			endDate: absences[i].date_end,
-			boatName: boats[i].name || 'unknown',
-			place: boats[i].place || 'unknown',
-		});
+		const boatsPromises = [];
+		absencesOfTheDay.map(absence => boatsPromises.push(getBoatById(absence.boat_id)));
+		/**@type {Array<T_boat>} */
+		const boats = await Promise.all(boatsPromises);
+
+		const eprAbsences = [];
+		for (let i = 0; i < boats.length; i++) {
+			eprAbsences.push({
+				startDate: absencesOfTheDay[i].date_start,
+				endDate: absencesOfTheDay[i].date_end,
+				boatName: boats[i].name || 'unknown',
+				place: boats[i].place || 'unknown',
+			});
+		}
+		res.end(JSON.stringify({ results: eprAbsences }));
+	} catch (error) {
+		console.error('[ERROR]', error.message);
+		UTILS.httpUtil.dataError(req, res, "Error", error.message, "500", "1.0");
+		return;
 	}
-	res.end(JSON.stringify({ eprAbsences }));
+
 };
 
 exports.router = [
@@ -280,7 +281,7 @@ exports.router = [
 	},
 	{
 		route: "/api-erp/harbour/:harbourId/absence",
-		handler: getAbsenceByHarbour,
+		handler: getAbsenceOfTheDayByHarbour,
 		method: "GET",
 	},
 ];
