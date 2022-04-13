@@ -24,8 +24,8 @@
 					<a href="/harborlife?select=maintenance"><img style="height:25px;width:25px;"
 							src="/library/bouton-maintenance-64.png"></a>
 				</div>
-				<div class="nav-item" id="bricolage">
-					<a href="/harborlife?select=bricolage"><img style="height:25px;width:25px;" src="/library/bouton-tool-64.png"></a>
+				<div class="nav-item" id="accastillage">
+					<a href="/harborlife?select=accastillage"><img style="height:25px;width:25px;" src="/library/bouton-tool-64.png"></a>
 					</div>
 					<div class="nav-item" id="alimentation">
 					<a href="/harborlife?select=alimentation"><img style="height:25px;width:25px;"
@@ -203,8 +203,8 @@
 				var activeSubCategories = _data.data.activeSubCategories;
 				if (!activeSubCategories.sos)
 					document.getElementById('sos').hidden = true;
-				if (!activeSubCategories.bricolage)
-					document.getElementById('bricolage').hidden = true;
+				if (!activeSubCategories.accastillage)
+					document.getElementById('accastillage').hidden = true;
 				if (!activeSubCategories.maintenance)
 					document.getElementById('maintenance').hidden = true;
 				if (!activeSubCategories.sante)
@@ -299,7 +299,7 @@
 							case "maintenance":
 								currentRow = currentRow.replace("__IMG__", "/library/bouton-maintenance-64.png");
 								break;
-							case "bricolage":
+							case "accastillage":
 								currentRow = currentRow.replace("__IMG__", "/library/bouton-tool-64.png");
 								break;
 							case "sante":
