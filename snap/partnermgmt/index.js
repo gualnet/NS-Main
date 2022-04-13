@@ -273,8 +273,8 @@ async function getActivePartnersCategoryHandler(_req, _res) {
             case "maintenance":
                 data.activeSubCategories.maintenance = true;
                 break;
-            case "bricolage":
-                data.activeSubCategories.bricolage = true;
+            case "accastillage":
+                data.activeSubCategories.accastillage = true;
                 break;
             case "sante":
                 data.activeSubCategories.sante = true;
@@ -529,7 +529,7 @@ exports.plugin =
             var subcategories = {
                 harbourlife: '<option value="sos">S.O.S.</option>'
                     + '<option value="maintenance">Maintenance</option>'
-                    + '<option value="bricolage">Bricolage</option>'
+                    + '<option value="accastillage">Accastillage</option>'
                     + '<option value="sante">Santé</option>'
                     + '<option value="annonce">Annonce</option>'
                     + '<option value="laverie">Laverie</option>'
