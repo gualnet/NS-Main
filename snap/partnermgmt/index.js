@@ -124,7 +124,10 @@ async function getPartnerById(_id) {
     });
 }
 
-
+/**
+ * 
+ * @returns {Promise<Array<T_partner>>}
+ */
 async function getPartner() {
     return new Promise(resolve => {
         STORE.db.linkdb.Find(_partnerCol, {}, null, function (_err, _data) {
@@ -147,6 +150,11 @@ async function getPartnerByHarbourId(_harbour_id) {
     });
 }
 
+/**
+ * 
+ * @param {*} _search 
+ * @returns {Promise<Array<T_partner>>}
+ */
 async function getPartnerBySearch(_search) {
     return new Promise(resolve => {
         STORE.db.linkdb.Find(_partnerCol, _search, null, function (_err, _data) {
@@ -181,16 +189,20 @@ async function createPartner(_obj) {
     });
 }
 
+/**
+ * 
+ * @param {T_partner} _obj 
+ * @returns 
+ */
 async function updatePartner(_obj) {
-    // console.log('updatePartner', _obj);
-    return new Promise(resolve => {
-        STORE.db.linkdb.Update(_partnerCol, { id: _obj.id }, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+	return new Promise(resolve => {
+		STORE.db.linkdb.Update(_partnerCol, { id: _obj.id }, _obj, function (_err, _data) {
+			if (_data)
+				resolve(_data);
+			else
+				resolve(_err);
+		});
+	});
 }
 async function getAdminById(_id) {
     return new Promise(resolve => {
@@ -342,6 +354,27 @@ async function getActivePartnersCategoryHandler(_req, _res) {
     return;
 }
 
+/**
+ * ! fonction destinee à remplacer toutes les references a la subcategory Bricolage par accastillage - ONE SHOT
+ * @param {*} req 
+ * @param {*} res 
+ */
+const updateBricoToAccastillage = async (req, res) => {
+	const partnersList = await getPartnerBySearch({ subcategory: 'bricolage' });
+
+	const promiseList = [];
+	partnersList.map(partner => {
+		const updatedPartner = partner;
+		updatedPartner.subcategory = 'accastillage';
+		promiseList.push(
+			updatePartner(updatedPartner)
+		);
+	});
+
+	const ret = await Promise.all(promiseList);
+	res.end(JSON.stringify({ result: ret }));
+};
+
 exports.router =
     [
         {
@@ -366,6 +399,12 @@ exports.router =
             on: true,
             route: "/api/partners/",
             handler: getPartnersByHarbourHandler,
+            method: "GET"
+        },
+        {
+            on: true,
+            route: "/api/partners/update-bric",
+            handler: updateBricoToAccastillage,
             method: "GET"
         }
     ];
