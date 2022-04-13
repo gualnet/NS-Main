@@ -558,9 +558,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="bricolage">
+                    <div class="swiper-slide" id="accastillage">
                         <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=bricolage')">
+                            <div class="col" onclick="window.location.href = ('/harborlife?select=accastillage')">
                                 <div class="row">
                                     <div class="col">
                                         <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
@@ -1501,8 +1501,8 @@
             if (activeCategory.harbourlife) {
                 if (activeSubCategories.sos)
                     document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=sos')");
-                else if (activeSubCategories.bricolage)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=bricolage')");
+                else if (activeSubCategories.accastillage)
+                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=accastillage')");
                 else if (activeSubCategories.maintenance)
                     document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=maintenance')");
                 else if (activeSubCategories.alimentation)
@@ -1523,8 +1523,8 @@
                     document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vendeurLoueurHl')");
 
 
-                if (!activeSubCategories.bricolage)
-                    document.getElementById('bricolage').hidden = true;
+                if (!activeSubCategories.accastillage)
+                    document.getElementById('accastillage').hidden = true;
                 if (!activeSubCategories.sos)
                     document.getElementById('sos').hidden = true;
                 if (!activeSubCategories.maintenance)
@@ -1620,7 +1620,7 @@
 
         var subCategoryHarbourLife = '<option value="sos">S.O.S.</option>'
             + '<option value="maintenance">Maintenance</option>'
-            + '<option value="bricolage">Bricolage</option>'
+            + '<option value="accastillage">Accastillage</option>'
             + '<option value="sante">Santé</option>'
             + '<option value="annonce">Annonce</option>'
             + '<option value="laverie">Laverie</option>'

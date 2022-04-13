@@ -7,4 +7,22 @@
  * @property {string} appLink - link to PWA app
  * @property {number} createdAt - timestamp 
  * @property {number} updatedAt - timestamp 
-s */
+ */
+
+/**
+ * @typedef T_partner
+ * @property {string} id
+ * @property {string} harbour_id
+ * @property {string} name
+ * @property {string} category
+ * @property {string} subcategory
+ * @property {string} prefix
+ * @property {string} phone
+ * @property {string} address
+ * @property {string} img
+ * @property {string} description
+ * @property {number} date
+ * @property {string} prefixed_phone
+ * @property {string} cloudinary_img_public_id
+ */
+
