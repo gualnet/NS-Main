@@ -20,32 +20,19 @@
 
     <div id="ongoing-container">
       <div class="sub-title">Absences en cours</div>
-      <div class="items-container">
+      <div class="items-container" id="current-absence-item-container">
         <label class="text-low-visibility" id="text">Aucune absence en cours</label>
       </div>
     </div>
 
     <div id="past-container">
       <div class="sub-title">Absences passées</div>
-      <div class="items-container">
-        <div class="absence-item">
-          <div class="date-info" id="start-info">
-            <div class="start-label">Date de départ</div>
-            <div class="date-label">xx/xx/xxxx</div>
-            <!-- <input id="" name="date_start" type="date" class="form-control floating-input" required> -->
-          </div>
-          <div class="date-info" id="end-info">
-            <div class="end-label">Date de retour</div>
-            <div class="date-label">xx/xx/xxxx</div>
-            <!-- <input id="" name="date_end" type="date" class="form-control floating-input" required> -->
-          </div>
-        </div>
+      <div class="items-container" id="past-absence-item-container">
       </div>
     </div>
 
     <div id="bottom-container">
-      <div id="new-absence-btn" onclick="openNewAbsenceModal()">Nouvelle Absence</div>
-      <button type="button" data-bs-toggle="modal" data-bs-target="#myModal">Launch modal</button>
+      <div id="new-absence-btn">Nouvelle Absence</div>
     </div>
   </div>
 
@@ -60,16 +47,18 @@
       <div class="modal-card-content">
         <div class="date-info">
           <label>Date de départ</label>
-          <input id="" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
+          <input id="input-date-start" name="date_start" type="date"
+            class="form-control floating-input modal-date-input" required>
         </div>
         <div class="date-info">
           <label>Date de retour</label>
-          <input id="" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
+          <input id="input-date-end" name="date_end" type="date" class="form-control floating-input modal-date-input"
+            required>
         </div>
       </div>
       <div class="modal-card-footer">
         <div class="footer-btn" id="modal-cancel-btn">Annuler</div>
-        <div class="footer-btn" id="modal-validate-btn">Valider</div>
+        <div class="footer-btn" id="modal-submit-btn">Valider</div>
       </div>
     </div>
 
@@ -90,11 +79,13 @@
     display: grid;
     height: 100vh;
     width: 100vw;
-    grid-template-rows: 120px 150px auto 50px 50px;
+    grid-template-rows: 15% 30% 45% 5% 5%;
+    grid-template-columns: 30px auto 30px;
   }
 
   #top-container {
     grid-row: 1;
+    grid-column: 2;
     display: flex;
     width: 100%;
     justify-content: center;
@@ -109,15 +100,22 @@
 
   #ongoing-container {
     grid-row: 2;
+    grid-column: 2;
     display: flex;
     flex-direction: column;
-    padding-left: 30px;
-    min-height: 100px;
+    min-height: 150px;
+    height: auto;
   }
 
   .sub-title {
     font-size: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+  }
+
+  #current-absence-item-container {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
   }
 
   .text-low-visibility {
@@ -126,16 +124,19 @@
 
   #past-container {
     grid-row: 3;
-    /* border: 1px solid red; */
+    grid-column: 2;
     display: flex;
     flex-direction: column;
-    padding-left: 30px;
-    padding-right: 30px;
+    margin-bottom: 10px;
+  }
 
+  #past-absence-item-container {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
   }
 
   /* ABSENCE ITEM */
-
   .absence-item {
     display: flex;
     border-radius: 13px;
@@ -145,6 +146,9 @@
     box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, .16);
     color: rgb(131, 131, 131);
     font-size: 15px;
+    margin-bottom: 38px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 
   .date-info {
@@ -161,9 +165,10 @@
 
   /* BOTTOM CONTAINER */
   #bottom-container {
+    grid-column: 2;
     grid-row: 4;
     display: flex;
-    padding: 0px 30px;
+    /* padding: 0px 30px; */
     justify-content: flex-end;
   }
 
@@ -201,7 +206,7 @@
 
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0s, opacity 0.5s linear;
+    transition: visibility .5s, opacity 0.5s linear;
   }
 
   .modal-card {
@@ -238,7 +243,6 @@
     border-top: 1px solid rgba(178, 178, 178, .18);
     display: flex;
     height: 44px;
-
   }
 
   .modal-card .footer-btn {
@@ -274,28 +278,181 @@
 </style>
 
 <script>
+  /**
+   * Fetch user's boat data
+   * @returns {Promise<T_boat>}
+   */
+  const getBoatInfo = async () => {
+    const res = await fetch(
+      `/api/get/userboats?user_id=${localStorage['user']}&harbour_id=${localStorage["harbourid"]}`,
+      { method: 'GET' }
+    );
+    const decodedResponse = await res.json();
+    const boatData = decodedResponse.data[0];
+    return (boatData);
+  };
 
-  const closeNewAbsenceModal = (ev) => {
-    console.log('closeNewAbsenceModal', ev)
-    // const modalEl = document.getElementById('createAbsenceModal');
-    // modalEl.style.visibility = 'hidden';
-    // modalEl.style.opacity = 0;
+  /**
+   * Fetch user's absences
+   * @returns {Promise<Array<T_absence>>}
+   */
+  const getAbsences = async () => {
+    const response = await fetch(
+      `/api/get/absence?user_id=${localStorage['user']}&harbour_id=${localStorage["harbourid"]}`,
+      { method: 'GET' }
+    );
+    const decodedresponse = await response.json();
+    console.log('decodedresponse', decodedresponse);
+    const absences = decodedresponse.data;
+    return (absences);
   }
 
+  const updateAbsenceList = async () => {
+    const absenceList = await getAbsences();
+    absenceList.map(absence => {
+      if (typeof absence.date_end) {
+        absence.date_end = new Date(absence.date_end).getTime();
+      }
+      if (typeof absence.date_start) {
+        absence.date_start = new Date(absence.date_start).getTime();
+      }
+    });
 
-  const createAbsenceModal = document.getElementById('createAbsenceModal');
+    absenceList.sort((A, B) => A.date_end > B.date_end ? 1 : -1);
 
+    let i = 0;
+    const todayTimestamp = new Date;
+    todayTimestamp.setHours(0);
+    todayTimestamp.setMinutes(0);
+    todayTimestamp.setSeconds(0);
+    todayTimestamp.setMilliseconds(0);
+    const timeRef = todayTimestamp.getTime();
+    while (i < absenceList.length) {
+      if (absenceList[i].date_end > timeRef) {
+        break;
+      }
+      i++;
+    }
+    const oldAbsenceList = absenceList.slice(0, i);
+    const ongoingAbsenceList = absenceList.slice(i, absenceList.length);
 
-  createAbsenceModal.addEventListener('onclick', closeNewAbsenceModal)
+    const oldAbsenceCardList = createAbsenceCard(oldAbsenceList);
+    // console.log('oldAbsenceCardList', oldAbsenceCardList)
+    const pastItemsContainerEl = document.getElementById('past-absence-item-container');
+    pastItemsContainerEl.innerHTML = oldAbsenceCardList.join('')
 
-  const openNewAbsenceModal = (ev) => {
-    console.log('createNewAbsence');
+    const ongoingAbsenceCardList = createAbsenceCard(ongoingAbsenceList);
+    console.log('ongoingAbsenceList', ongoingAbsenceList)
+    const currentItemsContainerEl = document.getElementById('current-absence-item-container');
+    currentItemsContainerEl.innerHTML = ongoingAbsenceCardList.join('')
+  };
+  updateAbsenceList();
 
+  /**
+   * take a timestamps and output a formated string (DD/MM/YYYY)
+   */
+  const formatDate = (timestamp) => {
+    let tempDate = new Date(timestamp);
+    tempDate = tempDate.toISOString().split('T')[0];
+    tempDate = tempDate.split('-').reverse().join('/');
+    return(tempDate);
+  }
+
+  /**
+   * @param {Array<T_absence>} absenceList
+   * @returns {Array<string>}
+   */
+  const createAbsenceCard = (absenceList) => {
+    const absenceItemList = [];
+    absenceList.map(absence => {
+      const startDate = formatDate(absence.date_start);
+      const endDate = formatDate(absence.date_end);
+      absenceItemList.push(`
+        <div class="absence-item">
+          <div class="date-info" id="start-info">
+            <div class="start-label">Date de départ</div>
+            <div class="date-label">${startDate}</div>
+          </div>
+          <div class="date-info" id="end-info">
+            <div class="end-label">Date de retour</div>
+            <div class="date-label">${endDate}</div>
+          </div>
+        </div>
+      `);
+    });
+    return(absenceItemList);
+  }
+
+  const clickModalBackgroundHandler = (ev) => {
+    const target = ev.target;
+    if (!target.classList.contains('myModal')) {
+      return;
+    }
+    target.style.visibility = 'hidden';
+    target.style.opacity = 0;
+  }
+
+  const clickOnNewAbsenceButtonHandler = (ev) => {
     const modalEl = document.getElementById('createAbsenceModal');
     modalEl.style.visibility = 'visible';
     modalEl.style.opacity = 1;
-  }
+  };
 
+  const clickOnSubmitNewAbsenceBtn = async (ev) => {
+    console.log('CALL clickOnSubmitNewAbsenceBtn');
+
+    const inputStartDateEl = document.getElementById('input-date-start');
+    const startDate = new Date(inputStartDateEl.value).getTime();
+    const inputEndDateEL = document.getElementById('input-date-end');
+    const endDate = new Date(inputEndDateEL.value).getTime();
+
+    const boatData = await getBoatInfo();
+
+    const newAbsenceParams = {
+      date_start: startDate,
+      date_end: endDate,
+      user_id: localStorage['user'],
+      token: localStorage['token'],
+      harbour_id: localStorage['harbourid'],
+      boat_id: boatData.id,
+    };
+
+    const ret = await fetch('/api/create/absence', {
+      method: 'POST',
+      body: JSON.stringify(newAbsenceParams),
+    });
+    const decodedResponse = await ret.json();
+    console.log('decodedResponse', decodedResponse);
+  };
+
+  const clickOnCancelNewAbsenceBtn = (ev) => {
+    // close the modal
+    const modalEl = document.getElementById('createAbsenceModal');
+    modalEl.style.visibility = 'hidden';
+    modalEl.style.opacity = 0;
+
+    // reset the input after the modal close animation
+    setTimeout(() => {
+      const inputStartDateEl = document.getElementById('input-date-start');
+      inputStartDateEl.value = undefined;
+      const inputEndDateEL = document.getElementById('input-date-end');
+      inputEndDateEL.value = undefined;
+    }, 500);
+  };
+
+  /* EVENT LISTENERS */
+
+  const createAbsenceModal = document.getElementById('createAbsenceModal');
+  createAbsenceModal.addEventListener('click', clickModalBackgroundHandler);
+
+  const newAbsenceBtn = document.getElementById('new-absence-btn');
+  newAbsenceBtn.addEventListener('click', clickOnNewAbsenceButtonHandler);
+
+  const createAbsenceSubmitBtn = document.getElementById('modal-submit-btn');
+  createAbsenceSubmitBtn.addEventListener('click', clickOnSubmitNewAbsenceBtn);
+
+  const createAbsenceCancelBtn = document.getElementById('modal-cancel-btn');
+  createAbsenceCancelBtn.addEventListener('click', clickOnCancelNewAbsenceBtn);
 </script>
 
 </html>
