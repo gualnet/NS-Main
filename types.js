@@ -35,7 +35,9 @@
  * @property {string} date_end
  * @property {string} token
  * @property {string} harbour_id
- * @property {number} date
+ * @property {number} date - OLD DATE TO BE REMOVED
+ * @property {number} created_at - timestamp
+ * @property {number} updated_at - timestamp
  */
 
 /**
