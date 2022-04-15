@@ -39,6 +39,11 @@ function verifyPostReq(_req, _res) {
 }
 
 //db functions <
+/**
+ * 
+ * @param {T_absence['id']} _id absence unique id
+ * @returns {Promise<T_absence>}
+ */
 async function getAbsenceById(_id) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.FindById(_absenceCol, _id, null, function (_err, _data) {
@@ -108,6 +113,11 @@ async function createAbsence(_obj) {
 	});
 }
 
+/**
+ * 
+ * @param {T_absence} _obj 
+ * @returns 
+ */
 async function updateAbsence(_obj) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Update(_absenceCol, { id: _obj.id }, _obj, function (_err, _data) {
@@ -219,6 +229,32 @@ async function createAbsenceHandler(req, res) {
 	}
 }
 
+const updateAbsenceHandler = async (req, res) => {
+	const { absence_id, newStartDate, newEndDate } = req.body;
+
+	try {
+		const absence = await getAbsenceById(absence_id);
+		const newAbsence = { ...absence };
+		newAbsence.date_start = newStartDate;
+		newAbsence.date_end = newEndDate;
+		newAbsence.updated_at = Date.now();
+		const result = await updateAbsence(newAbsence);
+
+		res.end(JSON.stringify({
+			success: true,
+			payload: result,
+			error: null,
+		}))
+	} catch (error) {
+		console.log('[ERRROR]', error.message);
+		res.writeHead(500)
+		res.end(JSON.stringify({
+			success: false,
+			error: error.message,
+		}))
+	}
+};
+
 /**
  * 
  * @param {*} req 
@@ -285,16 +321,25 @@ const getAbsenceOfTheDayByHarbour = async (req, res) => {
 
 exports.router = [
 	{
+		on: true,
 		route: "/api/get/absence",
 		handler: getAbsenceHandler,
 		method: "GET",
 	},
 	{
+		on: true,
 		route: "/api/create/absence",
 		handler: createAbsenceHandler,
 		method: "POST",
 	},
 	{
+		on: true,
+		route: "/api/absence",
+		handler: updateAbsenceHandler,
+		method: "PUT",
+	},
+	{
+		on: true,
 		route: "/api-erp/harbour/:harbourId/absence",
 		handler: getAbsenceOfTheDayByHarbour,
 		method: "GET",
