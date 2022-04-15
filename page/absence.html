@@ -1,291 +1,647 @@
-<!doctype html>
-<html lang="en" class="h-100">
-
-
+<!DOCTYPE html>
+<html lang="fr">
 {{element->header_app.html}}
 
-<body class="d-flex flex-column h-100 menu-overlay">
-    <nav class="navbar navbar-light fixed-top mt-3">
-        <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
-    </nav>
-    <!-- screen loader -->
-    {{element->loader.html}}
-    <!-- Begin page content -->
-    <main class="flex-shrink-0">
-        <!-- Fixed navbar        <header class="header">
-                    <div class="row">
-                        <div class="col-auto px-0">
-                            <a href="/index" class="btn menu-btn btn-link text-dark">
-                                <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                                    <title>ionicons-v5-a</title>
-                                    <polyline points='244 400 100 256 244 112' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-                                    <line x1='120' y1='256' x2='412' y2='256' style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px' />
-                                </svg>
-                            </a>
-                        </div>
-                        <div class="text-left col align-self-center">
-                            <h5>Profil</h5>
-                        </div>
-                        <div class="ml-auto col-auto align-self-center">
+<body>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
 
-                        </div>
-                    </div>
-                </header>
+  <!-- TOAST -->
+  <div class="toast-container">
+    <div class="toast" id="alertToast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-body">
+        Hello, world!
+      </div>
+    </div>
+  </div>
 
-                page content start
-
-
-                <div class="container mt-4 text-center">
-                    <div class="icon icon-100 position-relative">
-                        <figure class="background">
-                            <img src="img/" alt="">
-                        </figure>
-                    </div>
-                </div>
-        -->
-        <div class="container mt-4">
-            <form id="absence_form" method="post" autocomplete="off">
-                <input id="user_id" name="user_id" hidden />
-                <input id="boat_id" name="boat_id" hidden />
-                <div class="card mt-3 mb-4">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12 col-md-6">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group floating-form-group active">
-                                            <input id="" name="date_start" type="date" class="form-control floating-input" required>
-                                            <label class="floating-label">Date de départ</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group floating-form-group active">
-                                            <input id="phone" name="date_end" type="date" class="form-control floating-input" required>
-                                            <label class="floating-label">Date de retour</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="updateError"> </div>
-                <button type="button" class="btn btn-block btn-info btn-lg" onclick="sendForm();">Envoyer</button>
-            </form>
-            <div id="absences">
-
-            </div>
-        </div>
-        <br />
-        <br />
-        <div class="container py-3">
-            {{element->navbar.html}}
-        </div>
-    </main>
-    <!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
-        <span class="text-white">
-            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                <title>ionicons-v5-m</title>
-                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
-                <circle cx='144' cy='208' r='32' />
-                <circle cx='152' cy='311' r='32' />
-                <circle cx='224' cy='144' r='32' />
-                <circle cx='256' cy='367' r='48' />
-                <circle cx='328' cy='144' r='32' />
-            </svg>
-        </span>
-    </button>
-         -->
-
-    <div class="sidebar-right">
-        <div class="selectoption">
-            <input type="checkbox" id="darklayout" name="darkmode">
-            <label for="darklayout">Dark</label>
-        </div>
-        <div class="selectoption mb-0">
-            <input type="checkbox" id="rtllayout" name="layoutrtl">
-            <label for="rtllayout">RTL</label>
-        </div>
-        <hr>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
-            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
-            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
-            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
-            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
-            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
-            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
-            <label for="templatecolor8" class="bg-red" data-title="red"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
-            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
-            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
-            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
-            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
-            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
-            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
-            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-        </div>
-
+  <div class="page-container">
+    <div id="top-container">
+      <div class="top-separator"></div>
+      <div class="page-title" id="title">Mes absences</div>
+      <div class="top-separator"></div>
     </div>
 
 
-    <!-- Required jquery and libraries -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <div id="ongoing-container">
+      <div class="sub-title">Absences en cours</div>
+      <div class="items-container" id="current-absence-item-container">
+        <label class="text-low-visibility" id="text">Aucune absence en cours</label>
+      </div>
+    </div>
 
-    <!-- cookie js -->
-    <script src="js/jquery.cookie.js"></script>
+    <div id="past-container">
+      <div class="sub-title">Absences passées</div>
+      <div class="items-container" id="past-absence-item-container">
+      </div>
+    </div>
 
-    <!-- Swiper slider  -->
-    <script src="vendor/swiper/js/swiper.min.js"></script>
-
-    <!-- Masonry js -->
-    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-    <!-- Customized jquery file  -->
-    <script src="js/main.js"></script>
-    <script src="js/color-scheme-demo.js"></script>
-
-    <!-- page level custom script -->
-    <script>
-        var user;
-        "use strict"
-        $(window).on('load', function () {
-            if (localStorage['entity_id'] == '4eqv44307K')
-                document.getElementById('validate_button')?.setAttribute("style", "background-color: #FB9101;");
-
-            var swiper = new Swiper('.swiper-container', {
-                pagination: {
-                    el: '.swiper-pagination',
-                },
-            });
-
-            var formData = new FormData();
-            formData.append("token", localStorage["token"])
-            fetch("/api/getuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                user = _data.data;
-                document.getElementById("user_id").value = user.id;
-                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
-                    var boat = _data.data[0]
-                    document.getElementById("boat_id").value = boat.id;
-                    updateAbsenceList();
-                }).catch((error) => {
-                    console.log(error);
-                });
-            }).catch((error) => {
-                console.log(error);
-            });
+    <div id="bottom-container">
+      <div id="new-absence-btn">Nouvelle Absence</div>
+    </div>
+  </div>
 
 
-        });
-        var dynamicSort = function (property) {
-            var sortOrder = 1;
-            if (property[0] === "-") {
-                sortOrder = -1;
-                property = property.substr(1);
-            }
-            return function (a, b) {
-                /* next line works with strings and numbers,
-                 * and you may want to customize it to your needs
-                 */
-                var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-                return result * sortOrder;
-            }
-        }
 
-        function updateAbsenceList() {
-            fetch("/api/get/absence?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
-                var absences = _data.data?.sort(dynamicSort("date")).reverse();
-                ;
-                document.getElementById("absences").innerHTML = "";
-                for (var i = 0; i < absences.length; i++) {
+  <!-- MODAL NEW ABSENCE -->
+  <div class="myModal" id="createAbsenceModal">
+    <div class="modal-card">
+      <div class="modal-card-header">
+        Declarez votre absence
+      </div>
+      <div class="modal-card-content">
+        <div class="date-info">
+          <label>Date de départ</label>
+          <input id="input-date-start" name="date_start" type="date"
+            class="form-control floating-input modal-date-input" required>
+        </div>
+        <div class="date-info">
+          <label>Date de retour</label>
+          <input id="input-date-end" name="date_end" type="date" class="form-control floating-input modal-date-input"
+            required>
+        </div>
+      </div>
+      <div class="modal-card-footer">
+        <div class="footer-btn" id="modal-cancel-create-btn">Annuler</div>
+        <div class="footer-btn" id="modal-submit-create-btn">Valider</div>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL UPDATE ABSENCE -->
+  <div class="myModal" id="updateAbsenceModal">
+    <div class="modal-card">
+      <div class="modal-card-header">
+        Modifiez votre absence
+      </div>
+      <div class="modal-card-content">
+        <div class="date-info">
+          <label>Date de départ</label>
+          <input id="input-date-start" name="date_start" type="date"
+            class="form-control floating-input modal-date-input" required>
+        </div>
+        <div class="date-info">
+          <label>Date de retour</label>
+          <input id="input-date-end" name="date_end" type="date" class="form-control floating-input modal-date-input"
+            required>
+        </div>
+      </div>
+      <div class="modal-card-footer">
+        <div class="footer-btn" id="modal-cancel-update-btn">Annuler</div>
+        <div class="footer-btn" id="modal-submit-update-btn">Valider</div>
+      </div>
+    </div>
+  </div>
 
-                    document.getElementById("absences").innerHTML += '<div class="card mt-3 mb-4">'
-                        + '<div class="card-header justify-content-center"><h6>Absence N° ' + (absences.length - i) + '</h6></div>'
-                        + '<div class="card-body">'
 
-                        + '<div class="row">'
-                        + '<div class="col-6">'
-                        + '<div class="form-group floating-form-group active" >'
-                        + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_start + '" readonly>'
-                        + '   <label class="floating-label">Date de départ</label>'
-                        + '</div>'
-                        + '</div>'
-                        + '<div class="col-6">'
-                        + '<div class="form-group floating-form-group active" >'
-                        + '   <input id="phone" name="date_end" type="date" class="form-control floating-input" value="' + absences[i].date_end + '" readonly>'
-                        + '   <label class="floating-label">Date de retour</label>'
-                        + '</div>'
-                        + '</div>'
-                        + '</div>'
-                        + '</div>'
-                        + '</div>'
-
-                }
-            }).catch((e) => { console.error(e) });
-        }
-
-        function sendForm() {
-            var form = document.getElementById("absence_form");
-            var formData = new FormData(form);
-            formData.append("token", localStorage["token"])
-            formData.append("harbour_id", localStorage["harbourid"])
-            fetch("/api/create/absence", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log('_data:', _data);
-                if (_data.success) {
-                    // console.log(_data);
-                    updateAbsenceList();
-                } else {
-                    if (document.getElementById("error"))
-                        document.getElementById("updateError").removeChild(document.getElementById("error"));
-
-                    document.getElementById("updateError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
-        }
-    </script>
-    {{element->footer_app.html}}
 </body>
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/setting.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
+
+<style>
+  body {
+    display: flex;
+    font-family: 'Poppins';
+  }
+
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+
+  .page-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid-template-rows: 15% 30% 45% 5% 5%;
+    grid-template-columns: 30px auto 30px;
+  }
+
+  #top-container {
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 40px 0px;
+    align-items: center;
+  }
+
+  .top-separator {
+    height: 0px;
+    border-top: 1px solid black;
+    width: 25%;
+  }
+
+  .page-title {
+    font-family: 'Poppins-SemiBold';
+    font-size: 20px;
+    align-self: center;
+    margin: 0 15px;
+  }
+
+  #ongoing-container {
+    grid-row: 2;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    height: auto;
+  }
+
+  #ongoing-container #text {
+    padding-left: 25px;
+  }
+
+  .sub-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .sub-title::before {
+    content: url('/library/dot-circle.png');
+    margin-right: 10px;
+  }
+
+  #current-absence-item-container {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+  }
+
+  .text-low-visibility {
+    color: rgb(131, 131, 131);
+  }
+
+  #past-container {
+    grid-row: 3;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  #past-absence-item-container {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+  }
+
+  /* ABSENCE ITEM */
+  .absence-item {
+    display: flex;
+    border-radius: 13px;
+    height: 100px;
+    padding: 20px 30px;
+    justify-content: space-between;
+    box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, .16);
+    color: rgb(131, 131, 131);
+    font-size: 15px;
+    margin-bottom: 38px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .date-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 45%;
+  }
+
+  .date-label {
+    border: 0px;
+    border-bottom: 1px solid rgb(131, 131, 131);
+  }
+
+  /* BOTTOM CONTAINER */
+  #bottom-container {
+    grid-column: 2;
+    grid-row: 4;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  #new-absence-btn {
+    border-radius: 50px;
+    background-color: rgb(3, 60, 138);
+    height: 50px;
+    width: 210px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+  }
+
+  #new-absence-btn::before {
+    content: '+';
+    font-size: 30px;
+    color: white;
+    transform: translate(-10px);
+  }
+
+  /* MODAL */
+  .myModal {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    position: absolute;
+    background-color: rgba(131, 131, 131, .5);
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility .5s, opacity 0.5s linear;
+  }
+
+  .modal-card {
+    background-color: white;
+    border-radius: 13px;
+    box-shadow: 0 3px 6px 0 rgb(0 0 0 / 16%);
+    margin: 0px 30px;
+    padding-top: 24px;
+    width: 100%;
+    height: fit-content;
+    margin-top: 35%;
+  }
+
+  .modal-card-header {
+    align-items: center;
+    display: flex;
+    font-family: 'Avenir-Medium', 'Poppins-SemiBold';
+    font-size: 21px;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 0px 34px;
+  }
+
+  .modal-card-content {
+    color: rgb(98, 88, 88);
+    display: flex;
+    font-family: 'Avenir-Medium', 'Poppins-SemiBold';
+    font-size: 15px;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 0px 34px;
+  }
+
+  .modal-card-footer {
+    border: 0px;
+    border-top: 1px solid rgba(178, 178, 178, .18);
+    display: flex;
+    height: 44px;
+  }
+
+  .modal-card .footer-btn {
+    align-items: center;
+    color: rgb(50, 129, 243);
+    display: flex;
+    font-family: 'Avenir-Black';
+    font-size: 15px;
+    height: 100%;
+    justify-content: center;
+    width: 50%;
+  }
+
+  .modal-card-footer :nth-child(1) {
+    border-right: 1px solid rgba(178, 178, 178, .18);
+  }
+
+  .modal-card .date-info label {
+    margin: 0px;
+  }
+
+  input[type=date].form-control.modal-date-input {
+    border: 0px;
+    border-radius: 0px;
+    width: 100%;
+    border-bottom: 1px solid rgb(131, 131, 131);
+    background-color: transparent;
+    margin-left: 0px;
+    padding-left: 0px;
+    padding-bottom: 0px;
+    color: rgb(131, 131, 131);
+  }
+
+  /* TOAST */
+  .toast-container {
+    display: flex;
+    width: 100%;
+    position: absolute;
+    justify-content: center;
+  }
+
+  #alertToast {
+    position: absolute;
+    width: 100%;
+  }
+
+  .toast-body {
+    display: flex;
+    justify-content: center;
+  }
+</style>
+
+<script>
+  /**
+   * Fetch user's boat data
+   * @returns {Promise<T_boat>}
+   */
+  const getBoatInfo = async () => {
+    const res = await fetch(
+      `/api/get/userboats?user_id=${localStorage['user']}&harbour_id=${localStorage["harbourid"]}`,
+      { method: 'GET' }
+    );
+    const decodedResponse = await res.json();
+    const boatData = decodedResponse.data[0];
+    return (boatData);
+  };
+
+  /**
+   * Fetch user's absences
+   * @returns {Promise<Array<T_absence>>}
+   */
+  const getAbsences = async () => {
+    const response = await fetch(
+      `/api/get/absence?user_id=${localStorage['user']}&harbour_id=${localStorage["harbourid"]}`,
+      { method: 'GET' }
+    );
+    const decodedresponse = await response.json();
+    console.log('decodedresponse', decodedresponse);
+    const absences = decodedresponse.data;
+    return (absences);
+  }
+
+  const showAlertToast = async (message) => {
+    document.querySelector('.toast-body').innerHTML = message;
+    G_bsToast.show();
+  };
+
+  const updateAbsenceList = async () => {
+    const absenceList = await getAbsences();
+    absenceList.map(absence => {
+      if (typeof absence.date_end) {
+        absence.date_end = new Date(absence.date_end).getTime();
+      }
+      if (typeof absence.date_start) {
+        absence.date_start = new Date(absence.date_start).getTime();
+      }
+    });
+
+    absenceList.sort((A, B) => A.date_end > B.date_end ? 1 : -1);
+
+    let i = 0;
+    const todayTimestamp = new Date;
+    todayTimestamp.setHours(0);
+    todayTimestamp.setMinutes(0);
+    todayTimestamp.setSeconds(0);
+    todayTimestamp.setMilliseconds(0);
+    const timeRef = todayTimestamp.getTime();
+    while (i < absenceList.length) {
+      if (absenceList[i].date_end > timeRef) {
+        break;
+      }
+      i++;
+    }
+    const oldAbsenceList = absenceList.slice(0, i);
+    const ongoingAbsenceList = absenceList.slice(i, absenceList.length);
+
+    const oldAbsenceCardList = createAbsenceCard(oldAbsenceList);
+    const pastItemsContainerEl = document.getElementById('past-absence-item-container');
+    pastItemsContainerEl.innerHTML = oldAbsenceCardList.join('')
+
+    const ongoingAbsenceCardList = createAbsenceCard(ongoingAbsenceList);
+    const currentItemsContainerEl = document.getElementById('current-absence-item-container');
+    if (ongoingAbsenceCardList.length > 0) {
+      currentItemsContainerEl.innerHTML = ongoingAbsenceCardList.join('')
+      currentItemsContainerEl.querySelectorAll('.absence-item').forEach((item) => {
+        item.addEventListener('click', clickOnOngoingAbsenceItem);
+      });
+    } else {
+      currentItemsContainerEl.innerHTML = `<label class="text-low-visibility" id="text">Aucune absence en cours</label>`;
+    }
+  };
+
+  /**
+   * take a timestamps and output a formated string (DD/MM/YYYY)
+   */
+  const formatDate = (timestamp) => {
+    let tempDate = new Date(timestamp);
+    tempDate = tempDate.toISOString().split('T')[0];
+    tempDate = tempDate.split('-').reverse().join('/');
+    return (tempDate);
+  }
+
+  /**
+   * @param {Array<T_absence>} absenceList
+   * @returns {Array<string>}
+   */
+  const createAbsenceCard = (absenceList, isOngoing = false) => {
+    const absenceItemList = [];
+    absenceList.map(absence => {
+      const startDate = formatDate(absence.date_start);
+      const endDate = formatDate(absence.date_end);
+      absenceItemList.push(`
+        <div class="absence-item uid-${absence.id}">
+          <div class="date-info" id="start-info">
+            <div class="start-label">Date de départ</div>
+            <div class="date-label">${startDate}</div>
+          </div>
+          <div class="date-info" id="end-info">
+            <div class="end-label">Date de retour</div>
+            <div class="date-label">${endDate}</div>
+          </div>
+        </div>
+      `);
+    });
+    return (absenceItemList);
+  }
+
+  const clickModalBackgroundHandler = (ev) => {
+    const target = ev.target;
+    if (!target.classList.contains('myModal')) {
+      return;
+    }
+    target.style.visibility = 'hidden';
+    target.style.opacity = 0;
+  }
+
+  const clickOnNewAbsenceButtonHandler = (ev) => {
+    const modalEl = document.getElementById('createAbsenceModal');
+    modalEl.style.visibility = 'visible';
+    modalEl.style.opacity = 1;
+  };
+
+  const clickOnSubmitCreateAbsenceBtn = async (ev) => {
+    try {
+      const inputStartDateEl = document.getElementById('input-date-start');
+      const startDate = new Date(inputStartDateEl.value).getTime();
+      const inputEndDateEL = document.getElementById('input-date-end');
+      const endDate = new Date(inputEndDateEL.value).getTime();
+
+      const boatData = await getBoatInfo();
+
+      const newAbsenceParams = {
+        date_start: startDate,
+        date_end: endDate,
+        user_id: localStorage['user'],
+        token: localStorage['token'],
+        harbour_id: localStorage['harbourid'],
+        boat_id: boatData.id,
+      };
+
+      const ret = await fetch('/api/create/absence', {
+        method: 'POST',
+        body: JSON.stringify(newAbsenceParams),
+      });
+      const decodedResponse = await ret.json();
+      await updateAbsenceList();
+      // close modal
+      const modalEl = document.getElementById('createAbsenceModal');
+      modalEl.style.visibility = 'hidden';
+      modalEl.style.opacity = 0;
+    } catch (error) {
+      console.error(error);
+      showAlertToast(' Ooops.. \nQuelque chose n\'a pas fonctionné !')
+    }
+
+  };
+
+  const clickOnSubmitUpdateAbsenceBtn = async (ev) => {
+    try {
+      const updateModalEl = document.querySelector('#updateAbsenceModal');
+      if (!updateModalEl) {
+        console.error('[ERROR] update absence modal not found');
+        return;
+      }
+      const inputStartEl = updateModalEl.querySelector('#input-date-start');
+      const startDate = new Date(inputStartEl.value).getTime();
+
+      const inputEndEl = updateModalEl.querySelector('#input-date-end');
+      const endDate = new Date(inputEndEl.value).getTime();
+
+      const payload = {
+        absence_id: G_absenceId,
+        newStartDate: startDate,
+        newEndDate: endDate,
+      }
+      const resp = await fetch('/api/absence', {
+        method: 'PUT',
+        body: JSON.stringify(payload),
+      });
+
+      const decodedResponse = await resp.json();
+      if (decodedResponse.success) {
+        await updateAbsenceList();
+      } else {
+        console.log('ERRRRRRROOOOOO', decodedResponse.error)
+      }
+      // close modal
+      const modalEl = document.getElementById('updateAbsenceModal');
+      modalEl.style.visibility = 'hidden';
+      modalEl.style.opacity = 0;
+    } catch (error) {
+      console.error('[ERROR]', error);
+      showAlertToast('Sorry something wrong happened !');
+    }
+
+
+
+  };
+
+  const clickOnCancelCreateAbsenceBtn = (ev) => {
+    // close the modal
+    const modalEl = document.getElementById('createAbsenceModal');
+    modalEl.style.visibility = 'hidden';
+    modalEl.style.opacity = 0;
+
+    // reset the input after the modal close animation
+    setTimeout(() => {
+      const inputStartDateEl = document.getElementById('input-date-start');
+      inputStartDateEl.value = 'undefined';
+      const inputEndDateEL = document.getElementById('input-date-end');
+      inputEndDateEL.value = undefined;
+    }, 500);
+  };
+
+  const clickOnCancelUpdateAbsenceBtn = (ev) => {
+    // close the modal
+    const modalEl = document.getElementById('updateAbsenceModal');
+    modalEl.style.visibility = 'hidden';
+    modalEl.style.opacity = 0;
+  };
+
+  let G_absenceId;
+  const clickOnOngoingAbsenceItem = (ev) => {
+    const absenceItemEl = ev.target.closest('.absence-item');
+
+    let absenceId;
+    for (let str of absenceItemEl.classList.values()) {
+      if (str.includes('uid-')) {
+        G_absenceId = str.replace('uid-', '');
+      }
+    }
+
+    // open update modal
+    const updateModalEl = document.querySelector('#updateAbsenceModal');
+    updateModalEl.style.visibility = 'visible';
+    updateModalEl.style.opacity = 1;
+
+    // set the the initial date values
+    let startValue = absenceItemEl.querySelector('#start-info')?.querySelector('.date-label').innerHTML;
+    startValue = startValue.split('/').reverse().join('-')
+    let endValue = absenceItemEl.querySelector('#end-info')?.querySelector('.date-label').innerHTML;
+    endValue = endValue.split('/').reverse().join('-')
+    updateModalEl.querySelector('#input-date-start').value = startValue;
+    updateModalEl.querySelector('#input-date-end').value = endValue;
+  };
+
+  // INIT
+  let G_bsToast
+  window.onload = async (ev) => {
+    /* EVENT LISTENERS */
+
+    const createAbsenceModal = document.getElementById('createAbsenceModal');
+    createAbsenceModal.addEventListener('click', clickModalBackgroundHandler);
+
+    const newAbsenceBtn = document.getElementById('new-absence-btn');
+    newAbsenceBtn.addEventListener('click', clickOnNewAbsenceButtonHandler);
+
+    const createAbsenceSubmitBtn = document.getElementById('modal-submit-create-btn');
+    createAbsenceSubmitBtn.addEventListener('click', clickOnSubmitCreateAbsenceBtn);
+
+    const createAbsenceCancelBtn = document.getElementById('modal-cancel-create-btn');
+    createAbsenceCancelBtn.addEventListener('click', clickOnCancelCreateAbsenceBtn);
+
+    const updateAbsenceSubmitBtn = document.getElementById('modal-submit-update-btn');
+    updateAbsenceSubmitBtn.addEventListener('click', clickOnSubmitUpdateAbsenceBtn);
+
+    const updateAbsenceCancelBtn = document.getElementById('modal-cancel-update-btn');
+    updateAbsenceCancelBtn.addEventListener('click', clickOnCancelUpdateAbsenceBtn);
+
+    /* INIT BOOTSTRAP ELEMENTS */
+    const toastEl = document.querySelector('.toast');
+    G_bsToast = new bootstrap.Toast(toastEl, {
+      animation: true,
+      autohide: true,
+      delay: 2000,
+    });
+
+    /* INITIAL DATA FETCH */
+    await updateAbsenceList();
+    
+  }
+
+
+
+
+</script>
+
 </html>

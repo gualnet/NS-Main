@@ -26,3 +26,28 @@
  * @property {string} cloudinary_img_public_id
  */
 
+/**
+ * @typedef T_absence
+ * @property {string} id
+ * @property {string} user_id
+ * @property {string} boat_id
+ * @property {string} date_start
+ * @property {string} date_end
+ * @property {string} token
+ * @property {string} harbour_id
+ * @property {number} date - OLD DATE TO BE REMOVED
+ * @property {number} created_at - timestamp
+ * @property {number} updated_at - timestamp
+ */
+
+/**
+ * @typedef T_boat
+ * @property {string} id
+ * @property {string} place
+ * @property {string} name
+ * @property {string} immatriculation
+ * @property {string} is_resident
+ * @property {string} user
+ * @property {string} harbour
+ * @property {number} date
+ */
