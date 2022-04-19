@@ -51,3 +51,73 @@
  * @property {string} harbour
  * @property {number} date
  */
+
+/**
+ * @typedef T_place
+ * @property {string} id
+ * @property {string} harbour_id
+ * @property {string} number
+ * @property {string} captorNumber
+ * @property {string} pontonId
+ * @property {number} longueur
+ * @property {number} largeur
+ * @property {number} tirantDeau
+ * @property {string} type
+ * @property {number} nbTramesDepart
+ * @property {number} nbTramesRetour
+ * @property {number} maxSeuil
+ * @property {number} minSeuil
+ * @property {string} occupation
+ * @property {number} status
+ */
+
+/**
+ * @typedef T_harbour
+ * @property {EpochTimeStamp} date
+ * @property {string} address
+ * @property {string} buoy
+ * @property {string} cloudinary_harbour_map_public_id
+ * @property {string} cloudinary_img_public_id
+ * @property {string} cloudinary_price_list_public_id
+ * @property {string} electricity
+ * @property {string} email
+ * @property {string} email_concierge
+ * @property {string} erp_link
+ * @property {string} fuel
+ * @property {string} harbour_map
+ * @property {string} hours
+ * @property {string} id
+ * @property {string} id_entity
+ * @property {string} img
+ * @property {string} latitude
+ * @property {string} longitude
+ * @property {string} longmax
+ * @property {string} name
+ * @property {string} phone
+ * @property {string} phone_urgency
+ * @property {string} place
+ * @property {string} places
+ * @property {string} prefix
+ * @property {string} prefix_urgency
+ * @property {string} prefixed_phone
+ * @property {string} prefixed_phone_urgency
+ * @property {string} price_list
+ * @property {string} sanitary_code
+ * @property {string} showers
+ * @property {string} technical_informations
+ * @property {string} tirantdeau
+ * @property {string} toilet
+ * @property {string} touristwebsite
+ * @property {string} vfh
+ * @property {string} water
+ * @property {string} website
+ * @property {string} wifi
+ * @property {string} wifi_pass
+ * @property {string} lundi
+ * @property {string} mardi
+ * @property {string} mercredi
+ * @property {string} jeudi
+ * @property {string} vendredi
+ * @property {string} samedi
+ * @property {string} dimanche
+ */
