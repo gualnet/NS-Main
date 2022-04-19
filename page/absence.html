@@ -532,6 +532,11 @@
         newStartDate: startDate,
         newEndDate: endDate,
       }
+
+      if (!confirm('Confirmez vous la modification')) {
+        return;
+      }
+
       const resp = await fetch('/api/absence', {
         method: 'PUT',
         body: JSON.stringify(payload),
