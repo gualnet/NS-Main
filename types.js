@@ -31,11 +31,13 @@
  * @property {string} id
  * @property {string} user_id
  * @property {string} boat_id
- * @property {string} date_start
- * @property {string} date_end
+ * @property {EpochTimeStamp} previous_date_start
+ * @property {EpochTimeStamp} date_start
+ * @property {EpochTimeStamp} previous_date_end
+ * @property {EpochTimeStamp} date_end
  * @property {string} token
  * @property {string} harbour_id
- * @property {number} date - OLD DATE TO BE REMOVED
+ * @property {number} date - OLD created_at DATE TO BE REMOVED
  * @property {number} created_at - timestamp
  * @property {number} updated_at - timestamp
  */
