@@ -1,3 +1,7 @@
+require('../../types');
+const FM = require('../lib-js/formatDate');
+
+
 //gestions des absences
 
 
@@ -55,6 +59,10 @@ async function getAbsenceById(_id) {
 	});
 }
 
+/**
+ * Return all absences
+ * @returns {Promise<Array<T_absence>>}
+ */
 async function getAbsence() {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_absenceCol, {}, null, function (_err, _data) {
@@ -116,7 +124,7 @@ async function createAbsence(_obj) {
 /**
  * 
  * @param {T_absence} _obj 
- * @returns 
+ * @returns {Promise<Array<T_absence>>}
  */
 async function updateAbsence(_obj) {
 	return new Promise(resolve => {
@@ -183,16 +191,15 @@ async function createAbsenceHandler(req, res) {
 	const newAbsence = { ...req.post };
 
 	newAbsence.date = Date.now();
+	newAbsence.previous_date_start = null;
+	newAbsence.previous_date_end = null;
 	newAbsence.created_at = Date.now();
 	newAbsence.updated_at = newAbsence.created_at;
-	console.log('newAbsence', newAbsence);
 
 	var harbour = await STORE.harbourmgmt.getHarbourById(req.post.harbour_id);
-	console.log('harbour', harbour)
 
 	if (harbour) {
 		var absence = await createAbsence(newAbsence);
-		console.log('CREATED ABSENCE', absence)
 		if (absence.id) {
 			if (false === true) { // ! DEV
 
@@ -235,18 +242,52 @@ const updateAbsenceHandler = async (req, res) => {
 	try {
 		const absence = await getAbsenceById(absence_id);
 		const newAbsence = { ...absence };
+
+		newAbsence.previous_date_start = newAbsence.date_start;
 		newAbsence.date_start = newStartDate;
+		newAbsence.previous_date_end = newAbsence.date_end;
 		newAbsence.date_end = newEndDate;
 		newAbsence.updated_at = Date.now();
-		const result = await updateAbsence(newAbsence);
+		const [result] = await updateAbsence(newAbsence);
+
+		const boat = await getBoatById(result.boat_id);
+		if (!boat) {
+			console.error('[ERROR] Boat is empty');
+			throw new Error('Sorry an error occured, please retry.');
+		}
+		/** @type {Array<T_place>} */
+		const place = await STORE.mapmgmt.getPlaceById(boat.place_id);
+		if (!place) {
+			console.error('[ERROR] Place is empty');
+			throw new Error('Sorry an error occured, please retry.');
+		}
+		/** @type {Array<T_harbour>} */
+		const harbour = await STORE.harbourmgmt.getHarbourById(absence.harbour_id);
+		if (!harbour) {
+			console.error('[ERROR] Harbour is empty');
+			throw new Error('Sorry an error occured, please retry.');
+		}
+
+		//prepare mail
+		var subject = "Modification d'absence";
+		var body = `
+					<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
+					<h2>Bonjour</h2>
+					<p style="font-size: 12pt">Le bateau  place n° "${place.number}" vous signale son absence du "${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}" au lieu de l'absence initiale du "${FM.formatDate(absence.previous_date_start)} au ${FM.formatDate(absence.previous_date_end)}".</p>
+					<p style="font-size: 10pt">À bientôt,</p>
+					<p style="font-size: 10pt">L'équipe Nauticspot</p>
+					`;
+
+		//send mail
+		await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
 
 		res.end(JSON.stringify({
 			success: true,
 			payload: result,
 			error: null,
-		}))
+		}));
 	} catch (error) {
-		console.log('[ERRROR]', error.message);
+		console.log('[ERRROR]', error);
 		res.writeHead(500)
 		res.end(JSON.stringify({
 			success: false,

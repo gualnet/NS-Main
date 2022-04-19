@@ -532,6 +532,11 @@
         newStartDate: startDate,
         newEndDate: endDate,
       }
+
+      if (!confirm('Confirmez vous la modification')) {
+        return;
+      }
+
       const resp = await fetch('/api/absence', {
         method: 'PUT',
         body: JSON.stringify(payload),
@@ -581,6 +586,17 @@
   let G_absenceId;
   const clickOnOngoingAbsenceItem = (ev) => {
     const absenceItemEl = ev.target.closest('.absence-item');
+
+    // check if less than 48H before start date
+    const dateStr = absenceItemEl.querySelector('#start-info')?.querySelector('.date-label').innerHTML;
+    const date = new Date(dateStr.split('/').reverse().join('-')).getTime() / 1000;
+    const now = parseInt(Date.now() / 1000);
+    const deltaTime = (date - now) / 3600;
+    if (deltaTime < 48) { // en dessous de 48H
+      showAlertToast(`Les absences dont le départ est à moins de 48H ne sont pas modifiables.
+      Veuillez entrer en contact avec la capitainerie.`);
+      return;
+    }
 
     let absenceId;
     for (let str of absenceItemEl.classList.values()) {
