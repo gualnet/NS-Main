@@ -191,6 +191,8 @@ async function createAbsenceHandler(req, res) {
 	const newAbsence = { ...req.post };
 
 	newAbsence.date = Date.now();
+	newAbsence.previous_date_start = null;
+	newAbsence.previous_date_end = null;
 	newAbsence.created_at = Date.now();
 	newAbsence.updated_at = newAbsence.created_at;
 
@@ -240,9 +242,10 @@ const updateAbsenceHandler = async (req, res) => {
 	try {
 		const absence = await getAbsenceById(absence_id);
 		const newAbsence = { ...absence };
-		const oldStartDate = absence.date_start;
-		const oldEndDate = absence.date_end;
+
+		newAbsence.previous_date_start = newAbsence.date_start;
 		newAbsence.date_start = newStartDate;
+		newAbsence.previous_date_end = newAbsence.date_end;
 		newAbsence.date_end = newEndDate;
 		newAbsence.updated_at = Date.now();
 		const [result] = await updateAbsence(newAbsence);
@@ -270,7 +273,7 @@ const updateAbsenceHandler = async (req, res) => {
 		var body = `
 					<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
 					<h2>Bonjour</h2>
-					<p style="font-size: 12pt">Le bateau  place n° "${place.number}" vous signale son absence du "${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}" au lieu de l'absence initiale du "${FM.formatDate(oldStartDate)} au ${FM.formatDate(oldEndDate)}".</p>
+					<p style="font-size: 12pt">Le bateau  place n° "${place.number}" vous signale son absence du "${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}" au lieu de l'absence initiale du "${FM.formatDate(absence.previous_date_start)} au ${FM.formatDate(absence.previous_date_end)}".</p>
 					<p style="font-size: 10pt">À bientôt,</p>
 					<p style="font-size: 10pt">L'équipe Nauticspot</p>
 					`;
