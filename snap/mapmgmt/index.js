@@ -646,6 +646,105 @@ exports.handler = async (req, res) => {
     return;
 }
 
+/* ------------ */
+/* API NEXT GEN */
+/* ------------ */
+// Api a little more restful
+async function getPlaceWhere(whereOptions) {
+    return new Promise(resolve => {
+        STORE.db.linkdb.Find(_placeCol, whereOptions, null, function (_err, _data) {
+            if (_data)
+                resolve(_data);
+            else
+                resolve(_err);
+        });
+    });
+}
+async function deletePlaceWhere(whereOptions) {
+    return new Promise(resolve => {
+        STORE.db.linkdb.Delete(_placeCol, whereOptions, null, function (_err, _data) {
+            if (_data)
+                resolve(_data);
+            else
+                resolve(_err);
+        });
+    });
+}
+async function getZoneWhere(whereOptions) {
+    return new Promise(resolve => {
+        STORE.db.linkdb.Find(_zoneCol, whereOptions, null, function (_err, _data) {
+            if (_data)
+                resolve(_data);
+            else
+                resolve(_err);
+        });
+    });
+}
+async function deleteZoneWhere(whereOptions) {
+    return new Promise(resolve => {
+        STORE.db.linkdb.Delete(_zoneCol, whereOptions, null, function (_err, _data) {
+            if (_data)
+                resolve(_data);
+            else
+                resolve(_err);
+        });
+    });
+}
+const getPlaceByHandler = async (req, res) => {
+    try {
+        const where = { ...req.get };
+        const places = await getPlaceWhere(where);
+        res.end(JSON.stringify({ success: true, payload: places }));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        res.writeHead(500);
+        res.end('ERROR');
+    }
+};
+const removePlaceByHandler = async (req, res) => {
+    try {
+        const where = { ...req.get };
+        if (Object.entries(where).length === 0) { // isObjectEmpty
+            throw new Error('Where options empty');
+        }
+        const places = await deletePlaceWhere(where);
+        res.end(JSON.stringify({ success: true, payload: places }));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        res.writeHead(500);
+        res.end('ERROR');
+    }
+};
+
+const getZoneByHandler = async (req, res) => {
+    try {
+        const where = { ...req.get };
+        const places = await getZoneWhere(where);
+        res.end(JSON.stringify({ success: true, payload: places }));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        res.writeHead(500);
+        res.end('ERROR');
+    }
+};
+const deleteZoneByHandler = async (req, res) => {
+    try {
+        const where = { ...req.get };
+        if (Object.entries(where).length === 0) { // isObjectEmpty
+            throw new Error('Where options empty');
+        }
+        const places = await deleteZoneWhere(where);
+        res.end(JSON.stringify({ success: true, payload: places }));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        res.writeHead(500);
+        res.end('ERROR');
+    }
+};
+/* ------------ */
+/* API NEXT END */
+/* ------------ */
+
 exports.router =
     [
         {
@@ -697,8 +796,33 @@ exports.router =
             route: "/api/sensor/get",
             handler: getBoueeByHarbourIdHandler,
             method: "POST"
-        }
+        },
 
+        // * API NEXT GEN
+        {
+            on: false,
+            route: "/api/dev/places",
+            handler: getPlaceByHandler,
+            method: "GET"
+        },
+        {
+            on: false,
+            route: "/api/dev/places",
+            handler: removePlaceByHandler,
+            method: "DELETE"
+        },
+        {
+            on: false,
+            route: "/api/dev/zones",
+            handler: getZoneByHandler,
+            method: "GET"
+        },
+        {
+            on: false,
+            route: "/api/dev/zones",
+            handler: deleteZoneByHandler,
+            method: "DELETE"
+        }
     ];
 
 exports.plugin =
