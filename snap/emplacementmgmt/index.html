@@ -334,7 +334,7 @@
             var form = document.getElementById("addPontonsCsv");
             var formData = new FormData(form);
             formData.append("type", 'csvzone');
-            formData.append("harbour_id", document.getElementById("harbourid_place").value);
+            formData.append("harbour_id", document.getElementById("harbourid_ponton").value);
             fetch(window.location.href,
                 {
                     method: "post",
