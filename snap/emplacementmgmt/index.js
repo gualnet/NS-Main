@@ -318,6 +318,7 @@ exports.plugin =
     title: "Gestion des emplacements",
     desc: "",
     handler: async (req, res) => {
+        console.log('EMPLACEMENT HANDLER');
         var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
@@ -332,7 +333,7 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
-            console.log(req.post);
+            console.log('POST', req.post);
             if (req.post.id) {
                 if (req.post.type == "zone") {
                     delete req.post.type;
@@ -350,18 +351,15 @@ exports.plugin =
                 res.end();
                 return;
             } else if (req.post.type == 'csvzone') {
-
                 var zonesArray = req.post.csvzones.replace(/\n/g, '').split('\r');
-                console.log(zonesArray);
-                var zonesJson = {};
+                console.log('[INFO] Creating new zones', zonesArray);
                 let createdZones = [];
-                for (var i = 1; i < zonesArray.length - 1; i++) {
+                for (var i = 1; i < zonesArray.length; i++) {
                     let zoneInfo = zonesArray[i].split(';');
                     let doublonZone = await getPontonZoneByHarbourIdAndName(req.post.harbour_id, zoneInfo[0]);
                     if (!doublonZone[0]) {
                         let id = makeid(10) + '_' + Date.now();
                         let zone = { id: id, harbour_id: req.post.harbour_id, name: zoneInfo[0], type: "ponton" }
-                        //consolezonesArray
                         createdZones.push(await createZone(zone));
                     }
                 }
@@ -370,10 +368,9 @@ exports.plugin =
             } else if (req.post.type == 'csvplace') {
 
                 var placesArray = req.post.csvplaces.replace(/\n/g, '').split('\r');
-                console.log(placesArray);
-                var placesJson = {};
+                console.log('[INFO] Creating new places', zonesArray);
                 let createdPlaces = [];
-                for (var i = 1; i < placesArray.length - 1; i++) {
+                for (var i = 1; i < placesArray.length; i++) {
                     let placeInfo = placesArray[i].split(';');
                     //place = (place[])
                     let id = makeid(10) + '_' + Date.now();
@@ -393,8 +390,6 @@ exports.plugin =
                         let place = { id: doublonPlace[0].id, harbour_id: req.post.harbour_id, number: placeInfo[0], captorNumber: placeInfo[1], pontonId: ponton, longueur: placeInfo[2], largeur: placeInfo[3], tirantDeau: placeInfo[4], type: placeInfo[5], nbTramesDepart: placeInfo[6], nbTramesRetour: placeInfo[7], maxSeuil: placeInfo[8], minSeuil: placeInfo[9], occupation: "occupied" };
                         await updatePlace(place);
                     }
-
-
                 }
                 UTILS.httpUtil.dataSuccess(req, res, "success", "places added", createdPlaces, '1.0');
                 return;
