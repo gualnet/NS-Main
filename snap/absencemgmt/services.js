@@ -35,7 +35,7 @@ module.exports = {
 /* -------- */
 
 /**
- * @typedef T_arbourWhereOptions
+ * @typedef T_harbourWhereOptions
  * @property {string} [apiErpToken]
  * @property {string} [erp_link]
  * @property {string} [id]
@@ -45,7 +45,7 @@ module.exports = {
  */
 /**
  * 
- * @param {T_arbourWhereOptions} whereOptions 
+ * @param {T_harbourWhereOptions} whereOptions 
  * @returns 
  */
 async function getHarbourWhere(whereOptions) {
