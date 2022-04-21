@@ -1,6 +1,6 @@
 require('../../types');
 const FM = require('../lib-js/formatDate');
-const validityHelpers = require('./services');
+const services = require('./services');
 
 
 //gestions des absences
@@ -302,33 +302,21 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 	console.log('HEAD', req.headers);
 	console.log('get', req.get);
 
-	const apiAuthToken = req.headers['x-auth-token'];
-	console.log('apiAuthToken', apiAuthToken)
 	try {
-		const isTokeValid = await validityHelpers.checkApiErpTokenValidity(apiAuthToken);
-		if (!isTokeValid) {
+		// validate api token
+		const apiAuthToken = req.headers['x-auth-token'];
+		const [harbour] = await services.getHarbourWhere({ apiErpToken: apiAuthToken });
+		if (!harbour) {
 			res.writeHead(401);
 			res.end(JSON.stringify({
 				success: false,
 				status: 'error',
 				message: 'Invalid api token.',
 			}));
+			return;
 		}
-	} catch (error) {
-		console.error('[ERROR]', error);
-		res.writeHead(500);
-		res.end(JSON.stringify({
-			success: false,
-			status: 'error',
-			message: 'Internal Error.',
-		}));
-		return;
-	}
 
-	const harbourId = req.get.harbour_id;
-	console.log('harbourId', harbourId)
-	try {
-		const absences = await getAbsencesByHarbourId(harbourId);
+		const absences = await getAbsencesByHarbourId(harbour.id);
 		// ASBSENCE SORT BY DATE
 		absences.sort((A, B) => A.date > B.date ? 1 : -1);
 
@@ -376,12 +364,17 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		}
 		res.end(JSON.stringify({ results: eprAbsences }));
 	} catch (error) {
-		console.error('[ERROR]', error.message);
-		UTILS.httpUtil.dataError(req, res, "Error", error.message, "500", "1.0");
-		return;
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			success: false,
+			status: 'error',
+			message: 'Internal Error.',
+		}));
 	}
 
-};
+	return;
+}
 
 exports.router = [
 	{
