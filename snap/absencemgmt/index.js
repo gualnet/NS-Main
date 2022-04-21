@@ -1,5 +1,6 @@
 require('../../types');
 const FM = require('../lib-js/formatDate');
+const validityHelpers = require('./services');
 
 
 //gestions des absences
@@ -73,6 +74,7 @@ async function getAbsence() {
 		});
 	});
 }
+
 /**
  * 
  * @param {string} _harbour_id 
@@ -163,13 +165,6 @@ async function getBoatById(boatId) {
 	});
 };
 
-
-exports.handler = async (req, res) => {
-	var _absence = await getAbsence();
-	res.end(JSON.stringify(_absence));
-	return;
-}
-
 //handler that return absence by user id and harbour id
 async function getAbsenceHandler(req, res) {
 	try {
@@ -236,7 +231,7 @@ async function createAbsenceHandler(req, res) {
 	}
 }
 
-const updateAbsenceHandler = async (req, res) => {
+async function updateAbsenceHandler(req, res) {
 	const { absence_id, newStartDate, newEndDate } = req.body;
 
 	try {
@@ -302,8 +297,36 @@ const updateAbsenceHandler = async (req, res) => {
  * @param {*} res 
  * @returns {Promis<{results: Array<T_absence>}>}
  */
-const getAbsenceOfTheDayByHarbour = async (req, res) => {
-	const { harbourId } = req.param;
+async function getAbsenceOfTheDayByHarbour(req, res) {
+	console.log('CALL getAbsenceOfTheDayByHarbour');
+	console.log('HEAD', req.headers);
+	console.log('get', req.get);
+
+	const apiAuthToken = req.headers['x-auth-token'];
+	console.log('apiAuthToken', apiAuthToken)
+	try {
+		const isTokeValid = await validityHelpers.checkApiErpTokenValidity(apiAuthToken);
+		if (!isTokeValid) {
+			res.writeHead(401);
+			res.end(JSON.stringify({
+				success: false,
+				status: 'error',
+				message: 'Invalid api token.',
+			}));
+		}
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			success: false,
+			status: 'error',
+			message: 'Internal Error.',
+		}));
+		return;
+	}
+
+	const harbourId = req.get.harbour_id;
+	console.log('harbourId', harbourId)
 	try {
 		const absences = await getAbsencesByHarbourId(harbourId);
 		// ASBSENCE SORT BY DATE
@@ -381,11 +404,18 @@ exports.router = [
 	},
 	{
 		on: true,
-		route: "/api-erp/harbour/:harbourId/absence",
+		// route: "/api-erp/harbour/:harbourId/absence",
+		route: "/api-erp/absence",
 		handler: getAbsenceOfTheDayByHarbour,
 		method: "GET",
 	},
 ];
+
+exports.handler = async (req, res) => {
+	var _absence = await getAbsence();
+	res.end(JSON.stringify(_absence));
+	return;
+}
 
 exports.plugin =
 {
