@@ -28,24 +28,24 @@
 
 /**
  * @typedef T_absence
- * @property {string} id
- * @property {string} user_id
- * @property {string} boat_id
- * @property {EpochTimeStamp} previous_date_start
+ * @property {EpochTimeStamp} created_at
+ * @property {EpochTimeStamp} date_end
  * @property {EpochTimeStamp} date_start
  * @property {EpochTimeStamp} previous_date_end
- * @property {EpochTimeStamp} date_end
- * @property {string} token
+ * @property {EpochTimeStamp} previous_date_start
+ * @property {EpochTimeStamp} updated_at
+ * @property {number} date - Deprec, use created_at instead
+ * @property {string} boat_id
  * @property {string} harbour_id
- * @property {number} date - OLD created_at DATE TO BE REMOVED
- * @property {number} created_at - timestamp
- * @property {number} updated_at - timestamp
+ * @property {string} id
+ * @property {string} token
+ * @property {string} user_id
  */
 
 /**
  * @typedef T_boat
  * @property {string} id
- * @property {string} place
+ * @property {string} place_id
  * @property {string} name
  * @property {string} immatriculation
  * @property {string} is_resident
@@ -153,4 +153,13 @@
  * @property {string} wlink_vone_user
  * @property {string} wlink_vtwo_apikey
  * @property {string} wlink_vtwo_secretkey
+ */
+
+/**
+ * @typedef T_zone
+ * @property {string} id
+ * @property {string} harbour_id
+ * @property {string} name
+ * @property {string} type
+ * 
  */
