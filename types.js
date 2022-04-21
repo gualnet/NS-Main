@@ -123,3 +123,33 @@
  * @property {string} samedi
  * @property {string} dimanche
  */
+
+/**
+ * @typedef T_entity
+ * @property {boolean} absence_module
+ * @property {string} address
+ * @property {boolean} challenges_module
+ * @property {string} cloudinary_img_public_id
+ * @property {EpochTimeStamp} date
+ * @property {string} email
+ * @property {string} id
+ * @property {string} img
+ * @property {string} logo
+ * @property {string} mailjet_apikey
+ * @property {string} mailjet_secretkey
+ * @property {string} maree_id
+ * @property {boolean} marees_module
+ * @property {string} name
+ * @property {string} onesignal_app_id
+ * @property {string} onesignal_auth
+ * @property {string} phone
+ * @property {string} prefix
+ * @property {string} prefixed_phone
+ * @property {boolean} security_module
+ * @property {string} weather_api
+ * @property {string} wlink_vone_pw
+ * @property {string} wlink_vone_token
+ * @property {string} wlink_vone_user
+ * @property {string} wlink_vtwo_apikey
+ * @property {string} wlink_vtwo_secretkey
+ */
