@@ -1,16 +1,20 @@
 
 console.log('LOAD SERVICES FILE')
+const crypto = require('crypto')
+
 
 /**
- * Not implemented
+ * 
+ * @param {number} tokenLength - token length in bits
  */
-function generateApiErpToken() {
-  throw new Error('generateApiErpToken NOT IMPLEMENTED');
+function generateApiErpToken(tokenLength = 32) {
+	console.log('CALL generateApiErpToken');
+	const token = crypto.randomBytes(tokenLength).toString('hex');
+	console.log('New token', token)
 };
 
 module.exports = {
-  // generateApiErpToken,
-  getHarbourWhere,
+	getHarbourWhere,
 };
 
 
