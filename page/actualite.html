@@ -28,10 +28,6 @@
                         <div class="col">
                             <h5 id="title"></h5>
                         </div>
-                        <div class="col-auto">
-                            <p class="small text-secondary" id="date"></p>
-                        </div>
-
                     </div>
                     <div class="row pt-2">
                         <div class="col">
@@ -59,13 +55,10 @@
             fetch("/api/new/" + url.get('id')).then(response => response.json()).then(_data => {
                 console.log(_data);
                 var actualite = _data.data;
-                var date = new Date(actualite.date);
-                var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
                 //if (communication.category == "news")
                 //    communication.category = "Article";
                 document.getElementById("title").innerHTML = '<strong>' + actualite.title + '</strong>';
                 //document.getElementById("category").innerHTML = communication.category;
-                document.getElementById("date").innerHTML = dateFormated;
                 document.getElementById("content").innerHTML = actualite.content;
                 document.getElementById("description").innerHTML = actualite.description;
                 if (actualite.img) {
