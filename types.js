@@ -165,8 +165,11 @@
 
 /**
  * @typedef T_incident
- * @property {EpochTimeStamp} date - diff between date and date start ?
- * @property {EpochTimeStamp} date_start - diff between date and date start ?
+ * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} created_at
+ * @property {EpochTimeStamp} updated_at
+ * @property {EpochTimeStamp} date_start
+ * @property {EpochTimeStamp} date_end
  * @property {string} description
  * @property {string} harbour_id
  * @property {string} id
