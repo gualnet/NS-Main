@@ -1,10 +1,8 @@
 
-console.log('LOAD SERVICES FILE')
 const crypto = require('crypto')
 
-
 /**
- * 
+ * Not shared yet
  * @param {number} tokenLength - token length in bits
  */
 function generateApiErpToken(tokenLength = 32) {
