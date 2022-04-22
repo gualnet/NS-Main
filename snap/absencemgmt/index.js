@@ -335,6 +335,7 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		let startIdx = undefined;
 		let endIdx = undefined;
 		for (let i = 0; i < absences.length; i++) {
+			if (startIdx === undefined && absences[i].updated_at >= startLimit) {
 				startIdx = i;
 			}
 			if (endIdx === undefined && absences[i].updated_at > endLimit) {
@@ -351,17 +352,40 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		absencesOfTheDay.map(absence => boatsPromises.push(getBoatById(absence.boat_id)));
 		/**@type {Array<T_boat>} */
 		const boats = await Promise.all(boatsPromises);
+		
+		const placesPromises = [];
+		boats.map(boat => placesPromises.push(STORE.mapmgmt.getPlaceById(boat.place_id)));
+		/** @type {Array<T_place>} */
+		const places = await Promise.all(placesPromises);
+
+		const zonesPromises = [];
+		places.map(place => zonesPromises.push(STORE.mapmgmt.getZoneById(place.pontonId)));
+		/** @type {Array<T_zone>} */
+		const zones = await Promise.all(zonesPromises);
 
 		const eprAbsences = [];
 		for (let i = 0; i < boats.length; i++) {
 			eprAbsences.push({
+				id: absencesOfTheDay[i].id,
 				startDate: absencesOfTheDay[i].date_start,
 				endDate: absencesOfTheDay[i].date_end,
+				prevStartDate: absencesOfTheDay[i].previous_date_start || null,
+				prevEndDate: absencesOfTheDay[i].previous_date_end || null,
+				createdAt: absencesOfTheDay[i].created_at,
+				updatedAt: absencesOfTheDay[i].updated_at,
 				boatName: boats[i].name || 'unknown',
-				place: boats[i].place || 'unknown',
+				place: places[i].number || 'unknown',
+				ponton: zones[i].name || 'unknow',
 			});
 		}
-		res.end(JSON.stringify({ results: eprAbsences }));
+
+		res.end(JSON.stringify({
+			success: true,
+			payload: {
+				length: eprAbsences.length,
+				absences: eprAbsences,
+			}
+		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
 		res.writeHead(500);
@@ -396,8 +420,7 @@ exports.router = [
 	},
 	{
 		on: true,
-		// route: "/api-erp/harbour/:harbourId/absence",
-		route: "/api-erp/absence",
+		route: "/api-erp/absences",
 		handler: getAbsenceOfTheDayByHarbour,
 		method: "GET",
 	},
