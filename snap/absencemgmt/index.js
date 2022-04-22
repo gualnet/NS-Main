@@ -335,10 +335,9 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		let startIdx = undefined;
 		let endIdx = undefined;
 		for (let i = 0; i < absences.length; i++) {
-			if (startIdx === undefined && absences[i].date >= startLimit) {
 				startIdx = i;
 			}
-			if (endIdx === undefined && absences[i].date > endLimit) {
+			if (endIdx === undefined && absences[i].updated_at > endLimit) {
 				endIdx = i;
 				break;
 			}
