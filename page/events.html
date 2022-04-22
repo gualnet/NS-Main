@@ -148,9 +148,6 @@
             + '<div class="col">'
             + '<h6 style="font-size: 13px;" ><strong>__TITLE__</strong></h6>'
             + '</div>'
-            + '<div class="col-auto">'
-            + '<div class="small text-muted">__DATE__</div>'
-            + '</div>'
             + '</div>'
             + '<div class="row">'
             + '<div class="col">'
@@ -166,9 +163,10 @@
         fetch("/api/events/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
             var events = _data.data.sort(dynamicSort("date")).reverse();
             for (var i = 0; i < 10; i++) {
-                var date = new Date(events[i].date);
-                var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
-                var rowCurrent = eventRow.replace("__ID__", events[i].id).replace("__TITLE__", events[i].title).replace("__DATE__", dateFormated).replace("__CONTENT__", events[i].description);
+                var rowCurrent = eventRow
+                    .replace("__ID__", events[i].id)
+                    .replace("__TITLE__", events[i].title)
+                    .replace("__CONTENT__", events[i].description);
 
                 if (events[i].img) {
                     rowCurrent = rowCurrent.replace('__IMG__', events[i].img)
