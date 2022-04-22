@@ -161,5 +161,17 @@
  * @property {string} harbour_id
  * @property {string} name
  * @property {string} type
- * 
+ */
+
+/**
+ * @typedef T_incident
+ * @property {EpochTimeStamp} date - diff between date and date start ?
+ * @property {EpochTimeStamp} date_start - diff between date and date start ?
+ * @property {string} description
+ * @property {string} harbour_id
+ * @property {string} id
+ * @property {string} status
+ * @property {string} token
+ * @property {string} user_id
+ * @property {string} zone
  */
