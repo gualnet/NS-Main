@@ -64,11 +64,6 @@
             + '<div class="text-muted small">__DESCRIPTION__</div>'
             + '</div>'
             + '</div>'
-            + '<div class="row">'
-            + '<div class="col-auto text-muted small">'
-            + '__DATE__'
-            + '</div>'
-            + '</div>'
             + '</div>'
             + '</div>'
             + '</div>'
@@ -79,10 +74,11 @@
             console.log(_data);
             var articles = _data.data.sort(dynamicSort("date")).reverse();
             for (var i = 0; i < 10; i++) {
-                var date = new Date(articles[i].date);
-                var dateFormated = [("0" + (date.getDate() + 1)).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours() + 1)).slice(-2), ("0" + (date.getMinutes() + 1)).slice(-2), ("0" + (date.getSeconds() + 1)).slice(-2)].join(':');
-                var rowCurrent = newsRow.replace("__ID__", articles[i].id).replace("__TITLE__", articles[i].title).replace("__DATE__", dateFormated).replace("__DESCRIPTION__", articles[i].description);
-                //
+                var rowCurrent = newsRow
+                    .replace("__ID__", articles[i].id)
+                    .replace("__TITLE__", articles[i].title)
+                    .replace("__DESCRIPTION__", articles[i].description);
+
                 if (articles[i].img) {
                     rowCurrent = rowCurrent.replace('__IMG__', articles[i].img)
                 } else {
