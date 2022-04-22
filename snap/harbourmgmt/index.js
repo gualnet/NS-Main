@@ -1,3 +1,4 @@
+require('../../types');
 var _harbourCol = "harbour";
 var _userCol = "user";
 
@@ -143,6 +144,9 @@ async function getHarbourById(_id) {
     });
 }
 
+/**
+ * @returns {Promise<Array<T_harbour>>}
+ */
 async function getHarbour() {
     return new Promise(resolve => {
         STORE.db.linkdb.Find(_harbourCol, {}, null, function (_err, _data) {
@@ -224,6 +228,51 @@ async function getHarbourInfos(req, res) {
     UTILS.httpUtil.dataSuccess(req, res, "success, harbour infos", harbours, "1.0");
     return;
 }
+
+/* ---------------------- */
+/* NEW API HANDLERS START */
+/* ---------------------- */
+/**
+ * 
+ * @param {T_harbour} options - Object containing valide filds from harbour type
+ * @returns {Promise<Array<T_harbour>>}
+ */
+async function getHarboursWhere(options) {
+    return new Promise(resolve => {
+        STORE.db.linkdb.Find(_harbourCol, options, null, function (_err, _data) {
+            if (_data)
+                resolve(_data);
+            else
+                resolve(_err);
+        });
+    });
+};
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function getHarboursHandler(req, res) {
+    console.log('get', req.get);
+    const ret = await getHarboursWhere(req.get);
+    ret.map(harbour => {
+        console.log('=> harbour', harbour)
+        if (!harbour.apiErpToken) {
+            harbour.apiErpToken = 'No Token';
+        } else {
+            harbour.apiErpToken = `${harbour.apiErpToken.slice(0,5)}******`
+        }
+    })
+
+    res.end(JSON.stringify({ success: true, payload: {
+        length: ret.length,
+        result: ret
+    } }))
+};
+/* -------------------- */
+/* NEW API HANDLERS END */
+/* -------------------- */
+
 exports.store = 
 {
     getHarbourByEntityId: getHarbourByEntityId,
@@ -244,6 +293,27 @@ exports.router =
             handler: getHarbourInfos,
             method: "GET",
         },
+
+        // * API NEXT GEN
+        {
+            on: true,
+            route: "/api/dev/harbours",
+            handler: getHarboursHandler,
+            method: "GET"
+        },
+        {
+            on: false,
+            route: "/api/dev/zones",
+            // handler: updateHarboursWhere,
+            method: "PUT"
+        },
+        {
+            on: false,
+            route: "/api/dev/harbours",
+            // handler: deleteHarboursWhere,
+            method: "DELETE"
+        },
+        
     ];
 
 
@@ -311,6 +381,13 @@ exports.plugin =
                 req.post.prefixed_phone_urgency = req.post.prefix + req.post.phone_urgency.replace(/^0/, '');
             }
 
+            if (req.post.api_erp_token) {
+                req.post.apiErpToken = req.post.api_erp_token;
+                delete req.post.api_erp_token;
+            } else {
+                req.post.apiErpToken = undefined;
+            }
+
             if (req.post.id) {
                 //update harbour
                 var currentHarbour = await getHarbourById(req.post.id);
@@ -361,6 +438,7 @@ exports.plugin =
                     }
 
                     if (!req.post.email_concierge) req.post.email_concierge = '';
+                    console.log('UPDATE POST', req.post);
                     var harbour = await updateHarbour(req.post);
                     if (harbour[0].id) {
                         UTILS.httpUtil.dataSuccess(req, res, "Success", "Port mis à jour", "1.0");
@@ -422,6 +500,7 @@ exports.plugin =
         else {
             var _indexHtml;
             var _harbourHtml;
+            /**@type {Array<T_harbour} */
             var _harbours = [];
 
             if (_role == "user") {
@@ -445,6 +524,10 @@ exports.plugin =
                     const date = splited[0]; 
                     const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
                     formatedDate = `${date} à ${heure}`;
+                }
+                let secretApiErpToken = 'No token';
+                if (_harbours[i].apiErpToken) {
+                    secretApiErpToken = _harbours[i].apiErpToken?.slice(0,5) + '******';
                 }
                 _harbourGen += _harbourHtml.replace(/__ID__/g, _harbours[i].id)
                     .replace(/__FORMID__/g, _harbours[i].id.replace(/\./g, "_"))
@@ -485,6 +568,7 @@ exports.plugin =
                     .replace(/__HARBOUR_MAP__/g, _harbours[i].harbour_map)
                     .replace(/__PRICE_LIST__/g, _harbours[i].price_list)
                     .replace(/__ERP_LINK__/g, _harbours[i].erp_link)
+                    .replace(/__API_ERP_TOKEN__/g, secretApiErpToken)
                     .replace(/__PJ__/g, _harbours[i].pj)
                     .replace(/__PJ_NAME__/g, _harbours[i].pj_name)
                     .replace(/__EMAIL_CONCIERGE__/g, _harbours[i].email_concierge)

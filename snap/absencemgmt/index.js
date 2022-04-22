@@ -1,5 +1,6 @@
 require('../../types');
 const FM = require('../lib-js/formatDate');
+const services = require('./services');
 
 
 //gestions des absences
@@ -73,6 +74,7 @@ async function getAbsence() {
 		});
 	});
 }
+
 /**
  * 
  * @param {string} _harbour_id 
@@ -163,13 +165,6 @@ async function getBoatById(boatId) {
 	});
 };
 
-
-exports.handler = async (req, res) => {
-	var _absence = await getAbsence();
-	res.end(JSON.stringify(_absence));
-	return;
-}
-
 //handler that return absence by user id and harbour id
 async function getAbsenceHandler(req, res) {
 	try {
@@ -236,7 +231,7 @@ async function createAbsenceHandler(req, res) {
 	}
 }
 
-const updateAbsenceHandler = async (req, res) => {
+async function updateAbsenceHandler(req, res) {
 	const { absence_id, newStartDate, newEndDate } = req.body;
 
 	try {
@@ -302,10 +297,26 @@ const updateAbsenceHandler = async (req, res) => {
  * @param {*} res 
  * @returns {Promis<{results: Array<T_absence>}>}
  */
-const getAbsenceOfTheDayByHarbour = async (req, res) => {
-	const { harbourId } = req.param;
+async function getAbsenceOfTheDayByHarbour(req, res) {
+	console.log('CALL getAbsenceOfTheDayByHarbour');
+	console.log('HEAD', req.headers);
+	console.log('get', req.get);
+
 	try {
-		const absences = await getAbsencesByHarbourId(harbourId);
+		// validate api token
+		const apiAuthToken = req.headers['x-auth-token'];
+		const [harbour] = await services.getHarbourWhere({ apiErpToken: apiAuthToken });
+		if (!harbour) {
+			res.writeHead(401);
+			res.end(JSON.stringify({
+				success: false,
+				status: 'error',
+				message: 'Invalid api token.',
+			}));
+			return;
+		}
+
+		const absences = await getAbsencesByHarbourId(harbour.id);
 		// ASBSENCE SORT BY DATE
 		absences.sort((A, B) => A.date > B.date ? 1 : -1);
 
@@ -324,10 +335,10 @@ const getAbsenceOfTheDayByHarbour = async (req, res) => {
 		let startIdx = undefined;
 		let endIdx = undefined;
 		for (let i = 0; i < absences.length; i++) {
-			if (startIdx === undefined && absences[i].date >= startLimit) {
+			if (startIdx === undefined && absences[i].updated_at >= startLimit) {
 				startIdx = i;
 			}
-			if (endIdx === undefined && absences[i].date > endLimit) {
+			if (endIdx === undefined && absences[i].updated_at > endLimit) {
 				endIdx = i;
 				break;
 			}
@@ -341,24 +352,52 @@ const getAbsenceOfTheDayByHarbour = async (req, res) => {
 		absencesOfTheDay.map(absence => boatsPromises.push(getBoatById(absence.boat_id)));
 		/**@type {Array<T_boat>} */
 		const boats = await Promise.all(boatsPromises);
+		
+		const placesPromises = [];
+		boats.map(boat => placesPromises.push(STORE.mapmgmt.getPlaceById(boat.place_id)));
+		/** @type {Array<T_place>} */
+		const places = await Promise.all(placesPromises);
+
+		const zonesPromises = [];
+		places.map(place => zonesPromises.push(STORE.mapmgmt.getZoneById(place.pontonId)));
+		/** @type {Array<T_zone>} */
+		const zones = await Promise.all(zonesPromises);
 
 		const eprAbsences = [];
 		for (let i = 0; i < boats.length; i++) {
 			eprAbsences.push({
+				id: absencesOfTheDay[i].id,
 				startDate: absencesOfTheDay[i].date_start,
 				endDate: absencesOfTheDay[i].date_end,
+				prevStartDate: absencesOfTheDay[i].previous_date_start || null,
+				prevEndDate: absencesOfTheDay[i].previous_date_end || null,
+				createdAt: absencesOfTheDay[i].created_at,
+				updatedAt: absencesOfTheDay[i].updated_at,
 				boatName: boats[i].name || 'unknown',
-				place: boats[i].place || 'unknown',
+				place: places[i].number || 'unknown',
+				ponton: zones[i].name || 'unknow',
 			});
 		}
-		res.end(JSON.stringify({ results: eprAbsences }));
+
+		res.end(JSON.stringify({
+			success: true,
+			payload: {
+				length: eprAbsences.length,
+				absences: eprAbsences,
+			}
+		}));
 	} catch (error) {
-		console.error('[ERROR]', error.message);
-		UTILS.httpUtil.dataError(req, res, "Error", error.message, "500", "1.0");
-		return;
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			success: false,
+			status: 'error',
+			message: 'Internal Error.',
+		}));
 	}
 
-};
+	return;
+}
 
 exports.router = [
 	{
@@ -381,11 +420,17 @@ exports.router = [
 	},
 	{
 		on: true,
-		route: "/api-erp/harbour/:harbourId/absence",
+		route: "/api-erp/absences",
 		handler: getAbsenceOfTheDayByHarbour,
 		method: "GET",
 	},
 ];
+
+exports.handler = async (req, res) => {
+	var _absence = await getAbsence();
+	res.end(JSON.stringify(_absence));
+	return;
+}
 
 exports.plugin =
 {
