@@ -307,8 +307,8 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 
 		// validate api token
 		const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
-		console.log('ERP User: ', erpUsers.name);
-		console.log('harbourId', harbourId);
+		console.log('>\tERP User: ', erpUsers.name);
+		console.log('>\tHarbour ID: ', harbourId);
 		if (!erpUsers) {
 			res.writeHead(403);
 			res.end(JSON.stringify({ message: 'Invalid api token.' }));
