@@ -299,9 +299,7 @@ async function updateAbsenceHandler(req, res) {
  * @returns {Promis<{results: Array<T_absence>}>}
  */
 async function getAbsenceOfTheDayByHarbour(req, res) {
-	console.log('CALL getAbsenceOfTheDayByHarbour');
-	console.log('HEAD', req.headers);
-	console.log('get', req.get);
+	console.log('[INFO] /api-erp/absences')
 
 	try {
 		const apiAuthToken = req.headers['x-auth-token'];
@@ -309,6 +307,8 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 
 		// validate api token
 		const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
+		console.log('ERP User: ', erpUsers.name);
+		console.log('harbourId', harbourId);
 		if (!erpUsers) {
 			res.writeHead(403);
 			res.end(JSON.stringify({ message: 'Invalid api token.' }));
@@ -322,7 +322,7 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		}
 
 		// Get the absences
-		const absences = await getAbsencesByHarbourId(harbour.id);
+		const absences = await getAbsencesByHarbourId(harbourId);
 		// ASBSENCE SORT BY DATE
 		absences.sort((A, B) => A.date > B.date ? 1 : -1);
 
