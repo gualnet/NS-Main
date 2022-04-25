@@ -1,8 +1,10 @@
 <!doctype html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="Content-Language" content="en" />
     <meta name="msapplication-TileColor" content="#2d89ef">
@@ -17,9 +19,11 @@
     <link href="/assets/quill/quill.snow.css" rel="stylesheet">
     <script src="/assets/quill/quill.js"></script> <!-- Create the editor container -->
 
-    <title>Vendors management</title>
+    <!-- <title>Vendors management</title> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
     <script src="/fortpress_admin_assets/assets/js/require.min.js"></script>
     <script>
         requirejs.config({
@@ -36,7 +40,9 @@
     <script src="/fortpress_admin_assets/assets/plugins/input-mask/plugin.js"></script>
     <!-- Datatables Plugin -->
     <script src="/fortpress_admin_assets/assets/plugins/datatables/plugin.js"></script>
+
 </head>
+
 <body class="">
     <div class="page">
         <div class="flex-fill">
@@ -47,14 +53,15 @@
                             <div class="card-header">
                                 <h3 class="card-title">Gestion sécurité/maintenance</h3>
                             </div>
+
+                            <div class="container-fluid p-5">
+                                __HARBOUR_ID_INPUT__
+                                Gestion types d'incident:
+                                <div id="incidentTypeContainer"></div>
+                            </div>
+
                             <div class="card-body">
                                 <div id="harbourError"></div>
-                                <!--<form method="POST" enctype="multipart/form-data" id="createForm">
-                                    <div class="row">
-                                         __HARBOUR_ID_INPUT__
-                                    </div>
-                                </form>-->
-
                                 <div class="table-responsive">
                                     <table class="table card-table table-vcenter text-nowrap datatable dataTable">
                                         <thead>
@@ -70,10 +77,10 @@
                                                 <th>Date de clôture</th>
                                                 <th></th>
                                             </tr>
-                                        <thead>
-                                        <tbody id="result">
-                                            __SECURITES__
-                                        </tbody>
+                                            <thead>
+                                            <tbody id="result">
+                                                __SECURITES__
+                                            </tbody>
                                     </table>
                                 </div>
 
@@ -85,16 +92,17 @@
         </div>
     </div>
     <script>
-        var quill = new Quill('#editor', {
-            placeholder: 'Entrez le texte...',
-            theme: 'snow'
-        });
-        var quillDescription = new Quill('#description', {
-            placeholder: 'Entrez le texte...',
-            theme: 'snow'
-        });
+        // var quill = new Quill('#editor', {
+        //     placeholder: 'Entrez le texte...',
+        //     theme: 'snow'
+        // });
+        // var quillDescription = new Quill('#description', {
+        //     placeholder: 'Entrez le texte...',
+        //     theme: 'snow'
+        // });
 
-        window.onload = function () {
+        let G_selectedHarbourId;
+        window.onload = async function () {
             require(['datatables', 'jquery'], function (datatable, $) {
                 $('.datatable').DataTable(
                     {
@@ -107,43 +115,143 @@
                         "info": false,
                     });
             });
+
+
+            await displayIncidentOptions();
+            attachEventHandlers();
+            dropdownJSInit();
+            if (G_selectedHarbourId) {
+                const harbourIfo = await getHarbourInfos(G_selectedHarbourId);
+                updateIncidentTypeInputs(harbourIfo.incidentTypes)
+            }
         }
-        function sendCreateForm() {
-            var form = document.getElementById("createForm");
-            var formData = new FormData(form);
-            formData.append("content", document.getElementById('editor').firstChild.innerHTML);
-            formData.append("description", document.getElementById('description').firstChild.innerHTML);
 
-            fetch(form.action,
-                {
-                    method: form.method,
-                    body: formData
-                }).then(response => response.json()).then(_data => {
-                    console.log(_data);
-                    if (_data.success) {
-                        location.reload();
-                    }
-                    else {
-                        if (document.getElementById("error"))
-                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
+        function attachEventHandlers() {
+            const incidentTypeContainerEl = document.querySelector('#incidentTypeContainer');
+            const inputElems = incidentTypeContainerEl.querySelectorAll('input');
+            inputElems.forEach(input => input.addEventListener("change", inputOnChangeHandler));
 
-                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
-                        alert(_data.message);
-                    }
-                }).catch((error) => {
-                    if (document.getElementById("error"))
-                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
+            // on change selection du port
+            const harboursDropdownEl = document.querySelector('#harbourDropdown');
+            G_selectedHarbourId = harboursDropdownEl.value;
+            harboursDropdownEl.addEventListener('change', harbourSelectorOnChangeHandler)
+        };
 
-                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
-                });
+        async function inputOnChangeHandler(ev) {
+            sendEventTypesStatusUpdate();
+        };
+
+        async function harbourSelectorOnChangeHandler(ev) {
+            const harbourId = ev.target.value;
+            G_selectedHarbourId = harbourId;
+            // update type incidents
+            const harbourInfo = await getHarbourInfos(G_selectedHarbourId)
+            updateIncidentTypeInputs(harbourInfo.incidentTypes);
         }
+
+        function updateIncidentTypeInputs(incidentTypesObj = {}) {
+            const incidentTypeContainerEl = document.querySelector('#incidentTypeContainer');
+            const inputElems = incidentTypeContainerEl.querySelectorAll('input');
+            inputElems.forEach(input => {
+                if (incidentTypesObj[`${input.name}`]) {
+                    input.checked = true;
+                } else {
+                    input.checked = false;
+                }
+            });
+        }
+
+        function dropdownJSInit() {
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl)
+            });
+        }
+
+        async function getHarbourInfos(harbourId) {
+            try {
+                const response = await fetch(`/api/next/harbours?id=${harbourId}`, { method: 'GET' });
+                const [harbourInfo] = await response.json();
+                return(harbourInfo);
+            } catch (error) {
+                console.error(error);
+                alert('Une erreur est survenue lors de la récuperation des informations !')
+            }
+        }
+
+        async function sendEventTypesStatusUpdate() {
+            const incidentTypeContainerEl = document.querySelector('#incidentTypeContainer');
+            const inputElems = incidentTypeContainerEl.querySelectorAll('input');
+            const inputsObj = {incidentTypes: {}};
+            inputElems.forEach(input => {
+                inputsObj.incidentTypes[`${input.name}`] = input.checked;
+            });
+            const response = await fetch(`/api/next/harbours?id=${G_selectedHarbourId}`, {
+                method: 'PUT',
+                body: JSON.stringify(inputsObj)
+            });
+        };
+
+        async function displayIncidentOptions() {
+            const resp = await fetch('/api/next/incident-types', { method: 'GET' });
+            const decodedResp = await resp.json();
+            const incidentTypesObj = decodedResp.payload.incidentTypes;
+
+            const incidentTypes = Object.entries(incidentTypesObj);
+            incidentTypes.sort((a, b) => a[1] > b[1] ? 1 : -1);
+
+            const divList = [];
+            incidentTypes.map(([Key, Value]) => {
+                console.log(`Key:[${Key}] - Value:[${Value}]`);
+                divList.push(`
+                    <div class="incidentTypeCard">
+                        <input type="checkbox" name="${Key}" id="radio-${Key}">
+                        <label for="radio-${Key}">
+                            ${Value}
+                        </label>
+                    </div>
+                `);
+            });
+
+            const incidentTypeContainerEl = document.querySelector('#incidentTypeContainer');
+            incidentTypeContainerEl.innerHTML = divList.join('\n');
+
+        };
+
+        // function sendCreateForm() {
+        //     var form = document.getElementById("createForm");
+        //     var formData = new FormData(form);
+        //     formData.append("content", document.getElementById('editor').firstChild.innerHTML);
+        //     formData.append("description", document.getElementById('description').firstChild.innerHTML);
+
+        //     fetch(form.action,
+        //         {
+        //             method: form.method,
+        //             body: formData
+        //         }).then(response => response.json()).then(_data => {
+        //             console.log(_data);
+        //             if (_data.success) {
+        //                 location.reload();
+        //             }
+        //             else {
+        //                 if (document.getElementById("error"))
+        //                     document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+        //                 document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+        //                 alert(_data.message);
+        //             }
+        //         }).catch((error) => {
+        //             if (document.getElementById("error"))
+        //                 document.getElementById("harbourError").removeChild(document.getElementById("error"));
+
+        //             document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+        //         });
+        // }
 
         function sendUpdateForm(id) {
             var form = document.getElementById(id);
             console.log(form);
             var formData = new FormData(form);
-
-
             fetch(form.action,
                 {
                     method: form.method,
@@ -169,4 +277,19 @@
         }
     </script>
 </body>
+
 </html>
+
+<style>
+    #incidentTypeContainer {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 10px;
+        padding: 10px;
+    }
+
+    .incidentTypeCard {
+        width: 30%;
+        height: 24px;
+    }
+</style>
