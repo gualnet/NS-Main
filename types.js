@@ -73,6 +73,7 @@
  * @property {number} status
  */
 
+const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 /**
  * @typedef T_harbour
  * @property {EpochTimeStamp} date
@@ -123,6 +124,7 @@
  * @property {string} vendredi
  * @property {string} samedi
  * @property {string} dimanche
+ * @property {Array<incidentsTypes>} incidentTypesEnabled - contain the incident types that are enabled for the harbour users - see ENUM.incidentTypes
  */
 
 /**
