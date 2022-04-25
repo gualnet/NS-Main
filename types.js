@@ -77,7 +77,6 @@
  * @typedef T_harbour
  * @property {EpochTimeStamp} date
  * @property {string} address
- * @property {string} apiErpToken
  * @property {string} buoy
  * @property {string} cloudinary_harbour_map_public_id
  * @property {string} cloudinary_img_public_id
