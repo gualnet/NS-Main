@@ -1,25 +1,4 @@
 
-const crypto = require('crypto')
-
-/**
- * Not shared yet
- * @param {number} tokenLength - token length in bits
- */
-function generateApiErpToken(tokenLength = 32) {
-	console.log('CALL generateApiErpToken');
-	const token = crypto.randomBytes(tokenLength).toString('hex');
-	console.log('New token', token)
-};
-
-module.exports = {
-	getHarbourWhere,
-};
-
-
-/* -------- */
-/* SERVICES */
-/* -------- */
-
 /**
  * @typedef T_harbourWhereOptions
  * @property {string} [apiErpToken]
@@ -43,4 +22,9 @@ async function getHarbourWhere(whereOptions) {
 				resolve(err);
 		});
 	});
+};
+
+
+module.exports = {
+	getHarbourWhere,
 };

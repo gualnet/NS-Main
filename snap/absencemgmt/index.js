@@ -1,6 +1,7 @@
 require('../../types');
 const FM = require('../lib-js/formatDate');
 const services = require('./services');
+const erpUsersServices = require('../erpUsers/services');
 
 
 //gestions des absences
@@ -298,25 +299,30 @@ async function updateAbsenceHandler(req, res) {
  * @returns {Promis<{results: Array<T_absence>}>}
  */
 async function getAbsenceOfTheDayByHarbour(req, res) {
-	console.log('CALL getAbsenceOfTheDayByHarbour');
-	console.log('HEAD', req.headers);
-	console.log('get', req.get);
+	console.log('[INFO] /api-erp/absences')
 
 	try {
-		// validate api token
 		const apiAuthToken = req.headers['x-auth-token'];
-		const [harbour] = await services.getHarbourWhere({ apiErpToken: apiAuthToken });
-		if (!harbour) {
-			res.writeHead(401);
-			res.end(JSON.stringify({
-				success: false,
-				status: 'error',
-				message: 'Invalid api token.',
-			}));
+		const harbourId = req.get["harbour-id"];
+
+		// validate api token
+		const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
+		console.log('>\tERP User: ', erpUsers.name);
+		console.log('>\tHarbour ID: ', harbourId);
+		if (!erpUsers) {
+			res.writeHead(403);
+			res.end(JSON.stringify({ message: 'Invalid api token.' }));
+			return;
+		}
+		// verify if ERP can access to the requested port absences
+		if (!harbourId || !erpUsers.harbourIds.includes(harbourId)) {
+			res.writeHead(403);
+			res.end(JSON.stringify({ message: 'Invalid \'harbour-id\' parameter.' }));
 			return;
 		}
 
-		const absences = await getAbsencesByHarbourId(harbour.id);
+		// Get the absences
+		const absences = await getAbsencesByHarbourId(harbourId);
 		// ASBSENCE SORT BY DATE
 		absences.sort((A, B) => A.date > B.date ? 1 : -1);
 
@@ -348,6 +354,7 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 
 		const absencesOfTheDay = absences.slice(startIdx || 0, endIdx + 1 || 0);
 
+		// Get the needed data and Construct the response object
 		const boatsPromises = [];
 		absencesOfTheDay.map(absence => boatsPromises.push(getBoatById(absence.boat_id)));
 		/**@type {Array<T_boat>} */
@@ -395,8 +402,6 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 			message: 'Internal Error.',
 		}));
 	}
-
-	return;
 }
 
 exports.router = [

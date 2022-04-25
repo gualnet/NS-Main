@@ -77,7 +77,6 @@
  * @typedef T_harbour
  * @property {EpochTimeStamp} date
  * @property {string} address
- * @property {string} apiErpToken
  * @property {string} buoy
  * @property {string} cloudinary_harbour_map_public_id
  * @property {string} cloudinary_img_public_id
@@ -162,4 +161,15 @@
  * @property {string} name
  * @property {string} type
  * 
+ */
+
+/**
+ * @typedef T_erpUser
+ * @property {string} id
+ * @property {string} name
+ * @property {Array<T_harbour>} harbourIds - list of harbour id, port access list
+ * @property {string} apiToken
+ * @property {string} role - ERP
+ * @property {EpochTimeStamp} created_at 
+ * @property {EpochTimeStamp} updated_at 
  */

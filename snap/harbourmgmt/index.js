@@ -568,7 +568,6 @@ exports.plugin =
                     .replace(/__HARBOUR_MAP__/g, _harbours[i].harbour_map)
                     .replace(/__PRICE_LIST__/g, _harbours[i].price_list)
                     .replace(/__ERP_LINK__/g, _harbours[i].erp_link)
-                    .replace(/__API_ERP_TOKEN__/g, secretApiErpToken)
                     .replace(/__PJ__/g, _harbours[i].pj)
                     .replace(/__PJ_NAME__/g, _harbours[i].pj_name)
                     .replace(/__EMAIL_CONCIERGE__/g, _harbours[i].email_concierge)
