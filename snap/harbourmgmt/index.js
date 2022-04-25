@@ -201,6 +201,18 @@ async function updateHarbour(_obj) {
         });
     });
 }
+
+async function updateHarbourWhere(updateFieds, whereFields) {
+    return new Promise(resolve => {
+        STORE.db.linkdb.Update(_harbourCol, whereFields, updateFieds, function (_err, _data) {
+            if (_data)
+                resolve(_data);
+            else
+                resolve(_err);
+        });
+    });
+}
+
 async function getAdminById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
@@ -254,67 +266,78 @@ async function getHarboursWhere(options) {
  */
 async function getHarboursHandler(req, res) {
     console.log('get', req.get);
-    const ret = await getHarboursWhere(req.get);
-    ret.map(harbour => {
-        console.log('=> harbour', harbour)
-        if (!harbour.apiErpToken) {
-            harbour.apiErpToken = 'No Token';
-        } else {
-            harbour.apiErpToken = `${harbour.apiErpToken.slice(0,5)}******`
-        }
-    })
-
-    res.end(JSON.stringify({ success: true, payload: {
-        length: ret.length,
-        result: ret
-    } }))
+    try {
+        const ret = await getHarboursWhere(req.get);
+        res.end(JSON.stringify(ret));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        res.writeHead(500);
+        res.end({ message: 'Internal error.' });
+    }
 };
+
+async function updateHarboursHandler(req, res) {
+    console.log('req.get', req.get);
+    console.log('req.body', req.body);
+    try {
+        const harbourUpdate = { ...req.body };
+        const whereFields = { ...req.get };
+
+        // TODO - check for requested fields
+
+        const result = await updateHarbourWhere(harbourUpdate, whereFields);
+        res.end(JSON.stringify({ results: result }));
+    } catch (error) {
+        console.error('ERROR', error)
+        res.writeHeader(500);
+        res.end({ message: 'Internal error.' });
+    }
+}
 /* -------------------- */
 /* NEW API HANDLERS END */
 /* -------------------- */
 
-exports.store = 
+exports.store =
 {
     getHarbourByEntityId: getHarbourByEntityId,
     getHarbourById: getHarbourById,
     getHarbour: getHarbour
 }
-exports.router =
-    [
-        {
-            on: true,
-            route: "/api/getharbours/:entity_id",
-            handler: getHarbourList,
-            method: "GET",
-        },
-        {
-            on: true,
-            route: "/api/getharbour/:harbourid",
-            handler: getHarbourInfos,
-            method: "GET",
-        },
+exports.router = [
+    {
+        on: true,
+        route: "/api/getharbours/:entity_id",
+        handler: getHarbourList,
+        method: "GET",
+    },
+    {
+        on: true,
+        route: "/api/getharbour/:harbourid",
+        handler: getHarbourInfos,
+        method: "GET",
+    },
 
-        // * API NEXT GEN
-        {
-            on: true,
-            route: "/api/dev/harbours",
-            handler: getHarboursHandler,
-            method: "GET"
-        },
-        {
-            on: false,
-            route: "/api/dev/zones",
-            // handler: updateHarboursWhere,
-            method: "PUT"
-        },
-        {
-            on: false,
-            route: "/api/dev/harbours",
-            // handler: deleteHarboursWhere,
-            method: "DELETE"
-        },
-        
-    ];
+    // * API NEXT GEN
+    {
+        on: true,
+        route: "/api/next/harbours",
+        handler: getHarboursHandler,
+        method: "GET"
+    },
+    {
+        on: true,
+        route: "/api/next/harbours",
+        handler: updateHarboursHandler,
+        method: "PUT"
+    },
+    {
+        on: false,
+        route: "/api/next/harbours",
+        // handler: deleteHarboursWhere,
+        method: "DELETE"
+    },
+
+];
 
 
 exports.handler = async (req, res) => {
@@ -521,14 +544,10 @@ exports.plugin =
                 if (_harbours[i].date) {
                     const dateObj = new Date(_harbours[i].date)
                     const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
-                    const date = splited[0]; 
+                    const date = splited[0];
                     const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
                     formatedDate = `${date} à ${heure}`;
-                }
-                let secretApiErpToken = 'No token';
-                if (_harbours[i].apiErpToken) {
-                    secretApiErpToken = _harbours[i].apiErpToken?.slice(0,5) + '******';
-                }
+                } secretApiErpToken = _harbours[i].apiErpToken?.slice(0, 5) + '******';
                 _harbourGen += _harbourHtml.replace(/__ID__/g, _harbours[i].id)
                     .replace(/__FORMID__/g, _harbours[i].id.replace(/\./g, "_"))
                     .replace(/__ID_ENTITY__/g, _harbours[i].id_entity)
@@ -568,7 +587,6 @@ exports.plugin =
                     .replace(/__HARBOUR_MAP__/g, _harbours[i].harbour_map)
                     .replace(/__PRICE_LIST__/g, _harbours[i].price_list)
                     .replace(/__ERP_LINK__/g, _harbours[i].erp_link)
-                    .replace(/__API_ERP_TOKEN__/g, secretApiErpToken)
                     .replace(/__PJ__/g, _harbours[i].pj)
                     .replace(/__PJ_NAME__/g, _harbours[i].pj_name)
                     .replace(/__EMAIL_CONCIERGE__/g, _harbours[i].email_concierge)
