@@ -34,13 +34,19 @@ exports.router = [
 	},
 ];
 
+exports.store = {
+	getErpUserWhere: services.getErpUserWhere,
+	createErpUser: services.createErpUser,
+	updateErpUserWhere: services.updateErpUserWhere,
+	deleteErpUserWhere: services.deleteErpUserWhere,
+}
+
 exports.handler = async (req, res) => {
 	res.end('Nothing to see here.');
 };
 
 
 async function getErpUserHandler(req, res) {
-	console.log('CALL getErpUserHandler');
 	const searchOpt = { ...req.get };
 	try {
 		

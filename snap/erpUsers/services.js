@@ -9,7 +9,6 @@ const ERP_USER_TABLE = 'erp-users';
  * @returns {string} token
  */
 function generateApiErpToken(tokenLength = 32) {
-	console.log('CALL generateApiErpToken');
 	const token = crypto.randomBytes(tokenLength).toString('hex');
 	console.log('New token', token)
 	return (token);
@@ -56,9 +55,6 @@ async function createErpUser(erpUser) {
  * @returns {Promise<Array<T_erpUser>>}
  */
 async function updateErpUserWhere(updateFields, whereOptions) {
-	console.log('001')
-	console.log('STORE.db', STORE)
-	console.log('002')
 	return new Promise((resolve, reject) => {
 		STORE.db.linkdb.Update(ERP_USER_TABLE, whereOptions, updateFields, function (_err, _data) {
 			if (_data)
@@ -92,6 +88,3 @@ module.exports = {
 	deleteErpUserWhere,
 	generateApiErpToken,
 }
-
-
-
