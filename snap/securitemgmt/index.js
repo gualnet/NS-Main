@@ -1,3 +1,6 @@
+require('../../types');
+const ENUM = require('../lib-js/enums');
+
 var _securiteCol = "securite";
 var _userCol = "user";
 
@@ -135,6 +138,7 @@ async function createSecuriteHandler(req, res) {
     req.post;
     req.post.date_start = Date.now();
     req.post.date = Date.now();
+    req.post.created_at = req.post.date;
     req.post.status = "open";
     var securite = await createSecurite(req.post);
     if (securite.id) {
@@ -164,6 +168,65 @@ async function createSecuriteHandler(req, res) {
     }
 }
 
+/* ------------ */
+/* API NEXT GEN */
+/* ------------ */
+/**
+ * 
+ * @param {T_incident} whereOptions
+ * @returns {Promise<Array<T_incident>>}
+ */
+async function getIncidentsWhere(whereOptions) {
+    return new Promise(resolve => {
+        STORE.db.linkdb.Find(_securiteCol, whereOptions, null, function (_err, _data) {
+            if (_data)
+                resolve(_data);
+            else
+                resolve(_err);
+        });
+    });
+}
+async function getIncidentsHandler(req, res) {
+    try {
+        const where = { ...req.get };
+        const places = await getIncidentsWhere(where);
+        res.end(JSON.stringify({ success: true, payload: places }));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        res.writeHead(500);
+        res.end('ERROR');
+    }
+};
+
+async function createIncidentHandler(req, res) {};
+
+async function updateIncidentHandler(req, res) {};
+
+async function deleteIncidentHandler(req, res) {};
+
+async function getIncidentTypesHandler(req, res) {
+    try {
+        res.end(JSON.stringify({
+            success: 'success',
+            payload: {
+                incidentTypes: ENUM.incidentsTypes,
+            }
+        }));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        res.writeHead(500);
+        res.end(JSON.stringify({
+            status: 'error',
+            error: {
+                message: 'Unexpected internal error',
+            }
+        }))
+    }
+    
+};
+
+
+
 exports.router =
     [
         {
@@ -176,6 +239,38 @@ exports.router =
             handler: createSecuriteHandler,
             method: "POST",
         },
+
+        // * API NEXT GEN
+        {
+            on: true,
+            route: "/api/next/incidents",
+            handler: getIncidentsHandler,
+            method: "GET",
+        },
+        {
+            on: true,
+            route: "/api/next/incidents",
+            handler: (req, res) => { res.end('Not implemented')},
+            method: "POST",
+        },
+        {
+            on: true,
+            route: "/api/next/incidents",
+            handler: (req, res) => { res.end('Not implemented')},
+            method: "PUT",
+        },
+        {
+            on: true,
+            route: "/api/next/incidents",
+            handler: (req, res) => { res.end('Not implemented')},
+            method: "DELETE",
+        },
+        {
+            on: true,
+            route: "/api/next/incident-types",
+            handler: getIncidentTypesHandler,
+            method: "GET",
+        }
     ];
 
 exports.plugin =
@@ -183,7 +278,7 @@ exports.plugin =
     title: "Gestion Sécurité/Maintenance",
     desc: "",
     handler: async (req, res) => {
-
+        console.log('req.userCookie',req.userCookie);
         var admin = await getAdminById(req.userCookie.data.id);
         var _role = admin.role;
         var _type = admin.data.type;
@@ -206,7 +301,6 @@ exports.plugin =
                 _FD.date_start = Date.parse(_FD.date_start);
                 _FD.date_end = Date.parse(_FD.date_end);
                 var securite = await updateSecurite(_FD);
-                console.log(securite);
                 if (securite[0].id) {
                     UTILS.httpUtil.dataSuccess(req, res, "Success", "Securite mis à jour", "1.0");
                     return;
@@ -224,7 +318,6 @@ exports.plugin =
                         _FD.date_start = Date.parse(_FD.date_start);
                         _FD.date_end = Date.parse(_FD.date_end);
                         var securite = await createSecurite(_FD);
-                        console.log(securite);
                         if (securite.id) {
                             UTILS.httpUtil.dataSuccess(req, res, "Success", "Securite créé", "1.0");
                             return;
@@ -247,8 +340,11 @@ exports.plugin =
                     _Securites = _Securites.concat(await getSecuritesByHarbourId(_harbour_id[i]));
                 }
             }
-            else if (_role == "admin")
+            else if (_role == "admin") {
                 _Securites = await getSecurite();
+            }
+
+        
 
 
             var _securiteGen = "";
@@ -296,7 +392,7 @@ exports.plugin =
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Séléction du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
+                    + '<select class="form-control" style="width:250px;" name="harbour_id" id="harbourDropdown">';
                 for (var i = 0; i < _harbour_id.length; i++) {
                     userHarbours[i] = await STORE.harbourmgmt.getHarbourById(_harbour_id[i]);
                     harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
@@ -306,10 +402,8 @@ exports.plugin =
                 harbour_select = '<div class="col-12">'
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Séléction du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
+                    + '<select class="form-control" style="width:250px;" name="harbour_id" id="harbourDropdown">';
                 userHarbours = await STORE.harbourmgmt.getHarbour();
-                console.log("ici");
-                console.log(userHarbours);
                 for (var i = 0; i < userHarbours.length; i++) {
                     harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
                 }

@@ -801,25 +801,25 @@ exports.router =
         // * API NEXT GEN
         {
             on: false,
-            route: "/api/dev/places",
+            route: "/api/next/places",
             handler: getPlaceByHandler,
             method: "GET"
         },
         {
             on: false,
-            route: "/api/dev/places",
+            route: "/api/next/places",
             handler: removePlaceByHandler,
             method: "DELETE"
         },
         {
             on: false,
-            route: "/api/dev/zones",
+            route: "/api/next/zones",
             handler: getZoneByHandler,
             method: "GET"
         },
         {
             on: false,
-            route: "/api/dev/zones",
+            route: "/api/next/zones",
             handler: deleteZoneByHandler,
             method: "DELETE"
         }
