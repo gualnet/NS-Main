@@ -4,7 +4,7 @@
  * @readonly
  * @enum {string}
  */
-export const incidentsTypes = {
+const incidentsTypes = {
   // existing
   INCENDIE: 'Incendie',
   PB_ELECTRIQUE: 'Problème électrique',
@@ -31,4 +31,8 @@ export const incidentsTypes = {
   PROPRETE_TERRESTRE: 'Propreté terrestre',
   SECURITE: 'Sûreté/Sécurité',
   ANIMATIONS: 'Animations',
+};
+
+module.exports = {
+  incidentsTypes,
 };
