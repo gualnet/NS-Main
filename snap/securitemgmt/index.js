@@ -167,7 +167,12 @@ async function createSecuriteHandler(req, res) {
             `;
 
         const sendTo = harbour.email_incident || harbour.email;
-        await STORE.mailjet.sendHTML(harbour.id_entity, sendTo, harbour.name, subject, body);
+        if (sendTo.includes(';')) {
+            const emails = sendTo.split(';');
+            emails.map(async (email) => await STORE.mailjet.sendHTML(harbour.id_entity, email, harbour.name, subject, body))
+        } else {
+            await STORE.mailjet.sendHTML(harbour.id_entity, sendTo, harbour.name, subject, body);
+        }
         UTILS.httpUtil.dataSuccess(req, res, "success", securite, "1.0");
         return;
     }
