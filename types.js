@@ -178,6 +178,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} token
  * @property {string} user_id
  * @property {string} zone
+ * @property {string} type - one of incidentsTypes enum
  */
 
 /**
