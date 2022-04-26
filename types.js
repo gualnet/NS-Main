@@ -76,15 +76,18 @@
 const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 /**
  * @typedef T_harbour
+ * @property {Array<incidentsTypes>} incidentTypesEnabled - contain the incident types that are enabled for the harbour users - see ENUM.incidentTypes
  * @property {EpochTimeStamp} date
  * @property {string} address
  * @property {string} buoy
  * @property {string} cloudinary_harbour_map_public_id
  * @property {string} cloudinary_img_public_id
  * @property {string} cloudinary_price_list_public_id
+ * @property {string} dimanche
  * @property {string} electricity
  * @property {string} email
  * @property {string} email_concierge
+ * @property {string} email_incident
  * @property {string} erp_link
  * @property {string} fuel
  * @property {string} harbour_map
@@ -92,9 +95,13 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} id
  * @property {string} id_entity
  * @property {string} img
+ * @property {string} jeudi
  * @property {string} latitude
  * @property {string} longitude
  * @property {string} longmax
+ * @property {string} lundi
+ * @property {string} mardi
+ * @property {string} mercredi
  * @property {string} name
  * @property {string} phone
  * @property {string} phone_urgency
@@ -105,25 +112,19 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} prefixed_phone
  * @property {string} prefixed_phone_urgency
  * @property {string} price_list
+ * @property {string} samedi
  * @property {string} sanitary_code
  * @property {string} showers
  * @property {string} technical_informations
  * @property {string} tirantdeau
  * @property {string} toilet
  * @property {string} touristwebsite
+ * @property {string} vendredi
  * @property {string} vfh
  * @property {string} water
  * @property {string} website
  * @property {string} wifi
  * @property {string} wifi_pass
- * @property {string} lundi
- * @property {string} mardi
- * @property {string} mercredi
- * @property {string} jeudi
- * @property {string} vendredi
- * @property {string} samedi
- * @property {string} dimanche
- * @property {Array<incidentsTypes>} incidentTypesEnabled - contain the incident types that are enabled for the harbour users - see ENUM.incidentTypes
  */
 
 /**

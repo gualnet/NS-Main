@@ -21,7 +21,6 @@ function addProtocolToUrl(url) {
 
 
 function verifyPostReq(_req, _res) {
-    console.log(_req.post)
     if (!_req.post.user_id || _req.post.user_id.length < 1) {
         UTILS.httpUtil.dataError(_req, _res, "Error", "Utilisateur requis", "100", "1.0");
         return false;
@@ -120,9 +119,8 @@ exports.handler = async (req, res) => {
 }
 
 async function getSecuriteHandler(req, res) {
-    console.log(req.get.user_id);
+    console.info('[INFO] Handler -> /api/get/securite')
     var _data = await getSecuriteByUserIdAndHarbourId(req.get.user_id, req.get.harbour_id);
-    console.log(_data);
     if (_data[0]) {
         UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
         return;
@@ -134,6 +132,7 @@ async function getSecuriteHandler(req, res) {
 }
 
 async function createSecuriteHandler(req, res) {
+    console.info('[INFO] Handler -> /api/create/securite')
     verifyPostReq(req);
     req.post;
     req.post.date_start = Date.now();
@@ -141,10 +140,12 @@ async function createSecuriteHandler(req, res) {
     req.post.created_at = req.post.date;
     req.post.status = "open";
     var securite = await createSecurite(req.post);
+    console.log('securite', securite);
     if (securite.id) {
         var date = new Date(securite.date_start);
         var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
 
+        /**@type {import('../../types').T_harbour} */
         var harbour = await STORE.harbourmgmt.getHarbourById(securite.harbour_id);
         var user = await STORE.usermgmt.getUserById(securite.user_id);
         var zone = await STORE.mapmgmt.getZoneById(securite.zone);
@@ -153,12 +154,25 @@ async function createSecuriteHandler(req, res) {
         var body = `
             <img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
             <h1>Bonjour</h1>
-            <p style="font-size: 12pt">Le plaisancier <B>${user.first_name || ''} ${user.last_name || ''}</B>, a déclaré un incident <B>${securite.description || 'pas de description'}</B> dans la zone <B>${zone.name || 'zone non renseignée'}</></p>
-            <p style="font-size: 10pt">À bientôt,</p>
-            <p style="font-size: 10pt">L'équipe Nauticspot</p>
+            <p style="font-size: 13pt">
+                Le plaisancier <B>${user.first_name || ''} ${user.last_name || ''}</B> a déclaré un incident.
+            </p>
+            <p style="font-size: 13pt">
+                Type: ${ENUM.incidentsTypes[`${securite.type}`]|| 'type d\'incident non renseignée'}.</BR>
+                Zone: ${zone.name || 'zone non renseignée'}.</BR>
+                Description: ${securite.description || 'pas de description'}.
+            </p>
+            <p style="font-size: 12pt">À bientôt,</p>
+            <p style="font-size: 12pt">L'équipe Nauticspot</p>
             `;
 
-        await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
+        const sendTo = harbour.email_incident || harbour.email;
+        if (sendTo.includes(';')) {
+            const emails = sendTo.split(';');
+            emails.map(async (email) => await STORE.mailjet.sendHTML(harbour.id_entity, email, harbour.name, subject, body))
+        } else {
+            await STORE.mailjet.sendHTML(harbour.id_entity, sendTo, harbour.name, subject, body);
+        }
         UTILS.httpUtil.dataSuccess(req, res, "success", securite, "1.0");
         return;
     }
