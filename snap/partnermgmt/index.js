@@ -4,7 +4,7 @@ var _userCol = "user";
 var path_to_img = path.resolve(path.join(CONF.instance.static, "img", "partner"));
 
 function makeid(length) {
-	var result = '';s
+	var result = '';
 	var characters = 'abcdefghijklmnopqrstuvwxyz';
 	var charactersLength = characters.length;
 	for (var i = 0; i < length; i++) {
@@ -261,148 +261,152 @@ async function getPartnersByHarbourHandler(_req, _res) {
 
 async function getActivePartnersCategoryHandler(_req, _res) {
 
-    var partners = await getPartnerByHarbourId(_req.param.harbour_id);
-    // console.log('Partners00', partners)
-    var data = { activeCategories: {}, activeSubCategories: {} };
-    for (var i = 0; i < partners.length; i++) {
-        switch (partners[i].category) {
-            case "harbourlife":
-                data.activeCategories.harbourlife = true;
-                break;
-            case "experience":
-                data.activeCategories.experience = true;
-                break;
-            case "discovery":
-                data.activeCategories.discovery = true;
-                break;
-        }
+	var partners = await getPartnerByHarbourId(_req.param.harbour_id);
+	// console.log('Partners00', partners)
+	var data = { activeCategories: {}, activeSubCategories: {} };
+	for (var i = 0; i < partners.length; i++) {
+		switch (partners[i].category) {
+			case "harbourlife":
+				data.activeCategories.harbourlife = true;
+				break;
+			case "experience":
+				data.activeCategories.experience = true;
+				break;
+			case "discovery":
+				data.activeCategories.discovery = true;
+				break;
+		}
 
 
-        //discovery 	divertissement
-        switch (partners[i].subcategory) {
-            case "sos":
-                data.activeSubCategories.sos = true;
-                break;
-            case "maintenance":
-                data.activeSubCategories.maintenance = true;
-                break;
-            case "accastillage":
-                data.activeSubCategories.accastillage = true;
-                break;
-            case "sante":
-                data.activeSubCategories.sante = true;
-                break;
-            case "annonce":
-                data.activeSubCategories.annonce = true;
-                break;
-            case "laverie":
-                data.activeSubCategories.laverie = true;
-                break;
-            case "transport":
-                data.activeSubCategories.transport = true;
-                break;
-            case "boutique":
-                data.activeSubCategories.boutique = true;
-                break;
-            case "alimentation":
-                data.activeSubCategories.alimentation = true;
-                break;
-            case "vieportautre":
-                data.activeSubCategories.vieportautre = true;
-                break;
-            case "nautic":
-                data.activeSubCategories.nautic = true;
-                break;
-            case "terrestres":
-                data.activeSubCategories.terrestres = true;
-                break;
-            case "association":
-                data.activeSubCategories.association = true;
-                break;
-            case "equipbourse":
-                data.activeSubCategories.equipbourse = true;
-                break;
-            case "experienceautre":
-                data.activeSubCategories.experienceautre = true;
-                break;
-            case "restaurant":
-                data.activeSubCategories.restaurant = true;
-                break;
-            case "bar":
-                data.activeSubCategories.bar = true;
-                break;
-            case "culture":
-                data.activeSubCategories.culture = true;
-                break;
-            case "divertissement":
-                data.activeSubCategories.divertissement = true;
-                break;
-            case "detente":
-                data.activeSubCategories.detente = true;
-                break;
-            case "decouverteautre":
-                data.activeSubCategories.decouverteautre = true;
-                break;
-            case 'vendeurLoueurHl':
-                data.activeSubCategories.vendeurLoueurHl = true;
-                break;
-            case 'vendeurLoueurEx':
-                data.activeSubCategories.vendeurLoueurEx = true;
-                break;
-        }
-    }
-    UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
-    return;
+		//discovery 	divertissement
+		switch (partners[i].subcategory) {
+			case "sos":
+				data.activeSubCategories.sos = true;
+				break;
+			case "maintenance":
+				data.activeSubCategories.maintenance = true;
+				break;
+			case "accastillage":
+				data.activeSubCategories.accastillage = true;
+				break;
+			case "sante":
+				data.activeSubCategories.sante = true;
+				break;
+			case "annonce":
+				data.activeSubCategories.annonce = true;
+				break;
+			case "laverie":
+				data.activeSubCategories.laverie = true;
+				break;
+			case "transport":
+				data.activeSubCategories.transport = true;
+				break;
+			case "boutique":
+				data.activeSubCategories.boutique = true;
+				break;
+			case "alimentation":
+				data.activeSubCategories.alimentation = true;
+				break;
+			case "vieportautre":
+				data.activeSubCategories.vieportautre = true;
+				break;
+			case "nautic":
+				data.activeSubCategories.nautic = true;
+				break;
+			case "terrestres":
+				data.activeSubCategories.terrestres = true;
+				break;
+			case "association":
+				data.activeSubCategories.association = true;
+				break;
+			case "equipbourse":
+				data.activeSubCategories.equipbourse = true;
+				break;
+			case "experienceautre":
+				data.activeSubCategories.experienceautre = true;
+				break;
+			case "restaurant":
+				data.activeSubCategories.restaurant = true;
+				break;
+			case "bar":
+				data.activeSubCategories.bar = true;
+				break;
+			case "culture":
+				data.activeSubCategories.culture = true;
+				break;
+			case "divertissement":
+				data.activeSubCategories.divertissement = true;
+				break;
+			case "detente":
+				data.activeSubCategories.detente = true;
+				break;
+			case "decouverteautre":
+				data.activeSubCategories.decouverteautre = true;
+				break;
+			case 'vendeurLoueurHl':
+				data.activeSubCategories.vendeurLoueurHl = true;
+				break;
+			case 'vendeurLoueurEx':
+				data.activeSubCategories.vendeurLoueurEx = true;
+				break;
+		}
+	}
+	UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
+	return;
 }
 
-/**
- * ! fonction destinee à remplacer toutes les references a la subcategory Bricolage par accastillage - ONE SHOT
- * @param {*} req 
- * @param {*} res 
- */
-const updateBricoToAccastillage = async (req, res) => {
-	const partnersList = await getPartnerBySearch({ subcategory: 'bricolage' });
+exports.router = [
+	{
+		on: true,
+		route: "/api/getpartner/:id",
+		handler: getPartnerByIdHandler,
+		method: "GET"
+	},
+	{
+		on: true,
+		route: "/api/partner/:harbour_id/:category/:subcategory",
+		handler: getPartnerBySearchHandler,
+		method: "GET"
+	},
+	{
+		on: true,
+		route: "/api/partner/active/:harbour_id",
+		handler: getActivePartnersCategoryHandler,
+		method: "GET"
+	},
+	{
+		on: true,
+		route: "/api/partners/",
+		handler: getPartnersByHarbourHandler,
+		method: "GET"
+	},
 
-	const promiseList = [];
-	partnersList.map(partner => {
-		const updatedPartner = partner;
-		updatedPartner.subcategory = 'accastillage';
-		promiseList.push(
-			updatePartner(updatedPartner)
-		);
-	});
-
-	const ret = await Promise.all(promiseList);
-	res.end(JSON.stringify({ result: ret }));
-};
-
-exports.router =
-	[
-		{
-			on: true,
-			route: "/api/getpartner/:id",
-			handler: getPartnerByIdHandler,
-			method: "GET"
-		},
-		{
-			on: true,
-			route: "/api/partner/:harbour_id/:category/:subcategory",
-			handler: getPartnerBySearchHandler,
-			method: "GET"
-		},
-		{
-			on: true,
-			route: "/api/partner/active/:harbour_id",
-			handler: getActivePartnersCategoryHandler,
-			method: "GET"
-		},
-		{
-			on: true,
-			route: "/api/partners/",
-			handler: getPartnersByHarbourHandler,
-			method: "GET"
-		}
-	];
+	// * API NEXT GEN
+	{
+		on: true,
+		route: "/api/next/partners",
+		handler: ((req, res) => { res.writeHead(401); res.end() }),
+		method: "GET"
+	},
+	{
+		on: true,
+		route: "/api/next/partners",
+		handler: ((req, res) => { res.writeHead(401); res.end() }),
+		method: "POST"
+	},
+	{
+		on: true,
+		route: "/api/next/partners",
+		handler: ((req, res) => { res.writeHead(401); res.end() }),
+		method: "PUT"
+	},
+	{
+		on: false,
+		route: "/api/next/partners",
+		// handler: ((req, res) => res.writeHead(401); res.end()),
+		method: "DELETE"
+	},
+];
 
 exports.handler = async (req, res) => {
 	var _partner = await getPartner();
@@ -542,17 +546,12 @@ exports.plugin =
 
 			if (_role == "user") {
 				for (var i = 0; i < _harbour_id.length; i++) {
-					// ! TEST ONLY
-					if (!userHarbours[0]) harbour_id[0] = 'SlLLJ.5utq'
-
 					_partners = _partners.concat(await getPartnerByHarbourId(_harbour_id[i]));
 				}
 			}
 			else if (_role == "admin") {
 				_partners = await getPartner();
 				_partners = _partners.slice(0, 50);
-				// console.log('LEN', _partners.length);
-				// _partners = await getPartnerByHarbourId(userHarbours[0].id);
 			}
 
 			var categories = `
@@ -591,8 +590,8 @@ exports.plugin =
 				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_partners[i].harbour_id);
 
 				let formatedDate = '-';
-				if (_partners[i].date) {
-					const dateObj = new Date(_partners[i].date)
+				if (_partners[i].created_at || _partners[i].date) {
+					const dateObj = new Date(_partners[i].created_at || _partners[i].date)
 					const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
 					const date = splited[0];
 					const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
