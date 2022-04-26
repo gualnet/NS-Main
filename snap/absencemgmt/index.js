@@ -311,13 +311,21 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		console.log('>\tHarbour ID: ', harbourId);
 		if (!erpUsers) {
 			res.writeHead(403);
-			res.end(JSON.stringify({ message: 'Invalid api token.' }));
+			res.end(JSON.stringify({
+				code: 403,
+				message: 'Validation Failed',
+				description: 'Invalid api token.'
+			}));
 			return;
 		}
 		// verify if ERP can access to the requested port absences
 		if (!harbourId || !erpUsers.harbourIds.includes(harbourId)) {
 			res.writeHead(403);
-			res.end(JSON.stringify({ message: 'Invalid \'harbour-id\' parameter.' }));
+			res.end(JSON.stringify({
+				code: 403,
+				message: 'Validation Failed',
+				description: 'Invalid \'harbour-id\' parameter.'
+			}));
 			return;
 		}
 
@@ -387,19 +395,15 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		}
 
 		res.end(JSON.stringify({
-			success: true,
-			payload: {
-				length: eprAbsences.length,
-				absences: eprAbsences,
-			}
+			results: eprAbsences
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
 		res.writeHead(500);
 		res.end(JSON.stringify({
-			success: false,
-			status: 'error',
-			message: 'Internal Error.',
+			code: 500,
+			message: 'Unexpected internal server error',
+			details: '',
 		}));
 	}
 }
