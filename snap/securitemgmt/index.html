@@ -195,7 +195,7 @@
         async function displayIncidentOptions() {
             const resp = await fetch('/api/next/incident-types', { method: 'GET' });
             const decodedResp = await resp.json();
-            const incidentTypesObj = decodedResp.payload.incidentTypes;
+            const incidentTypesObj = decodedResp.results;
 
             const incidentTypes = Object.entries(incidentTypesObj);
             incidentTypes.sort((a, b) => a[1] > b[1] ? 1 : -1);

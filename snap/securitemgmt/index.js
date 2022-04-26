@@ -207,10 +207,7 @@ async function deleteIncidentHandler(req, res) {};
 async function getIncidentTypesHandler(req, res) {
     try {
         res.end(JSON.stringify({
-            success: 'success',
-            payload: {
-                incidentTypes: ENUM.incidentsTypes,
-            }
+            results: ENUM.incidentsTypes,
         }));
     } catch (error) {
         console.error('[ERROR]', error);
