@@ -35,6 +35,12 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group floating-form-group active">
+                                            <select id="types" name="type" class="form-control floating-input" required></select>
+                                            <label class="floating-label">Type</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group floating-form-group active">
                                             <textarea id="phone" name="description" type="date" class="form-control floating-input" required></textarea>
                                             <label class="floating-label">Description</label>
                                         </div>
@@ -163,9 +169,10 @@
 
     <!-- page level custom script -->
     <script>
+        let INCIDENT_TYPES = {};
         var user;
         "use strict"
-        $(window).on('load', function () {
+        $(window).on('load', async function () {
             if (localStorage['entity_id'] == '4eqv44307K')
                 document.getElementById('validate_button')?.setAttribute("style", "background-color: #FB9101;");
 
@@ -191,9 +198,57 @@
                 console.log(error);
             });
 
+            await createIncidentTypesDropdown();
 
             updateTicketList()
         });
+
+        async function fetchIncidentTypes() {
+            const response = await fetch('/api/next/incident-types', { method: 'GET' });
+            const decodedResponse = await response.json();
+            const incidentTypes = decodedResponse.results;
+            INCIDENT_TYPES = incidentTypes;
+            // console.log('incidentTypes',incidentTypes)
+            return(incidentTypes);
+        }
+        async function fetchHarbourInfo() {
+            const response = await fetch(`/api/next/harbours?id=${localStorage['harbourid']}`, { method: 'GET' });
+            const decodedResponse = await response.json();
+            const [harbourInfo] = decodedResponse.results;
+            // console.log('harbourInfo',harbourInfo)
+            return(harbourInfo);
+        }
+
+        async function createIncidentTypesDropdown() {
+            const harbourInfo = await fetchHarbourInfo();
+            const incidentTypesObj = await fetchIncidentTypes();
+
+            const incidentTypesDropdownEl = document.querySelector('#types')
+            if (!harbourInfo.incidentTypes) {
+                // if no indient types should be shown, remove incident types dropdown
+                incidentTypesDropdownEl.parentNode.parentNode.innerHTML = '';
+            }
+
+            const optionHtmlList = [];
+            const incidentTypes = Object.entries(incidentTypesObj)
+            incidentTypes.sort((a, b) => a[0] < b[0] ? -1 : 1);
+            // creates an options list with only the authorized incidentTypes
+            incidentTypes.map(([key, value]) => {
+                if (harbourInfo.incidentTypes[`${key}`]) {
+                    optionHtmlList.push(`
+                        <option
+                            class="incident-type-option"
+                            id="incident-${key}"
+                            value="${key}"
+                        >
+                            ${value}
+                        </option>
+                    `);
+                }
+            });
+            document.querySelector('#types').innerHTML = optionHtmlList.join('');
+        }
+        
         var dynamicSort = function (property) {
             var sortOrder = 1;
             if (property[0] === "-") {
@@ -230,9 +285,10 @@
                         var date_startFormated = [date_start.getFullYear(), ("0" + (date_start.getMonth() + 1)).slice(-2), ("0" + (date_start.getDate())).slice(-2)].join('-');
 
                         var ticket = "";
+                        const incidentTypeStr = INCIDENT_TYPES[securites[i].type] ? ` - ${INCIDENT_TYPES[securites[i].type]}` : '';
 
                         ticket += '<div class="card mt-3 mb-4">'
-                            + '<div class="card-header justify-content-center"><h6>Incident N° ' + (securites.length - i) + '</h6></div>'
+                            + '<div class="card-header justify-content-center"><h6>Incident N° ' + (securites.length - i) + incidentTypeStr + '</h6></div>'
                             + '<div class="card-body">'
 
                             + '<div class="row">'

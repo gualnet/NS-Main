@@ -268,11 +268,15 @@ async function getHarboursHandler(req, res) {
     console.log('get', req.get);
     try {
         const ret = await getHarboursWhere(req.get);
-        res.end(JSON.stringify(ret));
+        res.end(JSON.stringify({ results: ret }));
     } catch (error) {
         console.error('[ERROR]', error);
         res.writeHead(500);
-        res.end({ message: 'Internal error.' });
+        res.end({
+            code: 500,
+            message: 'Internal error.',
+            description: '',
+        });
     }
 };
 
