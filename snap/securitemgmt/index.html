@@ -171,10 +171,12 @@
         async function getHarbourInfos(harbourId) {
             try {
                 const response = await fetch(`/api/next/harbours?id=${harbourId}`, { method: 'GET' });
-                const [harbourInfo] = await response.json();
+                console.log('response', response);
+                const decodedResponse = await response.json();
+                const [harbourInfo] = decodedResponse.results;
                 return(harbourInfo);
             } catch (error) {
-                console.error(error);
+                console.error('[ERROR]',error);
                 alert('Une erreur est survenue lors de la récuperation des informations !')
             }
         }
