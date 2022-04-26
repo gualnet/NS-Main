@@ -183,6 +183,43 @@
                     });
             });
         }
+
+        var categories = `
+            <option value="harbourlife">Vie au port</option>
+            <option value="experience">Experiences</option>
+            <option value="discovery">Découvertes</option>
+        `;
+        var subCategoryHarbourLife = '<option value="sos">S.O.S.</option>'
+            + '<option value="maintenance">Maintenance</option>'
+            + '<option value="accastillage">Accastillage</option>'
+            + '<option value="sante">Santé</option>'
+            + '<option value="annonce">Annonce</option>'
+            + '<option value="laverie">Laverie</option>'
+            + '<option value="transport">Transport</option>'
+            + '<option value="alimentation">Alimentation</option>'
+            + '<option value="boutique">Boutique</option>'
+            + '<option value="vendeurLoueurHl">Vendeur / Loueur</option>'
+            + '<option value="vieportautre">Autre</option>';
+
+        var subCategoryExperience = '<option value="nautic">Activités nautiques</option>'
+            + '<option value="terrestres">Activités terrestres</option>'
+            + '<option value="association">Association</option>'
+            + '<option value="equipbourse">Bourse aux équipiers</option>'
+            + '<option value="vendeurLoueurEx">Vendeur / Loueur</option>'
+            + '<option value="experienceautre">Autre</option>';
+
+        var subCategoryDiscovery = '<option value="restaurant">Restaurants</option>'
+            + '<option value="bar">Bar</option>'
+            + '<option value="culture">Culture</option>'
+            + '<option value="divertissement">Loisirs</option>'
+            + '<option value="detente">Détente</option>'
+            + '<option value="decouverteautre">Autre</option>';
+        const subcategories = {
+            harbourlife: subCategoryHarbourLife,
+            experience: subCategoryExperience,
+            discovery: subCategoryDiscovery,
+        };
+
         document.getElementById('harbour_id').addEventListener('change', function (e) {
             var ids = []
             if (ids[0]) {
@@ -200,13 +237,23 @@
                         var gen = "";
 
                         for (var i = 0; i < _partners.length; i++) {
+                            let formatedDate = '-';
+                            if (_partners[i].created_at || _partners[i].date) {
+                                const dateObj = new Date(_partners[i].created_at || _partners[i].date)
+                                const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
+                                const date = splited[0];
+                                const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
+                                formatedDate = `${date} à ${heure}`;
+                            }
                             var _partnerHtml = _data.data.html;
                             _partnerGen = _partnerHtml.replace(/__ID__/g, _partners[i].id)
                                 .replace(/__FORMID__/g, _partners[i].id.replace(/\./g, "_"))
                                 .replace(/__HARBOUR_NAME__/g, _data.data.harbour.name)
                                 .replace(/__HARBOUR_ID__/g, _partners[i].harbour_id)
-                                .replace(/__CATEGORY__/g, _partners[i].category)
-                                .replace(/__SUBCATEGORY__/g, _partners[i].subcategory)
+                                .replace(/__CATEGORY__/g, categories)
+                                .replace(`option value="${_partners[i].category}"`, `option value=${_partners[i].category} selected`)
+                                .replace(/__SUBCATEGORY__/g, subcategories[_partners[i].category])
+                                .replace(`option value="${_partners[i].subcategory}"`, `option value=${_partners[i].subcategory} selected`)
                                 .replace(/__NAME__/g, _partners[i].name)
                                 .replace(/__EDITOR_ID__/g, "editor_" + _partners[i].id.replace(/\./g, "_"))
                                 .replace(/__DESCRIPTION__/g, _partners[i].description)
@@ -216,6 +263,7 @@
                                 .replace(/__IMG__/g, _partners[i].img)
                                 .replace(/__WEBSITE__/g, _partners[i].website)
                                 .replace(/__ADDRESS__/g, _partners[i].address)
+                                .replace(/__DATE_CREATION__/g, formatedDate)
 
                             ids.push(_partners[i].id.replace(/\./g, "_"));
                             gen += _partnerGen;
@@ -258,31 +306,7 @@
         });
 
 
-        var subCategoryHarbourLife = '<option value="sos">S.O.S.</option>'
-            + '<option value="maintenance">Maintenance</option>'
-            + '<option value="accastillage">Accastillage</option>'
-            + '<option value="sante">Santé</option>'
-            + '<option value="annonce">Annonce</option>'
-            + '<option value="laverie">Laverie</option>'
-            + '<option value="transport">Transport</option>'
-            + '<option value="alimentation">Alimentation</option>'
-            + '<option value="boutique">Boutique</option>'
-            + '<option value="vendeurLoueurHl">Vendeur / Loueur</option>'
-            + '<option value="vieportautre">Autre</option>';
 
-        var subCategoryExperience = '<option value="nautic">Activités nautiques</option>'
-            + '<option value="terrestres">Activités terrestres</option>'
-            + '<option value="association">Association</option>'
-            + '<option value="equipbourse">Bourse aux équipiers</option>'
-            + '<option value="vendeurLoueurEx">Vendeur / Loueur</option>'
-            + '<option value="experienceautre">Autre</option>';
-
-        var subCategoryDiscovery = '<option value="restaurant">Restaurants</option>'
-            + '<option value="bar">Bar</option>'
-            + '<option value="culture">Culture</option>'
-            + '<option value="divertissement">Loisirs</option>'
-            + '<option value="detente">Détente</option>'
-            + '<option value="decouverteautre">Autre</option>';
 
         var selectedCategory = document.getElementById('category_select').value;
         if (selectedCategory == "harbourlife") {
@@ -399,49 +423,49 @@
         }
 
         const subcategoriesObj = {
-        harbourlife: {
-            sos: 'S.O.S.',
-            maintenance: 'Maintenance',
-            accastillage: 'Accastillage',
-            sante: 'Santé',
-            annonce: 'Annonce',
-            laverie: 'Laverie',
-            transport: 'Transport',
-            alimentation: 'Alimentation',
-            boutique: 'Boutique',
-            vendeurLoueurHl: 'Vendeur / Loueur',
-            vieportautre: 'Autre<',
-        },
-        experience: {
-            nautic: 'Activités nautiques',
-            terrestres: 'Activités terrestres',
-            association: 'Association',
-            equipbourse: 'Bourse aux équipiers',
-            vendeurLoueurEx: 'Vendeur / Loueur',
-            experienceautre: 'Autre',
-        },
-        discovery: {
-            restaurant: 'Restaurants',
-            bar: 'Bar',
-            culture: 'Culture',
-            divertissement: 'Loisirs',
-            detente: 'Détente',
-            decouverteautre: 'Autre',
-        }
-    };
-
-    function updateSubcategories(target) {
-        const targetId = target.id.split('_')[1];
-        const newCategory = target.value;
-        const subcategoryElem = document.getElementById(`subcategory_${targetId}`);
-        while (subcategoryElem.options.length > 0) {
-            subcategoryElem.remove(0);
+            harbourlife: {
+                sos: 'S.O.S.',
+                maintenance: 'Maintenance',
+                accastillage: 'Accastillage',
+                sante: 'Santé',
+                annonce: 'Annonce',
+                laverie: 'Laverie',
+                transport: 'Transport',
+                alimentation: 'Alimentation',
+                boutique: 'Boutique',
+                vendeurLoueurHl: 'Vendeur / Loueur',
+                vieportautre: 'Autre<',
+            },
+            experience: {
+                nautic: 'Activités nautiques',
+                terrestres: 'Activités terrestres',
+                association: 'Association',
+                equipbourse: 'Bourse aux équipiers',
+                vendeurLoueurEx: 'Vendeur / Loueur',
+                experienceautre: 'Autre',
+            },
+            discovery: {
+                restaurant: 'Restaurants',
+                bar: 'Bar',
+                culture: 'Culture',
+                divertissement: 'Loisirs',
+                detente: 'Détente',
+                decouverteautre: 'Autre',
+            }
         };
-        Object.entries(subcategoriesObj[newCategory]).map(([subKey, subValue]) => {
-            const newOption = new Option(subValue, subKey);
-            subcategoryElem.add(newOption, undefined);
-        });
-    };
+
+        function updateSubcategories(target) {
+            const targetId = target.id.split('_')[1];
+            const newCategory = target.value;
+            const subcategoryElem = document.getElementById(`subcategory_${targetId}`);
+            while (subcategoryElem.options.length > 0) {
+                subcategoryElem.remove(0);
+            };
+            Object.entries(subcategoriesObj[newCategory]).map(([subKey, subValue]) => {
+                const newOption = new Option(subValue, subKey);
+                subcategoryElem.add(newOption, undefined);
+            });
+        };
     </script>
 </body>
 
