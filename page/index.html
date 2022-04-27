@@ -1427,7 +1427,7 @@
         }
 
         fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-            console.log(_data);
+            // console.log('_data',_data);
             var activeCategory = _data.data.activeCategories;
             var activeSubCategories = _data.data.activeSubCategories;
 
@@ -1476,6 +1476,8 @@
                     document.getElementById('alimentation').hidden = true;
                 if (!activeSubCategories.vieportautre)
                     document.getElementById('vieportautre').hidden = true;
+                if (!activeSubCategories.vendeurLoueurHl)
+                    document.getElementById('vendeurLoueurHl').hidden = true;
             } else {
                 document.getElementById('harbourlife').hidden = true;
                 document.getElementById('harbourlife_link').hidden = true;
