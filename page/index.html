@@ -194,25 +194,6 @@
                         }
                     </style>
 
-                    <!--
-                                            <div id="wrap">
-                                    <iframe id="scaled-frame" src="https://nauticspot.io/weather/?harbour=8&token=LAF20VooQSkdOuj%2FxehrkR09z5sjiuJVobbsAwY0IKgEACHKMjFyIgCvpQwj%2Bd5zmw0%3D"></iframe>
-                                </div>
-
-
-
-                    document.getElementById("meteo_desc").innerHTML = ('<img class="rounded" src="' + weather[0].hourly[hour].weatherIconUrl[0].value + '"/><div class="float-right">' + weather[0].hourly[hour].lang_fr[0].value + '</div>');
-                    document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + weather[0].hourly[hour].tempC + "°C");
-                    document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + weather[0].hourly[hour].humidity + "%");
-                    document.getElementById("pressure").innerHTML = ('<i class="bi bi-speedometer2"></i> ' + weather[0].hourly[hour].pressure + "mbar");
-                    document.getElementById("compassRingventjaune").style.transform = "rotate(" + weather[0].hourly[hour].winddirDegree + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
-                    //document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-                    document.getElementById("wind_speed").innerHTML = ('<i class="bi bi-wind"></i> ' + weather[0].hourly[hour].winddir16Point + weather[0].hourly[hour].winddirDegree + "° " + weather[0].hourly[hour].windspeedKmph + "Km/h");
-                    //document.getElementById("wind_speed").insertAdjacentHTML('beforeend', '<div class="float-right">' + weather[0].hourly[hour].windspeedKmph + "Km/h</div>");
-
-                        -->
-                    <!--<img style="width:100%;" src="/img/fakeweather.png">-->
-                    <!-- <div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="window.location.href = '/previsions';"> -->
                     <div class="card text-white bg-light mb-3 rounded" id="weather_card"
                         onclick="weatherOnClickHandler()">
                         <div class="card-body rounded"
@@ -362,23 +343,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--
-                                <div class="col-4 col-sm-4 col-md-4 col-lg-4 px-2" onclick="window.location.href = ('/index');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;" class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;" class="image-boxed" src="/library/navigation-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Avis de navigation</span>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                -->
                                 <div id="absences" class="col-4 px-2" onclick="window.location.href = ('/absence');">
                                     <div class="row">
                                         <div class="col d-flex justify-content-center">
@@ -963,22 +928,6 @@
                 </div>
             </div>
         </div>
-        <!--
-                <div class="container mt-4">
-                    <div class="row">
-                        <div class="col">
-                            <a class="link-dark" style="text-decoration:none;color:black;" href=""><h4>Mes croisières<i style="float:right;" class="bi bi-arrow-right"></i></h4></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="container mt-4">
-                    <div class="row">
-                        <div class="col">
-                            <input type="text" class="form-control search" placeholder="Où allez-vous?">
-                        </div>
-                    </div>
-                </div>
-                -->
         <br />
         <br />
         <br />
@@ -1083,22 +1032,6 @@
     </div>
     <div class="filter-backdrop"></div>
 
-
-    <!-- color settings style switcher
-        <button type="button" class="btn btn-info colorsettings">
-                                                                                                                                                                <span class="text-white">
-                                                                                                                                                                    <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                                                                                                                                                                        <title>ionicons-v5-m</title>
-                                                                                                                                                                        <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
-                                                                                                                                                                        <circle cx='144' cy='208' r='32' />
-                                                                                                                                                                        <circle cx='152' cy='311' r='32' />
-                                                                                                                                                                        <circle cx='224' cy='144' r='32' />
-                                                                                                                                                                        <circle cx='256' cy='367' r='48' />
-                                                                                                                                                                        <circle cx='328' cy='144' r='32' />
-                                                                                                                                                                    </svg>
-                                                                                                                                                                </span>
-                                                                                                                                                            </button>
-    -->
     <div class="sidebar-right">
         <div class="selectoption">
             <input type="checkbox" id="darklayout" name="darkmode">
