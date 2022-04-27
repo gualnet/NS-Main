@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en" class="h-100">
 
-
 {{element->header_app.html}}
 <!-- Swiper -->
 
@@ -192,6 +191,13 @@
 
     <!-- page level custom script -->
     <script>
+
+        window.onload = () => {
+            if (navigator.userAgent.toLocaleLowerCase().includes('iphone')) {
+                document.querySelector('#addtodevice').style.display = 'none';
+            }
+        };
+
         var urlParam = new URLSearchParams(window.location.search);
         function changePage(_url) {
             var urlPara = new URLSearchParams(window.location.search);
