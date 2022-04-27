@@ -437,8 +437,7 @@ exports.plugin =
 			}
 		}
 		if (req.method == "POST") {
-			console.log("ici meme 0");
-			// console.log(req.post);
+			console.info('[INFO] Partner plugin req.post', req.post);
 			if (req.post.id) {
 				if (req.post.website)
 					req.post.website = addProtocolToUrl(req.post.website);
@@ -465,7 +464,6 @@ exports.plugin =
 					}
 
 					var partner = await updatePartner(_FD);
-					// console.log(partner);
 					if (partner[0].id) {
 						UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire mis à jour", "1.0");
 						return;
