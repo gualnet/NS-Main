@@ -161,7 +161,7 @@
 
 
         fetch("/api/events/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-            var events = _data.data.sort(dynamicSort("date")).reverse();
+            var events = _data.data.sort(dynamicSort("date_start")).reverse();
             for (var i = 0; i < 10; i++) {
                 var rowCurrent = eventRow
                     .replace("__ID__", events[i].id)
