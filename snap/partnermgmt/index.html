@@ -357,7 +357,7 @@
         }
 
         function sendUpdateForm(id) {
-            console.log("id : " + id)
+            // console.log("sendUpdateForm id: " + id)
             var form = document.getElementById(id);
             form.appendChild(document.getElementById('id_' + id))
             form.appendChild(document.getElementById('name_' + id))
@@ -367,6 +367,9 @@
             form.appendChild(document.getElementById('website_' + id))
             form.appendChild(document.getElementById('address_' + id))
             form.appendChild(document.getElementById('img_' + id))
+            form.appendChild(document.getElementById('category_' + id))
+            form.appendChild(document.getElementById('subcategory_' + id))
+
             // add category info
             const categoryValue = document.createElement('textarea');
             categoryValue.id = `category_${id}`;
@@ -379,24 +382,8 @@
             subcategoryValue.innerHTML = elem.value;
             form.appendChild(subcategoryValue);
 
-
-            // console.log(form);
             var formData = new FormData(form);
-            // console.log(form);
-            // console.log(formData);
             formData.set("description", document.getElementById('editor_' + id).firstChild.innerHTML);
-            /*
-            formData.set("id", document.getElementById('id_' + id).innerHTML);
-            formData.set("name", document.getElementById('name_' + id).innerHTML);
-            formData.set("email", document.getElementById('email_' + id).innerHTML);
-            formData.set("prefix", document.getElementById('prefix_' + id).value);
-            formData.set("phone", document.getElementById('phone_' + id).value);
-            formData.set("website", document.getElementById('website_' + id).value);
-            formData.set("address", document.getElementById('address_' + id).innerHTML);
-            formData.set("img", document.getElementById('img_' + id).value);
-            */
-
-            // console.log(formData);
 
             fetch(form.action,
                 {
