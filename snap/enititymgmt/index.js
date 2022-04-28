@@ -418,7 +418,6 @@ exports.plugin =
 			else if (req.post.id) {
 				verifyAccess(_type, res);
 				if (verifyPostReq(req, res)) {
-
 					req.post.date = Date.now();
 					var _FD = req.post;
 					if (_FD.prefix) {
@@ -447,10 +446,6 @@ exports.plugin =
 						if (currentEntity.cloudinary_logo_public_id) {
 							await STORE.cloudinary.deleteFile(currentEntity.cloudinary_logo_public_id);
 						}
-					}
-
-					if (_FD.appIcon) {
-						var upload = await STORE.cloudinary.uploadFile(_FD.logo, req.field["appIcon"].filename);
 					}
 
 					if (_FD.absence_module)
