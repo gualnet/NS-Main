@@ -27,10 +27,10 @@
                 const blob = new Blob([stringManifest], { type: 'application/json' });
                 //const manifestURL = URL.createObjectURL(blob);
                 document.getElementById('manifest').setAttribute('href', manifestURL);
+                document.getElementById('apple-mobile-web-app-title').setAttribute('content', manifest.name);
                 document.getElementById('apple-touch-icon-128').setAttribute('href', manifest.icons[0].src);
                 document.getElementById('apple-touch-icon-256').setAttribute('href', manifest.icons[1].src);
-                document.getElementById('apple-touch-icon-512').setAttribute('href', manifest.icons[1].src);
-                document.getElementById('apple-mobile-web-app-title').setAttribute('content', manifest.name);
+                document.getElementById('apple-touch-icon-512').setAttribute('href', manifest.icons[2].src);
             }
         }).catch(e => { console.error(e) });
 
@@ -39,12 +39,12 @@
     <!-- iOS PWA Directives -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-touch-fullscreen" content="yes" />
-    <meta id="apple-mobile-web-app-title" name="apple-mobile-web-app-title" content="__PWA_APP_TITLE__" />
+    <meta id="apple-mobile-web-app-title" name="apple-mobile-web-app-title" content="Nauticspot" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <link id="apple-touch-icon-128" rel="apple-touch-icon" sizes="128x128" href="__PWA_APP_ICO_128__" />
-    <link id="apple-touch-icon-256" rel="apple-touch-icon" sizes="256x256" href="__PWA_APP_ICO_256__" />
-    <link id="apple-touch-icon-512" rel="apple-touch-icon" sizes="512x512" href="__PWA_APP_ICO_512__" />
+    <link id="apple-touch-icon-128" rel="apple-touch-icon" sizes="128x128" href="" />
+    <link id="apple-touch-icon-256" rel="apple-touch-icon" sizes="256x256" href="" />
+    <link id="apple-touch-icon-512" rel="apple-touch-icon" sizes="512x512" href="" />
     <link id="manifest" rel="manifest">
 
     <!-- Favicons -->
