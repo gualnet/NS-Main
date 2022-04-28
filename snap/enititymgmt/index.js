@@ -1,3 +1,4 @@
+require('../../types');
 var _entityCol = "entity";
 var _userCol = "user";
 
@@ -203,18 +204,46 @@ async function getEntityByCookieIdHandler(_req, _res) {
 	return;
 }
 
+/**
+s * @typedef getEntityWhereOptions 
+ * @property {string} [id]
+ * @property {string} [name]
+ * @property {string} [email]
+ * @returns 
+ */
+/**
+ * @param {getEntityWhereOptions} whereOptions
+ * @returns 
+ */
+const getEntityWhere = (whereOptions) => {
+	return new Promise(resolve => {
+		STORE.db.linkdb.Find(_entityCol, whereOptions, null, function (_err, _data) {
+			if (_data)
+				resolve(_data);
+			else
+				resolve(_err);
+		});
+	});
+};
+
 const getEntityHandler = async (req, res) => {
 	console.log('req.get', req.get)
 	console.log('req.param', req.param)
 	try {
-		const entityId = req.param.id;
-		if (!entityId) throw new Error({ code: 404, message: 'param error' });
-
-		const result = await getEntityById(entityId);
+		/** @type {getEntityWhereOptions} */
+		const whereOpt = {}
+		if (req.get.id) whereOpt.id = req.get.id;
+		if (req.get.name) whereOpt.name = req.get.name;
+		if (req.get.email) whereOpt.email = req.get.email;
+		const result = await getEntityWhere(whereOpt);
 		res.end(JSON.stringify(result));
 	} catch (error) {
-		res.writeHeader(error.code);
-		res.end(JSON.stringify({ message: error.message }));
+		console.error('[ERROR]', error);
+		res.writeHeader(500);
+		res.end(JSON.stringify({
+			message: error.message,
+			description: '',
+		}));
 	}
 }
 
@@ -233,15 +262,32 @@ const createEntityHandler = async (req, res) => {
 	}
 }
 
+/**
+ * 
+ * @param {import('../../types').T_entity} updateFields 
+ * @param {getEntityWhereOptions} whereFields 
+ * @returns {Promise<Array<import('../../types').T_entity>>}
+ */
+async function updateEntityWhere(updateFields, whereFields) {
+	return new Promise(resolve => {
+		STORE.db.linkdb.Update(_entityCol, whereFields, updateFields, function (_err, _data) {
+			if (_data)
+				resolve(_data);
+			else
+				resolve(_err);
+		});
+	});
+};
+
 const updateEntityHandler = async (req, res) => {
-	console.log('req.body', req.body);
 	try {
-		const entityData = req.body;
-		if (!entityData.id) throw new Error({ code: 400, message: 'request body error' });
+		/** @type {getEntityWhereOptions} */
+		const whereOpt = {}
+		if (req.get.id) whereOpt.id = req.get.id;
+		if (req.get.name) whereOpt.name = req.get.name;
+		if (req.get.email) whereOpt.email = req.get.email;
 
-		// TODO - check for requested fields
-
-		const result = await updateEntity(entityData);
+		const result = await updateEntityWhere(req.body, whereOpt);
 		res.end(JSON.stringify(result));
 	} catch (error) {
 		console.error('ERROR', error)
@@ -280,25 +326,25 @@ exports.router = [
 	// NEW CRUD
 	{
 		on: true,
-		route: "/api/crud/entity/:id",
+		route: "/api/next/entities",
 		handler: getEntityHandler,
 		method: 'GET'
 	},
 	{
 		on: true,
-		route: "/api/crud/entity",
+		route: "/api/next/entities",
 		handler: createEntityHandler,
 		method: 'POST'
 	},
 	{
 		on: true,
-		route: "/api/crud/entity",
+		route: "/api/next/entities",
 		handler: updateEntityHandler,
 		method: 'PUT'
 	},
 	{
 		on: true,
-		route: "/api/crud/entity/:id",
+		route: "/api/next/entities",
 		handler: deleteEntityHandler,
 		method: 'DELETE'
 	},
@@ -312,7 +358,6 @@ exports.handler = async (req, res) => {
 function verifyAccess(_type, _res) {
 	if (_type == 'harbour_manager') {
 		_res.end("<p>Accès refusé</p>");
-		return;
 	}
 }
 exports.plugin =
@@ -325,7 +370,6 @@ exports.plugin =
 		var _entity_id;
 		var _harbour_id;
 		if (req.userCookie.data.id) {
-			console.log(req.userCookie.data.id);
 			admin = await getAdminById(req.userCookie.data.id);
 			if (admin.id) {
 				if (admin.data.type)
@@ -354,9 +398,8 @@ exports.plugin =
 			}
 		}
 		if (req.method == "POST") {
+
 			if (req.post.mode == "getEntity") {
-				console.log(_entity_id);
-				console.log("test");
 				if (_entity_id) {
 					var entity = await getEntityById(_entity_id);
 					if (entity.id) {
@@ -381,7 +424,6 @@ exports.plugin =
 					if (_FD.prefix) {
 						_FD.prefix = completePhonePrefix(_FD.prefix);
 						_FD.prefixed_phone = _FD.prefix + _FD.phone.replace(/^0/, '');
-						console.log(_FD.prefixed_number);
 					}
 
 					var currentEntity = await getEntityById(req.post.id);
@@ -390,7 +432,6 @@ exports.plugin =
 					//img gesture
 					if (_FD.img) {
 						var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-						console.log(upload);
 						_FD.img = upload.secure_url;
 						_FD.cloudinary_img_public_id = upload.public_id;
 						if (currentEntity.cloudinary_img_public_id) {
@@ -401,13 +442,15 @@ exports.plugin =
 					//logo gesture
 					if (_FD.logo) {
 						var upload = await STORE.cloudinary.uploadFile(_FD.logo, req.field["logo"].filename);
-						console.log(upload);
 						_FD.logo = upload.secure_url;
 						_FD.cloudinary_img_public_id = upload.public_id;
 						if (currentEntity.cloudinary_logo_public_id) {
 							await STORE.cloudinary.deleteFile(currentEntity.cloudinary_logo_public_id);
 						}
+					}
 
+					if (_FD.appIcon) {
+						var upload = await STORE.cloudinary.uploadFile(_FD.logo, req.field["appIcon"].filename);
 					}
 
 					if (_FD.absence_module)
@@ -435,7 +478,6 @@ exports.plugin =
 						_FD.wlink_vone_pw = UTILS.Crypto.encryptText(_FD.wlink_vone_pw, "AJtWbggDUidBESek3fIc");
 					}
 					var entity = await updateEntity(_FD);
-					console.log(entity);
 					if (entity[0].id) {
 						UTILS.httpUtil.dataSuccess(req, res, "Success", "Entité mise à jour", "1.0");
 						return;
@@ -459,7 +501,6 @@ exports.plugin =
 					//img gesture
 					if (_FD.img) {
 						var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-						console.log(upload);
 						_FD.img = upload.secure_url;
 						_FD.cloudinary_img_public_id = upload.public_id;
 					}
@@ -467,9 +508,13 @@ exports.plugin =
 					//logo gesture
 					if (_FD.logo) {
 						var upload = await STORE.cloudinary.uploadFile(_FD.logo, req.field["logo"].filename);
-						console.log(upload);
 						_FD.logo = upload.secure_url;
 						_FD.cloudinary_logo_public_id = upload.public_id;
+					}
+
+					if (_FD.appIcon) {
+						var upload = await STORE.cloudinary.uploadFile(_FD.appIcon, req.field["appIcon"].filename, undefined, {cloudinaryPath: '/Nauticspot-Next/pwa-mobile-logo/2048/'});
+						_FD.appIcon = upload.secure_url;
 					}
 
 					if (_FD.absence_module)
