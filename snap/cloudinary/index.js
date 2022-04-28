@@ -13,14 +13,26 @@ cloudinary.config({
 });
 
 //function to upload a file to cloudinary.
-var uploadFile = async function (_file, _fileName, _nameFormat) {
+/**
+ * @typedef uploadFileOptions
+ * @property {string} cloudinaryPath
+ */
+/**
+ * 
+ * @param {string} _file 
+ * @param {string} _fileName 
+ * @param {string || undefined} _nameFormat 
+ * @param {uploadFileOptions} options 
+ * @returns 
+ */
+var uploadFile = async function (_file, _fileName, _nameFormat, options) {
     return new Promise(resolve => {
         var isFileNameUsed = false;
         if (_nameFormat) {
             // get file extension
             var split = _fileName.split('.');
             var extension = '.' + split[split.length - 1];
-            
+
             //convert name to slug if slug selected
             if (_nameFormat == "slug") {
                 _fileName = "";
@@ -34,28 +46,34 @@ var uploadFile = async function (_file, _fileName, _nameFormat) {
 
         // set up the full file location
         var fullFileLocationName = path.join(CONF.tmp, _fileName);
-        
+
         // write file
         try {
             fs.writeFileSync(fullFileLocationName, Buffer.from(_file, 'binary'));
         } catch (err) {
             console.log(err);
         }
-        
+
         //send file to cloudinary
-        cloudinary.uploader.upload(fullFileLocationName, {use_filename: isFileNameUsed}, function (result, error) {
-            console.log(result);
-            try {
-                fs.unlinkSync(path.join(fullFileLocationName));
-            } catch (e) {
-                console.log(e);
-            }
-            if (result) {
-                resolve(result);
-            } else {
-                resolve(error);
-            }
-        });
+        cloudinary.uploader.upload(
+            fullFileLocationName,
+            {
+                use_filename: isFileNameUsed,
+                folder: options.cloudinaryPath || '',
+            },
+            function (result, error) {
+                console.log(result);
+                try {
+                    fs.unlinkSync(path.join(fullFileLocationName));
+                } catch (e) {
+                    console.log(e);
+                }
+                if (result) {
+                    resolve(result);
+                } else {
+                    resolve(error);
+                }
+            });
     });
 }
 

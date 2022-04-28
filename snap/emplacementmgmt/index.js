@@ -324,7 +324,6 @@ exports.plugin =
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
-
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.zone_id) {
                 await delZone(req.get.zone_id);
@@ -414,9 +413,9 @@ exports.plugin =
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" id="harbour_id" style="width:250px;" name="harbour_id">';
-
+        
                 const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
-                const userHarbours = await Promise.all(getHarbourPromises);
+                userHarbours = await Promise.all(getHarbourPromises);
                 userHarbours.map(userHarbour => {
                     harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
                 });
@@ -437,8 +436,6 @@ exports.plugin =
             }
             _indexHtml = _indexHtml.replace('__HARBOUR_ID_PLACE_INPUT__', harbour_select.replace('id="harbour_id"', 'id="harbourid_place"'));
             _indexHtml = _indexHtml.replace('__HARBOUR_ID_PONTON_INPUT__', harbour_select.replace('id="harbour_id"', 'id="harbourid_ponton"'));
-
-
 
             _places = await getPlaceByHarbourId(userHarbours[0].id);
             _zones = await getPontonZoneByHarbourId(userHarbours[0].id);

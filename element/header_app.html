@@ -7,35 +7,47 @@
     <title>Nauticspot</title>
 
     <!-- manifest -->
-   
-<script>
 
-    var urlParam = new URLSearchParams(window.location.search);
-    var urlPara = new URLSearchParams(window.location.search);
-    let manifestURL = "/snap/getmanifest?entity=";
-    if (urlParam.get("entity")) {
-        manifestURL += urlPara.get("entity");
-    }
-    else {
-        manifestURL += localStorage["entity_id"]
-    }
-        
-    fetch(manifestURL).then(response => response.json()).then(manifest =>{
-        if(manifest.name) {
-        const stringManifest = JSON.stringify(manifest);
-        const blob = new Blob([stringManifest], {type: 'application/json'});
-        //const manifestURL = URL.createObjectURL(blob);
-        document.getElementById('manifest').setAttribute('href', manifestURL);
+    <script>
+
+        var urlParam = new URLSearchParams(window.location.search);
+        var urlPara = new URLSearchParams(window.location.search);
+        let manifestURL = "/snap/getmanifest?entity=";
+        if (urlParam.get("entity")) {
+            manifestURL += urlPara.get("entity");
         }
-    }).catch(e => {console.error(e)});
+        else {
+            manifestURL += localStorage["entity_id"]
+        }
 
-        
-</script>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<link id="manifest" rel="manifest">
+        fetch(manifestURL).then(response => response.json()).then(manifest => {
+            console.log('manifest', manifest);
+            if (manifest.name) {
+                const stringManifest = JSON.stringify(manifest);
+                const blob = new Blob([stringManifest], { type: 'application/json' });
+                //const manifestURL = URL.createObjectURL(blob);
+                document.getElementById('manifest').setAttribute('href', manifestURL);
+                document.getElementById('apple-touch-icon-128').setAttribute('href', manifest.icons[0].src);
+                document.getElementById('apple-touch-icon-256').setAttribute('href', manifest.icons[1].src);
+                document.getElementById('apple-touch-icon-512').setAttribute('href', manifest.icons[1].src);
+                document.getElementById('apple-mobile-web-app-title').setAttribute('content', manifest.name);
+            }
+        }).catch(e => { console.error(e) });
+
+
+    </script>
+    <!-- iOS PWA Directives -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta id="apple-mobile-web-app-title" name="apple-mobile-web-app-title" content="__PWA_APP_TITLE__" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link id="apple-touch-icon-128" rel="apple-touch-icon" sizes="128x128" href="__PWA_APP_ICO_128__" />
+    <link id="apple-touch-icon-256" rel="apple-touch-icon" sizes="256x256" href="__PWA_APP_ICO_256__" />
+    <link id="apple-touch-icon-512" rel="apple-touch-icon" sizes="512x512" href="__PWA_APP_ICO_512__" />
+    <link id="manifest" rel="manifest">
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/img/favicon180.png" sizes="180x180">
     <link rel="icon" href="/img/favicon32.png" sizes="32x32" type="image/png">
     <link rel="icon" href="/img/favicon16.png" sizes="16x16" type="image/png">
 
@@ -45,7 +57,8 @@
 
     <!-- Bootstrap core CSS -->
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -56,9 +69,9 @@
 
     <!-- Custom styles for this template -->
     <link href="/css/style.css" rel="stylesheet" id="style">
-    
+
     <!-- nouislider CSS -->
     <link href="/vendor/nouislider/nouislider.min.css" rel="stylesheet">
-    
+
 
 </head>
