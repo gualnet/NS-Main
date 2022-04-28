@@ -33,6 +33,39 @@ const incidentsTypes = {
   ANIMATIONS: 'Animations',
 };
 
+/**
+ * user roles
+ * @readonly
+ * @enum {string}
+ */
+const rolesBackOffice = {
+  VISITEUR: 'Visiteur',
+  PLAISANCIER: 'Plaisancier',
+  AGENT_CAPITAINERIE: 'Agent Capitainerie',
+  AGENT_ADMINISTRATEUR: 'Agent Administrateur',
+  AGENT_SUPERVISEUR: 'Agent Superviseur',
+  ADMIN_MULTIPORTS: 'Admin Multi-Ports',
+  SUPER_ADMIN: 'Super Admin Nauticspot',
+}
+
+/**
+ * user roles
+ * @readonly
+ * @enum {string}
+ */
+const rolesMobileApp = {
+  VISITEUR: 'Visiteur',
+  PLAISANCIER: 'Plaisancier',
+  CAPITAINERIE: 'Capitainerie',
+  AGENT_SECURITE: 'Agent Sécurité',
+  SUPERVISEUR: 'Superviseur',
+  PROFESSIONNEL: 'Professionnel',
+  ADMINISTRATEUR: 'Administrateur',
+  SUPER_ADMIN: 'Super Admin',
+}
+
 module.exports = {
   incidentsTypes,
+  rolesMobileApp,
+  rolesBackOffice,
 };
