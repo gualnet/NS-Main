@@ -138,6 +138,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} id
  * @property {string} img
  * @property {string} logo
+ * @property {string} appIcon - Link to the app icon, supposed to be a png file stored on cloudinary
  * @property {string} mailjet_apikey
  * @property {string} mailjet_secretkey
  * @property {string} maree_id
