@@ -7,17 +7,17 @@ exports.handler = async (req, res) => {
     name: entity.name,
     icons: [
       {
-        src: entity.appIcon.replace('/upload', '/upload/w_128,h_128,c_fill'),
+        src: entity.appIcon?.replace('/upload', '/upload/w_128,h_128,c_fill') || '',
         type: "image/png",
         sizes: "128x128"
       },
       {
-        src: entity.appIcon.replace('/upload', '/upload/w_256,h_256,c_fill'),
+        src: entity.appIcon?.replace('/upload', '/upload/w_256,h_256,c_fill') || '',
         type: "image/png",
         sizes: "256x256"
       },
       {
-        src: entity.appIcon.replace('/upload', '/upload/w_512,h_512,c_fill'),
+        src: entity.appIcon?.replace('/upload', '/upload/w_512,h_512,c_fill') || '',
         type: "image/png",
         sizes: "512x512"
       }
