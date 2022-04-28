@@ -1,3 +1,4 @@
+
 /**
  * @typedef qrcode
  * @property {string} id
@@ -192,4 +193,38 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} role - ERP
  * @property {EpochTimeStamp} created_at 
  * @property {EpochTimeStamp} updated_at 
+ */
+
+/**
+ * @typedef T_user - users referenced in nauticspot user db -> mobile app access
+ * @property {EpochTimeStamp} date
+ * @property {string} category
+ * @property {string} contract_number
+ * @property {string} email
+ * @property {string} first_name
+ * @property {string} harbourid
+ * @property {string} id
+ * @property {string} last_name
+ * @property {string} password
+ * @property {string} phone
+ * @property {string} prefix
+ * @property {string} prefixed_phone
+ * @property {string} token
+ * @property {import('./snap/lib-js/enums').rolesBackOffice} roleBackOffice
+ * @property {import('./snap/lib-js/enums').rolesMobileApp} roleMobileApp
+ */
+
+/**
+ * @typedef T_userFP - users referenced in fortpress user db -> dashboard access
+ * @property {string} id
+ * @property {string} login
+ * @property {string} pw_type
+ * @property {string} password
+ * @property {string} name
+ * @property {string} bio
+ * @property {string} role
+ * @property {string} data
+ * @property {string} link
+ * @property {string} last_login
+ * @property {string} photo
  */
