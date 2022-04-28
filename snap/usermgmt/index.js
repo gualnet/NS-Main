@@ -1,3 +1,4 @@
+const ENUM = require('../lib-js/enums');
 var _userCol = "user";
 var _mailCol = "mail";
 var _userFpCol = "user";
@@ -439,12 +440,64 @@ async function updateMailHandler(_req, _res) {
         return;
     }
 }
+
 async function verifyUserFormHandler(_req, _res) {
     if (verifyPostReq(_req.data)) {
         UTILS.httpUtil.dataSuccess(_req, _res, 'success', 'no error in form data', '1.0');
         return;
     }
 }
+
+/**
+ * 
+ * @param {string} role 
+ * @returns {Array<string>} 
+ */
+const generateRoleOptions = (role) => {
+    const options = []
+    const ROLES = ENUM.rolesBackOffice;
+    if (role === ROLES.VISITEUR) {
+        options.push(`<option value="VISITEUR">${ROLES.VISITEUR}</option>`);
+    } else if (role === ROLES.PLAISANCIER) {
+        options.push(`<option value="PLAISANCIER">${ROLES.PLAISANCIER}</option>`);
+    } else if (role === ROLES.AGENT_CAPITAINERIE) {
+        options.push(`<option value="VISITEUR">${ROLES.VISITEUR}</option>`);
+        options.push(`<option value="PLAISANCIER">${ROLES.PLAISANCIER}</option>`);
+    } else if (role === ROLES.AGENT_ADMINISTRATEUR) {
+        options.push(`<option value="VISITEUR">${ROLES.VISITEUR}</option>`);
+        options.push(`<option value="PLAISANCIER">${ROLES.PLAISANCIER}</option>`);
+        options.push(`<option value="AGENT_CAPITAINERIE">${ROLES.AGENT_CAPITAINERIE}</option>`);
+        options.push(`<option value="AGENT_ADMINISTRATEUR">${ROLES.AGENT_ADMINISTRATEUR}</option>`);
+    } else if (role === ROLES.AGENT_SUPERVISEUR) {
+        options.push(`<option value="VISITEUR">${ROLES.VISITEUR}</option>`);
+        options.push(`<option value="PLAISANCIER">${ROLES.PLAISANCIER}</option>`);
+        options.push(`<option value="AGENT_CAPITAINERIE">${ROLES.AGENT_CAPITAINERIE}</option>`);
+        options.push(`<option value="AGENT_ADMINISTRATEUR">${ROLES.AGENT_ADMINISTRATEUR}</option>`);
+        options.push(`<option value="AGENT_SUPERVISEUR">${ROLES.AGENT_SUPERVISEUR}</option>`);
+    } else if (role === ROLES.ADMIN_MULTIPORTS) {
+        options.push(`<option value="VISITEUR">${ROLES.VISITEUR}</option>`);
+        options.push(`<option value="PLAISANCIER">${ROLES.PLAISANCIER}</option>`);
+        options.push(`<option value="AGENT_CAPITAINERIE">${ROLES.AGENT_CAPITAINERIE}</option>`);
+        options.push(`<option value="AGENT_ADMINISTRATEUR">${ROLES.AGENT_ADMINISTRATEUR}</option>`);
+        options.push(`<option value="AGENT_SUPERVISEUR">${ROLES.AGENT_SUPERVISEUR}</option>`);
+        options.push(`<option value="ADMIN_MULTIPORTS">${ROLES.ADMIN_MULTIPORTS}</option>`);
+    } else if (role === ROLES.SUPER_ADMIN) {
+        options.push(`<option value="VISITEUR">${ROLES.VISITEUR}</option>`);
+        options.push(`<option value="PLAISANCIER">${ROLES.PLAISANCIER}</option>`);
+        options.push(`<option value="AGENT_CAPITAINERIE">${ROLES.AGENT_CAPITAINERIE}</option>`);
+        options.push(`<option value="AGENT_ADMINISTRATEUR">${ROLES.AGENT_ADMINISTRATEUR}</option>`);
+        options.push(`<option value="AGENT_SUPERVISEUR">${ROLES.AGENT_SUPERVISEUR}</option>`);
+        options.push(`<option value="ADMIN_MULTIPORTS">${ROLES.ADMIN_MULTIPORTS}</option>`);
+        options.push(`<option value="SUPER_ADMIN">${ROLES.SUPER_ADMIN}</option>`);
+    }
+    else if (role === 'admin') {
+        options.push(`<option value="VISITEUR">${ROLES.VISITEUR}</option>`)
+        options.push(`<option value="PLAISANCIER">${ROLES.PLAISANCIER}</option>`)
+        options.push(`<option value="AGENT_ADMINISTRATEUR">${ROLES.AGENT_ADMINISTRATEUR}</option>`)
+    }
+    return(options);
+}
+
 exports.router =
     [
         {
@@ -516,6 +569,7 @@ exports.plugin =
     desc: "",
     handler: async (req, res) => {
         var admin = await getAdminById(req.userCookie.data.id);
+        console.log('admin', admin)
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
@@ -566,17 +620,28 @@ exports.plugin =
             var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             var _userHtml = fs.readFileSync(path.join(__dirname, "user.html")).toString();
             var _mailHtml = fs.readFileSync(path.join(__dirname, "mail.html")).toString();
+            /**@type {Array<import('../../types').T_user>} */
             var _users = [];
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
                     _users = _users.concat(await getUserByHarbourId(_harbour_id[i]));
                 }
             }
-            else if (_role == "admin")
+            else if (_role == "admin") {
                 _users = await getUser();
+            }
+
+            const roleOptions = generateRoleOptions(_role);
 
             var _userGen = "";
             for (var i = 0; i < _users.length; i++) {
+                const optionsStr = roleOptions.join('');
+                if (_users[i].roleMobileApp) {
+                    optionsStr.replace(`>${_users[i].roleMobileApp}`, `selected>${_users[i].roleMobileApp}`);
+                } else {
+                    optionsStr.replace(`>${ENUM.rolesMobileApp.VISITEUR}`, `selected>${ENUM.rolesMobileApp.VISITEUR}`);
+                }
+
                 if (_users[i].category != "visitor") {
                     var currentHarbour = await STORE.harbourmgmt.getHarbourById(_users[i].harbourid);
 
@@ -591,6 +656,7 @@ exports.plugin =
                     _userGen += _userHtml.replace(/__ID__/g, _users[i].id)
                         .replace(/__FORMID__/g, _users[i].id.replace(/\./g, "_"))
                         .replace(/__CATEGORY__/g, _users[i].category)
+                        .replace(/__ROLE_OPTIONS__/g, roleOptions.join(''))
                         .replace(/__FIRST_NAME__/g, _users[i].first_name)
                         .replace(/__LAST_NAME__/g, _users[i].last_name)
                         .replace(/__EMAIL__/g, _users[i].email)
