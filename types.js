@@ -1,3 +1,4 @@
+const ENUM = require('./snap/lib-js/enums');
 
 /**
  * @typedef qrcode
@@ -210,8 +211,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} prefix
  * @property {string} prefixed_phone
  * @property {string} token
- * @property {import('./snap/lib-js/enums').rolesBackOffice} roleBackOffice
- * @property {import('./snap/lib-js/enums').rolesMobileApp} roleMobileApp
+ * @property {ENUM.rolesMobileApp} roleMobileApp
  */
 
 /**
@@ -222,9 +222,16 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} password
  * @property {string} name
  * @property {string} bio
- * @property {string} role
- * @property {string} data
+ * @property {string} role - Used by fortpress
+ * @property {T_data_userFP} data
  * @property {string} link
  * @property {string} last_login
  * @property {string} photo
+ */
+/**
+ * @typedef T_data_userFP
+ * @property {string} type - old role system use only 'harbour_manager' role
+ * @property {string} entity_id
+ * @property {Array<string>} harbour_id
+ * @property {string} roleBackOffice - used for back office access rights
  */
