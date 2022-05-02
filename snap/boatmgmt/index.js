@@ -1,5 +1,15 @@
 const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
 
 //gestions des bateaux
 
@@ -71,25 +81,6 @@ function verifyFirstPostReq(_req, _res) {
         return false;
     }
     return true;
-}
-
-/**
- * @param {string} role 
- */
-function verifyRoleAccess(role) {
-	const ROLES = ENUM.rolesBackOffice;
-	const accessAuthorized = [
-		ROLES.SUPER_ADMIN,
-		ROLES.AGENT_SUPERVISEUR,
-		ROLES.AGENT_CAPITAINERIE,
-		ROLES.AGENT_ADMINISTRATEUR,
-		ROLES.ADMIN_MULTIPORTS,
-	];
-
-	if (accessAuthorized.includes(role)) {
-		return(true);
-	}
-	return(false);
 }
 
 //db functions <
@@ -370,10 +361,10 @@ exports.plugin =
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
-        
-				if (!verifyRoleAccess(admin.data.roleBackOffice)){
+
+				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
 					res.writeHead(401);
-					res.end('Unauthorized.');
+					res.end('No access rights');
 					return;
 				}
 

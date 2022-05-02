@@ -1,6 +1,16 @@
 const TYPES = require('../../types');
 const TYPES_ADMIN = require('./adminmgmt.types');
 const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
 
 //gestion des admin gestionnaire de ports
 
@@ -375,6 +385,12 @@ exports.plugin =
 				if (admin.data.roleBackOffice)
 					roleBackOffice = admin.data.roleBackOffice;
 			}
+		}
+
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+			res.writeHead(401);
+			res.end('No access rights');
+			return;
 		}
 
 		if (req.method == "GET") {

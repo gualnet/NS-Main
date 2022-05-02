@@ -1,4 +1,16 @@
-require('../../types');
+const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
+
+
 var _index = fs.readFileSync(path.join(__dirname, "view", "index.html")).toString();
 var _qr = fs.readFileSync(path.join(__dirname, "view", "qr.html")).toString();
 var _landing = fs.readFileSync(path.join(__dirname, "view", "landing.html")).toString();
@@ -80,6 +92,14 @@ exports.plugin =
 	role: "admin",
 	handler: async (req, res) => {
 		
+		const admin = await getAdminById(req.userCookie.data.id);
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+			res.writeHead(401);
+			res.end('No access rights');
+			return;
+		}
+
+
 		if (req.get.target && req.get.mode && req.get.mode == "delete") {
 			await delQRCODE(req.get.target);
 		}
@@ -123,8 +143,6 @@ exports.plugin =
 
 /**
  * Handle old qrcode links and redirect to the pwa
- * @param {*} req 
- * @param {*} res 
  */
 async function qrHandler(req, res) {
 	/**@type {qrcode} */

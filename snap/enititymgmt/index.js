@@ -1,4 +1,12 @@
 require('../../types');
+const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+];
+
 var _entityCol = "entity";
 var _userCol = "user";
 
@@ -380,6 +388,13 @@ exports.plugin =
 					_harbour_id = admin.data.harbour_id;
 			}
 		}
+
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+			res.writeHead(401);
+			res.end('No access rights');
+			return;
+		}
+
 		if (req.method == "GET") {
 			verifyAccess(_type, res);
 			if (req.get.mode && req.get.mode == "delete" && req.get.entity_id) {
