@@ -1,3 +1,6 @@
+const TYPES = require('../../types');
+const ENUM = require('../lib-js/enums');
+
 //gestions des bateaux
 
 
@@ -68,6 +71,25 @@ function verifyFirstPostReq(_req, _res) {
         return false;
     }
     return true;
+}
+
+/**
+ * @param {string} role 
+ */
+function verifyRoleAccess(role) {
+	const ROLES = ENUM.rolesBackOffice;
+	const accessAuthorized = [
+		ROLES.SUPER_ADMIN,
+		ROLES.AGENT_SUPERVISEUR,
+		ROLES.AGENT_CAPITAINERIE,
+		ROLES.AGENT_ADMINISTRATEUR,
+		ROLES.ADMIN_MULTIPORTS,
+	];
+
+	if (accessAuthorized.includes(role)) {
+		return(true);
+	}
+	return(false);
 }
 
 //db functions <
@@ -156,6 +178,12 @@ async function updateBoat(_obj) {
         });
     });
 }
+
+/**
+ * 
+ * @param {TYPES.T_userFP['id']} _id 
+ * @returns {Promise<TYPES.T_userFP>}
+ */
 async function getAdminById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
@@ -331,19 +359,24 @@ exports.router = [
 ]
 
 
-
 exports.plugin =
 {
     title: "Gestion des bateaux",
     desc: "",
     handler: async (req, res) => {
-        
+
         var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
         
+				if (!verifyRoleAccess(admin.data.roleBackOffice)){
+					res.writeHead(401);
+					res.end('Unauthorized.');
+					return;
+				}
+
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.boat_id) {
                 await delBoat(req.get.boat_id);

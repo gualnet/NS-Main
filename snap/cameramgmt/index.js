@@ -1,3 +1,5 @@
+const ENUM = require('../lib-js/enums');
+
 //gestions des cameras
 
 
@@ -58,6 +60,19 @@ async function getCameraById(_id) {
                 resolve(_err);
         });
     });
+}
+
+/**
+ * @param {string} role 
+ */
+ function verifyRoleAccess(role) {
+	const ROLES = ENUM.rolesBackOffice;
+	const accessAuthorized = [ROLES.SUPER_ADMIN];
+
+	if (accessAuthorized.includes(role)) {
+		return(true);
+	}
+	return(false);
 }
 
 
@@ -156,6 +171,12 @@ exports.plugin =
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
         // >
+
+				if (!verifyRoleAccess(admin.data.roleBackOffice)){
+					res.writeHead(401);
+					res.end('Unauthorized.');
+					return;
+				}
         
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.camera_id) {
