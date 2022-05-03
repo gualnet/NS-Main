@@ -389,10 +389,12 @@ exports.plugin =
 			}
 		}
 
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
-			res.writeHead(401);
-			res.end('No access rights');
-			return;
+		if (req.post.mode !== 'getEntity') {
+			if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
+				res.writeHead(401);
+				res.end('No access rights');
+				return;
+			}
 		}
 
 		if (req.method == "GET") {

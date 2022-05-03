@@ -240,7 +240,7 @@
                 }).then(response => response.json()).then(_data => {
                     console.log('send update form response:', _data);
                     if (_data.success) {
-                        // location.reload();
+                        location.reload();
                     }
                     else {
                         if (document.getElementById("error"))
