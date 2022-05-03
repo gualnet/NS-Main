@@ -1,4 +1,4 @@
-require('../../types');
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 
@@ -112,6 +112,12 @@ async function updateSecurite(_obj) {
         });
     });
 }
+
+/**
+ * 
+ * @param {TYPES.T_userFP['id']} _id 
+ * @returns {Promise<TYPES.T_userFP>}
+ */
 async function getAdminById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
@@ -301,6 +307,7 @@ exports.plugin =
     desc: "",
     handler: async (req, res) => {
         console.log('req.userCookie',req.userCookie);
+
         var admin = await getAdminById(req.userCookie.data.id);
         var _role = admin.role;
         var _type = admin.data.type;
@@ -322,9 +329,21 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
+						console.log('POST ==>', req.post);
             if (req.post.id) {
                 var currentSecurite = await getSecuriteById(req.post.id);
                 var _FD = req.post;
+
+								const userRole = admin.data.roleBackOffice;
+								const closeIncidentAuthorized = [ROLES.AGENT_SUPERVISEUR, userRole.ADMIN_MULTIPORTS, userRole.SUPER_ADMIN];
+								if (req.post.status === 'closed' && !closeIncidentAuthorized.includes(userRole)) {
+									res.writeHead(401);
+									res.end(JSON.stringify({
+										message: 'No access rights',
+										description: 'Vous ne disposez pas des droits requis pour clôturer cet incident.'
+									}));
+									return;
+								}
 
                 _FD.date_start = Date.parse(_FD.date_start);
                 _FD.date_end = Date.parse(_FD.date_end);
