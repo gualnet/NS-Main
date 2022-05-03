@@ -303,7 +303,7 @@ exports.router =
 
 exports.plugin =
 {
-    title: "Gestion Sécurité/Maintenance",
+    title: "Gestion des incidents",
     desc: "",
     handler: async (req, res) => {
         console.log('req.userCookie',req.userCookie);
