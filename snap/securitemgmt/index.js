@@ -329,7 +329,6 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
-						console.log('POST ==>', req.post);
             if (req.post.id) {
                 var currentSecurite = await getSecuriteById(req.post.id);
                 var _FD = req.post;
