@@ -131,7 +131,7 @@
     <footer class="footer mt-auto py-3">
         <div class="container" style="margin-bottom: 25px">
             <!-- PWA add to home display -->
-            <div class="row" id="addtodevice">
+            <div class="row d-none" id="addtodevice">
                 <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1">
                     <p style="color: #033B8A; margin-left: 15px">Ajouter à <span class="font-weight-bold">l'écran d'accueil</span></p>
                 </div>
@@ -192,11 +192,12 @@
     <!-- page level custom script -->
     <script>
 
-        window.onload = () => {
-            if (navigator.userAgent.toLocaleLowerCase().includes('iphone')) {
-                document.querySelector('#addtodevice').style.display = 'none';
-            }
-        };
+				window.onload = () => {
+					if (!navigator.userAgent.toLocaleLowerCase().includes('iphone')) {
+						const addToDeviceEl = document.querySelector('#addtodevice');
+						addToDeviceEl.className = addToDeviceEl.className.replace('d-none', 'd-flex');
+					}
+				};
 
         var urlParam = new URLSearchParams(window.location.search);
         function changePage(_url) {
