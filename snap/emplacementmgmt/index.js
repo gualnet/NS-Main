@@ -1,3 +1,11 @@
+const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+];
+
 var _userCol = "user";
 var _placeCol = "place";
 var _zoneCol = "zone";
@@ -324,6 +332,13 @@ exports.plugin =
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
+
+				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+					res.writeHead(401);
+					res.end('No access rights');
+					return;
+				}
+
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.zone_id) {
                 await delZone(req.get.zone_id);

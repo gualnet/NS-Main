@@ -1,3 +1,9 @@
+const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [ROLES.SUPER_ADMIN];
+
 //gestions des cameras
 
 
@@ -59,7 +65,6 @@ async function getCameraById(_id) {
         });
     });
 }
-
 
 async function getCamera() {
     return new Promise(resolve => {
@@ -144,110 +149,115 @@ exports.router =
         },
     ];
 
-exports.plugin =
-{
-    title: "Gestion des caméras",
-    desc: "",
-    handler: async (req, res) => {
-        //get user from FORTPRESS db <
-        var admin = await getAdminById(req.userCookie.data.id);
-        var _type = admin.data.type;
-        var _role = admin.role;
-        var _entity_id = admin.data.entity_id;
-        var _harbour_id = admin.data.harbour_id;
-        // >
-        
-        if (req.method == "GET") {
-            if (req.get.mode && req.get.mode == "delete" && req.get.camera_id) {
-                var promise = await delCamera(req.get.camera_id);
-            }
-            else if (req.get.camera_id) {
-                await getCameraById(req.get.camera_id);
-            }
-        }
-        if (req.method == "POST") {
-            if (req.post.id) {
+exports.plugin = {
+	title: "Gestion des caméras",
+	desc: "",
+	handler: async (req, res) => {
+		//get user from FORTPRESS db <
+		var admin = await getAdminById(req.userCookie.data.id);
+		var _type = admin.data.type;
+		var _role = admin.role;
+		var _entity_id = admin.data.entity_id;
+		var _harbour_id = admin.data.harbour_id;
+		// >
 
-                if (verifyPostReq(req, res)) {
-                    if (typeof (await updateCamera(req.post)) != "string") {
-                        UTILS.httpUtil.dataSuccess(req, res, "Camera mis à jour", "1.0");
-                        return;
-                    }
-                }
-            }
-            else {
-                req.post.date = Date.now();
-                if (typeof (await createCamera(req.post)) != "string") {
-                    UTILS.httpUtil.dataSuccess(req, res, "Camera créé", "1.0");
-                    return;
-                }
-            }
-        }
-        else {
-            //get html files
-            var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
-            var _cameraHtml = fs.readFileSync(path.join(__dirname, "camera.html")).toString();
-            
-            //get cameras from user role
-            var _cameras = [];
-            if (_role == "user") {
-                for (var i = 0; i < _harbour_id.length; i++) {
-                    _cameras = _cameras.concat(await getCameraByHarbourId(_harbour_id[i]));
-                }
-            }
-            else if (_role == "admin")
-                _cameras = await getCamera();
+		if (!verifyRoleAccess(admin.data.roleBackOffice, AUTHORIZED_ROLES)) {
+			res.writeHead(401);
+			res.end('No access rights');
+			return;
+		}
+
+		if (req.method == "GET") {
+			if (req.get.mode && req.get.mode == "delete" && req.get.camera_id) {
+				var promise = await delCamera(req.get.camera_id);
+			}
+			else if (req.get.camera_id) {
+				await getCameraById(req.get.camera_id);
+			}
+		}
+		if (req.method == "POST") {
+			if (req.post.id) {
+
+				if (verifyPostReq(req, res)) {
+					if (typeof (await updateCamera(req.post)) != "string") {
+						UTILS.httpUtil.dataSuccess(req, res, "Camera mis à jour", "1.0");
+						return;
+					}
+				}
+			}
+			else {
+				req.post.date = Date.now();
+				if (typeof (await createCamera(req.post)) != "string") {
+					UTILS.httpUtil.dataSuccess(req, res, "Camera créé", "1.0");
+					return;
+				}
+			}
+		}
+		else {
+			//get html files
+			var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
+			var _cameraHtml = fs.readFileSync(path.join(__dirname, "camera.html")).toString();
+
+			//get cameras from user role
+			var _cameras = [];
+			if (_role == "user") {
+				for (var i = 0; i < _harbour_id.length; i++) {
+					_cameras = _cameras.concat(await getCameraByHarbourId(_harbour_id[i]));
+				}
+			}
+			else if (_role == "admin")
+				_cameras = await getCamera();
 
 
-            //modify html dynamically <
-            var _cameraGen = "";
-            for (var i = 0; i < _cameras.length; i++) {
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_cameras[i].harbour_id);
-                _cameraGen += _cameraHtml.replace(/__ID__/g, _cameras[i].id)
-                    .replace(/__FORMID__/g, _cameras[i].id.replace(/\./g, "_"))
-                    .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-                    .replace(/__HARBOUR_ID__/g, currentHarbour.id)
-                    .replace(/__URL__/g, _cameras[i].url)
-                    .replace(/__TITLE__/g, _cameras[i].title)
-            }
-            _indexHtml = _indexHtml.replace("__CAMERA__", _cameraGen).replace(/undefined/g, '');
-            // >
-            
-            var userHarbours = [];
-            var harbour_select;
-            if (_role == "user") {
-                harbour_select = '<div class="col-12">'
-                    + '<div class= "form-group" >'
-                    + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
+			//modify html dynamically <
+			var _cameraGen = "";
+			for (var i = 0; i < _cameras.length; i++) {
+				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_cameras[i].harbour_id);
+				_cameraGen += _cameraHtml.replace(/__ID__/g, _cameras[i].id)
+					.replace(/__FORMID__/g, _cameras[i].id.replace(/\./g, "_"))
+					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
+					.replace(/__HARBOUR_ID__/g, currentHarbour.id)
+					.replace(/__URL__/g, _cameras[i].url)
+					.replace(/__TITLE__/g, _cameras[i].title)
+			}
+			_indexHtml = _indexHtml.replace("__CAMERA__", _cameraGen).replace(/undefined/g, '');
+			// >
 
-                const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
-                const userHarbours = await Promise.all(getHarbourPromises);
-                userHarbours.map(userHarbour => {
-                    harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
-                });
+			var userHarbours = [];
+			var harbour_select;
+			if (_role == "user") {
+				harbour_select = '<div class="col-12">'
+					+ '<div class= "form-group" >'
+					+ '<label class="form-label">Sélection du port</label>'
+					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
 
-                harbour_select += '</select></div></div>';
-            } else if (_role == "admin") {
-                harbour_select = '<div class="col-12">'
-                    + '<div class= "form-group" >'
-                    + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
-                userHarbours = await STORE.harbourmgmt.getHarbour();
-                userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+				const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
+				const userHarbours = await Promise.all(getHarbourPromises);
+				userHarbours.map(userHarbour => {
+					harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
+				});
 
-                for (var i = 0; i < userHarbours.length; i++) {
-                    harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
-                }
-                harbour_select += '</select></div></div>';
-            }
-            _indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
-            //>
-    
-            //send plugin html page
-            res.setHeader("Content-Type", "text/html");
-            res.end(_indexHtml);
-            return;
-        }
-    }
+				harbour_select += '</select></div></div>';
+			} else if (_role == "admin") {
+				harbour_select = '<div class="col-12">'
+					+ '<div class= "form-group" >'
+					+ '<label class="form-label">Sélection du port</label>'
+					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
+				userHarbours = await STORE.harbourmgmt.getHarbour();
+				userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+
+				for (var i = 0; i < userHarbours.length; i++) {
+					harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
+				}
+				harbour_select += '</select></div></div>';
+			}
+			_indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
+			//>
+
+			//send plugin html page
+			res.setHeader("Content-Type", "text/html");
+			res.end(_indexHtml);
+			return;
+		}
+	}
 }

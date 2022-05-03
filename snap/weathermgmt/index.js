@@ -1,3 +1,15 @@
+const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
+
 var _weatherCol = "weather";
 
 var _userCol = "user";
@@ -316,6 +328,12 @@ exports.plugin =
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
+
+				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+					res.writeHead(401);
+					res.end('No access rights');
+					return;
+				}
 
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.weather_id) {

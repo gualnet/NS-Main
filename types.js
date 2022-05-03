@@ -1,3 +1,5 @@
+const ENUM = require('./snap/lib-js/enums');
+
 /**
  * @typedef qrcode
  * @property {string} id
@@ -192,4 +194,44 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} role - ERP
  * @property {EpochTimeStamp} created_at 
  * @property {EpochTimeStamp} updated_at 
+ */
+
+/**
+ * @typedef T_user - users referenced in nauticspot user db -> mobile app access
+ * @property {EpochTimeStamp} date
+ * @property {string} category
+ * @property {string} contract_number
+ * @property {string} email
+ * @property {string} first_name
+ * @property {string} harbourid
+ * @property {string} id
+ * @property {string} last_name
+ * @property {string} password
+ * @property {string} phone
+ * @property {string} prefix
+ * @property {string} prefixed_phone
+ * @property {string} token
+ * @property {ENUM.rolesMobileApp} roleMobileApp
+ */
+
+/**
+ * @typedef T_userFP - users referenced in fortpress user db -> dashboard access
+ * @property {string} id
+ * @property {string} login
+ * @property {string} pw_type
+ * @property {string} password
+ * @property {string} name
+ * @property {string} bio
+ * @property {string} role - Used by fortpress
+ * @property {T_data_userFP} data
+ * @property {string} link
+ * @property {string} last_login
+ * @property {string} photo
+ */
+/**
+ * @typedef T_data_userFP
+ * @property {string} type - old role system use only 'harbour_manager' role
+ * @property {string} entity_id
+ * @property {Array<string>} harbour_id
+ * @property {string} roleBackOffice - used for back office access rights
  */

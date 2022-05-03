@@ -1,3 +1,16 @@
+const TYPES = require('../../types');
+const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
+
 //gestions des bateaux
 
 
@@ -156,6 +169,12 @@ async function updateBoat(_obj) {
         });
     });
 }
+
+/**
+ * 
+ * @param {TYPES.T_userFP['id']} _id 
+ * @returns {Promise<TYPES.T_userFP>}
+ */
 async function getAdminById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
@@ -331,19 +350,24 @@ exports.router = [
 ]
 
 
-
 exports.plugin =
 {
     title: "Gestion des bateaux",
     desc: "",
     handler: async (req, res) => {
-        
+
         var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
-        
+
+				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+					res.writeHead(401);
+					res.end('No access rights');
+					return;
+				}
+
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.boat_id) {
                 await delBoat(req.get.boat_id);

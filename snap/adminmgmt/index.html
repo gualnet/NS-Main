@@ -71,6 +71,12 @@
                                                 __SELECT_ENTITY__
                                             </select>
                                         </div>
+																				<div class="col-lg-2">
+																					<label for="roleBackOffice" class="form-label">Role Back-Office</label>
+																					<select id="roleBackOffice" name="roleBackOffice" class="form-control" aria-label="Default select example">
+																							__SELECT_BACK_OFFICE__
+																					</select>
+																			</div>
                                         <div class="col-12">
                                             <label for="harbour_id" class="form-label">Port</label>
                                             <select id="harbour_id" class="form-control" name="harbour_id[]" multiple>
@@ -105,6 +111,8 @@
                                                 <th>login</th>
                                                 <th style="width:300px;">type</th>
                                                 <th>entité</th>
+                                                <th>port</th>
+																								<th>Back-Office Role</th>
                                                 <th>port</th>
                                                 <th></th>
                                             </tr>
@@ -230,7 +238,7 @@
                     method: form.method,
                     body: formData
                 }).then(response => response.json()).then(_data => {
-                    console.log(_data);
+                    console.log('send update form response:', _data);
                     if (_data.success) {
                         location.reload();
                     }

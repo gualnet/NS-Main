@@ -1,23 +1,22 @@
 exports.handler = async (req, res) => {
   // console.log('==================GET MANIFEST MGMT HANDLER=================')
   const entity = await STORE.enititymgmt.getEntityById(req.get.entity);
-
   let manifest = {
     short_name: entity.name,
     name: entity.name,
     icons: [
       {
-        src: entity.appIcon?.replace('/upload', '/upload/w_128,h_128,c_fill') || '',
+        src: entity.appIcon?.replace('/upload', '/upload/w_128,h_128,c_fill') || entity.logo,
         type: "image/png",
         sizes: "128x128"
       },
       {
-        src: entity.appIcon?.replace('/upload', '/upload/w_256,h_256,c_fill') || '',
+        src: entity.appIcon?.replace('/upload', '/upload/w_256,h_256,c_fill') || entity.logo,
         type: "image/png",
         sizes: "256x256"
       },
       {
-        src: entity.appIcon?.replace('/upload', '/upload/w_512,h_512,c_fill') || '',
+        src: entity.appIcon?.replace('/upload', '/upload/w_512,h_512,c_fill') || entity.logo,
         type: "image/png",
         sizes: "512x512"
       }

@@ -1,5 +1,16 @@
-require('../../types');
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
+
 
 var _securiteCol = "securite";
 var _userCol = "user";
@@ -101,6 +112,12 @@ async function updateSecurite(_obj) {
         });
     });
 }
+
+/**
+ * 
+ * @param {TYPES.T_userFP['id']} _id 
+ * @returns {Promise<TYPES.T_userFP>}
+ */
 async function getAdminById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
@@ -290,11 +307,18 @@ exports.plugin =
     desc: "",
     handler: async (req, res) => {
         console.log('req.userCookie',req.userCookie);
+
         var admin = await getAdminById(req.userCookie.data.id);
         var _role = admin.role;
         var _type = admin.data.type;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
+
+				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+					res.writeHead(401);
+					res.end('No access rights');
+					return;
+				}
 
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.securite_id) {
@@ -308,6 +332,17 @@ exports.plugin =
             if (req.post.id) {
                 var currentSecurite = await getSecuriteById(req.post.id);
                 var _FD = req.post;
+
+								const userRole = admin.data.roleBackOffice;
+								const closeIncidentAuthorized = [ROLES.AGENT_SUPERVISEUR, userRole.ADMIN_MULTIPORTS, userRole.SUPER_ADMIN];
+								if (req.post.status === 'closed' && !closeIncidentAuthorized.includes(userRole)) {
+									res.writeHead(401);
+									res.end(JSON.stringify({
+										message: 'No access rights',
+										description: 'Vous ne disposez pas des droits requis pour clôturer cet incident.'
+									}));
+									return;
+								}
 
                 _FD.date_start = Date.parse(_FD.date_start);
                 _FD.date_end = Date.parse(_FD.date_end);

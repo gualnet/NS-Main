@@ -125,51 +125,53 @@
                 </div>
             </div>
         </div>
-        <script>
-            function switchPlugin(_pluginName) {
-                let children = document.querySelectorAll("li.nav-item.active");
-                children[0].setAttribute("class", "nav-item py-2");
-                document.getElementById("nav_" + _pluginName).setAttribute("class", "nav-item py-2 active bg-theme-color-active");
-                if (_pluginName == "prevdashadmin")
-                    document.getElementById("plugin_display").src = "https://admin.nauticspot.io/#/login";
-                else if (_pluginName == "prevdashuser")
-                    document.getElementById("plugin_display").src = "https://app.nauticspot.io/#/login";
-                else
-                    document.getElementById("plugin_display").src = "/admin/plugin/" + _pluginName;
-            }
+	<script>
+		function switchPlugin(_pluginName) {
+			let children = document.querySelectorAll("li.nav-item.active");
+			children[0].setAttribute("class", "nav-item py-2");
+			document.getElementById("nav_" + _pluginName).setAttribute("class", "nav-item py-2 active bg-theme-color-active");
+			if (_pluginName == "prevdashadmin")
+				document.getElementById("plugin_display").src = "https://admin.nauticspot.io/#/login";
+			else if (_pluginName == "prevdashuser")
+				document.getElementById("plugin_display").src = "https://app.nauticspot.io/#/login";
+			else
+				document.getElementById("plugin_display").src = "/admin/plugin/" + _pluginName;
+		}
 
-            var formData = new FormData();
-            formData.append("mode", "get_session");
-            window.onload = function () {
-                fetch("/admin/plugin/adminmgmt", { method: "POST", body: formData }).then(response => response.json()).then(_data => {
-                    //console.log(_data);
-                    if (_data.success) {
-                        var _user = _data.data;
-                        if (_user.role != "admin") {
-                            var disabledPlugin = ["adminmgmt", "prevdashadmin", "prevdashuser", "qrcode", "enititymgmt", "mapmgmt"];
-                            for (var i = 0; i < disabledPlugin.length; i++)
-                                document.getElementById("nav_" + disabledPlugin[i]).hidden = true;
-                        }
-                        document.getElementById("name").innerHTML = _user.name;
-                    }
-                    else
-                        location.replace("/dashboard/login");
-                }).catch((e) => { location.replace("/dashboard/login");/*console.error(e);*/ });
+		var formData = new FormData();
+		formData.append("mode", "get_session");
+		window.onload = function () {
+			fetch("/admin/plugin/adminmgmt", { method: "POST", body: formData }).then(response => response.json()).then(_data => {
+				if (_data.success) {
+					var _user = _data.data;
+					const roleBO = _user.data?.roleBackOffice;
+					const disabledPluginList = [];
+					if (['Agent Capitainerie', 'Agent Administrateur', 'Agent Superviseur'].includes(roleBO)) {
+						disabledPluginList.push("adminmgmt", "prevdashadmin", "prevdashuser", "qrcode", "enititymgmt", 'emplacementmgmt')
+					}
+					for (var i = 0; i < disabledPluginList.length; i++) {
+						document.getElementById("nav_" + disabledPluginList[i]).hidden = true;
+					}
+					document.getElementById("name").innerHTML = _user.name;
+				}
+				else
+					location.replace("/dashboard/login");
+			}).catch((e) => { location.replace("/dashboard/login");/*console.error(e);*/ });
 
-                formData = new FormData();
-                formData.append("mode", "getEntity");
-                fetch("/admin/plugin/enititymgmt", { method: "POST", body: formData }).then(response => response.json()).then(_data => {
-                    document.getElementById("entity_img").src = _data.data.logo;
-                    document.getElementById("entity_name").src = _data.data.name;
-                    if(_data.data.absence_module == false)
-                                document.getElementById("nav_absencemgmt").hidden = true;
-                    if(_data.data.security_module == false)
-                                document.getElementById("nav_securitemgmt").hidden = true;
+			formData = new FormData();
+			formData.append("mode", "getEntity");
+			fetch("/admin/plugin/enititymgmt", { method: "POST", body: formData }).then(response => response.json()).then(_data => {
+				document.getElementById("entity_img").src = _data.data.logo;
+				document.getElementById("entity_name").src = _data.data.name;
+				if (_data.data.absence_module == false)
+					document.getElementById("nav_absencemgmt").hidden = true;
+				if (_data.data.security_module == false)
+					document.getElementById("nav_securitemgmt").hidden = true;
 
 
-                }).catch((e) => { console.error(e); });
-            };
-        </script>
+			}).catch((e) => { console.error(e); });
+		};
+	</script>
     </div>
     </div>
 {{element->footer_dashboard.html}}
