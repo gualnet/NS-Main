@@ -136,7 +136,7 @@
                     <p style="color: #033B8A; margin-left: 15px">Ajouter à <span class="font-weight-bold">l'écran d'accueil</span></p>
                 </div>
                 <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1" style="margin-bottom: 15px">
-                    <button class="btn btn-block btn-info btn-lg btn-lgft" style="color: #FFF; padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.15em; right: 15px; position: relative; bottom: 8px; font-size: 10px;" id="addtohome">Installer</button>
+                    <button class="btn btn-block btn-info btn-lg btn-lgft" style="display: none; color: #FFF; padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.15em; right: 15px; position: relative; bottom: 8px; font-size: 10px;" id="addtohome">Installer</button>
                 </div>
             </div>
             <!-- PWA add to home display -->
@@ -194,7 +194,7 @@
 
         window.onload = () => {
             if (navigator.userAgent.toLocaleLowerCase().includes('iphone')) {
-                document.querySelector('#addtodevice').style.display = 'none';
+                document.querySelector('#addtodevice').style.display = 'block';
             }
         };
 
