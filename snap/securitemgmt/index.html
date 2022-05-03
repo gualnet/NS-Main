@@ -250,33 +250,37 @@
         //         });
         // }
 
-        function sendUpdateForm(id) {
-            var form = document.getElementById(id);
-            console.log(form);
-            var formData = new FormData(form);
-            fetch(form.action,
-                {
-                    method: form.method,
-                    body: formData
-                }).then(response => response.json()).then(_data => {
-                    console.log(_data);
-                    if (_data.success) {
-                        location.reload();
-                    }
-                    else {
-                        if (document.getElementById("error"))
-                            document.getElementById("harbourError").removeChild(document.getElementById("error"));
-
-                        document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
-                        alert(_data.message);
-                    }
-                }).catch((error) => {
-                    if (document.getElementById("error"))
-                        document.getElementById("harbourError").removeChild(document.getElementById("error"));
-
-                    document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
-                });
-        }
+	function sendUpdateForm(id) {
+		var form = document.getElementById(id);
+		console.log(form);
+		var formData = new FormData(form);
+		fetch(form.action,
+			{
+				method: form.method,
+				body: formData
+			})
+			.then(response => response.json())
+			.then(_data => {
+				console.log(_data);
+				if (_data.success) {
+					location.reload();
+				}
+				else {
+					if (document.getElementById("error")) {
+						document.getElementById("harbourError").removeChild(document.getElementById("error"));
+					}
+					const errorMessage = _data.description || _data.message;
+					document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + errorMessage + '</div>');
+				}
+			})
+			.catch((error) => {
+				if (document.getElementById("error")) {
+					document.getElementById("harbourError").removeChild(document.getElementById("error"));
+				}
+				const errorMessage = _data.description || _data.message;
+				document.getElementById("harbourError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + errorMessage + '</div>');
+			});
+	}
     </script>
 </body>
 
