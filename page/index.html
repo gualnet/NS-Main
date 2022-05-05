@@ -1098,10 +1098,17 @@
             <input type="radio" id="templatecolor14" name="sidebarcolorselect">
             <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
         </div>
-
     </div>
 
     <script>
+			window.onload = () => {
+				const isGruissan = '4e2cd2p6mt' === localStorage['harbourid'];
+				if (isGruissan) {
+					const nauticBtn = document.querySelector('#nautic');
+					nautic.querySelector('img').src = '/library/ActivitieNautiqueGruissan.png'
+				}
+			};
+
         const weatherOnClickHandler = () => {
             const weatherDisableList = [
                 '4eqv44307K', // les sablons
