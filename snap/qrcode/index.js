@@ -10,22 +10,34 @@ const AUTHORIZED_ROLES = [
 	ROLES.AGENT_CAPITAINERIE,
 ];
 
-
 var _index = fs.readFileSync(path.join(__dirname, "view", "index.html")).toString();
 var _qr = fs.readFileSync(path.join(__dirname, "view", "qr.html")).toString();
 var _landing = fs.readFileSync(path.join(__dirname, "view", "landing.html")).toString();
 
 var QRCode = require('qrcode')
 var _qrCol = "qrcode";
+var _userCol = "user";
 
+// v.1.0.0 -> change link from native app to pwa
+// v.1.1.0 -> add role access rights
 
 exports.setup =
 {
 	on: true,
-	title: 'LibraryDownloader',
+	title: 'qrcode',
 	description: "A plugin to manage the QRCODEs",
-	version: '1.0.0',
-	// V.1.0.0 - change link to PWA
+	version: '1.1.0',
+}
+
+async function getAdminById(_id) {
+	return new Promise(resolve => {
+		STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
+			if (_data)
+				resolve(_data);
+			else
+				resolve(_err);
+		});
+	});
 }
 
 async function createImage(_target) {
@@ -91,14 +103,12 @@ exports.plugin =
 	desc: "Manage QRCODES",
 	role: "admin",
 	handler: async (req, res) => {
-		
 		const admin = await getAdminById(req.userCookie.data.id);
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('No access rights');
 			return;
 		}
-
 
 		if (req.get.target && req.get.mode && req.get.mode == "delete") {
 			await delQRCODE(req.get.target);
@@ -157,12 +167,11 @@ async function qrHandler(req, res) {
 	}
 }
 
-exports.router =
-	[
-		{
-			route: "/qrcode/:id", // old route to download native app from a qrcode
-			handler: qrHandler,
-			method: "GET",
-		},
-	];
+exports.router = [
+	{
+		route: "/qrcode/:id", // old route to download native app from a qrcode
+		handler: qrHandler,
+		method: "GET",
+	},
+];
 
