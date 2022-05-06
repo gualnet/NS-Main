@@ -204,24 +204,16 @@
 			var formData = new FormData(form);
 
 			if (isResident) {
-				// add ponton data
-				const pontonEl = document.querySelector('#ponton-select');
-				console.log('pontonEl', pontonEl);
-				const pontonValue = pontonEl?.value;
-				console.log('pontonValue', pontonValue);
-
 				const boatNameEl = document.querySelector('#boat-name');
-				console.log('boatNameEl', boatNameEl);
 				const boatNameValue = boatNameEl?.value;
-				console.log('boatNameValue', boatNameValue);
 				if (boatNameValue?.length < 1) {
 					document.getElementById("addUserError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + 'Nom du bateau manquant' + '</div>');
 					setTimeout(() => {
 						document.getElementById("error").remove();
 					}, 5000);
+					return;
 				}
 			}
-			return;
 			fetch("/api/verify/mail/", {
 				method: form.method,
 				body: formData
