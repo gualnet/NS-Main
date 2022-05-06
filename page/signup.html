@@ -73,8 +73,8 @@
 						</select>
 					</div>
 					<div class="form-group my-4 text-secondary">
-						En cliquant sur le bouton ci-dessous, je reconnais avoir
-						<a href="#" class="link">lu et accepté les conditions générales</a> de l'application
+						En cliquant sur le bouton ci-dessous, je reconnais avoir lu et accepté
+						<a href="#" class="link hyperlink" id="cguLink" download="nauticspot-cgu.pdf">les conditions générales</a> de l'application
 					</div>
 				</form>
 				<form method="post" id="boatform">
@@ -131,6 +131,11 @@
 		body {
 			background: url("../background2.png") #FFF fixed;
 			font-family: 'Poppins Regular' !important;
+		}
+
+		.hyperlink {
+			color: #068bf1;
+			text-decoration: underline;
 		}
 	</style>
 
@@ -192,11 +197,19 @@
 			}).catch((error) => {
 				console.log(error);
 			});
+
+			constructCguLink();
 		});
 
 		document.getElementById("harbourlist").addEventListener("change", function (event) {
 			getPlaces();
 		})
+
+		const constructCguLink = () => {
+			const harbourName = localStorage['harbourname'];
+			const cguLinkEl = document.querySelector('#cguLink');
+			cguLinkEl.href = `http://localhost:9090/library/cgu_${harbourName}.pdf`;
+		}
 
 		function sendSignupForm() {
 			var form = document.getElementById("signupForm");
