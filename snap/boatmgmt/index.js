@@ -403,38 +403,43 @@ exports.plugin =
                 _boats = await getBoat();
 
             //modify html dynamically <
-            var _boatGen = "";
-            for (var i = 0; i < _boats.length; i++) {
-                
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_boats[i].harbour);
-                var places = await STORE.mapmgmt.getPlaceByHarbourId(_boats[i].harbour);
-                
-                // set places lists
-                var places_select = "";
-                for (var p = 0; p < places.length; p++) {
-                    if (places[p] || _boats[i]) {
-                        if (places[p].id == _boats[i].place_id) {
-                            places_select += '<option value="' + places[p].id + '" selected>' + places[p].number + '</option>'
-                        } else {
-                            places_select += '<option value="' + places[p].id + '">' + places[p].number + '</option>'
-                        }
-                    }
-                }
+					var _boatGen = "";
+					let isPlaceAttributed;
+					for (var i = 0; i < _boats.length; i++) {
+						isPlaceAttributed = false;
+						var currentHarbour = await STORE.harbourmgmt.getHarbourById(_boats[i].harbour);
+						let places = await STORE.mapmgmt.getPlaceByHarbourId(_boats[i].harbour);
+						places = places.sort((a, b) => a.number < b.number ? -1 : 1);
+						// set places lists
+						var places_select = "";
+						for (var p = 0; p < places.length; p++) {
+							if (places[p] && _boats[i]) {
+								if (places[p]?.id == _boats[i]?.place_id) {
+									isPlaceAttributed = true
+									places_select += '<option value="' + places[p].id + '" selected>' + places[p].number + '</option>'
+								} else {
+									places_select += '<option value="' + places[p].id + '">' + places[p].number + '</option>'
+								}
+							}
+						}
+						if (isPlaceAttributed === false) {
+							places_select += '<option value="" selected> - - </option>'
+						}
 
-                var currentUser = await STORE.usermgmt.getUserById(_boats[i].user);
+						var currentUser = await STORE.usermgmt.getUserById(_boats[i].user);
 
-                _boatGen += _boatHtml.replace(/__ID__/g, _boats[i].id)
-                    .replace(/__FORMID__/g, _boats[i].id.replace(/\./g, "_"))
-                    .replace(/__NAME__/g, _boats[i].name)
-                    .replace(/__PLACE__/g, places_select)
-                    .replace(/__USER__/g, _boats[i].user + "\\" + currentUser.first_name + " " + currentUser.last_name)
-                    .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-                    .replace(/__HARBOUR_ID__/g, currentHarbour.id)
-                    .replace(/__IMMATRICULATION__/g, _boats[i].immatriculation)
-                    .replace(/__LONGUEUR__/g, _boats[i].longueur)
-                    .replace(/__LARGEUR__/g, _boats[i].largeur)
-                    .replace(/__TIRANT_EAU__/g, _boats[i].tirant_eau)
-            }
+						_boatGen += _boatHtml.replace(/__ID__/g, _boats[i].id)
+							.replace(/__FORMID__/g, _boats[i].id.replace(/\./g, "_"))
+							.replace(/__NAME__/g, _boats[i].name)
+							.replace(/__PLACE__/g, places_select)
+							.replace(/__USER__/g, _boats[i].user + "\\" + currentUser.first_name + " " + currentUser.last_name)
+							.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
+							.replace(/__HARBOUR_ID__/g, currentHarbour.id)
+							.replace(/__IMMATRICULATION__/g, _boats[i].immatriculation)
+							.replace(/__LONGUEUR__/g, _boats[i].longueur)
+							.replace(/__LARGEUR__/g, _boats[i].largeur)
+							.replace(/__TIRANT_EAU__/g, _boats[i].tirant_eau)
+					}
             _indexHtml = _indexHtml.replace("__BOATS__", _boatGen).replace(/undefined/g, '');
             // >
             
