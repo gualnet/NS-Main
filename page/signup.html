@@ -154,6 +154,7 @@
 
     <!-- page level custom script -->
     <script>
+				let isResident = false;
         "use strict"
         $(window).on('load', function () {
             if (localStorage['entity_id'] == '4eqv44307K')
@@ -209,6 +210,25 @@
             console.log(form);
             var formData = new FormData(form);
 
+						if (isResident) {
+							// add ponton data
+							const pontonEl = document.querySelector('#ponton-select');
+							console.log('pontonEl',pontonEl);
+							const pontonValue = pontonEl?.value;
+							console.log('pontonValue',pontonValue);
+
+							const boatNameEl = document.querySelector('#boat-name');
+							console.log('boatNameEl',boatNameEl);
+							const boatNameValue = boatNameEl?.value;
+							console.log('boatNameValue',boatNameValue);
+							if (boatNameValue?.length < 1) {
+								document.getElementById("addUserError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + 'Nom du bateau manquant' + '</div>');
+								setTimeout(() => {
+									document.getElementById("error").remove();
+								}, 5000);
+							}
+						}
+					return;
             fetch("/api/verify/mail/", {
                 method: form.method,
                 body: formData
@@ -289,6 +309,8 @@
         }
 
         function showResidentInputs() {
+					if (isResident) return;
+					isResident = true;
             document.getElementById('yesButton').className = "btn btn-primary";
             document.getElementById('noButton').className = "btn btn-secondary";
 
@@ -309,7 +331,7 @@
                 + '    </div>'
                 + '</div >'
                 + '<div class="form-group floating-form-group">'
-                + '<input name="name" type="text" class="form-control floating-input" required>'
+                + '<input name="name" type="text" class="form-control floating-input" id="boat-name" required>'
                 + '<label class="floating-label" style="color: #446E7B">Nom du bateau</label>'
                 + '</div >'
                 + '<div class="form-group floating-form-group">'
