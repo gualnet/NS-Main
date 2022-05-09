@@ -208,7 +208,7 @@
 		const constructCguLink = () => {
 			const harbourName = localStorage['harbourname'];
 			const cguLinkEl = document.querySelector('#cguLink');
-			cguLinkEl.href = `http://localhost:9090/library/cgu_${harbourName}.pdf`;
+			cguLinkEl.href = `/library/cgu_${harbourName}.pdf`;
 		}
 
 		function sendSignupForm() {
