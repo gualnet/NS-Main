@@ -198,7 +198,11 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 
 /**
  * @typedef T_user - users referenced in nauticspot user db -> mobile app access
- * @property {EpochTimeStamp} date
+ * @property {ENUM.rolesMobileApp} roleMobileApp
+ * @property {EpochTimeStamp} created_at 
+ * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} updated_at 
+ * @property {string || undefined} resetPwdToken - 
  * @property {string} category
  * @property {string} contract_number
  * @property {string} email
@@ -211,7 +215,6 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} prefix
  * @property {string} prefixed_phone
  * @property {string} token
- * @property {ENUM.rolesMobileApp} roleMobileApp
  */
 
 /**
