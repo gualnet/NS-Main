@@ -28,6 +28,22 @@
         </div>
     </header>
 
+		<!-- MODAL RESET PASSWORD -->
+		<div class="modal" tabindex="-1" id="resetPwdModal">
+			<div class="modal-dialog" style="margin-top: 30%;">
+				<div class="modal-content">
+					<div class="modal-body">
+						<div class="mb-3">
+							<label class="form-label">Veuillez entrer votre adresse e-mail</label>
+							<input type="email" class="form-control" id="resetPwdEmail" placeholder="name@example.com">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="resetPwdValidateBtn">Valider</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
     <!-- Begin page content -->
     <main class="flex-shrink-0">
@@ -48,7 +64,7 @@
                         <label class="floating-label">Mot de passe</label>
                     </div>
                     <div class="form-group my-4">
-                        <a href="#" class="link">Mot de passe oublié?</a>
+                        <a href="#" class="link" id="linkResetPwd">Mot de passe oublié?</a>
                     </div>
                 </form>
                 <button class="btn btn-block btn-info btn-lg" onclick="login();">Se connecter</button>
@@ -86,7 +102,9 @@
     <script src="js/color-scheme-demo.js"></script>
 
     <!-- page level custom script -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
+
         "use strict"
         $(window).on('load', function () {
             var data = new FormData();
@@ -119,7 +137,45 @@
 
     <!-- Auth scripts -->
     <script>
+			window.addEventListener('DOMContentLoaded', () => {
+				document
+					.querySelector('#linkResetPwd')
+					?.addEventListener('click', resetPasswordOnClickHandler);
 
+				document
+					.querySelector('#resetPwdValidateBtn')
+					?.addEventListener('click', sendResetPasswordRequest);
+			})
+
+			// Init modal as bootstrap element
+			const modalEl = document.getElementById('resetPwdModal');
+			const resetPwdModal = new bootstrap.Modal(modalEl, {
+				backdrop: true,
+				keyboard: true,
+				focus: true,
+			});
+
+			const resetPasswordOnClickHandler = (ev) => {
+				console.log('resetPasswordOnClickHandler')
+				resetPwdModal.show();
+			};
+
+			const sendResetPasswordRequest = async (ev) => {
+				console.log('sendResetPasswordRequest');
+				const email = document.querySelector('#resetPwdEmail')?.value;
+				console.log('email', email);
+
+				if (email.length < 1) {
+					console.warn('Email Invalide');
+					return;
+				}
+
+				const response = await fetch(`/api/user/reset-pwd/?email=${email}`);
+				const decoded = await response.text()
+				console.log('decoded', decoded);
+
+
+			};
 
         function login() {
             const form = document.getElementById("signinForm");
@@ -153,7 +209,6 @@
                 }).catch((error) => {
                     console.error('Error:', error);
                 });
-
         }
     </script>
     {{element->footer_app.html}}
