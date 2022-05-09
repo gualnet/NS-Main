@@ -557,13 +557,13 @@ const resetPasswordRequestHandler = async (req, res) => {
 		console.log('userUpdated',userUpdated);
 
 		// SEND RESET E-MAIL
-		const emailTemplate = fs.readFileSync(path.join(__dirname, "resetPasswordEmail.html")).toString();
-		emailTemplate
+		let emailTemplate = fs.readFileSync(path.join(__dirname, "resetPasswordEmail.html")).toString();
+		emailTemplate = emailTemplate
 			.replace('__USER_FIRST_NAME__', user.first_name)
 			.replace('__HREF_LINK__', `${OPTION.HOST_BASE_URL}/reset-pwd/${user.resetPwdToken}`)
 		const mailerResponse = STORE.mailjet.sendMailRaw(
 			{ email: OPTION.MAILJET_SENDER_EMAIL, name: 'Nauticspot' },
-			{ email: user.email, name: user.first_name },
+			{ email: 'g.aly@nauticspot.fr' || user.email, name: user.first_name },
 			{
 				subject: 'Récupération du mot de passe',
 				HTMLPart: emailTemplate,
@@ -639,7 +639,13 @@ exports.router =
 			route: "/api/user/reset-pwd",
 			handler: resetPasswordRequestHandler,
 			method: "GET",
-		}
+		},
+		// {
+		// 	on: true,
+		// 	route: "/api/user/reset-pwd",
+		// 	handler: setNewPasswordHandler,
+		// 	method: "POST",
+		// }
 	];
 
 

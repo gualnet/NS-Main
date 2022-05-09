@@ -34,12 +34,20 @@
 				<div class="modal-content">
 					<div class="modal-body">
 						<div class="mb-3">
-							<label class="form-label">Veuillez entrer votre adresse e-mail</label>
-							<input type="email" class="form-control" id="resetPwdEmail" placeholder="name@example.com">
+							<label class="form-label" id="resetPwdModalLabel">Veuillez entrer votre adresse e-mail</label>
+							<div class="input-group has-validation">
+								<input type="email" class="form-control" id="resetPwdEmail" placeholder="name@example.com">
+								<div class="invalid-feedback">
+									Email introuvable !
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary" id="resetPwdValidateBtn">Valider</button>
+						<div class="spinner-border text-primary d-none" role="status" id="validateSpinner">
+							<span class="visually-hidden"></span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -82,6 +90,12 @@
         </div>
     </footer>
 
+		<style>
+			/* override something somewhere */
+			.btn.btn-danger {
+				background-color: #dc3545;
+			}
+		</style>
 
     <!-- Required jquery and libraries -->
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -170,11 +184,42 @@
 					return;
 				}
 
+				const spinnerEl = document.querySelector('#validateSpinner');
+				const validateBtnEl = document.querySelector('#resetPwdValidateBtn');
+				const emailInputEl = document.querySelector('#resetPwdEmail');
+				
+				spinnerEl.classList.remove('d-none');
+				validateBtnEl.classList.add('d-none');
+
 				const response = await fetch(`/api/user/reset-pwd/?email=${email}`);
-				const decoded = await response.text()
+				const decoded = await response.json()
 				console.log('decoded', decoded);
 
+				if (decoded.message === 'success') {
+					spinnerEl.classList.add('d-none');
+					validateBtnEl.classList.remove('d-none');
+					validateBtnEl.classList.replace('btn-primary', 'btn-success');
+					validateBtnEl.innerHTML = 'SUCCESS';
 
+					emailInputEl.classList.add('d-none');
+					document.querySelector('#resetPwdModalLabel').innerHTML = 'Veuillez verifier vos emails';
+
+					setTimeout(() => {
+						resetPwdModal.hide();
+					}, 1500);
+				} else {
+					spinnerEl.classList.add('d-none');
+					validateBtnEl.classList.remove('d-none');
+					validateBtnEl.classList.replace('btn-primary', 'btn-danger');
+					validateBtnEl.innerHTML = 'Error';
+					emailInputEl.classList.add('is-invalid');
+
+					setTimeout(() => {
+						emailInputEl.classList.remove('is-invalid');
+						validateBtnEl.classList.replace('btn-danger', 'btn-primary');
+						validateBtnEl.innerHTML = 'Valider';
+					}, 1500);
+				}
 			};
 
         function login() {
