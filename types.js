@@ -198,7 +198,11 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 
 /**
  * @typedef T_user - users referenced in nauticspot user db -> mobile app access
- * @property {EpochTimeStamp} date
+ * @property {ENUM.rolesMobileApp} roleMobileApp
+ * @property {EpochTimeStamp} created_at 
+ * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} updated_at 
+ * @property {string || undefined} resetPwdToken - 
  * @property {string} category
  * @property {string} contract_number
  * @property {string} email
@@ -211,22 +215,23 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} prefix
  * @property {string} prefixed_phone
  * @property {string} token
- * @property {ENUM.rolesMobileApp} roleMobileApp
  */
 
 /**
  * @typedef T_userFP - users referenced in fortpress user db -> dashboard access
- * @property {string} id
- * @property {string} login
- * @property {string} pw_type
- * @property {string} password
- * @property {string} name
+ * @property {EpochTimeStamp} created_at 
+ * @property {EpochTimeStamp} updated_at 
  * @property {string} bio
+ * @property {string} id
+ * @property {string} last_login
+ * @property {string} link
+ * @property {string} login
+ * @property {string} name
+ * @property {string} password
+ * @property {string} photo
+ * @property {string} pw_type
  * @property {string} role - Used by fortpress
  * @property {T_data_userFP} data
- * @property {string} link
- * @property {string} last_login
- * @property {string} photo
  */
 /**
  * @typedef T_data_userFP
