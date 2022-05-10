@@ -560,7 +560,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 		let emailTemplate = fs.readFileSync(path.join(__dirname, "resetPasswordEmail.html")).toString();
 		emailTemplate = emailTemplate
 			.replace('__USER_FIRST_NAME__', user.first_name)
-			.replace('__HREF_LINK__', `${OPTION.HOST_BASE_URL}/reset-pwd/${user.resetPwdToken}`)
+			.replace('__HREF_LINK__', `${OPTION.HOST_BASE_URL}/pwd-recover/?token=${user.resetPwdToken}`)
 		const mailerResponse = STORE.mailjet.sendMailRaw(
 			{ email: OPTION.MAILJET_SENDER_EMAIL, name: 'Nauticspot' },
 			{ email: 'g.aly@nauticspot.fr' || user.email, name: user.first_name },
@@ -574,9 +574,40 @@ const resetPasswordRequestHandler = async (req, res) => {
 	} catch (error) {
 		console.error('[ERROR]', error);
 		res.writeHead(500);
-		res.end();
+		res.end(JSON.stringify({ success: false }));
 	}
-}
+};
+
+const setNewPasswordHandler = async (req, res) => {
+	try {
+		const token = req.post.recoveryToken;
+		const password = req.post.newPassword;
+
+		const [user] = await getUserWhere({resetPwdToken: token});
+		if(!user) {
+			res.writeHead(404);
+			res.end(JSON.stringify({
+				success: false,
+				message: 'Ressource not found',
+				description: 'This token is invalid',
+			}));
+		}
+		const newPasswordHash = UTILS.Crypto.createSHA512(user.id + password);
+
+		user.password = newPasswordHash;
+		user.resetPwdToken = null;
+		const updatedUser = await updateUser(user);
+
+		res.end(JSON.stringify({
+			success: true,
+			message: 'success',
+		}))
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({ success: false }));
+	}
+};
 
 exports.router =
 	[
@@ -640,12 +671,12 @@ exports.router =
 			handler: resetPasswordRequestHandler,
 			method: "GET",
 		},
-		// {
-		// 	on: true,
-		// 	route: "/api/user/reset-pwd",
-		// 	handler: setNewPasswordHandler,
-		// 	method: "POST",
-		// }
+		{
+			on: true,
+			route: "/api/user/reset-pwd",
+			handler: setNewPasswordHandler,
+			method: "POST",
+		}
 	];
 
 
