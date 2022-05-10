@@ -1,3 +1,4 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 
@@ -516,6 +517,98 @@ const generateRoleOptions = (role) => {
 	return (options);
 }
 
+/**
+ * 
+ * @param {*} whereOpt 
+ * @returns {Promise<Array<TYPES.T_user>>}
+ */
+const getUserWhere = async (whereOpt) => {
+	return new Promise((resolve, reject) => {
+		STORE.db.linkdb.Find(_userCol, whereOpt, null, function (_err, _data) {
+			if (_data)
+				resolve(_data);
+			else
+				reject(_err);
+		});
+	});
+}
+
+
+const resetPasswordRequestHandler = async (req, res) => {
+	console.log('resetPasswordRequestHandler');
+	try {
+		// GET USER INFO
+		const [user] = await getUserWhere({ email: req.get.email });
+		if (!user) { // no user found
+			res.writeHead(404);
+			res.end(JSON.stringify({
+				message: 'Ressource not found',
+				description: 'This user doesn\'t exists'
+			}));
+			return;
+		}
+
+		// GENERATE A RESET TOKEN
+		const tokenLength = 24;
+		const resetToken = crypto.randomBytes(tokenLength).toString('hex');
+		user.resetPwdToken = resetToken;
+		user.updated_at = Date.now();
+		const userUpdated = await updateUser(user);
+		console.log('userUpdated',userUpdated);
+
+		// SEND RESET E-MAIL
+		let emailTemplate = fs.readFileSync(path.join(__dirname, "resetPasswordEmail.html")).toString();
+		emailTemplate = emailTemplate
+			.replace('__USER_FIRST_NAME__', user.first_name)
+			.replace('__HREF_LINK__', `${OPTION.HOST_BASE_URL}/pwd-recover/?token=${user.resetPwdToken}`)
+		const mailerResponse = STORE.mailjet.sendMailRaw(
+			{ email: OPTION.MAILJET_SENDER_EMAIL, name: 'Nauticspot' },
+			{ email: 'g.aly@nauticspot.fr' || user.email, name: user.first_name },
+			{
+				subject: 'Récupération du mot de passe',
+				HTMLPart: emailTemplate,
+			}
+		);
+
+		res.end(JSON.stringify({ message: 'success' }));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({ success: false }));
+	}
+};
+
+const setNewPasswordHandler = async (req, res) => {
+	try {
+		const token = req.post.recoveryToken;
+		const password = req.post.newPassword;
+
+		const [user] = await getUserWhere({resetPwdToken: token});
+		if(!user) {
+			res.writeHead(404);
+			res.end(JSON.stringify({
+				success: false,
+				message: 'Ressource not found',
+				description: 'This token is invalid',
+			}));
+		}
+		const newPasswordHash = UTILS.Crypto.createSHA512(user.id + password);
+
+		user.password = newPasswordHash;
+		user.resetPwdToken = null;
+		const updatedUser = await updateUser(user);
+
+		res.end(JSON.stringify({
+			success: true,
+			message: 'success',
+		}))
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({ success: false }));
+	}
+};
+
 exports.router =
 	[
 		{
@@ -572,6 +665,18 @@ exports.router =
 			handler: updateMailHandler,
 			method: "POST",
 		},
+		{
+			on: true,
+			route: "/api/user/reset-pwd",
+			handler: resetPasswordRequestHandler,
+			method: "GET",
+		},
+		{
+			on: true,
+			route: "/api/user/reset-pwd",
+			handler: setNewPasswordHandler,
+			method: "POST",
+		}
 	];
 
 
@@ -592,7 +697,7 @@ exports.plugin =
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
 
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('No access rights');
 			return;
