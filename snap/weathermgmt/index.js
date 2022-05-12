@@ -286,6 +286,7 @@ async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
     res.end();
     return;
 }
+
 exports.handler = async (req, res) => {
     var _weather = await getWeather();
     res.end(JSON.stringify(_weather));
@@ -349,6 +350,7 @@ exports.plugin =
         if (req.method == "POST") {
             if (req.post.id) {
                 if (verifyPostReq(req, res)) {
+									req.post.updated_at = Date.now();
                     if (typeof (await updateWeather(req.post)) != "string") {
                         UTILS.httpUtil.dataSuccess(req, res, "Weather mis à jour", "1.0");
                         return;
@@ -360,6 +362,8 @@ exports.plugin =
                     var _FD = req.post;
 
                     _FD.date = Date.now();
+                    _FD.created_at = Date.now();
+                    _FD.updated_at = _FD.created_at;
 
                     //img gesture
                     if (_FD.img) {
@@ -461,3 +465,7 @@ exports.plugin =
         }
     }
 }
+
+exports.store = {
+	createWeather,
+};

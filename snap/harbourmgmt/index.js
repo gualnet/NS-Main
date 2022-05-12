@@ -305,7 +305,8 @@ exports.store =
 {
     getHarbourByEntityId: getHarbourByEntityId,
     getHarbourById: getHarbourById,
-    getHarbour: getHarbour
+    getHarbour: getHarbour,
+		getHarboursWhere,
 }
 exports.router = [
     {
