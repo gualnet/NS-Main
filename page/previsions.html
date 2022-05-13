@@ -972,8 +972,9 @@
                     } else if (weather_api == "wlv2") {
                         fetch("/api/weather/wlink/vtwo?entity_id=" + entity.id).then(response => response.json()).then(_data => {
                             if (_data.success) {
-                                let _wlData;
+															let _wlData;
                                 let _wlDataBaro;
+																let wlWaterTemp;
                                 for (let sensor of _data.data.sensors) {
                                     if (sensor.category === 'ISS') { // ISS => Integrated Sensor Suite
                                         _wlData = sensor.data[0];
@@ -981,6 +982,11 @@
                                     if (sensor.category === 'Barometer') {
                                         _wlDataBaro = sensor.data[0];
                                     }
+																		if (sensor.category === 'Other' && sensor.sensor_type === 55) {
+																			const waterTemp = parseFloat((sensor.data[0].temp - 32) / 1.8000).toFixed(0);
+																			console.log('water temp',waterTemp, sensor.data[0].temp)
+																			document.getElementById("temperature_two").innerHTML = waterTemp;
+																		}
                                 }
                                 document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlData.temp - 32) / 1.8000).toFixed(0));
                                 document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.rainfall_last_60_min_mm).toFixed(2));
