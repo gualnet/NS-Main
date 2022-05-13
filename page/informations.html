@@ -259,14 +259,10 @@
                     document.getElementById("pj").hidden = true;
                 }
 
-                if (harbour.id === '4e2cd2p6mt' && harbour?.wifi?.length === 0) {
-                    // if gruissan wifi field is empty hide wifi button
-                    // this is supposed to be a temporary fix
+                if (harbour?.wifi?.length === 0) {
                     document.getElementById("wifiButton").hidden = true;
                 }
-                if (harbour.id === '4e2cd2p6mt' && harbour?.sanitary_code?.length === 0) {
-                    // if gruissan sanitary field is empty hide sanitary button
-                    // this is supposed to be a temporary fix
+                if (harbour?.sanitary_code?.length === 0) {
                     document.getElementById("sanitaryButtons").hidden = true;
                 }
 

@@ -1,4 +1,4 @@
-require('../../types');
+const TYPES = require('../../types');
 var _harbourCol = "harbour";
 var _userCol = "user";
 
@@ -145,7 +145,7 @@ async function getHarbourById(_id) {
 }
 
 /**
- * @returns {Promise<Array<T_harbour>>}
+ * @returns {Promise<Array<TYPES.T_harbour>>}
  */
 async function getHarbour() {
     return new Promise(resolve => {
@@ -246,8 +246,8 @@ async function getHarbourInfos(req, res) {
 /* ---------------------- */
 /**
  * 
- * @param {T_harbour} options - Object containing valide filds from harbour type
- * @returns {Promise<Array<T_harbour>>}
+ * @param {TYPES.T_harbour} options - Object containing valide filds from harbour type
+ * @returns {Promise<Array<TYPES.T_harbour>>}
  */
 async function getHarboursWhere(options) {
     return new Promise(resolve => {
@@ -416,8 +416,9 @@ exports.plugin =
             }
 
             if (req.post.id) {
-                //update harbour
-                var currentHarbour = await getHarbourById(req.post.id);
+								console.log('req.post',req.post);
+								//update harbour
+								var currentHarbour = await getHarbourById(req.post.id);
                 if (verifyPostReq(req, res)) {
 
                     //img gesture
@@ -465,6 +466,10 @@ exports.plugin =
                     }
 
                     if (!req.post.email_concierge) req.post.email_concierge = '';
+										if (!req.post.wifi) req.post.wifi = '';
+										if (!req.post.wifi_pass) req.post.wifi_pass = '';
+										if (!req.post.sanitary_code) req.post.sanitary_code = '';
+
                     console.log('UPDATE POST', req.post);
                     var harbour = await updateHarbour(req.post);
                     if (harbour[0].id) {
