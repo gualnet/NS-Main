@@ -119,8 +119,6 @@
                         }
 
 
-
-
                         .cardmeteo {
                             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/img-meteo/bg-plage2.jpg");
                             background-position-x: 0%, 0%;
@@ -192,6 +190,28 @@
                             width: 100px;
                             height: auto;
                         }
+
+												/* Vie au port section */
+												.harbouLifeCategoryBtn {
+													position: relative;
+													width: 140px;
+													height: 95px;
+													border-radius: 5px;
+													text-align: center;
+													color: white;
+												}
+												.harbouLifeCategoryBtn span {
+													/* border: 2px solid red; */
+													position: absolute;
+													top: 50%;
+													left: 50%;
+													transform: translate(-50%, -50%);
+												}
+												.harbouLifeCategoryBtn img {
+													width: 140px;
+													height: 95px;
+													border-radius: 5px;
+												}
                     </style>
 
                     <div class="card text-white bg-light mb-3 rounded" id="weather_card"
@@ -489,190 +509,137 @@
         <div class="container-fluid px-0 mt-4" id="harbourlife">
             <div class="swiper-container swiper-products">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" id="sos">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="sos">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=sos')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/bouton-sos-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">SOS</span>
+                                        <img class="shadow harbouLifeCategoryBtn" src="/library/bouton-sos-64.png">
+																				<span class="small">SOS</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="maintenance" style="margin-left: 10px;">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=maintenance')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/bouton-maintenance-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Maintenance</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide" id="accastillage">
+									<div class="swiper-slide harbouLifeCategoryBtn" id="maintenance" style="margin-left: 10px;">
+										<div class="row">
+												<div class="col" onclick="window.location.href = ('/harborlife?select=maintenance')">
+														<div class="row">
+																<div class="col">
+																	<img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454035/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Maintenance_ns71zp.png">
+																	<span class="small">Maintenance</span>
+																</div>
+														</div>
+												</div>
+										</div>
+									</div>
+									<div class="swiper-slide harbouLifeCategoryBtn" id="accastillage">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=accastillage')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/bouton-tool-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center small pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted">Accastillage</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Accastillage_fb0glq.png">
+																						<span class="">Accastillage</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="alimentation">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="alimentation">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=alimentation')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/bouton-alimentation-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Alimentation</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454042/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Alimentation_g6l6jl.png">
+																						<span class="small">Alimentation</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="sante">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="sante">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=sante')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/bouton-sante-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Santé</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Sant%C3%A9_ot5lak.png">
+																						<span class="small">Santé</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="annonce">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="annonce">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=annonce')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/bouton-annonce-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Annonces</span>
+                                        <img class="shadow" src="/library/bouton-annonce-64.png">
+																						<span class="small">Annonces</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="laverie">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="laverie">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=laverie')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/laverie-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Laveries</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454039/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Laverie_gwrc01.png">
+																					<span class="small">Laveries</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="transport">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="transport">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=transport')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/transports-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Transport</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Transport_rpgytz.png">
+																						<span class="small">Transport</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="boutique">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="boutique">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=boutique')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow" style="border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/bouton-boutiques-64.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pt-2 pd-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Boutiques</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454040/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Commerces_zgtayw.png">
+																						<span class="small">Boutiques</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="vendeurLoueurHl">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="vendeurLoueurHl">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=vendeurLoueurHl')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/vendeur-loueur-hl.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Vendeur / Loueur</span>
+                                        <img class="shadow" src="/library/vendeur-loueur-hl.png">
+																				<span class="small">Vendeur / Loueur</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="vieportautre">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="vieportautre">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/harborlife?select=vieportautre')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color: #f2f2f2; border-radius: 20px; width: 125px; height: 125px;"
-                                            src="/library/autres-64.png">
+                                        <img class="shadow" src="/library/autres-64.png">
+																				<span class="small">Autres</span>
                                     </div>
                                 </div>
                                 <div class="row text-center">
                                     <div class="col">
-                                        <span class="text-muted small">Autres</span>
                                     </div>
                                 </div>
                             </div>
@@ -694,109 +661,73 @@
         <div class="container-fluid px-0 mt-4" id="experience">
             <div class="swiper-container swiper-products">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" id="nautic">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="nautic">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/experiences?select=nautic')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/Activitenautiques.jpg">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Activités nautiques</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Nautiques_qnxifh.png">
+																				<span class="small">Activités nautiques</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-										<div class="swiper-slide" id="vendeurLoueurEx">
+										<div class="swiper-slide harbouLifeCategoryBtn" id="vendeurLoueurEx">
 											<div class="row">
 													<div class="col" onclick="window.location.href = ('/experiences?select=vendeurLoueurEx')">
 															<div class="row">
 																	<div class="col">
-																			<img class="shadow"
-																					style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-																					src="/library/vendeur-loueur-ex.png">
-																	</div>
-															</div>
-															<div class="row text-center pd-2 pt-2">
-																	<div class="col">
-																			<span class="text-muted small">Vendeur / Loueur</span>
+																			<img class="shadow" src="/library/vendeur-loueur-ex.png">
+																			<span class="small">Vendeur / Loueur</span>
 																	</div>
 															</div>
 													</div>
 											</div>
 										</div>
-                    <div class="swiper-slide" id="terrestres">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="terrestres">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/experiences?select=terrestres')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/Activiteterrestres.jpg">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Activités terrestres</span>
+                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Terrestres_r4si8p.png">
+																				<span class="small">Activités terrestres</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="association">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="association">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/experiences?select=association')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/gererassociation.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Associations</span>
+                                        <img class="shadow" src="/library/gererassociation.png">
+																				<span class="small">Associations</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="equipbourse">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="equipbourse">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/experiences?select=equipbourse')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/Bourse-aux-equipiers.jpg">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Bourse aux équipiers</span>
+                                        <img class="shadow" src="/library/Bourse-aux-equipiers.jpg">
+																				<span class="small">Bourse aux équipiers</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="experienceautre">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="experienceautre">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/experiences?select=experienceautre')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/autres-500.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Autres</span>
+																			<img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/GUERILLA%20-%20NAUTICSPOT/Boutons%20vie%20au%20port/v22-05/Autre_wwmail.png">
+																			<span class="small">Autres</span>
                                     </div>
                                 </div>
                             </div>
@@ -817,109 +748,73 @@
         <div class="container-fluid px-0 mt-4" id="discovery">
             <div class="swiper-container swiper-products">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide" id="restaurant">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="restaurant">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/discovery?select=restaurant')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/Restaurant.jpg">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Restaurants</span>
+                                        <img class="shadow" src="/library/Restaurant.jpg">
+																				<span class="small">Restaurants</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="bar">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="bar">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/discovery?select=bar')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/Bars.jpg">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Bars</span>
+                                        <img class="shadow" src="/library/Bars.jpg">
+																				<span class="small">Bars</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="culture">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="culture">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/discovery?select=culture')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/Culture.jpg">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Culture</span>
+                                        <img class="shadow" src="/library/Culture.jpg">
+																				<span class="small">Culture</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="detente">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="detente">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/discovery?select=detente')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/bien-etre.jpg">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Détente</span>
+                                        <img class="shadow" src="/library/bien-etre.jpg">
+																				<span class="small">Détente</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="divertissement">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="divertissement">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/discovery?select=divertissement')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/divertissement.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Loisirs</span>
+                                        <img class="shadow" src="/library/divertissement.png">
+																				<span class="small">Loisirs</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="swiper-slide" id="decouverteautre">
+                    <div class="swiper-slide harbouLifeCategoryBtn" id="decouverteautre">
                         <div class="row">
                             <div class="col" onclick="window.location.href = ('/discovery?select=decouverteautre')">
                                 <div class="row">
                                     <div class="col">
-                                        <img class="shadow"
-                                            style="background-color:#f2f2f2;width:125px;height:125px;border-radius:20px;"
-                                            src="/library/autres-500.png">
-                                    </div>
-                                </div>
-                                <div class="row text-center pd-2 pt-2">
-                                    <div class="col">
-                                        <span class="text-muted small">Autres</span>
+                                        <img class="shadow" src="/library/autres-500.png">
+																				<span class="small">Autres</span>
                                     </div>
                                 </div>
                             </div>
