@@ -40,38 +40,33 @@
                 }
     }).catch((e) => console.error(e))
 
-		let userId;
-		let userCategory;
-		let harbourId;
-		let isUnreadComm = false;
 		window.addEventListener('load', async (ev) => {
-			userId = localStorage['user'];
-			userCategory = (!userId) ? 'visitor' : 'yachtsman';
-			harbourId = localStorage['harbourid'];
+			const userId = localStorage['user'];
+			const userCategory = (!userId) ? 'visitor' : 'yachtsman';
+			const harbourId = localStorage['harbourid'];
 
-			const communications = await fetchCommunications(harbourId);
-			console.log('communications', communications);
+			const communications = await fetchCommunicationsNavbar(harbourId, userCategory);
 			checkIfUnreadCommunications(userId, communications);
 		});
 
-		const fetchCommunications = async (harbourId) => {
-				try {
-					const urlCategory = `/api/next/communications?harbour_id=${harbourId}&user_category=${userCategory}`;
-					const urlAll = `/api/next/communications?harbour_id=${harbourId}&user_category=all`;
+		const fetchCommunicationsNavbar = async (harbourId, userCategory) => {
+			try {
+				const urlCategory = `/api/next/communications?harbour_id=${harbourId}&user_category=${userCategory}`;
+				const urlAll = `/api/next/communications?harbour_id=${harbourId}&user_category=all`;
 
-					const promiseCategory = fetch(urlCategory);
-					const promiseAll = fetch(urlAll);
-					const resp = await Promise.all([promiseCategory, promiseAll]);
-					const decodedCategory = await resp[0].json();
-					const decodedAll = await resp[1].json();
+				const promiseCategory = fetch(urlCategory);
+				const promiseAll = fetch(urlAll);
+				const resp = await Promise.all([promiseCategory, promiseAll]);
+				const decodedCategory = await resp[0].json();
+				const decodedAll = await resp[1].json();
 
-					const comms = [...decodedCategory, ...decodedAll];
-					return (comms);
-				} catch (error) {
-					console.error(error);
-					return ([]);
-				}
-			};
+				const comms = [...decodedCategory, ...decodedAll];
+				return (comms);
+			} catch (error) {
+				console.error(error);
+				return ([]);
+			}
+		};
 
 		const checkIfUnreadCommunications = (userId, comms = []) => {
 			for(const com of comms) {
