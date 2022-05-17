@@ -39,13 +39,49 @@
                     document.getElementById("harbourmap").href = 'geo:0,0?q=' + harbour.address;
                 }
     }).catch((e) => console.error(e))
-    
-    fetch("/api/coms/isunread?id=" + localStorage["user"]).then(response => response.json()).then(_data => {
-        if (_data.success) {
-            if (_data.data) {
-                document.getElementById('navbar-notif').src = "/library/notification-active-48.png";
-            }
-        }
-    }).catch((e) => {console.error(e)});
+
+		let userId;
+		let userCategory;
+		let harbourId;
+		let isUnreadComm = false;
+		window.addEventListener('load', async (ev) => {
+			userId = localStorage['user'];
+			userCategory = (!userId) ? 'visitor' : 'yachtsman';
+			harbourId = localStorage['harbourid'];
+
+			const communications = await fetchCommunications(harbourId);
+			console.log('communications', communications);
+			checkIfUnreadCommunications(userId, communications);
+		});
+
+		const fetchCommunications = async (harbourId) => {
+				try {
+					const urlCategory = `/api/next/communications?harbour_id=${harbourId}&user_category=${userCategory}`;
+					const urlAll = `/api/next/communications?harbour_id=${harbourId}&user_category=all`;
+
+					const promiseCategory = fetch(urlCategory);
+					const promiseAll = fetch(urlAll);
+					const resp = await Promise.all([promiseCategory, promiseAll]);
+					const decodedCategory = await resp[0].json();
+					const decodedAll = await resp[1].json();
+
+					const comms = [...decodedCategory, ...decodedAll];
+					return (comms);
+				} catch (error) {
+					console.error(error);
+					return ([]);
+				}
+			};
+
+		const checkIfUnreadCommunications = (userId, comms = []) => {
+			for(const com of comms) {
+				if (!com.read_id?.includes(userId)) {
+					isUnreadComm = true;
+					document.getElementById('navbar-notif')
+						.src = "/library/notification-active-48.png";
+					break;
+				}
+			}
+		}
 
 </script>

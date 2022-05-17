@@ -521,8 +521,21 @@ const findCommunicationsWhere = (whereOptions) =>{
 // DB Where getter/setter
 
 // API NEXT HANDLERS
+/**
+ * 
+ * @param {TYPES.T_user['token']} token 
+ * @returns {Promise<TYPES.T_user>}
+ */
+const authTokenVerification = async (token) => {
+	const [user] = await getUser({ token });
+	console.log('AUTH user', user);
+	return(user);
+}
+
 const getCommunicationsHandler = async (req, res) => {
 	try {
+		const userCategory = req.get.user_category;
+
 		/**@type {findCommunicationsOptions} */
 		const options = {};
 		if (req.get.id) options.id = req.get.id;
@@ -530,8 +543,8 @@ const getCommunicationsHandler = async (req, res) => {
 		if (req.get.harbour_id) options.harbour_id = req.get.harbour_id;
 		if (req.get.title) options.title = req.get.title;
 		if (req.get.user_category) options.user_category = req.get.user_category;
-		const coms = await findCommunicationsWhere(options);
-		res.end(JSON.stringify(coms));
+		const comms = await findCommunicationsWhere(options);
+		res.end(JSON.stringify(comms));
 	} catch (error) {
 		console.error('[ERROR]', error);
 		res.writeHead(500);
@@ -543,7 +556,6 @@ const getCommunicationsHandler = async (req, res) => {
 	}
 }
 // API NEXT HANDLERS
-
 
 exports.router = [
         {
