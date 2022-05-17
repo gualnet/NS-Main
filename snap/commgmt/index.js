@@ -1,4 +1,5 @@
 const ENUM = require('../lib-js/enums');
+const TYPES = require('../../types');
 const verifyRoleAccess = require('../lib-js/verify').verifyRoleAccess;
 
 const ROLES = ENUM.rolesBackOffice;
@@ -493,8 +494,58 @@ async function registerOneSignalUserIdHandler(_req, _res) {
     }
 }
 
-exports.router =
-    [
+// DB Where getter/setter
+/**
+ * @typedef findCommunicationsOptions
+ * @property {string} [id]
+ * @property {string} [harbour_id]
+ * @property {string} [category]
+ * @property {string} [title]
+ * @property {string} [user_category]
+ */
+/**
+ * 
+ * @param {findCommunicationsOptions} whereOptions 
+ * @returns {Promise<Array<TYPES.T_communication>>}
+ */
+const findCommunicationsWhere = (whereOptions) =>{
+	return(new Promise((resolve, reject) => {
+		STORE.db.linkdb.Find(_comCol, whereOptions, null, function (_err, _data) {
+			if (_data)
+				resolve(_data);
+			else
+				reject(_err);
+		});
+	}));
+};
+// DB Where getter/setter
+
+// API NEXT HANDLERS
+const getCommunicationsHandler = async (req, res) => {
+	try {
+		/**@type {findCommunicationsOptions} */
+		const options = {};
+		if (req.get.id) options.id = req.get.id;
+		if (req.get.category) options.category = req.get.category;
+		if (req.get.harbour_id) options.harbour_id = req.get.harbour_id;
+		if (req.get.title) options.title = req.get.title;
+		if (req.get.user_category) options.user_category = req.get.user_category;
+		const coms = await findCommunicationsWhere(options);
+		res.end(JSON.stringify(coms));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			code: 500,
+			message: 'Unexpected internal server error',
+			details: '',
+		}));
+	}
+}
+// API NEXT HANDLERS
+
+
+exports.router = [
         {
             route: "/api/register/onesignal/userid",
             handler: registerOneSignalUserIdHandler,
@@ -514,8 +565,31 @@ exports.router =
             route:"/api/coms/isunread",
             handler: isUnreadComsHandler,
             method: "GET"
-        }
-    ];
+        },
+
+	// API NEXT
+	{
+		on: true,
+		route: '/api/next/communications',
+		method: "GET",
+		handler: getCommunicationsHandler,
+	}, {
+		on: true,
+		route: '/api/next/communications',
+		method: "POST",
+		handler: (req, res) => res.end('NOT IMPLEM'),
+	}, {
+		on: true,
+		route: '/api/next/communications',
+		method: "PUT",
+		handler: (req, res) => res.end('NOT IMPLEM'),
+	}, {
+		on: true,
+		route: '/api/next/communications',
+		method: "DELETE",
+		handler: (req, res) => res.end('NOT IMPLEM'),
+	},
+];
 
 exports.plugin =
 {
@@ -528,7 +602,7 @@ exports.plugin =
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
 
-				if (!verifyRoleAccess(admin.data.roleBackOffice, AUTHORIZED_ROLES)){
+				if (!verifyRoleAccess(admin.data.roleBackOffice, AUTHORIZED_ROLES)) {
 					res.writeHead(401);
 					res.end('No access rights');
 					return;

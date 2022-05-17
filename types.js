@@ -240,3 +240,26 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {Array<string>} harbour_id
  * @property {string} roleBackOffice - used for back office access rights
  */
+
+/**
+ * @typedef T_communication
+ * @property {string} category
+ * @property {string} message
+ * @property {string} harbour_id
+ * @property {string} id
+ * @property {string} title
+ * @property {string} user_category ['visitor', 'yachtsman', 'all'],
+ * @property {string} notification_link
+ * @property {string} img
+ * @property {string} pjname
+ * @property {string} pj
+ * @property {string} link_name
+ * @property {string} link
+ * @property {string} cloudinary_img_public_id
+ * @property {string} cloudinary_pj_public_id
+ * @property {Array<string>} read_id
+ * @property {Array<string>} users_id - don't know what it is !
+ * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} created_at
+ * @property {EpochTimeStamp} updated_at
+ */
