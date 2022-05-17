@@ -213,7 +213,7 @@ async function getEntityByCookieIdHandler(_req, _res) {
 }
 
 /**
-s * @typedef getEntityWhereOptions 
+ * @typedef getEntityWhereOptions 
  * @property {string} [id]
  * @property {string} [name]
  * @property {string} [email]
@@ -239,7 +239,7 @@ const getEntityHandler = async (req, res) => {
 	console.log('req.param', req.param)
 	try {
 		/** @type {getEntityWhereOptions} */
-		const whereOpt = {}
+		const whereOpt = {};
 		if (req.get.id) whereOpt.id = req.get.id;
 		if (req.get.name) whereOpt.name = req.get.name;
 		if (req.get.email) whereOpt.email = req.get.email;
@@ -253,7 +253,7 @@ const getEntityHandler = async (req, res) => {
 			description: '',
 		}));
 	}
-}
+};
 
 const createEntityHandler = async (req, res) => {
 	try {

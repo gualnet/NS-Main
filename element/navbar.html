@@ -39,13 +39,44 @@
                     document.getElementById("harbourmap").href = 'geo:0,0?q=' + harbour.address;
                 }
     }).catch((e) => console.error(e))
-    
-    fetch("/api/coms/isunread?id=" + localStorage["user"]).then(response => response.json()).then(_data => {
-        if (_data.success) {
-            if (_data.data) {
-                document.getElementById('navbar-notif').src = "/library/notification-active-48.png";
-            }
-        }
-    }).catch((e) => {console.error(e)});
+
+		window.addEventListener('load', async (ev) => {
+			const userId = localStorage['user'];
+			const userCategory = (!userId) ? 'visitor' : 'yachtsman';
+			const harbourId = localStorage['harbourid'];
+
+			const communications = await fetchCommunicationsNavbar(harbourId, userCategory);
+			checkIfUnreadCommunications(userId, communications);
+		});
+
+		const fetchCommunicationsNavbar = async (harbourId, userCategory) => {
+			try {
+				const urlCategory = `/api/next/communications?harbour_id=${harbourId}&user_category=${userCategory}`;
+				const urlAll = `/api/next/communications?harbour_id=${harbourId}&user_category=all`;
+
+				const promiseCategory = fetch(urlCategory);
+				const promiseAll = fetch(urlAll);
+				const resp = await Promise.all([promiseCategory, promiseAll]);
+				const decodedCategory = await resp[0].json();
+				const decodedAll = await resp[1].json();
+
+				const comms = [...decodedCategory, ...decodedAll];
+				return (comms);
+			} catch (error) {
+				console.error(error);
+				return ([]);
+			}
+		};
+
+		const checkIfUnreadCommunications = (userId, comms = []) => {
+			for(const com of comms) {
+				if (!com.read_id?.includes(userId)) {
+					isUnreadComm = true;
+					document.getElementById('navbar-notif')
+						.src = "/library/notification-active-48.png";
+					break;
+				}
+			}
+		}
 
 </script>

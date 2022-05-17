@@ -59,7 +59,7 @@ var uploadFile = async function (_file, _fileName, _nameFormat, options) {
             fullFileLocationName,
             {
                 use_filename: isFileNameUsed,
-                folder: options.cloudinaryPath || '',
+                folder: options?.cloudinaryPath || '',
             },
             function (result, error) {
                 console.log(result);
