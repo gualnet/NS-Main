@@ -158,6 +158,11 @@ async function getUserByCategoryAndHarbourId(_category, _harbour_id) {
     });
 }
 
+/**
+ * 
+ * @param {TYPES.T_communication} _obj 
+ * @returns {Promise<Array<TYPES.T_communication>>}
+ */
 async function updateCom(_obj) {
     return new Promise(resolve => {
         STORE.db.linkdb.Update(_comCol, { id: _obj.id }, _obj, function (_err, _data) {
@@ -229,8 +234,10 @@ async function getHarbourById(_id) {
 //handler that get a communication
 async function getComHandler(req, res) {
     if(req.get.comid && req.get.userid) {
+			if (req.get.userid === 'undefined') req.get.userid = undefined;
+
         var _data = await getComById(req.get.comid);
-        if(_data.read_id) {
+        if(req.get.userid && _data.read_id) {
             var ids = _data.read_id.filter(id => id == req.get.userid)
             if(!ids[0]){
                 _data.read_id.push(req.get.userid);
@@ -555,6 +562,33 @@ const getCommunicationsHandler = async (req, res) => {
 		}));
 	}
 }
+
+const updateCommunicationsHandler = async (req, res) => {
+	try {
+		/**@type {TYPES.T_communication} */
+		const commModifications = req.body
+		const commId = commModifications.id;
+		if (!commId) { // no comm id specified
+			res.writeHead(500);
+			res.end(JSON.stringify({
+				code: 500,
+				message: 'Unexpected internal server error',
+				details: '',
+			}));
+		}
+		commModifications.updated_at = Date.now()
+		const updatedCommunication = await updateCom(commModifications)
+		res.end(JSON.stringify(updatedCommunication));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			code: 500,
+			message: 'Unexpected internal server error',
+			details: '',
+		}));
+	}
+}
 // API NEXT HANDLERS
 
 exports.router = [
@@ -594,7 +628,7 @@ exports.router = [
 		on: true,
 		route: '/api/next/communications',
 		method: "PUT",
-		handler: (req, res) => res.end('NOT IMPLEM'),
+		handler: updateCommunicationsHandler,
 	}, {
 		on: true,
 		route: '/api/next/communications',
