@@ -563,11 +563,8 @@ const resetPasswordRequestHandler = async (req, res) => {
 			.replace('__HREF_LINK__', `${OPTION.HOST_BASE_URL}/pwd-recover/?token=${user.resetPwdToken}`)
 		const mailerResponse = STORE.mailjet.sendMailRaw(
 			{ email: OPTION.MAILJET_SENDER_EMAIL, name: 'Nauticspot' },
-			{ email: 'g.aly@nauticspot.fr' || user.email, name: user.first_name },
-			{
-				subject: 'Récupération du mot de passe',
-				HTMLPart: emailTemplate,
-			}
+			{ email: user.email, name: user.first_name },
+			{ subject: 'Récupération du mot de passe', HTMLPart: emailTemplate }
 		);
 
 		res.end(JSON.stringify({ message: 'success' }));
