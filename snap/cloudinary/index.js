@@ -25,7 +25,7 @@ cloudinary.config({
  * @param {uploadFileOptions} options 
  * @returns 
  */
-var uploadFile = async function (_file, _fileName, _nameFormat, options) {
+var uploadFile = async function (_file, _fileName, _nameFormat, options = {}) {
     return new Promise(resolve => {
         var isFileNameUsed = false;
         if (_nameFormat) {
