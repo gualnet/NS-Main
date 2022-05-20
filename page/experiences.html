@@ -15,26 +15,36 @@
         <!-- page content start -->
 
         <nav class="navbar  navbar-light bg-light nav-pills nav-fill fixed-top" style="margin-top:41px;">
-            <div class="container-fluid small">
-                <div class="nav-item">
-                    <a href="/experiences?select=nautic" id="nautic" class="text-secondary">Nautique</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/experiences?select=vendeurLoueurEx" id="vendeur-loueur-ex" class="text-secondary">Vendeur / Loueur</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/experiences?select=terrestres" id="terrestres" class="text-secondary">Terrestre</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/experiences?select=association" id="association" class="text-secondary">Associations</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/experiences?select=bourses" id="equipbourse" class="text-secondary">Bourses</a>
-                </div>
-                <div class="nav-item">
-                    <a href="/experiences?select=experienceautre" id="experienceautre" class="text-secondary">Autres</a>
-                </div>
-            </div>
+ 
+					<!-- SWIPER START -->
+					<div class="container-fluid">
+						<div class="swiper-container swiper-products .nav-btn-container">
+							<div class="swiper-wrapper">
+								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png'); background-size: cover;">
+									<span class="small">Activités nautiques</span>
+								</div>
+								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/.png'); background-size: cover;">
+									<span class="small">Vendeur • Loueur</span>
+								</div>
+								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png'); background-size: cover;">
+									<span class="small">Activités terrestres</span>
+								</div>
+								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png'); background-size: cover;">
+									<span class="small">Associations</span>
+								</div>
+								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png'); background-size: cover;">
+									<span class="small">Bourse aux équipiers</span>
+								</div>
+								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
+									<span class="small">Autre</span>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<!-- SWIPER END -->
+
+
             <script>
                 //url = new URL(window.location.href);
                 const queryString = window.location.search;
@@ -55,7 +65,7 @@
         </div>
         <div class="container py-3">
             {{element->navbar.html}}
-            <nav class="navbar navbar-light fixed-top" style="margin-top:70px;">
+            <nav class="navbar navbar-light fixed-top" style="margin-top:105px;">
                 <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
             </nav>
         </div>
@@ -248,25 +258,25 @@
                     } else {
                         switch (partners[i].subcategory) {
                             case "nautic":
-                                currentRow = currentRow.replace("__IMG__", "/library/Activitenautiques.jpg");
+                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png");
                                 break;
                             case "terrestres":
-                                currentRow = currentRow.replace("__IMG__", "/library/Activiteterrestres.jpg");
+                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png");
                                 break;
                             case "association":
-                                currentRow = currentRow.replace("__IMG__", "/library/gererassociation.png");
+                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png");
                                 break;
                             case "equipbourse":
-                                currentRow = currentRow.replace("__IMG__", "/library/Bourse-aux-equipiers.jpg");
+                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png");
                                 break;
                             case "experienceautre":
-                                currentRow = currentRow.replace("__IMG__", "/library/autres-500.png");
+                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
                                 break;
                             case "vendeurLoueurEx":
-                                currentRow = currentRow.replace("__IMG__", "/library/vendeur-loueur-ex.png");
+                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png");
                                 break;
                             default:
-                                currentRow = currentRow.replace("__IMG__", "/library/autres-500.png");
+                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
                                 break;
                         }
                     }
@@ -299,6 +309,32 @@
         body {
             font-family: 'Poppins Regular' !important;
         }
+
+				.swiper-container {
+					display: flex;
+					flex-direction: column;
+					height: 57px;
+				}
+				.swiper-wrapper .swiper-slide.nav-btn {
+					align-items: center;
+					border-radius: 5px;
+					display: flex;
+					height: 100%;
+					justify-content: center;
+					margin: 0 3px;
+					width: 87px;
+				}
+				.nav-btn img {
+					height: auto;
+					width: auto;
+				}
+				.nav-btn span {
+					align-items: center;
+					display: flex;
+					height: 100%;
+					justify-content: center;
+					text-align: center;
+				}
     </style>
     {{element->footer_app.html}}
 </body>

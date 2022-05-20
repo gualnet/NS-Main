@@ -882,20 +882,20 @@ textarea:focus,
 
 /*------ 11. Product -------*/
 .swiper-products {
-  margin-bottom: -10px;
+  /* margin-bottom: -10px; */
 }
 
 .swiper-products .swiper-slide {
-  width: auto;
-  padding: 0 0px 10px 20px;
+  /* width: auto; */
+  /* padding: 0 0px 10px 20px; */
 }
 
 .swiper-products .swiper-slide:first-child {
-  padding-left: 30px;
+  /* padding-left: 30px; */
 }
 
 .swiper-products .swiper-slide:last-child {
-  padding-right: 30px;
+  /* padding-right: 30px; */
 }
 
 .product-card-large {
