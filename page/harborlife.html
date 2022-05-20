@@ -9,73 +9,95 @@
 	{{element->loader.html}}
 
 	<!-- Begin page content -->
-	<main class="flex-shrink-0" style="padding-top:100px;">
+	<main class="flex-shrink-0" style="padding-top:150px;">
 		<!-- Fixed navbar -->
 		{{element->navheader.html}}
 
 		<!-- page content start -->
-		<style>
-			.navBarButtons {
-				border: 1px solid red;
-			}
-			.navBarButtons img {
-				width: 90px;
-				height: 60px;
-			}
-		</style>
 
 		<nav class="navbar navbar-light bg-light nav-pills nav-fill fixed-top" style="margin-top:41px;">
+			<!-- SWIPER START -->
 			<div class="container-fluid">
-				<div class="nav-item navBarButtons" id="sos">
-					<a href="/harborlife?select=sos"><img src="/library/bouton-sos-64.png"></a>
-				</div>
-				<div class="nav-item navBarButtons" id="maintenance">
-					<a href="/harborlife?select=maintenance"><img src="/library/bouton-maintenance-64.png"></a>
-				</div>
-				<div class="nav-item navBarButtons" id="accastillage">
-					<a href="/harborlife?select=accastillage"><img src="/library/bouton-tool-64.png"></a>
-					</div>
-					<div class="nav-item navBarButtons" id="alimentation">
-					<a href="/harborlife?select=alimentation"><img src="/library/bouton-alimentation-64.png"></a>
-				</div>
-				<div class="nav-item navBarButtons" id="sante">
-					<a href="/harborlife?select=sante"> <img src="/library/bouton-sante-64.png"></a>
-					</div>
-					<div class="nav-item navBarButtons" id="annonce">
-					<a href="/harborlife?select=annonce"><img src="/library/bouton-annonce-64.png"></a>
-					</div>
-					<div class="nav-item navBarButtons" id="laverie">
-						<a href="/harborlife?select=laverie"><img src="/library/laverie-64.png"></a>
-					</div>
-					<div class="nav-item navBarButtons" id="transport">
-					<a href="/harborlife?select=transport"><img src="/library/transports-64.png"></a>
-					</div>
-					<div class="nav-item navBarButtons" id="boutique">
-					<a href="/harborlife?select=boutique"><img src="/library/bouton-boutiques-64.png"></a>
-					</div>
-					<div class="nav-item navBarButtons" id="vendeur-loueur-hl">
-						<a href="/harborlife?select=vendeurLoueurHl"><img src="/library/vendeur-loueur-hl.png"></a>
+				<div class="swiper-container swiper-products .nav-btn-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide nav-btn" id="sos"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953549/Nauticspot-Next/partenaires/SOS_jrboxy.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=sos')">SOS</span>
 						</div>
-					<div class="nav-item navBarButtons" id="vieportautre">
-						<a href="/harborlife?select=vieportautre"><img src="/library/autres-64.png"></a>
+
+						<div class="swiper-slide nav-btn" id="maintenance"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454035/Nauticspot-Next/partenaires/Maintenance_ns71zp.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=maintenance')">Association</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="accastillage"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Accastillage_fb0glq.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=accastillage')">Accastillage</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="alimentation"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454042/Nauticspot-Next/partenaires/Alimentation_g6l6jl.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=alimentation')">Alimentation</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="sante"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Sant%C3%A9_ot5lak.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=sante')">Santé</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="annonce"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652956258/Nauticspot-Next/partenaires/annonces_cxaz1j.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=annonce')">Annonce</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="laverie"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454039/Nauticspot-Next/partenaires/Laverie_gwrc01.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=laverie')">Laverie</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="transport"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=transport')">Transport</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="boutique"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=boutique')">Boutique</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="vendeur-loueur-hl"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=vendeur-loueur-hl')">Vendeur •
+								Loueur</span>
+						</div>
+
+						<div class="swiper-slide nav-btn" id="vieportautre"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=vieportautre')">Autre</span>
+						</div>
+
 					</div>
-					</div>
-					<script>
-						//url = new URL(window.location.href);
-						const queryString = window.location.search;
-						const urlParams = new URLSearchParams(queryString);
-						console.log(urlParams.get('select'));
-						if (urlParams.get != null) {
-							try {
-								document.getElementById(urlParams.get('select')).classList.add("bg-secondary");
-							} catch (e) {
-								console.log(e);
-							}
-						}
-                //url.location
-</script>
-			</nav>
-			<nav class="navbar navbar-light fixed-top" style="margin-top:70px;">
+				</div>
+			</div>
+			<!-- SWIPER END -->
+			<script>
+				//url = new URL(window.location.href);
+				const queryString = window.location.search;
+				const urlParams = new URLSearchParams(queryString);
+				console.log(urlParams.get('select'));
+				if (urlParams.get != null) {
+					try {
+						document.getElementById(urlParams.get('select')).classList.add("bg-secondary");
+					} catch (e) {
+						console.log(e);
+					}
+				}
+					
+
+				const clickOnNavBtnHandler = (url) => window.location = url;
+			</script>
+		</nav>
+		<nav class="navbar navbar-light fixed-top" style="margin-top:100px;">
 			<a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;"
 					class="bi bi-arrow-left-circle-fill"></i></a>
 		</nav>
@@ -87,8 +109,8 @@
 		<br />
 		<br />
 		<br />
-		</main>
-		<!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
+	</main>
+	<!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
         <span class="text-white">
             <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
                 <title>ionicons-v5-m</title>
@@ -197,14 +219,14 @@
 
 	<!-- page level custom script -->
 	<script>
-			"use strict"
-			$(window).on('load', function () {
-				/* carousel */
-				var swiper = new Swiper('.swiper-products', {
-					slidesPerView: 'auto',
-					spaceBetween: 0,
-					pagination: 'false'
-				});
+		"use strict"
+		$(window).on('load', function () {
+			/* carousel */
+			var swiper = new Swiper('.swiper-products', {
+				slidesPerView: 'auto',
+				spaceBetween: 0,
+				pagination: 'false'
+			});
 
 			fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
 				var activeSubCategories = _data.data.activeSubCategories;
@@ -301,40 +323,40 @@
 					} else {
 						switch (partners[i].subcategory) {
 							case "sos":
-								currentRow = currentRow.replace("__IMG__", "/library/bouton-sos-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652953549/Nauticspot-Next/partenaires/SOS_jrboxy.png");
 								break;
 							case "maintenance":
-								currentRow = currentRow.replace("__IMG__", "/library/bouton-maintenance-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454035/Nauticspot-Next/partenaires/Maintenance_ns71zp.png");
 								break;
 							case "accastillage":
-								currentRow = currentRow.replace("__IMG__", "/library/bouton-tool-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Accastillage_fb0glq.png");
 								break;
 							case "sante":
-								currentRow = currentRow.replace("__IMG__", "/library/bouton-sante-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Sant%C3%A9_ot5lak.png");
 								break;
 							case "annonce":
-								currentRow = currentRow.replace("__IMG__", "/library/bouton-annonce-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652956258/Nauticspot-Next/partenaires/annonces_cxaz1j.png");
 								break;
 							case "laverie":
-								currentRow = currentRow.replace("__IMG__", "/library/laverie-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454039/Nauticspot-Next/partenaires/Laverie_gwrc01.png");
 								break;
 							case "transport":
-								currentRow = currentRow.replace("__IMG__", "/library/transports-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png");
 								break;
 							case "alimentation":
-								currentRow = currentRow.replace("__IMG__", "/library/bouton-alimentation-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454042/Nauticspot-Next/partenaires/Alimentation_g6l6jl.png");
 								break;
 							case "boutique":
-								currentRow = currentRow.replace("__IMG__", "/library/bouton-boutiques-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png");
 								break;
 							case "vendeurLoueurHl":
-								currentRow = currentRow.replace("__IMG__", "/library/vendeur-loueur-hl.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png");
 								break;
 							case "vieportautre":
-								currentRow = currentRow.replace("__IMG__", "/library/autres-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
 								break;
 							default:
-								currentRow = currentRow.replace("__IMG__", "/library/autres-64.png");
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
 								break;
 						}
 					}
@@ -346,9 +368,8 @@
 				console.log(error);
 			});
 
-
 		});
-</script>
+	</script>
 
 	<style>
 		@font-face {
@@ -365,6 +386,36 @@
 		body {
 			background: url("../background2.png") #FFF fixed;
 			font-family: 'Poppins Regular' !important;
+		}
+
+		.swiper-container {
+			display: flex;
+			flex-direction: column;
+			height: 57px;
+		}
+
+		.swiper-wrapper .swiper-slide.nav-btn {
+			align-items: center;
+			border-radius: 5px;
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			margin: 0 3px;
+			width: 87px;
+		}
+
+		.nav-btn img {
+			height: auto;
+			width: auto;
+		}
+
+		.nav-btn span {
+			color: white;
+			align-items: center;
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			text-align: center;
 		}
 	</style>
 	{{element->footer_app.html}}
