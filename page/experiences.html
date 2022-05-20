@@ -21,22 +21,22 @@
 						<div class="swiper-container swiper-products .nav-btn-container">
 							<div class="swiper-wrapper">
 								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png'); background-size: cover;">
-									<span class="small">Activités nautiques</span>
+									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=nautic')">Activités nautiques</span>
 								</div>
-								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/.png'); background-size: cover;">
+								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png'); background-size: cover;" onclick="clickOnNavBtnHandler('/experiences?select=vendeurLoueurEx')">
 									<span class="small">Vendeur • Loueur</span>
 								</div>
 								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png'); background-size: cover;">
-									<span class="small">Activités terrestres</span>
+									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=terrestres')" >Activités terrestres</span>
 								</div>
 								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png'); background-size: cover;">
-									<span class="small">Associations</span>
+									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=association')">Associations</span>
 								</div>
 								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png'); background-size: cover;">
-									<span class="small">Bourse aux équipiers</span>
+									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=bourses')">Bourse aux équipiers</span>
 								</div>
 								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
-									<span class="small">Autre</span>
+									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=experienceautre')">Autre</span>
 								</div>
 
 							</div>
@@ -58,6 +58,11 @@
                     }
                 }
                 //url.location
+
+								const clickOnNavBtnHandler = (url) => {
+									console.log('clickOnNavBtnHandler', url)
+									window.location = url;
+								}
             </script>
         </nav>
 
@@ -329,6 +334,7 @@
 					width: auto;
 				}
 				.nav-btn span {
+					color: white;
 					align-items: center;
 					display: flex;
 					height: 100%;
