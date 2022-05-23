@@ -457,6 +457,22 @@
 										</div>
 									</div>
 								</div>
+								<div id="erp_link" class="col-4 px-2" onclick="window.location.href = ('/');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px; align-self:center;" class="image-boxed"
+													src="https://res.cloudinary.com/nauticspot/image/upload/v1653295724/GUERILLA%20-%20NAUTICSPOT/Boutons%20bureau%20du%20port/espace-plaisanciers_a5p0lw.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2" style="text-align: center;">Espace Plaisancier</span>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -1064,6 +1080,8 @@
 
 
 			fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+			console.log('_data', _data)
+
 				let harbour = _data.data;
 
 				if (harbour.email_concierge === ' ') delete harbour.email_concierge;
@@ -1078,6 +1096,12 @@
 
 				if (!harbour.email_concierge) {
 					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
+				}
+
+				if (!harbour.erp_link) {
+					document.getElementById('erp_link').hidden = true;
+				} else {
+					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
 				}
 
 				fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
