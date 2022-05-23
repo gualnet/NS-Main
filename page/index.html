@@ -17,1676 +17,1691 @@
 -->
 
 <body class="body-scroll d-flex flex-column h-100 menu-overlay">
-    <!-- __TPL_ONESIGNAL__ -->
-    {{element->onesignal.html}}
-    <!-- screen loader -->
-    <!-- __TPL_LOADER__ -->
-    {{element->loader.html}}
-    <!-- Begin page content -->
-    <main class="flex-shrink-0">
-        <!-- Fixed navbar -->
-        <!-- __TPL_NAVHEADER__ -->
-        {{element->navheader.html}}
-        <div class="container mt-0">
-            <div class="row">
-                <div class="col">
-                    <style>
-                        #wrap {
-                            width: 100%;
-                            height: 200px;
-                            padding: 0;
-                            overflow: hidden;
-                        }
+	<!-- __TPL_ONESIGNAL__ -->
+	{{element->onesignal.html}}
+	<!-- screen loader -->
+	<!-- __TPL_LOADER__ -->
+	{{element->loader.html}}
+	<!-- Begin page content -->
+	<main class="flex-shrink-0">
+		<!-- Fixed navbar -->
+		<!-- __TPL_NAVHEADER__ -->
+		{{element->navheader.html}}
+		<div class="container mt-0">
+			<div class="row">
+				<div class="col">
+					<style>
+						#wrap {
+							width: 100%;
+							height: 200px;
+							padding: 0;
+							overflow: hidden;
+						}
 
-                        #scaled-frame {
-                            width: 3550px;
-                            height: 2000px;
-                            border: 0px;
-                        }
+						#scaled-frame {
+							width: 3550px;
+							height: 2000px;
+							border: 0px;
+						}
 
-                        #scaled-frame {
-                            zoom: 0.1;
-                            -moz-transform: scale(0.1);
-                            -moz-transform-origin: 0 0;
-                            -o-transform: scale(0.1);
-                            -o-transform-origin: 0 0;
-                            -webkit-transform: scale(0.1);
-                            -webkit-transform-origin: 0 0;
-                        }
+						#scaled-frame {
+							zoom: 0.1;
+							-moz-transform: scale(0.1);
+							-moz-transform-origin: 0 0;
+							-o-transform: scale(0.1);
+							-o-transform-origin: 0 0;
+							-webkit-transform: scale(0.1);
+							-webkit-transform-origin: 0 0;
+						}
 
-                        @media screen and (-webkit-min-device-pixel-ratio:0) {
-                            #scaled - frame {
-                                zoom: 1;
-                            }
-                        }
-
-
-                        #compassContainer {
-                            width: 100px;
-                            height: 100px;
-                            margin: 0 auto;
-                        }
-
-                        #compassRing {
-                            height: 100px;
-                            width: 100px;
-                            border: 2px solid #F79F79;
-                            border-radius: 50%;
-                        }
-
-                        #bezel {
-                            margin: 3.333px;
-                            height: 90px;
-                            width: 90px;
-                            border: 2px dotted #E3F09B;
-                            border-radius: 50%;
-                            z-index: -100;
-                            position: absolute;
-                        }
-
-                        #pointerContain {
-                            height: 90px;
-                            z-index: -50;
-                            postion: absolute;
-                            -webkit-transform: rotate(20deg);
-                            -webkit-transform-origin: bottom;
-                            transform: rotate(300deg);
-                            transform-origin: center;
-                        }
-
-                        #pointer {
-                            margin: 0 auto;
-                            width: 0;
-                            height: 0;
-                            border-left: 17px solid transparent;
-                            border-right: 17px solid transparent;
-                            border-bottom: 30px solid #F79F79;
-                            -moz-border-radius: 50%;
-                            -webkit-border-radius: 50%;
-                            border-radius: 50%;
-                        }
-
-                        #direction {
-                            height: 100%;
-                            width: 100%;
-                            top: -70%;
-                            left: 20%;
-                            font-size: 2em;
-                            font-family: sans-serif;
-                            color: white;
-                            position: relative;
-                            z-index: 100;
-                        }
+						@media screen and (-webkit-min-device-pixel-ratio:0) {
+							#scaled - frame {
+								zoom: 1;
+							}
+						}
 
 
-                        .cardmeteo {
-                            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/img-meteo/bg-plage2.jpg");
-                            background-position-x: 0%, 0%;
-                            background-position-y: 0%, 0%;
-                            background-size: auto, auto;
-                            background-size: cover;
-                            background-position: 50% 50%;
-                            width: 100%;
-                            height: auto;
-                            border-radius: 20px;
-                            box-shadow: 0px 8px 16px 4px;
-                            margin-top: 20px;
-                            margin-bottom: 20px;
-                            padding-top: 10px;
-                            padding-bottom: 10px;
-                        }
+						#compassContainer {
+							width: 100px;
+							height: 100px;
+							margin: 0 auto;
+						}
 
-                        #compassContainer {
-                            width: 100px;
-                            height: 100px;
-                            margin: 0 auto;
-                        }
+						#compassRing {
+							height: 100px;
+							width: 100px;
+							border: 2px solid #F79F79;
+							border-radius: 50%;
+						}
 
-                        #compassRing {
-                            height: 100px;
-                            width: 100px;
-                            border: 4px solid #fff;
-                            border-radius: 50%;
-                        }
+						#bezel {
+							margin: 3.333px;
+							height: 90px;
+							width: 90px;
+							border: 2px dotted #E3F09B;
+							border-radius: 50%;
+							z-index: -100;
+							position: absolute;
+						}
 
-                        #compassRingventjaune {
-                            height: 100px;
-                            width: 100px;
-                            border-left: 20px solid transparent;
-                            border-right: 20px solid transparent;
-                            border-bottom: 10px solid transparent;
-                            border-bottom-color: #ffc107;
-                            border-radius: 50%;
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            z-index: 9;
-                            -webkit-transform: rotate(180deg);
-                            -webkit-transform-origin: bottom;
-                            transform: rotate(180deg);
-                            transform-origin: center;
-                        }
+						#pointerContain {
+							height: 90px;
+							z-index: -50;
+							postion: absolute;
+							-webkit-transform: rotate(20deg);
+							-webkit-transform-origin: bottom;
+							transform: rotate(300deg);
+							transform-origin: center;
+						}
 
-                        #pointerContain {
-                            display: flex;
-                            vertical-align: middle;
-                            color: #fff;
-                            margin: auto;
-                            width: 100%;
-                            height: 100%;
-                        }
+						#pointer {
+							margin: 0 auto;
+							width: 0;
+							height: 0;
+							border-left: 17px solid transparent;
+							border-right: 17px solid transparent;
+							border-bottom: 30px solid #F79F79;
+							-moz-border-radius: 50%;
+							-webkit-border-radius: 50%;
+							border-radius: 50%;
+						}
 
-                        #content-wth {
-                            padding-left: 20px;
-                            padding-right: 20px;
-                        }
+						#direction {
+							height: 100%;
+							width: 100%;
+							top: -70%;
+							left: 20%;
+							font-size: 2em;
+							font-family: sans-serif;
+							color: white;
+							position: relative;
+							z-index: 100;
+						}
 
-                        .bg-bssl-index {
-                            background-image: url(img/img-meteo/bg-bssl.png);
-                            background-repeat: no-repeat;
-                            background-size: contain;
-                            background-position: center;
-                            padding: 15px;
-                            width: 100px;
-                            height: auto;
-                        }
 
-												/* Vie au port section */
-												.harbouLifeCategoryBtn {
-													position: relative;
-													width: 140px;
-													height: 95px;
-													border-radius: 5px;
-													text-align: center;
-													color: white;
-												}
-												.harbouLifeCategoryBtn span {
-													/* border: 2px solid red; */
-													position: absolute;
-													top: 50%;
-													left: 50%;
-													transform: translate(-50%, -50%);
-												}
-												.harbouLifeCategoryBtn img {
-													width: 140px;
-													height: 95px;
-													border-radius: 5px;
-												}
-                    </style>
+						.cardmeteo {
+							background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/img-meteo/bg-plage2.jpg");
+							background-position-x: 0%, 0%;
+							background-position-y: 0%, 0%;
+							background-size: auto, auto;
+							background-size: cover;
+							background-position: 50% 50%;
+							width: 100%;
+							height: auto;
+							border-radius: 20px;
+							box-shadow: 0px 8px 16px 4px;
+							margin-top: 20px;
+							margin-bottom: 20px;
+							padding-top: 10px;
+							padding-bottom: 10px;
+						}
 
-                    <div class="card text-white bg-light mb-3 rounded" id="weather_card"
-                        onclick="weatherOnClickHandler()">
-                        <div class="card-body rounded"
-                            style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="justify-content-center">
-                                        <p class="text-center text1" id="meteo_desc"></p>
-                                    </div>
-                                    <div id="content-wth">
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div>
-                                                    <h2 class="mr-2 mt-0 ml-2 mb-4" id="temperature" style="display: flex;">
-                                                        <i class="large-font wi wi-thermometer"></i>
-                                                        <span class="large-font" id="temperature"></span><span
-                                                            class="time-font">°C</span>
-                                                    </h2>
-                                                </div>
-                                                <div>
-                                                    <p class="ml-auto mr-4 mb-0 med-font" style="display: flex;">
-                                                        <i class="med-font wi wi-raindrops"></i>
-                                                        <span class="med-font" id="humidity" style="display: flex;"></span><span
-                                                            class="med-font">mm</span>
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p class="ml-auto mb-0 med-font" style="display: flex;">
-                                                        <i class="med-font bi bi-speedometer2"></i>
-                                                        <span class="med-font" id="pressure"></span><span
-                                                            class="med-font">hPa</span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="row">
-                                                    <div class="col" id="wind_direction">
-                                                        <div class="bg-bssl-index">
-                                                            <div id="compassContainer"
-                                                                style="transform: rotate(180deg);">
-                                                                <div id="compassRing">
-                                                                    <div id="pointerContain"
-                                                                        style="transform: rotate(180deg);">
-                                                                        <p style="margin: auto; text-align: center;">
-                                                                            <i class="bi bi-wind"></i>
-                                                                            <br>
-                                                                            <span id="wind_speed"></span>
-                                                                            <span>nd</span>
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                                <div id="compassRingventjaune">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+						#compassContainer {
+							width: 100px;
+							height: 100px;
+							margin: 0 auto;
+						}
 
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col">
-                    <a class="link-dark" style="text-decoration:none;color:black;" href="/informations">
-                        <h4>Bureau du port<i style="float:right;" class="bi bi-arrow-right"></i></h4>
-                    </a>
-                </div>
-            </div>
+						#compassRing {
+							height: 100px;
+							width: 100px;
+							border: 4px solid #fff;
+							border-radius: 50%;
+						}
 
-        </div>
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col">
-                    <div class="card"
-                        style="width:100%; height: 95%; background-color: #FFF0;box-shadow: 0 3px 10px rgba(0, 0, 0, 0);">
-                        <div class="card-body" style="padding: 0px 0px; font-size:11px;">
-                            <div class="row px-2">
-                                <div class="col-4 px-2" onclick="window.location.href = ('/informations');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px; border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/information-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Informations</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-4 px-2" onclick="window.location.href = ('/camera');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/camera-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Caméras</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="map_pdf" class="col-4 px-2" onclick="window.location.href = ('/map');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/map-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary  pb-2 pt-2">Plan d'eau</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-4 px-2" onclick="window.location.href = ('/weather');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/meteo-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Bulletin météo</span>
-                                        </div>
-                                    </div>
-                                </div>
+						#compassRingventjaune {
+							height: 100px;
+							width: 100px;
+							border-left: 20px solid transparent;
+							border-right: 20px solid transparent;
+							border-bottom: 10px solid transparent;
+							border-bottom-color: #ffc107;
+							border-radius: 50%;
+							position: absolute;
+							top: 0;
+							left: 0;
+							z-index: 9;
+							-webkit-transform: rotate(180deg);
+							-webkit-transform-origin: bottom;
+							transform: rotate(180deg);
+							transform-origin: center;
+						}
 
-                                <div id="absences" class="col-4 px-2" onclick="window.location.href = ('/absence');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/navigation-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2"
-                                                style="text-align: center;">Déclaration d'absences</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="securites" class="col-4 px-2" onclick="window.location.href = ('/securite');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;border-radius: 15px;"
-                                                    class="image-boxed" src="/library/securite-icon.jpg">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Incidents</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="conciergerie_button" class="col-4 px-2"
-                                    onclick="window.location.href = ('/conciergerie');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/bell-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Conciergerie</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="marees" class="col-4 px-2"
-                                    onclick="window.open('https://maree.info/','_blank');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/mare-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Marées</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="reservation" class="col-4 px-2"
-                                    onclick="window.location.href = ('/reservation');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/resa-icon.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Réservation</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="challenges" class="col-4 px-2"
-                                    onclick="window.location.href = ('/challenges');">
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span style="width:80px; height:80px;border-radius: 25px;"
-                                                class="d-flex justify-content-center shadow">
-                                                <img style="width:80px; height:80px;align-self:center;"
-                                                    class="image-boxed" src="/library/icon-challenge.png">
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col d-flex justify-content-center">
-                                            <span class="text-secondary pb-2 pt-2">Challenges</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+						#pointerContain {
+							display: flex;
+							vertical-align: middle;
+							color: #fff;
+							margin: auto;
+							width: 100%;
+							height: 100%;
+						}
 
-        <div class="container mt-4" id="articles_link">
-            <div class="row">
-                <div class="col">
-                    <a class="link-dark" style="text-decoration:none;color:black;" href="/articles">
-                        <h4>Actualités<i style="float:right;" class="bi bi-arrow-right"></i></h4>
-                    </a>
-                </div>
-            </div>
-        </div>
+						#content-wth {
+							padding-left: 20px;
+							padding-right: 20px;
+						}
 
-        <div class="container mt-4" id="articles_container">
-        </div>
+						.bg-bssl-index {
+							background-image: url(img/img-meteo/bg-bssl.png);
+							background-repeat: no-repeat;
+							background-size: contain;
+							background-position: center;
+							padding: 15px;
+							width: 100px;
+							height: auto;
+						}
 
-        <div class="container mt-4" id="event_link">
-            <div class="row">
-                <div class="col">
-                    <a class="link-dark" style="text-decoration:none;color:black;" href="/events">
-                        <h4>Evénements<i style="float:right;" class="bi bi-arrow-right"></i></h4>
-                    </a>
-                </div>
-            </div>
-        </div>
+						/* Vie au port section */
+						.harbouLifeCategoryBtn {
+							position: relative;
+							width: 140px;
+							height: 95px;
+							border-radius: 5px;
+							text-align: center;
+							color: white;
+							margin: 0px 4px;
+						}
 
-        <div class="container mt-4" id="events_container">
-        </div>
+						.harbouLifeCategoryBtn span {
+							/* border: 2px solid red; */
+							position: absolute;
+							top: 50%;
+							left: 50%;
+							transform: translate(-50%, -50%);
+						}
 
-        <div class="container mt-4" id="harbourlife_link">
-            <div class="row">
-                <div class="col">
-                    <h4>Vie au port<i style="float:right;" class="bi bi-arrow-right"></i></h4>
-                </div>
-            </div>
-        </div>
+						.harbouLifeCategoryBtn img {
+							width: 140px;
+							height: 95px;
+							border-radius: 5px;
+						}
+					</style>
 
-        <div class="container-fluid px-0 mt-4" id="harbourlife">
-            <div class="swiper-container swiper-products" style="overflow: visible;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="sos">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=sos')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow harbouLifeCategoryBtn" src="https://res.cloudinary.com/nauticspot/image/upload/v1652953549/Nauticspot-Next/partenaires/SOS_jrboxy.png">
-																				<span class="small">SOS</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-									<div class="swiper-slide harbouLifeCategoryBtn" id="maintenance" style="margin-left: 10px;">
-										<div class="row">
-												<div class="col" onclick="window.location.href = ('/harborlife?select=maintenance')">
-														<div class="row">
-																<div class="col">
-																	<img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454035/Nauticspot-Next/partenaires/Maintenance_ns71zp.png">
-																	<span class="small">Maintenance</span>
-																</div>
-														</div>
-												</div>
-										</div>
+					<div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="weatherOnClickHandler()">
+						<div class="card-body rounded" style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
+							<div class="row">
+								<div class="col">
+									<div class="justify-content-center">
+										<p class="text-center text1" id="meteo_desc"></p>
 									</div>
-									<div class="swiper-slide harbouLifeCategoryBtn" id="accastillage">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=accastillage')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Accastillage_fb0glq.png">
-																						<span class="">Accastillage</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="alimentation">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=alimentation')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454042/Nauticspot-Next/partenaires/Alimentation_g6l6jl.png">
-																						<span class="small">Alimentation</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="sante">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=sante')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Sant%C3%A9_ot5lak.png">
-																						<span class="small">Santé</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="annonce">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=annonce')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652956258/Nauticspot-Next/partenaires/annonces_cxaz1j.png">
-																						<span class="small">Annonces</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="laverie">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=laverie')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454039/Nauticspot-Next/partenaires/Laverie_gwrc01.png">
-																					<span class="small">Laveries</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="transport">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=transport')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png">
-																						<span class="small">Transport</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="boutique">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=boutique')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454040/Nauticspot-Next/partenaires/Commerces_zgtayw.png">
-																						<span class="small">Boutiques</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="vendeurLoueurHl">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=vendeurLoueurHl')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png">
-																				<span class="small">Vendeur • Loueur</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="vieportautre">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/harborlife?select=vieportautre')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
-																				<span class="small">Autres</span>
-                                    </div>
-                                </div>
-                                <div class="row text-center">
-                                    <div class="col">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="container mt-4" id="experience_link">
-            <div class="row">
-                <div class="col">
-                    <h4>Expériences<i style="float:right;" class="bi bi-arrow-right"></i></h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="container-fluid px-0 mt-4" id="experience">
-            <div class="swiper-container swiper-products" style="overflow: visible;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="nautic">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/experiences?select=nautic')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png">
-																				<span class="small">Activités nautiques</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-										<div class="swiper-slide harbouLifeCategoryBtn" id="vendeurLoueurEx">
-											<div class="row">
-													<div class="col" onclick="window.location.href = ('/experiences?select=vendeurLoueurEx')">
-															<div class="row">
-																	<div class="col">
-																			<img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png">
-																			<span class="small">Vendeur • Loueur</span>
+									<div id="content-wth">
+										<div class="row">
+											<div class="col-6">
+												<div>
+													<h2 class="mr-2 mt-0 ml-2 mb-4" id="temperature" style="display: flex;">
+														<i class="large-font wi wi-thermometer"></i>
+														<span class="large-font" id="temperature"></span><span class="time-font">°C</span>
+													</h2>
+												</div>
+												<div>
+													<p class="ml-auto mr-4 mb-0 med-font" style="display: flex;">
+														<i class="med-font wi wi-raindrops"></i>
+														<span class="med-font" id="humidity" style="display: flex;"></span><span
+															class="med-font">mm</span>
+													</p>
+												</div>
+												<div>
+													<p class="ml-auto mb-0 med-font" style="display: flex;">
+														<i class="med-font bi bi-speedometer2"></i>
+														<span class="med-font" id="pressure"></span><span class="med-font">hPa</span>
+													</p>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="row">
+													<div class="col" id="wind_direction">
+														<div class="bg-bssl-index">
+															<div id="compassContainer" style="transform: rotate(180deg);">
+																<div id="compassRing">
+																	<div id="pointerContain" style="transform: rotate(180deg);">
+																		<p style="margin: auto; text-align: center;">
+																			<i class="bi bi-wind"></i>
+																			<br>
+																			<span id="wind_speed"></span>
+																			<span>nd</span>
+																		</p>
 																	</div>
+																</div>
+																<div id="compassRingventjaune">
+																</div>
 															</div>
+														</div>
 													</div>
+												</div>
 											</div>
 										</div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="terrestres">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/experiences?select=terrestres')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png">
-																				<span class="small">Activités terrestres</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="association">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/experiences?select=association')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png">
-																				<span class="small">Associations</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="equipbourse">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/experiences?select=equipbourse')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png">
-																				<span class="small">Bourse aux équipiers</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="experienceautre">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/experiences?select=experienceautre')">
-                                <div class="row">
-                                    <div class="col">
-																			<img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
-																			<span class="small">Autres</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <div class="container mt-4" id="discovery_link">
-            <div class="row">
-                <div class="col">
-                    <h4>Découvertes<i style="float:right;" class="bi bi-arrow-right"></i></h4>
-                </div>
-            </div>
-        </div>
+		<div class="container mt-4">
+			<div class="row">
+				<div class="col">
+					<a class="link-dark" style="text-decoration:none;color:black;" href="/informations">
+						<h4>Bureau du port<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+					</a>
+				</div>
+			</div>
 
-        <div class="container-fluid px-0 mt-4" id="discovery">
-            <div class="swiper-container swiper-products" style="overflow: visible;">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="restaurant">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/discovery?select=restaurant')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/restaurant_puz279.png">
-																				<span class="small">Restaurants</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="bar">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/discovery?select=bar')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/bar_lqdraf.png">
-																				<span class="small">Bars</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="culture">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/discovery?select=culture')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png">
-																				<span class="small">Culture</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="detente">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/discovery?select=detente')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652776957/Nauticspot-Next/partenaires/spa_vjrula.png">
-																				<span class="small">Détente</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="divertissement">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/discovery?select=divertissement')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/v1652956491/Nauticspot-Next/partenaires/loisirs_ciiyig.png">
-																				<span class="small">Loisirs</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide harbouLifeCategoryBtn" id="decouverteautre">
-                        <div class="row">
-                            <div class="col" onclick="window.location.href = ('/discovery?select=decouverteautre')">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="shadow" src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
-																				<span class="small">Autres</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br />
-        <br />
-        <br />
-        <div class="container py-3">
-            <!-- __TPL_NAVBAR__ -->
-            {{element->navbar.html}}
-        </div>
-    </main>
+		</div>
+		<div class="container mt-4">
+			<div class="row">
+				<div class="col">
+					<div class="card"
+						style="width:100%; height: 95%; background-color: #FFF0;box-shadow: 0 3px 10px rgba(0, 0, 0, 0);">
+						<div class="card-body" style="padding: 0px 0px; font-size:11px;">
+							<div class="row px-2">
+								<div class="col-4 px-2" onclick="window.location.href = ('/informations');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px; border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/information-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Informations</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-4 px-2" onclick="window.location.href = ('/camera');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/camera-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Caméras</span>
+										</div>
+									</div>
+								</div>
+								<div id="map_pdf" class="col-4 px-2" onclick="window.location.href = ('/map');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/map-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary  pb-2 pt-2">Plan d'eau</span>
+										</div>
+									</div>
+								</div>
+								<div class="col-4 px-2" onclick="window.location.href = ('/weather');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/meteo-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Bulletin météo</span>
+										</div>
+									</div>
+								</div>
 
-    <!-- filter menu -->
-    <div class="filter">
-        <div class="container filters-container">
-            <button class="btn btn-danger small-btn filter-btn close text-white">
-                <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                    <title>ionicons-v5-l</title>
-                    <line x1='368' y1='368' x2='144' y2='144'
-                        style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                    <line x1='368' y1='144' x2='144' y2='368'
-                        style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-                </svg>
-            </button>
+								<div id="absences" class="col-4 px-2" onclick="window.location.href = ('/absence');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/navigation-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2" style="text-align: center;">Déclaration d'absences</span>
+										</div>
+									</div>
+								</div>
+								<div id="securites" class="col-4 px-2" onclick="window.location.href = ('/securite');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;border-radius: 15px;" class="image-boxed"
+													src="/library/securite-icon.jpg">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Incidents</span>
+										</div>
+									</div>
+								</div>
+								<div id="conciergerie_button" class="col-4 px-2" onclick="window.location.href = ('/conciergerie');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/bell-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Conciergerie</span>
+										</div>
+									</div>
+								</div>
+								<div id="marees" class="col-4 px-2" onclick="window.open('https://maree.info/','_blank');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/mare-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Marées</span>
+										</div>
+									</div>
+								</div>
+								<div id="reservation" class="col-4 px-2" onclick="window.location.href = ('/reservation');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/resa-icon.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Réservation</span>
+										</div>
+									</div>
+								</div>
+								<div id="challenges" class="col-4 px-2" onclick="window.location.href = ('/challenges');">
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span style="width:80px; height:80px;border-radius: 25px;"
+												class="d-flex justify-content-center shadow">
+												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
+													src="/library/icon-challenge.png">
+											</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col d-flex justify-content-center">
+											<span class="text-secondary pb-2 pt-2">Challenges</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-            <h5 class="mb-0">
-                Filter Criteria
-            </h5>
-            <p class="small text-secondary mb-4">2154 products</p>
+		<div class="container mt-4" id="articles_link">
+			<div class="row">
+				<div class="col">
+					<a class="link-dark" style="text-decoration:none;color:black;" href="/articles">
+						<h4>Actualités<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+					</a>
+				</div>
+			</div>
+		</div>
 
-            <div class="form-group floating-form-group active">
-                <label class="floating-label">
-                    Select Price Range
-                </label>
-                <div id="rangeslider" class="mt-4"></div>
-            </div>
+		<div class="container mt-4" id="articles_container">
+		</div>
 
-            <div class="form-group floating-form-group pt-0">
-                <div class="row">
-                    <div class="col">
-                        <input type="number" min="0" max="500" value="100" step="1" id="input-select"
-                            class="floating-input form-control">
-                    </div>
-                    <div class="col-auto pt-2"> to </div>
-                    <div class="col">
-                        <input type="number" min="0" max="500" value="100" step="1" id="input-number"
-                            class="floating-input form-control">
-                    </div>
-                </div>
-            </div>
+		<div class="container mt-4" id="event_link">
+			<div class="row">
+				<div class="col">
+					<a class="link-dark" style="text-decoration:none;color:black;" href="/events">
+						<h4>Evénements<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+					</a>
+				</div>
+			</div>
+		</div>
 
-            <div class="form-group floating-form-group active">
-                <select class="form-control floating-input">
-                    <option selected>Home</option>
-                    <option>Room</option>
-                    <option>Flats</option>
-                </select>
-                <label class="floating-label">Select Property Type</label>
-            </div>
+		<div class="container mt-4" id="events_container">
+		</div>
 
-            <div class="form-group floating-form-group active">
-                <label class="floating-label">Select Facilities</label>
+		<div class="container mt-4" id="harbourlife_link">
+			<div class="row">
+				<div class="col">
+					<h4>Vie au port<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+				</div>
+			</div>
+		</div>
 
-                <div class="custom-control custom-switch mt-3 my-2">
-                    <input type="checkbox" class="custom-control-input" id="Garden">
-                    <label class="custom-control-label" for="Garden">Garden</label>
-                </div>
-                <div class="custom-control custom-switch my-2">
-                    <input type="checkbox" class="custom-control-input" id="Gym">
-                    <label class="custom-control-label" for="Gym">Gym</label>
-                </div>
-                <div class="custom-control custom-switch my-2">
-                    <input type="checkbox" class="custom-control-input" id="Sport">
-                    <label class="custom-control-label" for="Sport">Sport</label>
-                </div>
-                <div class="custom-control custom-switch my-2">
-                    <input type="checkbox" class="custom-control-input" id="Parking">
-                    <label class="custom-control-label" for="Parking">Parking</label>
-                </div>
-                <div class="custom-control custom-switch my-2">
-                    <input type="checkbox" class="custom-control-input" id="kidsplay">
-                    <label class="custom-control-label" for="kidsplay">Kid's Play</label>
-                </div>
-            </div>
+		<div class="container-fluid px-0 mt-4" id="harbourlife">
+			<div class="swiper-container swiper-products">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide harbouLifeCategoryBtn" id="sos">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=sos')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow harbouLifeCategoryBtn"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652953549/Nauticspot-Next/partenaires/SOS_jrboxy.png">
+										<span class="small">SOS</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="maintenance" style="margin-left: 10px;">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=maintenance')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454035/Nauticspot-Next/partenaires/Maintenance_ns71zp.png">
+										<span class="small">Maintenance</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="accastillage">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=accastillage')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Accastillage_fb0glq.png">
+										<span class="">Accastillage</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="alimentation">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=alimentation')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454042/Nauticspot-Next/partenaires/Alimentation_g6l6jl.png">
+										<span class="small">Alimentation</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="sante">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=sante')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Sant%C3%A9_ot5lak.png">
+										<span class="small">Santé</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="annonce">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=annonce')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652956258/Nauticspot-Next/partenaires/annonces_cxaz1j.png">
+										<span class="small">Annonces</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="laverie">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=laverie')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454039/Nauticspot-Next/partenaires/Laverie_gwrc01.png">
+										<span class="small">Laveries</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="transport">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=transport')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png">
+										<span class="small">Transport</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="boutique">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=boutique')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454040/Nauticspot-Next/partenaires/Commerces_zgtayw.png">
+										<span class="small">Boutiques</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="vendeurLoueurHl">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=vendeurLoueurHl')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png">
+										<span class="small">Vendeur • Loueur</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="vieportautre">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/harborlife?select=vieportautre')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
+										<span class="small">Autres</span>
+									</div>
+								</div>
+								<div class="row text-center">
+									<div class="col">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-            <div class="form-group floating-form-group">
-                <input type="text" class="form-control floating-input">
-                <label class="floating-label">Keyword</label>
-            </div>
+				</div>
+			</div>
+		</div>
 
-            <div class="form-group floating-form-group active mb-4">
-                <select class="form-control floating-input ">
-                    <option>10% </option>
-                    <option>30%</option>
-                    <option>50%</option>
-                    <option>80%</option>
-                </select>
-                <label class="floating-label">Offer Discount</label>
-            </div>
+		<div class="container mt-4" id="experience_link">
+			<div class="row">
+				<div class="col">
+					<h4>Expériences<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+				</div>
+			</div>
+		</div>
 
-            <button class="btn btn-info btn-rounded btn-block">Search</button>
-            <br>
+		<div class="container-fluid px-0 mt-4" id="experience">
+			<div class="swiper-container swiper-products">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide harbouLifeCategoryBtn" id="nautic">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/experiences?select=nautic')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png">
+										<span class="small">Activités nautiques</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="vendeurLoueurEx">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/experiences?select=vendeurLoueurEx')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png">
+										<span class="small">Vendeur • Loueur</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="terrestres">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/experiences?select=terrestres')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png">
+										<span class="small">Activités terrestres</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="association">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/experiences?select=association')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png">
+										<span class="small">Associations</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="equipbourse">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/experiences?select=equipbourse')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png">
+										<span class="small">Bourse aux équipiers</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="experienceautre">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/experiences?select=experienceautre')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
+										<span class="small">Autres</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        </div>
-    </div>
-    <div class="filter-backdrop"></div>
+		<div class="container mt-4" id="discovery_link">
+			<div class="row">
+				<div class="col">
+					<h4>Découvertes<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+				</div>
+			</div>
+		</div>
 
-    <div class="sidebar-right">
-        <div class="selectoption">
-            <input type="checkbox" id="darklayout" name="darkmode">
-            <label for="darklayout">Dark</label>
-        </div>
-        <div class="selectoption mb-0">
-            <input type="checkbox" id="rtllayout" name="layoutrtl">
-            <label for="rtllayout">RTL</label>
-        </div>
-        <hr>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
-            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
-            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
-            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
-            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
-            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
-            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
-            <label for="templatecolor8" class="bg-red" data-title="red"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
-            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
-            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
-            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
-            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
-            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
-            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
-            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-        </div>
-    </div>
+		<div class="container-fluid px-0 mt-4" id="discovery">
+			<div class="swiper-container swiper-products">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide harbouLifeCategoryBtn" id="restaurant">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=restaurant')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/restaurant_puz279.png">
+										<span class="small">Restaurants</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="bar">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=bar')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/bar_lqdraf.png">
+										<span class="small">Bars</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="culture">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=culture')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png">
+										<span class="small">Culture</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="detente">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=detente')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652776957/Nauticspot-Next/partenaires/spa_vjrula.png">
+										<span class="small">Détente</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="divertissement">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=divertissement')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652956491/Nauticspot-Next/partenaires/loisirs_ciiyig.png">
+										<span class="small">Loisirs</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="decouverteautre">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=decouverteautre')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
+										<span class="small">Autres</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<br />
+		<div class="container py-3">
+			<!-- __TPL_NAVBAR__ -->
+			{{element->navbar.html}}
+		</div>
+	</main>
 
-    <script>
-			window.onload = () => {
-				const isGruissan = '4e2cd2p6mt' === localStorage['harbourid'];
-				if (isGruissan) {
-					const nauticBtn = document.querySelector('#nautic');
-					nautic.querySelector('img').src = '/library/ActivitieNautiqueGruissan.png';
-					const sosBtn = document.querySelector('#sos');
-					sosBtn.querySelector('img').src = '/library/SOS_Background_Gruissan.png';
+	<!-- filter menu -->
+	<div class="filter">
+		<div class="container filters-container">
+			<button class="btn btn-danger small-btn filter-btn close text-white">
+				<svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
+					<title>ionicons-v5-l</title>
+					<line x1='368' y1='368' x2='144' y2='144'
+						style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
+					<line x1='368' y1='144' x2='144' y2='368'
+						style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
+				</svg>
+			</button>
+
+			<h5 class="mb-0">
+				Filter Criteria
+			</h5>
+			<p class="small text-secondary mb-4">2154 products</p>
+
+			<div class="form-group floating-form-group active">
+				<label class="floating-label">
+					Select Price Range
+				</label>
+				<div id="rangeslider" class="mt-4"></div>
+			</div>
+
+			<div class="form-group floating-form-group pt-0">
+				<div class="row">
+					<div class="col">
+						<input type="number" min="0" max="500" value="100" step="1" id="input-select"
+							class="floating-input form-control">
+					</div>
+					<div class="col-auto pt-2"> to </div>
+					<div class="col">
+						<input type="number" min="0" max="500" value="100" step="1" id="input-number"
+							class="floating-input form-control">
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group floating-form-group active">
+				<select class="form-control floating-input">
+					<option selected>Home</option>
+					<option>Room</option>
+					<option>Flats</option>
+				</select>
+				<label class="floating-label">Select Property Type</label>
+			</div>
+
+			<div class="form-group floating-form-group active">
+				<label class="floating-label">Select Facilities</label>
+
+				<div class="custom-control custom-switch mt-3 my-2">
+					<input type="checkbox" class="custom-control-input" id="Garden">
+					<label class="custom-control-label" for="Garden">Garden</label>
+				</div>
+				<div class="custom-control custom-switch my-2">
+					<input type="checkbox" class="custom-control-input" id="Gym">
+					<label class="custom-control-label" for="Gym">Gym</label>
+				</div>
+				<div class="custom-control custom-switch my-2">
+					<input type="checkbox" class="custom-control-input" id="Sport">
+					<label class="custom-control-label" for="Sport">Sport</label>
+				</div>
+				<div class="custom-control custom-switch my-2">
+					<input type="checkbox" class="custom-control-input" id="Parking">
+					<label class="custom-control-label" for="Parking">Parking</label>
+				</div>
+				<div class="custom-control custom-switch my-2">
+					<input type="checkbox" class="custom-control-input" id="kidsplay">
+					<label class="custom-control-label" for="kidsplay">Kid's Play</label>
+				</div>
+			</div>
+
+			<div class="form-group floating-form-group">
+				<input type="text" class="form-control floating-input">
+				<label class="floating-label">Keyword</label>
+			</div>
+
+			<div class="form-group floating-form-group active mb-4">
+				<select class="form-control floating-input ">
+					<option>10% </option>
+					<option>30%</option>
+					<option>50%</option>
+					<option>80%</option>
+				</select>
+				<label class="floating-label">Offer Discount</label>
+			</div>
+
+			<button class="btn btn-info btn-rounded btn-block">Search</button>
+			<br>
+
+		</div>
+	</div>
+	<div class="filter-backdrop"></div>
+
+	<div class="sidebar-right">
+		<div class="selectoption">
+			<input type="checkbox" id="darklayout" name="darkmode">
+			<label for="darklayout">Dark</label>
+		</div>
+		<div class="selectoption mb-0">
+			<input type="checkbox" id="rtllayout" name="layoutrtl">
+			<label for="rtllayout">RTL</label>
+		</div>
+		<hr>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor1" name="sidebarcolorselect">
+			<label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor2" name="sidebarcolorselect">
+			<label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor4" name="sidebarcolorselect">
+			<label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor6" name="sidebarcolorselect">
+			<label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor3" name="sidebarcolorselect">
+			<label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor5" name="sidebarcolorselect">
+			<label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor8" name="sidebarcolorselect">
+			<label for="templatecolor8" class="bg-red" data-title="red"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor13" name="sidebarcolorselect">
+			<label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor7" name="sidebarcolorselect">
+			<label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor11" name="sidebarcolorselect">
+			<label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor12" name="sidebarcolorselect">
+			<label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor10" name="sidebarcolorselect">
+			<label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor9" name="sidebarcolorselect">
+			<label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor14" name="sidebarcolorselect">
+			<label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+		</div>
+	</div>
+
+	<script>
+		window.onload = () => {
+			const isGruissan = '4e2cd2p6mt' === localStorage['harbourid'];
+			if (isGruissan) {
+				const nauticBtn = document.querySelector('#nautic');
+				nautic.querySelector('img').src = '/library/ActivitieNautiqueGruissan.png';
+				const sosBtn = document.querySelector('#sos');
+				sosBtn.querySelector('img').src = '/library/SOS_Background_Gruissan.png';
+			}
+		};
+
+		const weatherOnClickHandler = () => {
+			const weatherDisableList = [
+				'4eqv44307K', // les sablons
+				'Ex3ADuoAmY', // la napoule
+			];
+			if (weatherDisableList.includes(localStorage["entity_id"])) {
+				console.log('disabled');
+			} else {
+				window.location.href = '/previsions';
+			}
+		};
+
+
+		fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
+			let weather_api = "wwo";
+			let entity = _data.data;
+			if (_data.success) {
+				if (!entity.absence_module) {
+					console.log("dev asb")
+					document.getElementById("absences").hidden = true;
 				}
-			};
-
-        const weatherOnClickHandler = () => {
-            const weatherDisableList = [
-                '4eqv44307K', // les sablons
-                'Ex3ADuoAmY', // la napoule
-            ];
-            if (weatherDisableList.includes(localStorage["entity_id"])) {
-                console.log('disabled');
-            } else {
-                window.location.href = '/previsions';
-            }
-        };
-
-
-        fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
-            let weather_api = "wwo";
-            let entity = _data.data;
-            if (_data.success) {
-                if (!entity.absence_module) {
-                    console.log("dev asb")
-                    document.getElementById("absences").hidden = true;
-                }
-
-                if (!entity.security_module) {
-                    console.log("dev sec")
-                    document.getElementById("securites").hidden = true;
-                }
-
-                if (!entity.marees_module) {
-                    document.getElementById("marees").hidden = true;
-                } else if (entity.maree_id) {
-                    document.getElementById("marees").onclick = function () { window.open('https://maree.info/' + entity.maree_id, '_blank'); }
-                }
-                if (!entity.challenges_module) {
-                    document.getElementById("challenges").hidden = true;
-                }
-                if (entity.weather_api)
-                    weather_api = entity.weather_api
-                else
-                    weather_api = "";
-            }
-
-
-            fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-                let harbour = _data.data;
-
-                if (harbour.email_concierge === ' ') delete harbour.email_concierge;
-
-                if (!harbour.navily_id) {
-                    document.getElementById("reservation").hidden = true;
-                }
-                if (harbour.harbour_map)
-                    document.getElementById("map_pdf").onclick = function () { window.open(harbour.harbour_map) }
-                else
-                    document.getElementById("map_pdf").hidden = true;
-
-                if (!harbour.email_concierge) {
-                    document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
-                }
-
-                fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
-                    console.log("météo");
-                    _data = JSON.parse(_data.data.data);
-                    var weather = _data.data.weather;
-                    var date = new Date();
-                    var hour = date.getHours();
-                    var minutes = date.getMinutes();
-                    var hhmm = hour + minutes;
-
-                    var cloudy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337758/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/nuageux_2.1_dsd7ga.png"
-                    var rainy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337759/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain-2_dyyoyk.png"
-                    var sunCloudy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337759/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sun_cloud-afternoon_sqr3a6.jpg"
-                    var nightClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337760/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/Lune_i1ckbh.jpg"
-                    var sunsetClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337761/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunset_bpfwzj.png"
-                    var rainHeavy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337765/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain_kztbgd.png"
-                    var sunshineClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337766/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunshine_rzbzqh.png"
-
-                    console.log(weather[0].hourly[hour].weatherCode);
-                    //case WeatherCode	Condition	DayIcon	NightIcon
-                    switch (weather[0].hourly[hour].weatherCode) {
-                        case '395':	//Moderate or heavy snow in area with thunder
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '392':	//Patchy light snow in area with thunder
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '389':	//Moderate or heavy rain in area with thunder
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '386':	//Patchy light rain in area with thunder
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '377':	//Moderate or heavy showers of ice pellets
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '374':	//Light showers of ice pellets
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '371':	//Moderate or heavy snow showers
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '368':	//Light snow showers
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '365':	//Moderate or heavy sleet showers
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '362':	//Light sleet showers
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '359':	//Torrential rain shower
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '356':	//Moderate or heavy rain shower
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '353':	//Light rain shower
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '350':	//Ice pellets
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '338':	//Heavy snow
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '335':	//Patchy heavy snow
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '332':	//Moderate snow
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '329':	//Patchy moderate snow
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '326':	//Light snow
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '323':	//Patchy light snow
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '320':	//Moderate or heavy sleet
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '317':	//Light sleet
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '314':	//Moderate or Heavy freezing rain
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '311':	//Light freezing rain
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '308':	//Heavy rain
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '305':	//Heavy rain at times
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '302':	//Moderate rain
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '299':	//Moderate rain at times
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '296':	//Light rain
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '293':	//Patchy light rain
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '284':	//Heavy freezing drizzle
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '281':	//Freezing drizzle
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '266':	//Light drizzle
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '263':	//Patchy light drizzle
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '260':	//Freezing fog
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '248':	//Fog
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '230':	//Blizzard
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '227':	//Blowing snow
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '200':	//Thundery outbreaks in nearby
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '185':	//Patchy freezing drizzle nearby
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '182':	//Patchy sleet nearby
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '179':	//Patchy snow nearby
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '176':	//Patchy rain nearby
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '143':	//Mist
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '122':	//Overcast
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '119':	//Cloudy
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '116':	//Partly Cloudy
-                            document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        case '113':	//Clear/Sunny
-                            var sunrise = weather[0].astronomy[0].sunrise.split(':')[0]
-                            var sunset = weather[0].astronomy[0].sunset.split(':')[0]
-                            sunset = parseInt(sunset) + 12;
-                            if (sunrise == '12')
-                                sunrise = 0;
-                            sunrise = parseInt(sunrise);
-                            if (hour >= sunrise && hour <= sunrise + 1)
-                                document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunsetClearsky + "');background-position: center;background-size: 100% auto;");
-                            else if (hour <= sunset && hour >= sunset - 1)
-                                document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunsetClearsky + "');background-position: center;background-size: 100% auto;");
-                            else if (hour > sunset || hour < sunrise)
-                                document.getElementById("weather_card").setAttribute("style", "background-image: url('" + nightClearsky + "');background-position: center;background-size: 100% auto;");
-                            else
-                                document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunshineClearsky + "');background-position: center;background-size: 100% auto;");
-                            break;
-                        default:
-                            console.log(`Sorry, we are out of.`);
-                    }
-
-                    document.getElementById("meteo_desc").innerHTML = (weather[0].hourly[hour].lang_fr[0].value);
-                    if (weather_api == "wlv1") {
-                        fetch("/api/weather/wlink/vone?entity_id=" + entity.id).then(response => response.json()).then(_data => {
-                            console.log('/api/weather/wlink/vone', _data);
-                            if (_data.success) {
-                                let _wlData = JSON.parse(_data.data.data);
-                                document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat(_wlData.temp_c).toFixed(1) + "°C");
-                                document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.davis_current_observation.rain_day_in).toFixed(2));
-                                document.getElementById("pressure").innerHTML = (parseFloat(_wlData.pressure_mb).toFixed(0));
-                                document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlData.wind_degrees + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
-                                //document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-                                document.getElementById("wind_speed").innerHTML = parseFloat(_wlData.wind_kt).toFixed(0);
-
-                            }
-                        }).catch((e) => console.error(e));
-                    } else if (weather_api == "wlv2") {
-                        fetch("/api/weather/wlink/vtwo?entity_id=" + entity.id).then(response => response.json()).then(_data => {
-                            console.log('/api/weather/wlink/vtwo', _data);
-                            if (_data.success) {
-                                let _wlDataISS;
-                                let _wlDataBaro;
-                                // sensors list are not allways sorted the same way, we need to find the correct type
-                                for (let sensor of _data.data.sensors) {
-                                    if (sensor.category === 'ISS') { // ISS => Integrated Sensor Suite
-                                        _wlDataISS = sensor.data[0];
-                                    }
-                                    if (sensor.category === 'Barometer') {
-                                        _wlDataBaro = sensor.data[0];
-                                    }
-                                }
-                                document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlDataISS.temp - 32) / 1.8000).toFixed(1) + "°C");
-                                document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlDataISS.rainfall_daily_mm).toFixed(2));
-                                const convertionFactor = 0.02953; // 1 Hectopascal [hPa] = 0,029 529 980 164 712 Inch of mercury [inHg]
-                                const pressureInHpa = Math.round(_wlDataBaro.bar_absolute / convertionFactor); 
-                                document.getElementById("pressure").innerHTML = (pressureInHpa);
-                                document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir_last + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
-                                //document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-                                // document.getElementById("wind_speed").innerHTML = parseFloat(_wlDataISS.wind_speed_avg_last_1_min).toFixed(2);
-                                document.getElementById("wind_speed").innerHTML = parseInt(Math.round(_wlDataISS.wind_speed_avg_last_1_min));
-
-                            }
-                        }).catch((e) => console.error(e));
-                    } else {
-
-                        document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + weather[0].hourly[hour].tempC + "°C");
-                        document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + weather[0].hourly[hour].precipMM);
-                        document.getElementById("pressure").innerHTML = (weather[0].hourly[hour].pressure);
-                        document.getElementById("compassRingventjaune").style.transform = "rotate(" + weather[0].hourly[hour].winddirDegree + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
-                        //document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-                        document.getElementById("wind_speed").innerHTML = (Math.trunc(weather[0].hourly[hour].windspeedKmph / 1.852) + " ");
-
-
-                    }
-
-
-                    //document.getElementById("wind_speed").insertAdjacentHTML('beforeend', '<div class="float-right">' + weather[0].hourly[hour].windspeedKmph + "Km/h</div>");
-                }).catch((error) => {
-                    console.log("météo erreur");
-                    console.log(error);
-                });
-
-            }).catch((error) => {
-                console.log("météo erreur");
-                console.log(error);
-            });
-        }).catch((error) => {
-            console.log(error);
-        });
-
-        if (!localStorage["user"]) {
-            document.getElementById("absences").hidden = true;
-            document.getElementById("securites").hidden = true;
-            document.getElementById("challenges").hidden = true;
-        } else {
-            fetch("/api/get/userboats?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
-                if (!_data.success) {
-                    document.getElementById("absences").hidden = true;
-                    document.getElementById("challenges").hidden = true;
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
-        }
-
-        fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-            // console.log('_data',_data);
-            var activeCategory = _data.data.activeCategories;
-            var activeSubCategories = _data.data.activeSubCategories;
-
-            if (activeCategory.harbourlife) {
-                if (activeSubCategories.sos)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=sos')");
-                else if (activeSubCategories.accastillage)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=accastillage')");
-                else if (activeSubCategories.maintenance)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=maintenance')");
-                else if (activeSubCategories.alimentation)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=alimentation')");
-                else if (activeSubCategories.sante)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=sante')");
-                else if (activeSubCategories.annonce)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=annonce')");
-                else if (activeSubCategories.laverie)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=laverie')");
-                else if (activeSubCategories.transport)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=transport')");
-                else if (activeSubCategories.boutique)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=boutique')");
-                else if (activeSubCategories.vieportautre)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vieportautre')");
-                else if (activeSubCategories.vendeurLoueurHl)
-                    document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vendeurLoueurHl')");
-
-
-                if (!activeSubCategories.accastillage)
-                    document.getElementById('accastillage').hidden = true;
-                if (!activeSubCategories.sos)
-                    document.getElementById('sos').hidden = true;
-                if (!activeSubCategories.maintenance)
-                    document.getElementById('maintenance').hidden = true;
-                if (!activeSubCategories.sante)
-                    document.getElementById('sante').hidden = true;
-                if (!activeSubCategories.annonce)
-                    document.getElementById('annonce').hidden = true;
-                if (!activeSubCategories.laverie)
-                    document.getElementById('laverie').hidden = true;
-                if (!activeSubCategories.transport)
-                    document.getElementById('transport').hidden = true;
-                if (!activeSubCategories.boutique)
-                    document.getElementById('boutique').hidden = true;
-                if (!activeSubCategories.alimentation)
-                    document.getElementById('alimentation').hidden = true;
-                if (!activeSubCategories.vieportautre)
-                    document.getElementById('vieportautre').hidden = true;
-                if (!activeSubCategories.vendeurLoueurHl)
-                    document.getElementById('vendeurLoueurHl').hidden = true;
-            } else {
-                document.getElementById('harbourlife').hidden = true;
-                document.getElementById('harbourlife_link').hidden = true;
-            }
-
-            if (activeCategory.experience) {
-
-                if (activeSubCategories.nautic)
-                    document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=nautic')");
-                else if (activeSubCategories.terrestres)
-                    document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=terrestres')");
-                else if (activeSubCategories.association)
-                    document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=association')");
-                else if (activeSubCategories.equipbourse)
-                    document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=equipbourse')");
-                else if (activeSubCategories.vendeurLoueurEx)
-                    document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=vendeurLoueurEx')");
-                else if (activeSubCategories.experienceautre)
-                    document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=experienceautre')");
-
-
-                if (!activeSubCategories.nautic)
-                    document.getElementById('nautic').hidden = true;
-                if (!activeSubCategories.terrestres)
-                    document.getElementById('terrestres').hidden = true;
-                if (!activeSubCategories.association)
-                    document.getElementById('association').hidden = true;
-                if (!activeSubCategories.equipbourse)
-                    document.getElementById('equipbourse').hidden = true;
-                if (!activeSubCategories.vendeurLoueurEx)
-                    document.getElementById('vendeurLoueurEx').hidden = true;
-                if (!activeSubCategories.experienceautre)
-                    document.getElementById('experienceautre').hidden = true;
-            } else {
-                document.getElementById('experience').hidden = true;
-                document.getElementById('experience_link').hidden = true;
-            }
-
-            if (activeCategory.discovery) {
-
-                if (activeSubCategories.restaurant)
-                    document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=restaurant')");
-                else if (activeSubCategories.bar)
-                    document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=bar')");
-                else if (activeSubCategories.culture)
-                    document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=culture')");
-                else if (activeSubCategories.divertissement)
-                    document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=divertissement')");
-                else if (activeSubCategories.detente)
-                    document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=detente')");
-                else if (activeSubCategories.decouverteautre)
-                    document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=decouverteautre')");
-
-
-                if (!activeSubCategories.restaurant)
-                    document.getElementById('restaurant').hidden = true;
-                if (!activeSubCategories.bar)
-                    document.getElementById('bar').hidden = true;
-                if (!activeSubCategories.culture)
-                    document.getElementById('culture').hidden = true;
-                if (!activeSubCategories.divertissement)
-                    document.getElementById('divertissement').hidden = true;
-                if (!activeSubCategories.detente)
-                    document.getElementById('detente').hidden = true;
-                if (!activeSubCategories.decouverteautre)
-                    document.getElementById('decouverteautre').hidden = true;
-            } else {
-                document.getElementById('discovery').hidden = true;
-                document.getElementById('discovery_link').hidden = true;
-            }
-
-        }).catch((error) => {
-            console.log(error);
-        });
-
-        var subCategoryHarbourLife = '<option value="sos">S.O.S.</option>'
-            + '<option value="maintenance">Maintenance</option>'
-            + '<option value="accastillage">Accastillage</option>'
-            + '<option value="sante">Santé</option>'
-            + '<option value="annonce">Annonce</option>'
-            + '<option value="laverie">Laverie</option>'
-            + '<option value="transport">Transport</option>'
-            + '<option value="alimentation">alimentation</option>'
-            + '<option value="vieportautre">Autre</option>';
-
-        var subCategoryExperience = '<option value="nautic">Activités nautiques</option>'
-            + '<option value="terrestres">Activités terrestres</option>'
-            + '<option value="association">Association</option>'
-            + '<option value="equipbourse">Bourse aux équipiers</option>'
-            + '<option value="experienceautre">Autre</option>';
-
-        var subCategoryDiscovery = '<option value="restaurant">Restaurants</option>'
-            + '<option value="bar">Bar</option>'
-            + '<option value="culture">Culture</option>'
-            + '<option value="divertissement">Divertissement</option>'
-            + '<option value="detente">Détente</option>'
-            + '<option value="decouverteautre">Autre</option>';
-
-
-
-        var dynamicSort = function (property) {
-            var sortOrder = 1;
-            if (property[0] === "-") {
-                sortOrder = -1;
-                property = property.substr(1);
-            }
-            return function (a, b) {
-                /* next line works with strings and numbers,
-                 * and you may want to customize it to your needs
-                 */
-                var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-                return result * sortOrder;
-            }
-        }
-        var newsRow = '<div class="row">'
-            + '<div class="col">'
-            + '<div class="card product-card-small mb-3" onclick="window.location.href = (\'/actualite?id=__ID__\');">'
-            + '<div class="card-body" style="padding: 0px 0px!important;">'
-            + '<div class="row">'
-            + '<div class="col-auto p-1" style="margin-left:15px; padding: 0rem !important;">'
-            + '<div class="product-image-small" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">'
-            + '<img src="__IMG__" alt="" style="height:100%;width:auto;">'
-            + '</div>'
-            + '</div>'
-            + '<div class="col">'
-            + '<div class="row">'
-            + '<div class="col-12">'
-            + '<h6 style="font-size: 13px; margin-top: 10px;"><strong>__TITLE__</strong></h6>'
-            + '</div>'
-            + '<div class="col-auto">'
-            + '<div class="text-muted small">__DESCRIPTION__</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>';
-
-        fetch("/api/news/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-            console.log(_data);
-            if (_data.data[0]) {
-                var articles = _data.data.sort(dynamicSort("date")).reverse();
-                for (var i = 0; i < 3; i++) {
-                    var date = new Date(articles[i].date);
-                    var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
-                    var rowCurrent = newsRow.replace("__ID__", articles[i].id).replace("__TITLE__", articles[i].title).replace("__DATE__", dateFormated).replace("__DESCRIPTION__", articles[i].description);
-
-                    if (articles[i].img) {
-                        rowCurrent = rowCurrent.replace('__IMG__', articles[i].img)
-                    } else {
-                        rowCurrent = rowCurrent.replace('__IMG__', localStorage['entity_logo'])
-                    }
-                    document.getElementById("articles_container").insertAdjacentHTML("beforeend", rowCurrent);
-                }
-            } else {
-                document.getElementById("articles_link").hidden = true;
-            }
-        }).catch((error) => {
-            console.log(error);
-        })
-
-        var eventRow = '<div class="row">'
-            + '<div class="col">'
-            + '<div style="width:100%;" class="card product-card-large mb-3" onclick="window.location.href = (\'event?id=__ID__\');">'
-            + '<div class="card-body p-0">'
-            + '<div class="product-image-large">'
-            + '<div class="background">'
-            + '<img style="width:100%;height:auto;" src="__IMG__" alt="">'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '<div class="card-footer">'
-            + '<div class="row">'
-            + '<div class="col">'
-            + '<h6 style="font-size: 13px;" ><strong>__TITLE__</strong></h6>'
-            + '</div>'
-            + '</div>'
-            + '<div class="row">'
-            + '<div class="col">'
-            + '<div class="small text-muted">__CONTENT__</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-            + '</div>'
-
-
-        fetch("/api/events/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-            console.log('_data',_data);
-            if (_data.data[0]) {
-                var events = _data.data.sort(dynamicSort("date_start")).reverse();
-
-                for (var i = 0; i < 3; i++) {
-                    var date = new Date(events[i].date);
-                    var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
-                    var rowCurrent = eventRow.replace("__ID__", events[i].id).replace("__TITLE__", events[i].title).replace("__DATE__", dateFormated).replace("__CONTENT__", events[i].description);
-
-                    if (events[i].img) {
-                        rowCurrent = rowCurrent.replace('__IMG__', events[i].img)
-                    } else {
-                        rowCurrent = rowCurrent.replace('__IMG__', localStorage['entity_logo'])
-                    }
-
-                    document.getElementById("events_container").insertAdjacentHTML("beforeend", rowCurrent);
-                }
-            } else {
-                document.getElementById("event_link").hidden = true;
-            }
-        }).catch((error) => {
-            console.log(error);
-        });
-    </script>
-
-
-
-    <!-- Required jquery and libraries -->
-    <script src="/js/jquery-3.3.1.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- cookie js -->
-    <script src="/js/jquery.cookie.js"></script>
-
-    <!-- Swiper slider  js-->
-    <script src="/vendor/swiper/js/swiper.min.js"></script>
-
-    <!-- nouislider js -->
-    <script src="/vendor/nouislider/nouislider.min.js"></script>
-
-    <!-- Customized jquery file  -->
-    <script src="/js/main.js"></script>
-    <script src="/js/color-scheme-demo.js"></script>
-
-    <!-- PWA app service registration and works -->
-    <script src="/library/pwa-services.js"></script>
-
-    <!-- page level custom script -->
-    <script>
-        "use strict"
-        $(window).on('load', function () {
-
-            /* range picker for filter */
-            var html5Slider = document.getElementById('rangeslider');
-            noUiSlider.create(html5Slider, {
-                start: [0, 100],
-                connect: true,
-                range: {
-                    'min': 0,
-                    'max': 500
-                }
-            });
-
-            var inputNumber = document.getElementById('input-number');
-            var select = document.getElementById('input-select');
-
-            html5Slider.noUiSlider.on('update', function (values, handle) {
-                var value = values[handle];
-
-                if (handle) {
-                    inputNumber.value = value;
-                } else {
-                    select.value = Math.round(value);
-                }
-            });
-            select.addEventListener('change', function () {
-                html5Slider.noUiSlider.set([this.value, null]);
-            });
-            inputNumber.addEventListener('change', function () {
-                html5Slider.noUiSlider.set([null, this.value]);
-            });
-
-
-            /* carousel */
-            var swiper = new Swiper('.swiper-products', {
-                slidesPerView: 'auto',
-                spaceBetween: 0,
-                pagination: 'false'
-            });
-
-        });
-    </script>
-
-    <style>
-        @font-face {
-            font-family: 'Poppins Regular';
-            font-style: normal;
-            font-weight: normal;
-            src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
-        }
-
-        * {
-            font-family: 'Poppins Regular' !important;
-        }
-
-        body {
-            background: url("../background2.png") #FFF fixed;
-            font-family: 'Poppins Regular' !important;
-        }
-    </style>
-
-    <!-- __TPL_FOOTER_APP__ -->
-    {{element->footer_app.html}}
+
+				if (!entity.security_module) {
+					console.log("dev sec")
+					document.getElementById("securites").hidden = true;
+				}
+
+				if (!entity.marees_module) {
+					document.getElementById("marees").hidden = true;
+				} else if (entity.maree_id) {
+					document.getElementById("marees").onclick = function () { window.open('https://maree.info/' + entity.maree_id, '_blank'); }
+				}
+				if (!entity.challenges_module) {
+					document.getElementById("challenges").hidden = true;
+				}
+				if (entity.weather_api)
+					weather_api = entity.weather_api
+				else
+					weather_api = "";
+			}
+
+
+			fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+				let harbour = _data.data;
+
+				if (harbour.email_concierge === ' ') delete harbour.email_concierge;
+
+				if (!harbour.navily_id) {
+					document.getElementById("reservation").hidden = true;
+				}
+				if (harbour.harbour_map)
+					document.getElementById("map_pdf").onclick = function () { window.open(harbour.harbour_map) }
+				else
+					document.getElementById("map_pdf").hidden = true;
+
+				if (!harbour.email_concierge) {
+					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
+				}
+
+				fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
+					console.log("météo");
+					_data = JSON.parse(_data.data.data);
+					var weather = _data.data.weather;
+					var date = new Date();
+					var hour = date.getHours();
+					var minutes = date.getMinutes();
+					var hhmm = hour + minutes;
+
+					var cloudy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337758/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/nuageux_2.1_dsd7ga.png"
+					var rainy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337759/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain-2_dyyoyk.png"
+					var sunCloudy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337759/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sun_cloud-afternoon_sqr3a6.jpg"
+					var nightClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337760/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/Lune_i1ckbh.jpg"
+					var sunsetClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337761/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunset_bpfwzj.png"
+					var rainHeavy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337765/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain_kztbgd.png"
+					var sunshineClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337766/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunshine_rzbzqh.png"
+
+					console.log(weather[0].hourly[hour].weatherCode);
+					//case WeatherCode	Condition	DayIcon	NightIcon
+					switch (weather[0].hourly[hour].weatherCode) {
+						case '395':	//Moderate or heavy snow in area with thunder
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '392':	//Patchy light snow in area with thunder
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '389':	//Moderate or heavy rain in area with thunder
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '386':	//Patchy light rain in area with thunder
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '377':	//Moderate or heavy showers of ice pellets
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '374':	//Light showers of ice pellets
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '371':	//Moderate or heavy snow showers
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '368':	//Light snow showers
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '365':	//Moderate or heavy sleet showers
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '362':	//Light sleet showers
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '359':	//Torrential rain shower
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '356':	//Moderate or heavy rain shower
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '353':	//Light rain shower
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '350':	//Ice pellets
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '338':	//Heavy snow
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '335':	//Patchy heavy snow
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '332':	//Moderate snow
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '329':	//Patchy moderate snow
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '326':	//Light snow
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '323':	//Patchy light snow
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '320':	//Moderate or heavy sleet
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '317':	//Light sleet
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '314':	//Moderate or Heavy freezing rain
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '311':	//Light freezing rain
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '308':	//Heavy rain
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '305':	//Heavy rain at times
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '302':	//Moderate rain
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '299':	//Moderate rain at times
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '296':	//Light rain
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '293':	//Patchy light rain
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '284':	//Heavy freezing drizzle
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '281':	//Freezing drizzle
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '266':	//Light drizzle
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '263':	//Patchy light drizzle
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '260':	//Freezing fog
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '248':	//Fog
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '230':	//Blizzard
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '227':	//Blowing snow
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '200':	//Thundery outbreaks in nearby
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '185':	//Patchy freezing drizzle nearby
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '182':	//Patchy sleet nearby
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '179':	//Patchy snow nearby
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '176':	//Patchy rain nearby
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '143':	//Mist
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '122':	//Overcast
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '119':	//Cloudy
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '116':	//Partly Cloudy
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+							break;
+						case '113':	//Clear/Sunny
+							var sunrise = weather[0].astronomy[0].sunrise.split(':')[0]
+							var sunset = weather[0].astronomy[0].sunset.split(':')[0]
+							sunset = parseInt(sunset) + 12;
+							if (sunrise == '12')
+								sunrise = 0;
+							sunrise = parseInt(sunrise);
+							if (hour >= sunrise && hour <= sunrise + 1)
+								document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunsetClearsky + "');background-position: center;background-size: 100% auto;");
+							else if (hour <= sunset && hour >= sunset - 1)
+								document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunsetClearsky + "');background-position: center;background-size: 100% auto;");
+							else if (hour > sunset || hour < sunrise)
+								document.getElementById("weather_card").setAttribute("style", "background-image: url('" + nightClearsky + "');background-position: center;background-size: 100% auto;");
+							else
+								document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunshineClearsky + "');background-position: center;background-size: 100% auto;");
+							break;
+						default:
+							console.log(`Sorry, we are out of.`);
+					}
+
+					document.getElementById("meteo_desc").innerHTML = (weather[0].hourly[hour].lang_fr[0].value);
+					if (weather_api == "wlv1") {
+						fetch("/api/weather/wlink/vone?entity_id=" + entity.id).then(response => response.json()).then(_data => {
+							console.log('/api/weather/wlink/vone', _data);
+							if (_data.success) {
+								let _wlData = JSON.parse(_data.data.data);
+								document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat(_wlData.temp_c).toFixed(1) + "°C");
+								document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlData.davis_current_observation.rain_day_in).toFixed(2));
+								document.getElementById("pressure").innerHTML = (parseFloat(_wlData.pressure_mb).toFixed(0));
+								document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlData.wind_degrees + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
+								//document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
+								document.getElementById("wind_speed").innerHTML = parseFloat(_wlData.wind_kt).toFixed(0);
+
+							}
+						}).catch((e) => console.error(e));
+					} else if (weather_api == "wlv2") {
+						fetch("/api/weather/wlink/vtwo?entity_id=" + entity.id).then(response => response.json()).then(_data => {
+							console.log('/api/weather/wlink/vtwo', _data);
+							if (_data.success) {
+								let _wlDataISS;
+								let _wlDataBaro;
+								// sensors list are not allways sorted the same way, we need to find the correct type
+								for (let sensor of _data.data.sensors) {
+									if (sensor.category === 'ISS') { // ISS => Integrated Sensor Suite
+										_wlDataISS = sensor.data[0];
+									}
+									if (sensor.category === 'Barometer') {
+										_wlDataBaro = sensor.data[0];
+									}
+								}
+								document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlDataISS.temp - 32) / 1.8000).toFixed(1) + "°C");
+								document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlDataISS.rainfall_daily_mm).toFixed(2));
+								const convertionFactor = 0.02953; // 1 Hectopascal [hPa] = 0,029 529 980 164 712 Inch of mercury [inHg]
+								const pressureInHpa = Math.round(_wlDataBaro.bar_absolute / convertionFactor);
+								document.getElementById("pressure").innerHTML = (pressureInHpa);
+								document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir_last + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
+								//document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
+								// document.getElementById("wind_speed").innerHTML = parseFloat(_wlDataISS.wind_speed_avg_last_1_min).toFixed(2);
+								document.getElementById("wind_speed").innerHTML = parseInt(Math.round(_wlDataISS.wind_speed_avg_last_1_min));
+
+							}
+						}).catch((e) => console.error(e));
+					} else {
+
+						document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + weather[0].hourly[hour].tempC + "°C");
+						document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + weather[0].hourly[hour].precipMM);
+						document.getElementById("pressure").innerHTML = (weather[0].hourly[hour].pressure);
+						document.getElementById("compassRingventjaune").style.transform = "rotate(" + weather[0].hourly[hour].winddirDegree + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
+						//document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
+						document.getElementById("wind_speed").innerHTML = (Math.trunc(weather[0].hourly[hour].windspeedKmph / 1.852) + " ");
+
+
+					}
+
+
+					//document.getElementById("wind_speed").insertAdjacentHTML('beforeend', '<div class="float-right">' + weather[0].hourly[hour].windspeedKmph + "Km/h</div>");
+				}).catch((error) => {
+					console.log("météo erreur");
+					console.log(error);
+				});
+
+			}).catch((error) => {
+				console.log("météo erreur");
+				console.log(error);
+			});
+		}).catch((error) => {
+			console.log(error);
+		});
+
+		if (!localStorage["user"]) {
+			document.getElementById("absences").hidden = true;
+			document.getElementById("securites").hidden = true;
+			document.getElementById("challenges").hidden = true;
+		} else {
+			fetch("/api/get/userboats?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
+				if (!_data.success) {
+					document.getElementById("absences").hidden = true;
+					document.getElementById("challenges").hidden = true;
+				}
+			}).catch((error) => {
+				console.log(error);
+			});
+		}
+
+		fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+			// console.log('_data',_data);
+			var activeCategory = _data.data.activeCategories;
+			var activeSubCategories = _data.data.activeSubCategories;
+
+			if (activeCategory.harbourlife) {
+				if (activeSubCategories.sos)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=sos')");
+				else if (activeSubCategories.accastillage)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=accastillage')");
+				else if (activeSubCategories.maintenance)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=maintenance')");
+				else if (activeSubCategories.alimentation)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=alimentation')");
+				else if (activeSubCategories.sante)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=sante')");
+				else if (activeSubCategories.annonce)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=annonce')");
+				else if (activeSubCategories.laverie)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=laverie')");
+				else if (activeSubCategories.transport)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=transport')");
+				else if (activeSubCategories.boutique)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=boutique')");
+				else if (activeSubCategories.vieportautre)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vieportautre')");
+				else if (activeSubCategories.vendeurLoueurHl)
+					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vendeurLoueurHl')");
+
+
+				if (!activeSubCategories.accastillage)
+					document.getElementById('accastillage').hidden = true;
+				if (!activeSubCategories.sos)
+					document.getElementById('sos').hidden = true;
+				if (!activeSubCategories.maintenance)
+					document.getElementById('maintenance').hidden = true;
+				if (!activeSubCategories.sante)
+					document.getElementById('sante').hidden = true;
+				if (!activeSubCategories.annonce)
+					document.getElementById('annonce').hidden = true;
+				if (!activeSubCategories.laverie)
+					document.getElementById('laverie').hidden = true;
+				if (!activeSubCategories.transport)
+					document.getElementById('transport').hidden = true;
+				if (!activeSubCategories.boutique)
+					document.getElementById('boutique').hidden = true;
+				if (!activeSubCategories.alimentation)
+					document.getElementById('alimentation').hidden = true;
+				if (!activeSubCategories.vieportautre)
+					document.getElementById('vieportautre').hidden = true;
+				if (!activeSubCategories.vendeurLoueurHl)
+					document.getElementById('vendeurLoueurHl').hidden = true;
+			} else {
+				document.getElementById('harbourlife').hidden = true;
+				document.getElementById('harbourlife_link').hidden = true;
+			}
+
+			if (activeCategory.experience) {
+
+				if (activeSubCategories.nautic)
+					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=nautic')");
+				else if (activeSubCategories.terrestres)
+					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=terrestres')");
+				else if (activeSubCategories.association)
+					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=association')");
+				else if (activeSubCategories.equipbourse)
+					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=equipbourse')");
+				else if (activeSubCategories.vendeurLoueurEx)
+					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=vendeurLoueurEx')");
+				else if (activeSubCategories.experienceautre)
+					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=experienceautre')");
+
+
+				if (!activeSubCategories.nautic)
+					document.getElementById('nautic').hidden = true;
+				if (!activeSubCategories.terrestres)
+					document.getElementById('terrestres').hidden = true;
+				if (!activeSubCategories.association)
+					document.getElementById('association').hidden = true;
+				if (!activeSubCategories.equipbourse)
+					document.getElementById('equipbourse').hidden = true;
+				if (!activeSubCategories.vendeurLoueurEx)
+					document.getElementById('vendeurLoueurEx').hidden = true;
+				if (!activeSubCategories.experienceautre)
+					document.getElementById('experienceautre').hidden = true;
+			} else {
+				document.getElementById('experience').hidden = true;
+				document.getElementById('experience_link').hidden = true;
+			}
+
+			if (activeCategory.discovery) {
+
+				if (activeSubCategories.restaurant)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=restaurant')");
+				else if (activeSubCategories.bar)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=bar')");
+				else if (activeSubCategories.culture)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=culture')");
+				else if (activeSubCategories.divertissement)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=divertissement')");
+				else if (activeSubCategories.detente)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=detente')");
+				else if (activeSubCategories.decouverteautre)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=decouverteautre')");
+
+
+				if (!activeSubCategories.restaurant)
+					document.getElementById('restaurant').hidden = true;
+				if (!activeSubCategories.bar)
+					document.getElementById('bar').hidden = true;
+				if (!activeSubCategories.culture)
+					document.getElementById('culture').hidden = true;
+				if (!activeSubCategories.divertissement)
+					document.getElementById('divertissement').hidden = true;
+				if (!activeSubCategories.detente)
+					document.getElementById('detente').hidden = true;
+				if (!activeSubCategories.decouverteautre)
+					document.getElementById('decouverteautre').hidden = true;
+			} else {
+				document.getElementById('discovery').hidden = true;
+				document.getElementById('discovery_link').hidden = true;
+			}
+
+		}).catch((error) => {
+			console.log(error);
+		});
+
+		var subCategoryHarbourLife = '<option value="sos">S.O.S.</option>'
+			+ '<option value="maintenance">Maintenance</option>'
+			+ '<option value="accastillage">Accastillage</option>'
+			+ '<option value="sante">Santé</option>'
+			+ '<option value="annonce">Annonce</option>'
+			+ '<option value="laverie">Laverie</option>'
+			+ '<option value="transport">Transport</option>'
+			+ '<option value="alimentation">alimentation</option>'
+			+ '<option value="vieportautre">Autre</option>';
+
+		var subCategoryExperience = '<option value="nautic">Activités nautiques</option>'
+			+ '<option value="terrestres">Activités terrestres</option>'
+			+ '<option value="association">Association</option>'
+			+ '<option value="equipbourse">Bourse aux équipiers</option>'
+			+ '<option value="experienceautre">Autre</option>';
+
+		var subCategoryDiscovery = '<option value="restaurant">Restaurants</option>'
+			+ '<option value="bar">Bar</option>'
+			+ '<option value="culture">Culture</option>'
+			+ '<option value="divertissement">Divertissement</option>'
+			+ '<option value="detente">Détente</option>'
+			+ '<option value="decouverteautre">Autre</option>';
+
+
+
+		var dynamicSort = function (property) {
+			var sortOrder = 1;
+			if (property[0] === "-") {
+				sortOrder = -1;
+				property = property.substr(1);
+			}
+			return function (a, b) {
+				/* next line works with strings and numbers,
+				 * and you may want to customize it to your needs
+				 */
+				var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+				return result * sortOrder;
+			}
+		}
+		var newsRow = '<div class="row">'
+			+ '<div class="col">'
+			+ '<div class="card product-card-small mb-3" onclick="window.location.href = (\'/actualite?id=__ID__\');">'
+			+ '<div class="card-body" style="padding: 0px 0px!important;">'
+			+ '<div class="row">'
+			+ '<div class="col-auto p-1" style="margin-left:15px; padding: 0rem !important;">'
+			+ '<div class="product-image-small" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">'
+			+ '<img src="__IMG__" alt="" style="height:100%;width:auto;">'
+			+ '</div>'
+			+ '</div>'
+			+ '<div class="col">'
+			+ '<div class="row">'
+			+ '<div class="col-12">'
+			+ '<h6 style="font-size: 13px; margin-top: 10px;"><strong>__TITLE__</strong></h6>'
+			+ '</div>'
+			+ '<div class="col-auto">'
+			+ '<div class="text-muted small">__DESCRIPTION__</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>';
+
+		fetch("/api/news/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+			console.log(_data);
+			if (_data.data[0]) {
+				var articles = _data.data.sort(dynamicSort("date")).reverse();
+				for (var i = 0; i < 3; i++) {
+					var date = new Date(articles[i].date);
+					var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
+					var rowCurrent = newsRow.replace("__ID__", articles[i].id).replace("__TITLE__", articles[i].title).replace("__DATE__", dateFormated).replace("__DESCRIPTION__", articles[i].description);
+
+					if (articles[i].img) {
+						rowCurrent = rowCurrent.replace('__IMG__', articles[i].img)
+					} else {
+						rowCurrent = rowCurrent.replace('__IMG__', localStorage['entity_logo'])
+					}
+					document.getElementById("articles_container").insertAdjacentHTML("beforeend", rowCurrent);
+				}
+			} else {
+				document.getElementById("articles_link").hidden = true;
+			}
+		}).catch((error) => {
+			console.log(error);
+		})
+
+		var eventRow = '<div class="row">'
+			+ '<div class="col">'
+			+ '<div style="width:100%;" class="card product-card-large mb-3" onclick="window.location.href = (\'event?id=__ID__\');">'
+			+ '<div class="card-body p-0">'
+			+ '<div class="product-image-large">'
+			+ '<div class="background">'
+			+ '<img style="width:100%;height:auto;" src="__IMG__" alt="">'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '<div class="card-footer">'
+			+ '<div class="row">'
+			+ '<div class="col">'
+			+ '<h6 style="font-size: 13px;" ><strong>__TITLE__</strong></h6>'
+			+ '</div>'
+			+ '</div>'
+			+ '<div class="row">'
+			+ '<div class="col">'
+			+ '<div class="small text-muted">__CONTENT__</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+			+ '</div>'
+
+
+		fetch("/api/events/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+			console.log('_data', _data);
+			if (_data.data[0]) {
+				var events = _data.data.sort(dynamicSort("date_start")).reverse();
+
+				for (var i = 0; i < 3; i++) {
+					var date = new Date(events[i].date);
+					var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
+					var rowCurrent = eventRow.replace("__ID__", events[i].id).replace("__TITLE__", events[i].title).replace("__DATE__", dateFormated).replace("__CONTENT__", events[i].description);
+
+					if (events[i].img) {
+						rowCurrent = rowCurrent.replace('__IMG__', events[i].img)
+					} else {
+						rowCurrent = rowCurrent.replace('__IMG__', localStorage['entity_logo'])
+					}
+
+					document.getElementById("events_container").insertAdjacentHTML("beforeend", rowCurrent);
+				}
+			} else {
+				document.getElementById("event_link").hidden = true;
+			}
+		}).catch((error) => {
+			console.log(error);
+		});
+	</script>
+
+
+
+	<!-- Required jquery and libraries -->
+	<script src="/js/jquery-3.3.1.min.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- cookie js -->
+	<script src="/js/jquery.cookie.js"></script>
+
+	<!-- Swiper slider  js-->
+	<script src="/vendor/swiper/js/swiper.min.js"></script>
+
+	<!-- nouislider js -->
+	<script src="/vendor/nouislider/nouislider.min.js"></script>
+
+	<!-- Customized jquery file  -->
+	<script src="/js/main.js"></script>
+	<script src="/js/color-scheme-demo.js"></script>
+
+	<!-- PWA app service registration and works -->
+	<script src="/library/pwa-services.js"></script>
+
+	<!-- page level custom script -->
+	<script>
+		"use strict"
+		$(window).on('load', function () {
+
+			/* range picker for filter */
+			var html5Slider = document.getElementById('rangeslider');
+			noUiSlider.create(html5Slider, {
+				start: [0, 100],
+				connect: true,
+				range: {
+					'min': 0,
+					'max': 500
+				}
+			});
+
+			var inputNumber = document.getElementById('input-number');
+			var select = document.getElementById('input-select');
+
+			html5Slider.noUiSlider.on('update', function (values, handle) {
+				var value = values[handle];
+
+				if (handle) {
+					inputNumber.value = value;
+				} else {
+					select.value = Math.round(value);
+				}
+			});
+			select.addEventListener('change', function () {
+				html5Slider.noUiSlider.set([this.value, null]);
+			});
+			inputNumber.addEventListener('change', function () {
+				html5Slider.noUiSlider.set([null, this.value]);
+			});
+
+
+			/* carousel */
+			var swiper = new Swiper('.swiper-products', {
+				slidesPerView: 'auto',
+				spaceBetween: 0,
+				pagination: 'false'
+			});
+
+		});
+	</script>
+
+	<style>
+		@font-face {
+			font-family: 'Poppins Regular';
+			font-style: normal;
+			font-weight: normal;
+			src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+		}
+
+		* {
+			font-family: 'Poppins Regular' !important;
+		}
+
+		body {
+			background: url("../background2.png") #FFF fixed;
+			font-family: 'Poppins Regular' !important;
+		}
+	</style>
+
+	<!-- __TPL_FOOTER_APP__ -->
+	{{element->footer_app.html}}
 </body>
 <!-- Mirrored from maxartkiller.com/website/Nauticspot/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:07 GMT -->
 
