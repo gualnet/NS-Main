@@ -5,344 +5,359 @@
 {{element->header_app.html}}
 
 <body class="body-scroll d-flex flex-column h-100 menu-overlay">
-    <!-- screen loader -->
-    {{element->loader.html}}
+	<!-- screen loader -->
+	{{element->loader.html}}
 
-    <!-- Begin page content -->
-    <main class="flex-shrink-0" style="margin-top:100px;">
-        <!-- Fixed navbar -->
-        {{element->navheader.html}}
-        <!-- page content start -->
+	<!-- Begin page content -->
+	<main class="flex-shrink-0" style="margin-top:100px;">
+		<!-- Fixed navbar -->
+		{{element->navheader.html}}
+		<!-- page content start -->
 
-        <nav class="navbar  navbar-light bg-light nav-pills nav-fill fixed-top" style="margin-top:41px;">
- 
-					<!-- SWIPER START -->
-					<div class="container-fluid">
-						<div class="swiper-container swiper-products .nav-btn-container">
-							<div class="swiper-wrapper">
-								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png'); background-size: cover;">
-									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=nautic')">Activités nautiques</span>
-								</div>
-								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png'); background-size: cover;" onclick="clickOnNavBtnHandler('/experiences?select=vendeurLoueurEx')">
-									<span class="small">Vendeur • Loueur</span>
-								</div>
-								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png'); background-size: cover;">
-									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=terrestres')" >Activités terrestres</span>
-								</div>
-								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png'); background-size: cover;">
-									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=association')">Associations</span>
-								</div>
-								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png'); background-size: cover;">
-									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=bourses')">Bourse aux équipiers</span>
-								</div>
-								<div class="swiper-slide nav-btn" style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
-									<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=experienceautre')">Autre</span>
-								</div>
+		<nav class="navbar  navbar-light bg-light nav-pills nav-fill fixed-top" style="margin-top:41px;">
 
-							</div>
+			<!-- SWIPER START -->
+			<div class="container-fluid">
+				<div class="swiper-container swiper-products .nav-btn-container">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide nav-btn"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=nautic')">Activités
+								nautiques</span>
 						</div>
+						<div class="swiper-slide nav-btn"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png'); background-size: cover;"
+							onclick="clickOnNavBtnHandler('/experiences?select=vendeurLoueurEx')">
+							<span class="small">Vendeur • Loueur</span>
+						</div>
+						<div class="swiper-slide nav-btn"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=terrestres')">Activités
+								terrestres</span>
+						</div>
+						<div class="swiper-slide nav-btn"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=association')">Associations</span>
+						</div>
+						<div class="swiper-slide nav-btn"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=equipbourse')">Bourse aux
+								équipiers</span>
+						</div>
+						<div class="swiper-slide nav-btn"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=experienceautre')">Autre</span>
+						</div>
+
 					</div>
-					<!-- SWIPER END -->
+				</div>
+			</div>
+			<!-- SWIPER END -->
 
 
-            <script>
-                //url = new URL(window.location.href);
-                const queryString = window.location.search;
-                const urlParams = new URLSearchParams(queryString);
-                console.log(urlParams.get('select'));
-                if (urlParams.get != null) {
-                    try {
-                        document.getElementById(urlParams.get('select')).className = "text-primary";
-                    } catch (e) {
-                        console.log(e);
-                    }
-                }
-                //url.location
+			<script>
+				//url = new URL(window.location.href);
+				// const queryString = window.location.search;
+				// const urlParams = new URLSearchParams(queryString);
+				// console.log(urlParams.get('select'));
+				// if (urlParams.get != null) {
+				// 	try {
+				// 		document.getElementById(urlParams.get('select')).className = "text-primary";
+				// 	} catch (e) {
+				// 		console.log(e);
+				// 	}
+				// }
+				//url.location
 
-								const clickOnNavBtnHandler = (url) => {
-									console.log('clickOnNavBtnHandler', url)
-									window.location = url;
-								}
-            </script>
-        </nav>
+				const clickOnNavBtnHandler = (url) => {
+					console.log('clickOnNavBtnHandler', url)
+					window.location = url;
+				}
+			</script>
+		</nav>
 
-        <div class="container mt-4" id="content">
-        </div>
-        <div class="container py-3">
-            {{element->navbar.html}}
-            <nav class="navbar navbar-light fixed-top" style="margin-top:105px;">
-                <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
-            </nav>
-        </div>
-        <br />
-        <br />
-        <br />
-    </main>
+		<div class="container mt-4" id="content">
+		</div>
+		<div class="container py-3">
+			{{element->navbar.html}}
+			<nav class="navbar navbar-light fixed-top" style="margin-top:105px;">
+				<a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;"
+						class="bi bi-arrow-left-circle-fill"></i></a>
+			</nav>
+		</div>
+		<br />
+		<br />
+		<br />
+	</main>
 
-    <div class="sidebar-right">
-        <div class="selectoption">
-            <input type="checkbox" id="darklayout" name="darkmode">
-            <label for="darklayout">Dark</label>
-        </div>
-        <div class="selectoption mb-0">
-            <input type="checkbox" id="rtllayout" name="layoutrtl">
-            <label for="rtllayout">RTL</label>
-        </div>
-        <hr>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
-            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
-            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
-            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
-            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
-            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
-            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
-            <label for="templatecolor8" class="bg-red" data-title="red"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
-            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
-            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
-            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
-            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
-            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
-            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
-            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-        </div>
+	<div class="sidebar-right">
+		<div class="selectoption">
+			<input type="checkbox" id="darklayout" name="darkmode">
+			<label for="darklayout">Dark</label>
+		</div>
+		<div class="selectoption mb-0">
+			<input type="checkbox" id="rtllayout" name="layoutrtl">
+			<label for="rtllayout">RTL</label>
+		</div>
+		<hr>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor1" name="sidebarcolorselect">
+			<label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor2" name="sidebarcolorselect">
+			<label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor4" name="sidebarcolorselect">
+			<label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor6" name="sidebarcolorselect">
+			<label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor3" name="sidebarcolorselect">
+			<label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor5" name="sidebarcolorselect">
+			<label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor8" name="sidebarcolorselect">
+			<label for="templatecolor8" class="bg-red" data-title="red"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor13" name="sidebarcolorselect">
+			<label for="templatecolor13" class="bg-amber" data-title="amber"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor7" name="sidebarcolorselect">
+			<label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor11" name="sidebarcolorselect">
+			<label for="templatecolor11" class="bg-teal" data-title="teal"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor12" name="sidebarcolorselect">
+			<label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor10" name="sidebarcolorselect">
+			<label for="templatecolor10" class="bg-blue" data-title="blue"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor9" name="sidebarcolorselect">
+			<label for="templatecolor9" class="bg-purple" data-title="purple"></label>
+		</div>
+		<div class="colorselect">
+			<input type="radio" id="templatecolor14" name="sidebarcolorselect">
+			<label for="templatecolor14" class="bg-gray" data-title="gray"></label>
+		</div>
 
-    </div>
-
-
-
-    <!-- Required jquery and libraries -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- cookie js -->
-    <script src="js/jquery.cookie.js"></script>
-
-    <!-- Swiper slider  js-->
-    <script src="vendor/swiper/js/swiper.min.js"></script>
-
-    <!-- Masonry js -->
-    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-    <!-- nouislider js -->
-    <script src="vendor/nouislider/nouislider.min.js"></script>
-
-    <!-- Customized jquery file  -->
-    <script src="js/main.js"></script>
-    <script src="js/color-scheme-demo.js"></script>
-
-    <!-- page level custom script -->
-    <script>
-        "use strict"
-        $(window).on('load', function () {
-            /* carousel */
-            var swiper = new Swiper('.swiper-products', {
-                slidesPerView: 'auto',
-                spaceBetween: 0,
-                pagination: 'false'
-            });
-
-            fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-                var activeSubCategories = _data.data.activeSubCategories;
-                if (!activeSubCategories.nautic)
-                    document.getElementById('nautic').hidden = true;
-                if (!activeSubCategories.terrestres)
-                    document.getElementById('terrestres').hidden = true;
-                if (!activeSubCategories.association)
-                    document.getElementById('association').hidden = true;
-                if (!activeSubCategories.equipbourse)
-                    document.getElementById('equipbourse').hidden = true;
-                if (!activeSubCategories.experienceautre)
-                    document.getElementById('experienceautre').hidden = true;
-                if (!activeSubCategories.vendeurLoueurEx)
-                    document.getElementById('vendeur-loueur-ex').hidden = true;
-            }).catch((error) => {
-                console.log(error);
-            });
+	</div>
 
 
-            var row =
-                '<div class="row">'
-                + '    <div class="col">'
-                + '        <div class="card product-card-small mb-3" onclick="window.location.href = (\'/partner?id=__ID_PARTNER__\');">'
-                + '           <div class="card-body">'
-                + '                <div class="row">'
-                + '                    <div class="col-3 p-1">'
-                + '                        <div class="product-image-small">'
-                //+ '                            <div class="background" style="background-image: url(\'/img/image-3.html\');">'
-                + '                                <img style="width:auto;height:100%;" src="__IMG__" alt="" >'
-                //+ '                            </div>'
-                + '                        </div>'
-                + '                        </div>'
-                + '                        <div class="col-9">'
-                + '                            <div class="row">'
-                + '                                <div class="col-auto">'
-                + '                                    <h6>__NAME__</h6>'
-                + '                                </div>'
-                + '                            </div>'
-                + '                            <div class="row">'
-                + '                                <div class="col-auto">'
-                + '                                    <div class="small text-secondary" style="text-align: justify;">__DESCRIPTION__</div>'
-                + '                                </div>'
-                + '                            </div>'
-                + '                            <div class="row">'
-                + '                                <div class="col-auto">'
-                + '                                    <div id="gps_adress">'
-                + '                                     __GPS_LINK__'
-                + '                                    </div>'
-                + '                                </div>'
-                + '                            </div>'
-                + '                        </div>'
-                + '                    </div>'
-                + '                </div>'
-                + '            </div>'
-                + '        </div>'
-                + '    </div>';
 
-            fetch('/api/partner/' + localStorage['harbourid'] + '/experience/' + urlParams.get('select')).then(response => response.json()).then(_data => {
-                console.log('_data', _data);
-                var partners = _data.data;
+	<!-- Required jquery and libraries -->
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 
-                // sort partners by name alphabetical order
+	<!-- cookie js -->
+	<script src="js/jquery.cookie.js"></script>
+
+	<!-- Swiper slider  js-->
+	<script src="vendor/swiper/js/swiper.min.js"></script>
+
+	<!-- Masonry js -->
+	<script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+	<!-- nouislider js -->
+	<script src="vendor/nouislider/nouislider.min.js"></script>
+
+	<!-- Customized jquery file  -->
+	<script src="js/main.js"></script>
+	<script src="js/color-scheme-demo.js"></script>
+
+	<!-- page level custom script -->
+	<script>
+		"use strict"
+		$(window).on('load', function () {
+			/* carousel */
+			var swiper = new Swiper('.swiper-products', {
+				slidesPerView: 'auto',
+				spaceBetween: 0,
+				pagination: 'false'
+			});
+
+			fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+				var activeSubCategories = _data.data.activeSubCategories;
+				if (!activeSubCategories.nautic)
+					document.getElementById('nautic').hidden = true;
+				if (!activeSubCategories.terrestres)
+					document.getElementById('terrestres').hidden = true;
+				if (!activeSubCategories.association)
+					document.getElementById('association').hidden = true;
+				if (!activeSubCategories.equipbourse)
+					document.getElementById('equipbourse').hidden = true;
+				if (!activeSubCategories.experienceautre)
+					document.getElementById('experienceautre').hidden = true;
+				if (!activeSubCategories.vendeurLoueurEx)
+					document.getElementById('vendeur-loueur-ex').hidden = true;
+			}).catch((error) => {
+				console.log(error);
+			});
+
+
+			var row =
+				'<div class="row">'
+				+ '    <div class="col">'
+				+ '        <div class="card product-card-small mb-3" onclick="window.location.href = (\'/partner?id=__ID_PARTNER__\');">'
+				+ '           <div class="card-body">'
+				+ '                <div class="row">'
+				+ '                    <div class="col-3 p-1">'
+				+ '                        <div class="product-image-small">'
+				//+ '                            <div class="background" style="background-image: url(\'/img/image-3.html\');">'
+				+ '                                <img style="width:auto;height:100%;" src="__IMG__" alt="" >'
+				//+ '                            </div>'
+				+ '                        </div>'
+				+ '                        </div>'
+				+ '                        <div class="col-9">'
+				+ '                            <div class="row">'
+				+ '                                <div class="col-auto">'
+				+ '                                    <h6>__NAME__</h6>'
+				+ '                                </div>'
+				+ '                            </div>'
+				+ '                            <div class="row">'
+				+ '                                <div class="col-auto">'
+				+ '                                    <div class="small text-secondary" style="text-align: justify;">__DESCRIPTION__</div>'
+				+ '                                </div>'
+				+ '                            </div>'
+				+ '                            <div class="row">'
+				+ '                                <div class="col-auto">'
+				+ '                                    <div id="gps_adress">'
+				+ '                                     __GPS_LINK__'
+				+ '                                    </div>'
+				+ '                                </div>'
+				+ '                            </div>'
+				+ '                        </div>'
+				+ '                    </div>'
+				+ '                </div>'
+				+ '            </div>'
+				+ '        </div>'
+				+ '    </div>';
+
+			fetch('/api/partner/' + localStorage['harbourid'] + '/experience/' + urlParams.get('select')).then(response => response.json()).then(_data => {
+				console.log('_data', _data);
+				var partners = _data.data;
+
+				// sort partners by name alphabetical order
 				_data.data.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
-                var sBrowser, sUsrAg = navigator.userAgent;
-                var gpsLink;
+				var sBrowser, sUsrAg = navigator.userAgent;
+				var gpsLink;
 
-                for (var i = 0; i < partners.length; i++) {
-                    if (sUsrAg.indexOf("Safari") > -1) {
-                        sBrowser = "Apple Safari";
-                        gpsLink = '<a href="http://maps.apple.com/?q=' + partners[i].address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + partners[i].address + '</a>'
-                    } else {
-                        gpsLink = '<a href="geo:0,0?q=' + partners[i].address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + partners[i].address + '</a>'
-                    }
-                    var currentRow = row.replace('__ID_PARTNER__', partners[i].id).replace('__NAME__', partners[i].name).replace('__DESCRIPTION__', partners[i].description).replace('__GPS_LINK__', gpsLink);
+				for (var i = 0; i < partners.length; i++) {
+					if (sUsrAg.indexOf("Safari") > -1) {
+						sBrowser = "Apple Safari";
+						gpsLink = '<a href="http://maps.apple.com/?q=' + partners[i].address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + partners[i].address + '</a>'
+					} else {
+						gpsLink = '<a href="geo:0,0?q=' + partners[i].address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + partners[i].address + '</a>'
+					}
+					var currentRow = row.replace('__ID_PARTNER__', partners[i].id).replace('__NAME__', partners[i].name).replace('__DESCRIPTION__', partners[i].description).replace('__GPS_LINK__', gpsLink);
 
-                    if (partners[i].img) {
-                        currentRow = currentRow.replace("__IMG__", partners[i].img);
-                    } else {
-                        switch (partners[i].subcategory) {
-                            case "nautic":
-                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png");
-                                break;
-                            case "terrestres":
-                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png");
-                                break;
-                            case "association":
-                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png");
-                                break;
-                            case "equipbourse":
-                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png");
-                                break;
-                            case "experienceautre":
-                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
-                                break;
-                            case "vendeurLoueurEx":
-                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png");
-                                break;
-                            default:
-                                currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
-                                break;
-                        }
-                    }
-
-
-                    document.getElementById("content").insertAdjacentHTML('beforeend', currentRow);
-
-                }
-
-            }).catch((error) => {
-                console.log(error);
-            });
+					if (partners[i].img) {
+						currentRow = currentRow.replace("__IMG__", partners[i].img);
+					} else {
+						switch (partners[i].subcategory) {
+							case "nautic":
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png");
+								break;
+							case "terrestres":
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png");
+								break;
+							case "association":
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png");
+								break;
+							case "equipbourse":
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png");
+								break;
+							case "experienceautre":
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
+								break;
+							case "vendeurLoueurEx":
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png");
+								break;
+							default:
+								currentRow = currentRow.replace("__IMG__", "https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png");
+								break;
+						}
+					}
 
 
-        });
-    </script>
+					document.getElementById("content").insertAdjacentHTML('beforeend', currentRow);
 
-    <style>
-        @font-face {
-            font-family: 'Poppins Regular';
-            font-style: normal;
-            font-weight: normal;
-            src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
-        }
-
-        * {
-            font-family: 'Poppins Regular' !important;
-        }
-
-        body {
-            font-family: 'Poppins Regular' !important;
-        }
-
-				.swiper-container {
-					display: flex;
-					flex-direction: column;
-					height: 57px;
 				}
-				.swiper-wrapper .swiper-slide.nav-btn {
-					align-items: center;
-					border-radius: 5px;
-					display: flex;
-					height: 100%;
-					justify-content: center;
-					margin: 0 3px;
-					width: 87px;
-				}
-				.nav-btn img {
-					height: auto;
-					width: auto;
-				}
-				.nav-btn span {
-					color: white;
-					align-items: center;
-					display: flex;
-					height: 100%;
-					justify-content: center;
-					text-align: center;
-				}
-    </style>
-    {{element->footer_app.html}}
+
+			}).catch((error) => {
+				console.log(error);
+			});
+
+
+		});
+	</script>
+
+	<style>
+		@font-face {
+			font-family: 'Poppins Regular';
+			font-style: normal;
+			font-weight: normal;
+			src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+		}
+
+		* {
+			font-family: 'Poppins Regular' !important;
+		}
+
+		body {
+			font-family: 'Poppins Regular' !important;
+		}
+
+		.swiper-container {
+			display: flex;
+			flex-direction: column;
+			height: 57px;
+		}
+
+		.swiper-wrapper .swiper-slide.nav-btn {
+			align-items: center;
+			border-radius: 5px;
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			margin: 0 3px;
+			width: 87px;
+		}
+
+		.nav-btn img {
+			height: auto;
+			width: auto;
+		}
+
+		.nav-btn span {
+			color: white;
+			align-items: center;
+			display: flex;
+			height: 100%;
+			justify-content: center;
+			text-align: center;
+		}
+	</style>
+	{{element->footer_app.html}}
 </body>
 <!-- Mirrored from maxartkiller.com/website/Nauticspot/newoffer.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
+
 </html>

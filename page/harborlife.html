@@ -67,7 +67,7 @@
 
 						<div class="swiper-slide nav-btn" id="vendeur-loueur-hl"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=vendeur-loueur-hl')">Vendeur •
+							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=vendeurLoueurHl')">Vendeur •
 								Loueur</span>
 						</div>
 
@@ -82,22 +82,22 @@
 			<!-- SWIPER END -->
 			<script>
 				//url = new URL(window.location.href);
-				const queryString = window.location.search;
-				const urlParams = new URLSearchParams(queryString);
-				console.log(urlParams.get('select'));
-				if (urlParams.get != null) {
-					try {
-						document.getElementById(urlParams.get('select')).classList.add("bg-secondary");
-					} catch (e) {
-						console.log(e);
-					}
-				}
+				// const queryString = window.location.search;
+				// const urlParams = new URLSearchParams(queryString);
+				// console.log(urlParams.get('select'));
+				// if (urlParams.get != null) {
+				// 	try {
+				// 		document.getElementById(urlParams.get('select')).classList.add("bg-secondary");
+				// 	} catch (e) {
+				// 		console.log(e);
+				// 	}
+				// }
 					
 
 				const clickOnNavBtnHandler = (url) => window.location = url;
 			</script>
 		</nav>
-		<nav class="navbar navbar-light fixed-top" style="margin-top:100px;">
+		<nav class="navbar navbar-light fixed-top" style="margin-top:105px;">
 			<a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;"
 					class="bi bi-arrow-left-circle-fill"></i></a>
 		</nav>
