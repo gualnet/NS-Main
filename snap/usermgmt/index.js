@@ -559,7 +559,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 		// SEND RESET E-MAIL
 		let emailTemplate = fs.readFileSync(path.join(__dirname, "resetPasswordEmail.html")).toString();
 		emailTemplate = emailTemplate
-			.replace('__USER_FIRST_NAME__', user.first_name)
+			.replace('__USER_FIRST_NAME__', `${user.last_name} ${user.first_name}`)
 			.replace('__HREF_LINK__', `${OPTION.HOST_BASE_URL}/pwd-recover/?token=${user.resetPwdToken}`)
 		const mailerResponse = STORE.mailjet.sendMailRaw(
 			{ email: OPTION.MAILJET_SENDER_EMAIL, name: 'Nauticspot' },
