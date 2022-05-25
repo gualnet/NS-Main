@@ -203,9 +203,6 @@
                 } else {
                     document.getElementById('img').src = localStorage['entity_logo'];
                 }
-                //<div class="col-6" id="pj">
-                //    <a id="pj_link" target="_blank" class="small vm"><span class=" text-secondary" id="pj_name"></span></a>
-                //</div>
 
 
 
@@ -252,7 +249,7 @@
                 }
 
                 if (harbour?.wifi?.length === 0) {
-                    document.getElementById("wifiButton").hidden = true;
+                    document.getElementById("wifiButtons").hidden = true;
                 }
                 if (harbour?.sanitary_code?.length === 0) {
                     document.getElementById("sanitaryButtons").hidden = true;
