@@ -1319,9 +1319,7 @@
 								const convertionFactor = 0.02953; // 1 Hectopascal [hPa] = 0,029 529 980 164 712 Inch of mercury [inHg]
 								const pressureInHpa = Math.round(_wlDataBaro.bar_absolute / convertionFactor);
 								document.getElementById("pressure").innerHTML = (pressureInHpa);
-								document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir_last + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
-								//document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-								// document.getElementById("wind_speed").innerHTML = parseFloat(_wlDataISS.wind_speed_avg_last_1_min).toFixed(2);
+								document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir_last + "deg)";
 								document.getElementById("wind_speed").innerHTML = parseInt(Math.round(_wlDataISS.wind_speed_avg_last_1_min));
 
 							}
@@ -1331,15 +1329,13 @@
 						document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + weather[0].hourly[hour].tempC + "°C");
 						document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + weather[0].hourly[hour].precipMM);
 						document.getElementById("pressure").innerHTML = (weather[0].hourly[hour].pressure);
-						document.getElementById("compassRingventjaune").style.transform = "rotate(" + weather[0].hourly[hour].winddirDegree + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
-						//document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
+						document.getElementById("compassRingventjaune").style.transform = "rotate(" + weather[0].hourly[hour].winddirDegree + "deg)"
 						document.getElementById("wind_speed").innerHTML = (Math.trunc(weather[0].hourly[hour].windspeedKmph / 1.852) + " ");
 
 
 					}
 
 
-					//document.getElementById("wind_speed").insertAdjacentHTML('beforeend', '<div class="float-right">' + weather[0].hourly[hour].windspeedKmph + "Km/h</div>");
 				}).catch((error) => {
 					console.log("météo erreur");
 					console.log(error);
@@ -1369,7 +1365,6 @@
 		}
 
 		fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-			console.log('_data', _data)
 			var activeCategory = _data.data.activeCategories;
 			var activeSubCategories = _data.data.activeSubCategories;
 
