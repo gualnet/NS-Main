@@ -1,3 +1,4 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 
@@ -151,6 +152,10 @@ async function getPartner() {
 	});
 }
 
+/**
+ * @param {TYPES.T_harbour['id']} _harbour_id
+ * @returns {Promise<Array<TYPES.T_partner>>}
+ */
 async function getPartnerByHarbourId(_harbour_id) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_partnerCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
@@ -272,9 +277,7 @@ async function getPartnersByHarbourHandler(_req, _res) {
 }
 
 async function getActivePartnersCategoryHandler(_req, _res) {
-
 	var partners = await getPartnerByHarbourId(_req.param.harbour_id);
-	// console.log('Partners00', partners)
 	var data = { activeCategories: {}, activeSubCategories: {} };
 	for (var i = 0; i < partners.length; i++) {
 		switch (partners[i].category) {
@@ -288,7 +291,6 @@ async function getActivePartnersCategoryHandler(_req, _res) {
 				data.activeCategories.discovery = true;
 				break;
 		}
-
 
 		//discovery 	divertissement
 		switch (partners[i].subcategory) {
