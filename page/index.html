@@ -1062,12 +1062,10 @@
 			let entity = _data.data;
 			if (_data.success) {
 				if (!entity.absence_module) {
-					console.log("dev asb")
 					document.getElementById("absences").hidden = true;
 				}
 
 				if (!entity.security_module) {
-					console.log("dev sec")
 					document.getElementById("securites").hidden = true;
 				}
 
@@ -1087,8 +1085,6 @@
 
 
 			fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-			console.log('_data', _data)
-
 				let harbour = _data.data;
 
 				if (harbour.email_concierge === ' ') delete harbour.email_concierge;
@@ -1112,7 +1108,6 @@
 				}
 
 				fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
-					console.log("météo");
 					_data = JSON.parse(_data.data.data);
 					var weather = _data.data.weather;
 					var date = new Date();
@@ -1128,7 +1123,6 @@
 					var rainHeavy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337765/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain_kztbgd.png"
 					var sunshineClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337766/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunshine_rzbzqh.png"
 
-					console.log(weather[0].hourly[hour].weatherCode);
 					//case WeatherCode	Condition	DayIcon	NightIcon
 					switch (weather[0].hourly[hour].weatherCode) {
 						case '395':	//Moderate or heavy snow in area with thunder
@@ -1295,7 +1289,6 @@
 					document.getElementById("meteo_desc").innerHTML = (weather[0].hourly[hour].lang_fr[0].value);
 					if (weather_api == "wlv1") {
 						fetch("/api/weather/wlink/vone?entity_id=" + entity.id).then(response => response.json()).then(_data => {
-							console.log('/api/weather/wlink/vone', _data);
 							if (_data.success) {
 								let _wlData = JSON.parse(_data.data.data);
 								document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat(_wlData.temp_c).toFixed(1) + "°C");
@@ -1309,7 +1302,6 @@
 						}).catch((e) => console.error(e));
 					} else if (weather_api == "wlv2") {
 						fetch("/api/weather/wlink/vtwo?entity_id=" + entity.id).then(response => response.json()).then(_data => {
-							console.log('/api/weather/wlink/vtwo', _data);
 							if (_data.success) {
 								let _wlDataISS;
 								let _wlDataBaro;
@@ -1377,7 +1369,7 @@
 		}
 
 		fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-			// console.log('_data',_data);
+			console.log('_data', _data)
 			var activeCategory = _data.data.activeCategories;
 			var activeSubCategories = _data.data.activeSubCategories;
 
@@ -1569,7 +1561,6 @@
 			+ '</div>';
 
 		fetch("/api/news/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-			console.log(_data);
 			if (_data.data[0]) {
 				var articles = _data.data.sort(dynamicSort("date")).reverse();
 				for (var i = 0; i < 3; i++) {
@@ -1619,7 +1610,6 @@
 
 
 		fetch("/api/events/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-			console.log('_data', _data);
 			if (_data.data[0]) {
 				var events = _data.data.sort(dynamicSort("date_start")).reverse();
 
