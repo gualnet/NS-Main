@@ -36,10 +36,15 @@
                     <div class="card-body">
                         <div class="form-group floating-form-group">
                             <div class="form-group floating-form-group">
-                                <label class="text-muted" for="category-select">Numéro de place</label>
-                                <select name="place_id" class="form-control" id="place-select">
+                                <label class="text-muted" for="category-select">Ponton</label>
+                                <select name="ponton_id" class="form-control" id="ponton-select">
                                 </select>
                             </div>
+														<div class="form-group floating-form-group">
+															<label class="text-muted" for="category-select">Numéro de place</label>
+															<select name="place_id" class="form-control" id="place-select">
+															</select>
+														</div>
                         </div>
                         <div class="form-group floating-form-group active">
                             <input id="name" name="name" type="text" class="form-control floating-input" required>
@@ -121,7 +126,7 @@
                 </div>
 
                 <h6>Preferences</h6>
-                <div class="card mt-3 mb-4">
+                <div class="card mt-3 mb-4" id="preferences-container">
                     <div class="card-body px-0">
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item border-color">
@@ -157,7 +162,7 @@
                 </div>
 
                 <h6 class="mt-3">Changer mot de passe</h6>
-                <div class="card mt-3 mb-4">
+                <div class="card mt-3 mb-4" id="change-pwd-container">
                     <div class="card-body">
                         <div class="row ">
                             <div class="col-12 col-md-6">
@@ -182,7 +187,7 @@
                     </div>
                 </div>
                 <div id="updateError"> </div>
-                <button type="button" class="btn btn-block btn-info btn-lg" onclick="sendForm();">valider</button>
+                <button type="button" class="btn btn-block btn-info btn-lg" id="submit-btn" onclick="sendForm();">valider</button>
             </form>
             <button id="validate_button" type="button" class="btn btn-block btn-danger btn-lg" onclick="disconnect();">Déconnexion</button>
 
@@ -193,20 +198,6 @@
             {{element->navbar.html}}
         </div>
     </main>
-    <!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
-        <span class="text-white">
-            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                <title>ionicons-v5-m</title>
-                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
-                <circle cx='144' cy='208' r='32' />
-                <circle cx='152' cy='311' r='32' />
-                <circle cx='224' cy='144' r='32' />
-                <circle cx='256' cy='367' r='48' />
-                <circle cx='328' cy='144' r='32' />
-            </svg>
-        </span>
-    </button>
-         -->
 
     <div class="sidebar-right">
         <div class="selectoption">
@@ -287,7 +278,7 @@
     <script src="js/jquery.cookie.js"></script>
 
     <!-- Swiper slider  -->
-    <script src="vendor/swiper/js/swiper.min.js"></script>
+    <!-- <script src="vendor/swiper/js/swiper.min.js"></script> -->
 
     <!-- Masonry js -->
     <script src="vendor/masonry/masonry.pkgd.min.js"></script>
@@ -297,61 +288,194 @@
     <script src="js/color-scheme-demo.js"></script>
 
     <!-- page level custom script -->
+		<script>
+			// NEW SCRIPT
+			let G_Places;
+			window.addEventListener('load', async () => {
+				// Fetch all needed info to fill the page
+				const userToken = localStorage['token'];
+				if (!userToken) {
+					console.warn('USER IS A VISITOR - NO DATA WILL BE SHOWN')
+					document.querySelector('#boat_form')
+						.querySelector('.card-body')	
+							.innerHTML = 'No data available for visitors';
+					document.querySelector('#profil_form')
+						.querySelector('.card-body')	
+							.innerHTML = 'No data available for visitors';
+					document.querySelector('#preferences-container')
+						.querySelector('.card-body')	
+							.innerHTML = '<div style="padding-left: 15px">No data available for visitors</div>';
+					document.querySelector('#change-pwd-container')
+						.querySelector('.card-body')	
+							.innerHTML = 'No data available for visitors';
+					document.querySelector('#submit-btn')
+						.style.display = 'none';
+					return;
+				}
+				const userInfo = await getUserInfos(userToken);
+				const boatInfo = await getBoatInfo(userInfo);
+				const places = await getPlacesFromHarbour(localStorage["harbourid"]);
+				G_Places = places;
+				const pontons = await getPontonsFromHarbour(localStorage["harbourid"]);
+
+				let boatPlace;
+				for (const place of places) {
+					if (place.id === boatInfo.place_id) {
+						boatPlace = place;
+						break;
+					}
+				}
+				let boatPonton;
+				for (const ponton of pontons) {
+					if (ponton.id === boatPlace.pontonId) {
+						boatPonton = ponton;
+						break;
+					}
+				}
+
+				// keep places for the selected ponton
+				const placesByPonton = places.filter(place => place.pontonId === boatPonton.id);
+				populatePontonDropdown(pontons, boatPonton.id);
+				populatePlacesDropdown(placesByPonton, boatPlace.id);
+				populateFormInitialInfos(userInfo, boatInfo);
+
+				// add event listener
+				document.querySelector('#ponton-select')
+					.addEventListener('change', pontonDropdownOnChangeHandler);
+			});
+
+
+			const getUserInfos = async (userToken) => {
+				const url = `/api/getuser`;
+				const fetchBody = JSON.stringify({ token: userToken });
+				const fetchOptions = {
+					method: 'POST',
+					body: fetchBody,
+				}
+				const response = await fetch(url, fetchOptions);
+				if (!response.ok) {
+					console.error(response);
+					return;
+				}
+				const decoded = await response.json();
+				const userInfo = decoded.data;
+				return(userInfo);
+			};
+
+			const getBoatInfo = async (user) => {
+				const url = `/api/get/userboats?user_id=${user.id}&harbour_id=${user.harbourid}`;
+				const fetchOptions = { method: 'GET' };
+				const response = await fetch(url, fetchOptions);
+				if (!response.ok) {
+					console.error(response);
+					return;
+				}
+				const decoded = await response.json();
+				const [boatInfo] = decoded.data;
+				return(boatInfo);
+			};
+
+			const getPlacesFromHarbour = async (harbourId) => {
+				const url = `/api/places?harbour_id=${harbourId}`;
+				const response = await fetch(url);
+				if (!response.ok) {
+					console.error(response);
+					return;
+				}
+				const decoded = await response.json();
+				const places = decoded.data;
+				return(places);
+			};
+
+			const getPontonsFromHarbour = async (harbourId) => {
+				const url = `/api/zones?harbour_id=${localStorage['harbourid']}`;
+				const response = await fetch(url, { method: 'GET' });
+				if (!response.ok) {
+					console.error(response);
+					return;
+				}
+				const decoded = await response.json();
+				const zones = decoded.data;
+				const pontons = [];
+				zones.map(zone => {
+					if (zone.type === 'ponton') pontons.push(zone);
+				});
+				pontons.sort((a, b) => (a.name < b.name) ? -1 : 1);
+				return(pontons)
+			};
+
+			const populateFormInitialInfos = (user, boat) => {
+				document.getElementById("first_name").value = user.first_name;
+				document.getElementById("last_name").value = user.last_name;
+				document.getElementById("email").value = user.email;
+				document.getElementById("prefix").value = user.prefix;
+				document.getElementById("phone").value = user.phone;
+
+				document.getElementById("boat_id").value = boat.id;
+				document.getElementById("name").value = boat.name;
+				document.getElementById("immatriculation").value = boat.immatriculation;
+				document.getElementById("longueur").value = boat.longueur;
+				document.getElementById("largeur").value = boat.largeur;
+				document.getElementById("tirant_eau").value = boat.tirant_eau;
+			}
+
+			const populatePontonDropdown = (pontonsInfos = [], selectedPontonId) => {
+				const pontonsSelectEl = document.querySelector('#ponton-select');
+				pontonsSelectEl.innerHTML = '';
+				if (!selectedPontonId) {
+					pontonsSelectEl.innerHTML += `<option value='' id='' selected> - </option>`
+				}
+				pontonsInfos.map(ponton => {
+					if (ponton.id === selectedPontonId) {
+						pontonsSelectEl.innerHTML += `
+							<option value='${ponton.id}' id='${ponton.id}' selected>${ponton.name}</option>
+						`
+					} else {
+						pontonsSelectEl.innerHTML += `
+							<option value='${ponton.id}' id='${ponton.id}'>${ponton.name}</option>
+						`
+					}
+				});
+			};
+
+			const populatePlacesDropdown = (placesInfos = [], selectedPlaceId) => {
+				const placesSelectEl = document.querySelector('#place-select');
+				placesSelectEl.innerHTML = '';
+				if (!selectedPlaceId) {
+					placesSelectEl.innerHTML += `<option value='' id='' selected> - </option>`
+				}
+				placesInfos.map(place => {
+					if (place.id === selectedPlaceId) {
+						placesSelectEl.innerHTML += `
+							<option value='${place.id}' id='${place.id}' selected>${place.number}</option>
+						`
+					} else {
+						placesSelectEl.innerHTML += `
+							<option value='${place.id}' id='${place.id}'>${place.number}</option>
+						`
+					}
+				});
+			};
+
+			const pontonDropdownOnChangeHandler = (ev) => {
+				const newPontonId = ev.target.value;
+				const newPlacesByPonton = G_Places.filter(place => place.pontonId === newPontonId);
+				populatePlacesDropdown(newPlacesByPonton, undefined);
+			}
+		</script>
+
+
     <script>
         function activateBoatForm() {
             document.getElementById("boat_form").hidden = false;
             document.getElementById("add_boat_button").hidden = true;
             document.getElementById("delboatbutton").hidden = true;
-            getPlaces();
         }
         "use strict"
         $(window).on('load', function () {
             if (localStorage['entity_id'] == '4eqv44307K')
                 document.getElementById('validate_button')?.setAttribute("style", "background-color: #FB9101;");
-
-            var swiper = new Swiper('.swiper-container', {
-                pagination: {
-                    el: '.swiper-pagination',
-                },
-            });
-
-            var formData = new FormData();
-            formData.append("token", localStorage["token"])
-            fetch("/api/getuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log(_data);
-                if (_data.success) {
-                    var user = _data.data;
-                    document.getElementById("first_name").value = user.first_name;
-                    document.getElementById("last_name").value = user.last_name;
-                    document.getElementById("email").value = user.email;
-                    document.getElementById("phone").value = user.phone;
-                    document.getElementById("prefix").value = user.prefix;
-                    //api/get / userboats
-                    fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + user.harbourid, { method: "GET" }).then(response => response.json()).then(_data => {
-                        if (_data.success) {
-                            const boat = _data.data[0];
-                            document.getElementById("boat_id").value = boat.id;
-                            document.getElementById("name").value = boat.name;
-                            document.getElementById("immatriculation").value = boat.immatriculation;
-                            document.getElementById("longueur").value = boat.longueur;
-                            document.getElementById("largeur").value = boat.largeur;
-                            document.getElementById("tirant_eau").value = boat.tirant_eau;
-                            getPlaces(boat.place_id);
-                        } else {
-                            document.getElementById("boat_form").hidden = true;
-                            document.getElementById("add_boat_button").hidden = false;
-                        }
-                    }).catch((error) => {
-                        console.log(error);
-                    });
-                } else {
-                    document.getElementById("profil_form").hidden = true;
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
-        });
-
+				});
 
         function disconnect() {
             localStorage.removeItem("harbourid");
@@ -360,8 +484,7 @@
             localStorage.removeItem("token");
             localStorage.removeItem('onesignal_userid');
             window.location.href = ("/?entity=" + localStorage['entity_id']);
-        }
-
+        } 
 
         function sendForm() {
             var form = document.getElementById("profil_form");
@@ -369,9 +492,7 @@
             formData.append("token", localStorage["token"])
 
             fetch("/api/updateuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log(_data);
                 if (_data.success) {
-                    console.log(_data);
                     window.location.reload();
                 } else {
                     if (document.getElementById("error"))
@@ -380,21 +501,18 @@
                     document.getElementById("updateError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
                 }
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             });
-        }
+        };
 
         function sendBoatForm() {
-
             var form = document.getElementById("boat_form");
             var formData = new FormData(form);
             formData.append("token", localStorage["token"])
             formData.append("harbour", localStorage["harbourid"])
 
             fetch("/api/updateboat", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log(_data);
                 if (_data.success) {
-                    console.log(_data);
                     window.location.reload();
                 } else {
                     if (document.getElementById("errorBoat"))
@@ -403,18 +521,17 @@
                     document.getElementById("updateBoatError").insertAdjacentHTML("beforeend", '<div id="errorBoat" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
                 }
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             });
-        }
+        };
+
         function deleteBoatForm() {
 
             var form = document.getElementById("boat_form");
             var formData = new FormData(form);
             formData.append("token", localStorage["token"])
             fetch("/api/deleteBoat", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log(_data);
                 if (_data.success) {
-                    console.log(_data);
                     window.location.reload();
                 } else {
                     if (document.getElementById("errorBoat"))
@@ -423,27 +540,10 @@
                     document.getElementById("updateBoatError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
                 }
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             });
-        }
-        function getPlaces(_place_id) {
+        };
 
-            fetch("/api/places?harbour_id=" + localStorage["harbourid"], { method: "GET" }).then(response => response.json()).then(_data => {
-                console.log(_data);
-                var places = _data.data;
-                document.getElementById('place-select').innerHTML = "";
-                for (var i = 0; i < places.length; i++) {
-                    if (_place_id) {
-                        if (places.id == _place_id)
-                            document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" selected>' + places[i].number + '</option>';
-                        else
-                            document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" >' + places[i].number + '</option>';
-                    } else {
-                        document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" >' + places[i].number + '</option>';
-                    }
-                }
-            }).catch((e) => console.error(e));
-        }
     </script>
 
     <style>
