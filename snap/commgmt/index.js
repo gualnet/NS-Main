@@ -670,7 +670,6 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
-
             if (req.post.id) {
                 if (verifyPostReq(req, res)) {
 
@@ -727,8 +726,27 @@ exports.plugin =
                             var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
                             _FD.img = upload.secure_url;
                             _FD.cloudinary_img_public_id = upload.public_id;
-
-                        }
+                        } else {
+													switch (_FD.category) {
+														case 'weather':
+															_FD.img = 'https://res.cloudinary.com/nauticspot/image/upload/v1653643176/Nauticspot-Next/communications/comms-weather-ico_a7vutb.png';
+															break;
+														case 'event':
+															_FD.img = 'https://res.cloudinary.com/nauticspot/image/upload/v1653643176/Nauticspot-Next/communications/comms-event-ico_nklsil.png';
+															break;
+														case 'security':
+															_FD.img = 'https://res.cloudinary.com/nauticspot/image/upload/v1653643176/Nauticspot-Next/communications/comms-security-ico_ff5wm9.png';
+															break;
+														case 'maintenance':
+															_FD.img = 'https://res.cloudinary.com/nauticspot/image/upload/v1653643176/Nauticspot-Next/communications/comms-work-ico_cg5dma.png';
+															break;
+														case 'other':
+															break;
+													
+														default:
+															break;
+													}
+												}
 
                         //pj gesture
                         if (_FD.pj) {
@@ -741,7 +759,6 @@ exports.plugin =
                         _FD.notification_link = "/notification?id=" + _FD.id;
 
                         _FD.read_id = [];
-
                         var promise = await sendNotification(_FD);
                         if (promise.response) {
                             if (promise.users_id)
@@ -749,7 +766,6 @@ exports.plugin =
 
 
                             var com = await createCom(_FD);
-                            console.log(com);
                             if (com.id) {
                                 UTILS.httpUtil.dataSuccess(req, res, "Success", "Notification envoyé", "1.0");
                                 return;
