@@ -1105,7 +1105,7 @@
 					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
 				}
 
-				if (!harbour.erp_link) {
+				if (!harbour.erp_link || !localStorage['token']) {
 					document.getElementById('erp_link').hidden = true;
 				} else {
 					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
