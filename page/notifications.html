@@ -29,6 +29,16 @@
 		<br />
 		<br />
 	</main>
+	<style>
+		.comms-row-img-container {
+			border-radius: 15px;
+			overflow: hidden;
+			height: 50px;
+			width: 50px;
+			display: block;
+			position: relative;
+		}
+	</style>
 
 	<script>
 		window.addEventListener('load', async () => {
@@ -42,7 +52,7 @@
 		});
 
 		const displayCommunicationsCards = (comms = []) => {
-			comms.map(comm => {
+			comms.reverse().map(comm => {
 				let row = commsRow;
 				const isNew = (comm.read_id.includes(localStorage['user'])) ? false : true;
 
@@ -116,7 +126,7 @@
 			+ '<div class="card-body">'
 			+ '<div class="row">'
 			+ '<div class="col-auto p-1">'
-			+ '<div class="product-image-small text-center">'
+			+ '<div class="comms-row-img-container text-center">'
 			+ '<img src="__IMG__" alt="" style="height:100%;width:100%;">'
 			+ '</div>'
 			+ '</div>'
