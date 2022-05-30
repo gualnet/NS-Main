@@ -26,6 +26,7 @@ const ENUM = require('./snap/lib-js/enums');
  * @property {number} date
  * @property {string} prefixed_phone
  * @property {string} cloudinary_img_public_id
+ * @property {string} spotyrideLink - link to partner's spotyride page
  */
 
 /**

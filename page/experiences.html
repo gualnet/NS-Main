@@ -14,7 +14,7 @@
 		{{element->navheader.html}}
 		<!-- page content start -->
 
-		<nav class="navbar  navbar-light bg-light nav-pills nav-fill fixed-top" style="margin-top:41px;">
+		<nav class="navbar  navbar-light bg-light nav-pills nav-fill fixed-top" style="margin-top:40px;">
 
 			<!-- SWIPER START -->
 			<div class="container-fluid">
@@ -77,6 +77,7 @@
 		</nav>
 
 		<div class="container mt-4" id="content">
+
 		</div>
 		<div class="container py-3">
 			{{element->navbar.html}}
@@ -89,75 +90,6 @@
 		<br />
 		<br />
 	</main>
-
-	<div class="sidebar-right">
-		<div class="selectoption">
-			<input type="checkbox" id="darklayout" name="darkmode">
-			<label for="darklayout">Dark</label>
-		</div>
-		<div class="selectoption mb-0">
-			<input type="checkbox" id="rtllayout" name="layoutrtl">
-			<label for="rtllayout">RTL</label>
-		</div>
-		<hr>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor1" name="sidebarcolorselect">
-			<label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor2" name="sidebarcolorselect">
-			<label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor4" name="sidebarcolorselect">
-			<label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor6" name="sidebarcolorselect">
-			<label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor3" name="sidebarcolorselect">
-			<label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor5" name="sidebarcolorselect">
-			<label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor8" name="sidebarcolorselect">
-			<label for="templatecolor8" class="bg-red" data-title="red"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor13" name="sidebarcolorselect">
-			<label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor7" name="sidebarcolorselect">
-			<label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor11" name="sidebarcolorselect">
-			<label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor12" name="sidebarcolorselect">
-			<label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor10" name="sidebarcolorselect">
-			<label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor9" name="sidebarcolorselect">
-			<label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-		</div>
-		<div class="colorselect">
-			<input type="radio" id="templatecolor14" name="sidebarcolorselect">
-			<label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-		</div>
-
-	</div>
 
 
 
@@ -211,44 +143,26 @@
 				console.log(error);
 			});
 
-
-			var row =
-				'<div class="row">'
-				+ '    <div class="col">'
-				+ '        <div class="card product-card-small mb-3" onclick="window.location.href = (\'/partner?id=__ID_PARTNER__\');">'
-				+ '           <div class="card-body">'
-				+ '                <div class="row">'
-				+ '                    <div class="col-3 p-1">'
-				+ '                        <div class="product-image-small">'
-				//+ '                            <div class="background" style="background-image: url(\'/img/image-3.html\');">'
-				+ '                                <img style="width:auto;height:100%;" src="__IMG__" alt="" >'
-				//+ '                            </div>'
-				+ '                        </div>'
-				+ '                        </div>'
-				+ '                        <div class="col-9">'
-				+ '                            <div class="row">'
-				+ '                                <div class="col-auto">'
-				+ '                                    <h6>__NAME__</h6>'
-				+ '                                </div>'
-				+ '                            </div>'
-				+ '                            <div class="row">'
-				+ '                                <div class="col-auto">'
-				+ '                                    <div class="small text-secondary" style="text-align: justify;">__DESCRIPTION__</div>'
-				+ '                                </div>'
-				+ '                            </div>'
-				+ '                            <div class="row">'
-				+ '                                <div class="col-auto">'
-				+ '                                    <div id="gps_adress">'
-				+ '                                     __GPS_LINK__'
-				+ '                                    </div>'
-				+ '                                </div>'
-				+ '                            </div>'
-				+ '                        </div>'
-				+ '                    </div>'
-				+ '                </div>'
-				+ '            </div>'
-				+ '        </div>'
-				+ '    </div>';
+			const experienceCard = `
+				<div class="partner-experience-card" onclick="window.location.href = (\'/partner?id=__ID_PARTNER__\');">
+					<div class="img-container">
+						<img src="__IMG__" alt="nautic icon">
+					</div>
+					<div class="experience-card-body">
+						<div class="top-container">
+							<div class="title">
+								__NAME__
+							</div>
+							<div class="top-icon hidden">
+								<img src="https://res.cloudinary.com/nauticspot/image/upload/v1653910723/Nauticspot-Next/assets/partners_spotyride_ico_mlw4f9.png" alt="spoty ride icon">
+							</div>
+						</div>
+						<div class="description">
+							__DESCRIPTION__
+						</div>
+					</div>
+				</div>
+			`;
 
 			fetch('/api/partner/' + localStorage['harbourid'] + '/experience/' + urlParams.get('select')).then(response => response.json()).then(_data => {
 				console.log('_data', _data);
@@ -261,13 +175,15 @@
 				var gpsLink;
 
 				for (var i = 0; i < partners.length; i++) {
-					if (sUsrAg.indexOf("Safari") > -1) {
-						sBrowser = "Apple Safari";
-						gpsLink = '<a href="http://maps.apple.com/?q=' + partners[i].address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + partners[i].address + '</a>'
-					} else {
-						gpsLink = '<a href="geo:0,0?q=' + partners[i].address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + partners[i].address + '</a>'
+
+					let currentRow = experienceCard
+						.replace('__ID_PARTNER__', partners[i].id)
+						.replace('__NAME__', partners[i].name)
+						.replace('__DESCRIPTION__', partners[i].description)
+
+					if (partners[i].spotyrideLink) {
+						currentRow = currentRow.replace('class="top-icon hidden"', 'class="top-icon "');
 					}
-					var currentRow = row.replace('__ID_PARTNER__', partners[i].id).replace('__NAME__', partners[i].name).replace('__DESCRIPTION__', partners[i].description).replace('__GPS_LINK__', gpsLink);
 
 					if (partners[i].img) {
 						currentRow = currentRow.replace("__IMG__", partners[i].img);
@@ -297,16 +213,12 @@
 						}
 					}
 
-
 					document.getElementById("content").insertAdjacentHTML('beforeend', currentRow);
-
 				}
 
 			}).catch((error) => {
 				console.log(error);
 			});
-
-
 		});
 	</script>
 
@@ -326,12 +238,14 @@
 			font-family: 'Poppins Regular' !important;
 		}
 
+		/* ********************** */
+		/* * TOP SWIPER NAV BAR * */
+		/* ********************** */
 		.swiper-container {
 			display: flex;
 			flex-direction: column;
 			height: 57px;
 		}
-
 		.swiper-wrapper .swiper-slide.nav-btn {
 			align-items: center;
 			border-radius: 5px;
@@ -341,12 +255,10 @@
 			margin: 0 3px;
 			width: 87px;
 		}
-
 		.nav-btn img {
 			height: auto;
 			width: auto;
 		}
-
 		.nav-btn span {
 			color: white;
 			align-items: center;
@@ -354,6 +266,72 @@
 			height: 100%;
 			justify-content: center;
 			text-align: center;
+		}
+
+		/* *************************** */
+		/* * partner-experience-card * */
+		/* *************************** */
+		.partner-experience-card {
+			border-radius: 5px;
+			box-shadow: 1px 3px 8px 0px rgba(0, 0, 0, .16);
+			display: flex;
+			margin-bottom: 20px;
+			max-height: 70px;
+		}
+		.img-container {
+			display: flex;
+			height: 70px;
+			width: 100px;
+		}
+		.img-container img {
+			border-radius: 5px;
+			height: inherit;
+			object-fit: fill;
+			width: inherit;
+		}
+		.experience-card-body {
+			display: flex;
+			flex-direction: column;
+			flex-grow: 1;
+			justify-content: space-around;
+			margin: 5px 5px 5px 16px;
+			overflow: hidden;
+		}
+		.experience-card-body .top-container {
+			display: flex;
+			flex-direction: row;
+			height: 20px;
+			justify-content: space-between;
+			width: 100%;
+		}
+		.experience-card-body .top-container .title {
+			-webkit-box-orient: vertical; 
+			-webkit-line-clamp: 1;
+			display: -webkit-box;
+			font-family: 'Avenir-Heavy' !important;
+			font-size: 14px;
+			letter-spacing: .28px;
+			overflow: hidden;
+			width: calc(100% - 20px);
+		}
+		.experience-card-body .top-container .top-icon {
+			display: flex;
+			height: 20px;
+			width: 20px;
+		}
+		.experience-card-body .top-container .top-icon.hidden {
+			display: none;
+		}
+		.experience-card-body .description {
+			-webkit-box-orient: vertical; 
+			-webkit-line-clamp: 2;
+			color: rgb(112, 112, 112);
+			display: -webkit-box;
+			font-family: 'Avenir-Book' !important;
+			font-size: 10px;
+			letter-spacing: .2px;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 	</style>
 	{{element->footer_app.html}}
