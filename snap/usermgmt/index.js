@@ -197,6 +197,10 @@ async function createUser(_obj) {
 	});
 }
 
+/**
+ * @param {TYPES.T_user} _obj 
+ * @returns {Promise<Array<TYPES.T_user>>}
+ */
 async function updateUser(_obj) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Update(_userCol, { id: _obj.id }, _obj, function (_err, _data) {
@@ -322,6 +326,7 @@ async function getUserInfos(_req, _res) {
 		var user = await findByColl({ "token": _req.post.token })
 		if (user[0]) {
 			delete user[0].password;
+			delete user[0].resetPwdToken;
 			UTILS.httpUtil.dataSuccess(_req, _res, "User", user[0], "1.0");
 			return;
 		} else {
@@ -375,14 +380,12 @@ async function updateUserHandler(_req, _res) {
 	}
 	if (_req.post.token) {
 		var user = await findByColl({ "token": _req.post.token })
-
 		if (user[0]) {
+			user = user[0];
 			var update = _req.post;
 			update.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
-			console.log(update.prefixed_number);
-			update.id = user[0].id;
-			console.log(update);
-			promise = await updateUser(update);
+			update.id = user.id;
+			const updatedUsers = await updateUser(update);
 			UTILS.httpUtil.dataSuccess(_req, _res, "User authentified", null, "1.0");
 			return;
 		} else {
