@@ -10,6 +10,9 @@
 		flex-direction: column;
 		height: calc(100% - 56px);
 	}
+	.bottom-container.hidden {
+		display: none;
+	}
 	.bottom-container {
 		display: flex;
 		margin: auto;
@@ -64,7 +67,7 @@
             <div class="card-body border-top border-color small text-secondary" id="description" style="text-align: justify;">
             </div>
         </div>
-				<div class="bottom-container">
+				<div class="bottom-container hidden">
 					<button class="btn btn-lg btn-primary" id="spotiryde-resa">Reserver Maintenant</button>
 				</div>
 
@@ -175,6 +178,7 @@
                 if (harbour.description)
 								document.getElementById("description").insertAdjacentHTML('beforeend', harbour.description);
                 if (harbour.spotyrideLink) {
+									document.querySelector('.bottom-container')?.classList.remove('hidden');
 									const spotirydeBtn = document.querySelector('#spotiryde-resa');
 									spotirydeBtn.addEventListener('click', () => { open(harbour.spotyrideLink) });
 								}
