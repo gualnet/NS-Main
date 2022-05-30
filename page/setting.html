@@ -199,75 +199,6 @@
         </div>
     </main>
 
-    <div class="sidebar-right">
-        <div class="selectoption">
-            <input type="checkbox" id="darklayout" name="darkmode">
-            <label for="darklayout">Dark</label>
-        </div>
-        <div class="selectoption mb-0">
-            <input type="checkbox" id="rtllayout" name="layoutrtl">
-            <label for="rtllayout">RTL</label>
-        </div>
-        <hr>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
-            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
-            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
-            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
-            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
-            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
-            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
-            <label for="templatecolor8" class="bg-red" data-title="red"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
-            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
-            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
-            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
-            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
-            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
-            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
-            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-        </div>
-
-    </div>
-
 
     <!-- Required jquery and libraries -->
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -314,34 +245,38 @@
 				}
 				const userInfo = await getUserInfos(userToken);
 				const boatInfo = await getBoatInfo(userInfo);
-				const places = await getPlacesFromHarbour(localStorage["harbourid"]);
-				G_Places = places;
-				const pontons = await getPontonsFromHarbour(localStorage["harbourid"]);
-
-				let boatPlace;
-				for (const place of places) {
-					if (place.id === boatInfo.place_id) {
-						boatPlace = place;
-						break;
+				if (boatInfo) {
+					const places = await getPlacesFromHarbour(localStorage["harbourid"]);
+					G_Places = places;
+					const pontons = await getPontonsFromHarbour(localStorage["harbourid"]);
+	
+					let boatPlace;
+					for (const place of places) {
+						if (place.id === boatInfo?.place_id) {
+							boatPlace = place;
+							break;
+						}
 					}
-				}
-				let boatPonton;
-				for (const ponton of pontons) {
-					if (ponton.id === boatPlace.pontonId) {
-						boatPonton = ponton;
-						break;
+					let boatPonton;
+					for (const ponton of pontons) {
+						if (ponton.id === boatPlace?.pontonId) {
+							boatPonton = ponton;
+							break;
+						}
 					}
-				}
+					// keep places for the selected ponton
+					const placesByPonton = places.filter(place => place.pontonId === boatPonton.id);
+					populatePontonDropdown(pontons, boatPonton.id);
+					populatePlacesDropdown(placesByPonton, boatPlace.id);
+					populateFormInitialInfos(userInfo, boatInfo);
 
-				// keep places for the selected ponton
-				const placesByPonton = places.filter(place => place.pontonId === boatPonton.id);
-				populatePontonDropdown(pontons, boatPonton.id);
-				populatePlacesDropdown(placesByPonton, boatPlace.id);
-				populateFormInitialInfos(userInfo, boatInfo);
-
-				// add event listener
-				document.querySelector('#ponton-select')
+					// add event listener
+					document.querySelector('#ponton-select')
 					.addEventListener('change', pontonDropdownOnChangeHandler);
+				} else {
+					populateFormInitialInfos(userInfo, undefined);
+				}
+
 			});
 
 
@@ -371,7 +306,12 @@
 					return;
 				}
 				const decoded = await response.json();
-				const [boatInfo] = decoded.data;
+				console.log('decoded',decoded);
+				const boatInfo = decoded.data;
+				console.log('boatInfo.length',boatInfo?.length)
+				if (boatInfo?.length > 0) {
+					return(boatInfo[0]);
+				}
 				return(boatInfo);
 			};
 
@@ -383,7 +323,7 @@
 					return;
 				}
 				const decoded = await response.json();
-				const places = decoded.data;
+				const places = decoded?.data;
 				return(places);
 			};
 
@@ -411,12 +351,18 @@
 				document.getElementById("prefix").value = user.prefix;
 				document.getElementById("phone").value = user.phone;
 
-				document.getElementById("boat_id").value = boat.id;
-				document.getElementById("name").value = boat.name;
-				document.getElementById("immatriculation").value = boat.immatriculation;
-				document.getElementById("longueur").value = boat.longueur;
-				document.getElementById("largeur").value = boat.largeur;
-				document.getElementById("tirant_eau").value = boat.tirant_eau;
+				if (boat) {
+					document.getElementById("boat_id").value = boat.id;
+					document.getElementById("name").value = boat.name;
+					document.getElementById("immatriculation").value = boat.immatriculation;
+					document.getElementById("longueur").value = boat.longueur;
+					document.getElementById("largeur").value = boat.largeur;
+					document.getElementById("tirant_eau").value = boat.tirant_eau;
+				} else {
+					document.querySelector('#boat_form')
+						.querySelector('.card-body')	
+							.innerHTML = 'Vous n\'avez pas enregistré de beateau';
+				}
 			}
 
 			const populatePontonDropdown = (pontonsInfos = [], selectedPontonId) => {
