@@ -15,9 +15,20 @@
 	}
 	.bottom-container {
 		display: flex;
+		flex-direction: column;
 		margin: auto;
 		margin-bottom: 20px;
 		justify-content: center;
+	}
+	.bottom-container #spotiryde-resa {
+		padding: 15px 30px;
+	}
+	.bottom-container .resa-label {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 20px;
+		color: rgb(40, 100, 219);
 	}
 	.container.py-3 {
 		position: absolute;
@@ -68,7 +79,8 @@
             </div>
         </div>
 				<div class="bottom-container hidden">
-					<button class="btn btn-lg btn-primary" id="spotiryde-resa">Reserver Maintenant</button>
+					<div class="resa-label">Partenariat avec <img src="https://res.cloudinary.com/nauticspot/image/upload/v1653924269/Nauticspot-Next/assets/partners_spotyride_full_ico_ny2ndv.png" alt="spotyride logo" /></div>
+					<button class="btn btn-lg btn-primary" id="spotiryde-resa">Réserver une activité</button>
 				</div>
 
         <script>
@@ -89,8 +101,6 @@
                     harbour.category = "harborlife";
                 else if (harbour.category == "experience")
                     harbour.category = "experiences";
-                //else if (harbour.category == "harbourlife")
-                //    harbour.category = "harborlife";
 
                 document.getElementById("return_link").href = "/" + harbour.category + "?select=" + harbour.subcategory;
                 document.getElementById("name").insertAdjacentHTML('beforeend', harbour.name);
@@ -172,7 +182,6 @@
                             document.getElementById('img').src = "/library/autres-500.png";
                             break;
                     }
-                    // document.getElementById('img').src = localStorage['entity_logo'];
                 }
 
                 if (harbour.description)
