@@ -354,6 +354,107 @@ async function getActivePartnersCategoryHandler(_req, _res) {
 	return;
 }
 
+/* ---------------------- */
+/* NEW API HANDLERS START */
+/* ---------------------- */
+
+const checkApiAuth = async (authorization) => {
+	console.log('CHECK API NEXT AUTH', authorization)
+	const token = authorization.split(' ')[1];
+	const adminUser = await getAdminById('admin')
+	if (adminUser?.data?.token !== token) {
+		console.log('CHECK API NEXT AUTH FAILED\n')
+		return(false);
+	}
+	console.log('CHECK API NEXT AUTH SUCCESS\n')
+	return(true);
+}
+
+/**
+ * @param {TYPES.T_partner} options - Object containing valide filds from harbour type
+ * @returns {Promise<Array<TYPES.T_harbour>>}
+ */
+ async function getPartnersWhere(options) {
+	return new Promise(resolve => {
+			STORE.db.linkdb.Find(_partnerCol, options, null, function (_err, _data) {
+					if (_data)
+							resolve(_data);
+					else
+							resolve(_err);
+			});
+	});
+};
+
+async function getPartnerHandler(req, res) {
+	try {
+		const { authorization } = req.headers;
+		if (!checkApiAuth(authorization)) {
+			res.writeHead(401);
+			res.end({
+					code: 401,
+					message: 'Not autorized',
+					description: 'MUUUUUUUAHAHAHAHAH !!!',
+			});
+		}
+
+			const ret = await getPartnersWhere(req.get);
+			res.end(JSON.stringify({ results: ret }));
+	} catch (error) {
+			console.error('[ERROR]', error);
+			res.writeHead(500);
+			res.end({
+					code: 500,
+					message: 'Internal error.',
+					description: '',
+			});
+	}
+};
+
+/**
+ * 
+ * @param {*} updateFieds 
+ * @param {*} whereFields 
+ * @returns {Promise<Array<TYPES.T_partner>>}
+ */
+async function updatePartnerWhere(updateFieds, whereFields) {
+	return new Promise(resolve => {
+			STORE.db.linkdb.Update(_partnerCol, whereFields, updateFieds, function (_err, _data) {
+					if (_data)
+							resolve(_data);
+					else
+							resolve(_err);
+			});
+	});
+}
+
+const updatePartnerHandler = async (req, res) => {
+	try {
+		const { authorization } = req.headers;
+		if (!checkApiAuth(authorization)) {
+			res.writeHead(401);
+			res.end({
+					code: 401,
+					message: 'Not autorized',
+					description: 'MUUUUUUUAHAHAHAHAH !!!',
+			});
+		}
+
+		const harbourUpdate = { ...req.body };
+		const whereFields = { ...req.get };
+
+		const result = await updatePartnerWhere(harbourUpdate, whereFields);
+		res.end(JSON.stringify({ results: result }));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500);
+		res.end({
+				code: 500,
+				message: 'Internal error.',
+				description: '',
+		});
+	}
+}
+
 exports.router = [
 	{
 		on: true,
@@ -384,7 +485,7 @@ exports.router = [
 	{
 		on: true,
 		route: "/api/next/partners",
-		handler: ((req, res) => { res.writeHead(401); res.end() }),
+		handler: getPartnerHandler,
 		method: "GET"
 	},
 	{
@@ -396,7 +497,7 @@ exports.router = [
 	{
 		on: true,
 		route: "/api/next/partners",
-		handler: ((req, res) => { res.writeHead(401); res.end() }),
+		handler: updatePartnerHandler,
 		method: "PUT"
 	},
 	{
