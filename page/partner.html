@@ -10,6 +10,37 @@
 		flex-direction: column;
 		height: calc(100% - 56px);
 	}
+	#partnerDetailsContainer {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		justify-content: center;
+	}
+	#partnerDetailsContainer .title {
+		display: flex;
+		align-items: center;
+		line-height: 20px;
+		width: calc(100% - 70px);
+	}
+	#partnerDetailsContainer .spotyride-icon {
+		display: flex;
+		height: 70px;
+		width: 70px;
+	}
+	#partnerDetailsContainer.no-icon .title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 40px;
+		width: calc(100%);
+	}
+	#partnerDetailsContainer.no-icon .spotyride-icon {
+		display: none;
+	}
+	#partnerDetailsContainer .spotyride-icon.hidden {
+		display: none;
+	}
+
 	.bottom-container.hidden {
 		display: none;
 	}
@@ -53,10 +84,12 @@
         <div class="container top-30" id="container">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col" id="name">
-                        </div>
-                    </div>
+									<div class="top-container no-icon" id="partnerDetailsContainer">
+										<div class="title" id="name"></div>
+										<div class="spotyride-icon">
+											<img src="https://res.cloudinary.com/nauticspot/image/upload/v1653924269/Nauticspot-Next/assets/partners_spotyride_full_ico_ny2ndv.png" alt="spotyride logo" />
+										</div>
+									</div>
                     <div class="row">
                         <div class="col" id="phone">
                         </div>
@@ -190,6 +223,7 @@
 									document.querySelector('.bottom-container')?.classList.remove('hidden');
 									const spotirydeBtn = document.querySelector('#spotiryde-resa');
 									spotirydeBtn.addEventListener('click', () => { open(harbour.spotyrideLink) });
+									document.querySelector('#partnerDetailsContainer')?.classList.remove('no-icon');
 								}
 
                 document.getElementById("container").innerHTML = document.getElementById("container").innerHTML.replace(/undefined/g, " ");
