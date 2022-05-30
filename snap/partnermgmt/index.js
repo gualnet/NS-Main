@@ -1,3 +1,4 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 
@@ -38,13 +39,9 @@ function validatePhone(phone) {
 
 function addProtocolToUrl(url) {
 	var patternProtocol = new RegExp('^(https?:\\/\\/)') // protocol
-	// console.log(url);
-	// console.log(patternProtocol.test(url));
 	if (patternProtocol.test(url)) {
-		// console.log(url);
 		return url;
 	} else {
-		// console.log(url);
 		return ("https://" + url);
 	}
 }
@@ -123,11 +120,9 @@ function verifyPostReq(_req, _res) {
 }
 
 async function getPartnerById(_id) {
-	// console.log(_id);
 	return new Promise(resolve => {
 		STORE.db.linkdb.FindById(_partnerCol, _id, null, function (_err, _data) {
 			if (_data) {
-				// console.log(_data);
 				resolve(_data);
 			}
 			else
@@ -229,7 +224,6 @@ async function getAdminById(_id) {
 //route handlers
 async function getPartnerBySearchHandler(_req, _res) {
 	var partner = await getPartnerBySearch({ harbour_id: _req.param.harbour_id, category: _req.param.category, subcategory: _req.param.subcategory })
-	// console.log('partner>', partner);
 	if (partner) {
 		UTILS.httpUtil.dataSuccess(_req, _res, "success", partner, "1.0");
 		return;
@@ -241,8 +235,6 @@ async function getPartnerBySearchHandler(_req, _res) {
 
 async function getPartnerByIdHandler(_req, _res) {
 	var partner = await getPartnerById(_req.param.id);
-	// console.log(_req.param.id);
-	// console.log(partner);
 	if (partner.id) {
 		UTILS.httpUtil.dataSuccess(_req, _res, "success", partner, "1.0");
 		return;
@@ -258,9 +250,6 @@ async function getPartnersByHarbourHandler(_req, _res) {
 		var _partners = await getPartnerByHarbourId(_req.get.harbour_id);
 
 		if (_partners[0]) {
-			// for (var i = 0; i > _partners[i].length; i++) {
-			//     // console.log('ici' + _partners[i]);
-			// }
 			var _harbour = await STORE.harbourmgmt.getHarbourById(_req.get.harbour_id);
 			var _partnerHtml = fs.readFileSync(path.join(__dirname, "partner.html")).toString();
 			UTILS.httpUtil.dataSuccess(_req, _res, "success", { html: _partnerHtml, partners: _partners, harbour: _harbour }, "1.0");
@@ -274,7 +263,6 @@ async function getPartnersByHarbourHandler(_req, _res) {
 async function getActivePartnersCategoryHandler(_req, _res) {
 
 	var partners = await getPartnerByHarbourId(_req.param.harbour_id);
-	// console.log('Partners00', partners)
 	var data = { activeCategories: {}, activeSubCategories: {} };
 	for (var i = 0; i < partners.length; i++) {
 		switch (partners[i].category) {
@@ -288,7 +276,6 @@ async function getActivePartnersCategoryHandler(_req, _res) {
 				data.activeCategories.discovery = true;
 				break;
 		}
-
 
 		//discovery 	divertissement
 		switch (partners[i].subcategory) {
@@ -468,13 +455,11 @@ exports.plugin =
 					if (_FD.prefix && _FD.phone) {
 						_FD.prefix = completePhonePrefix(_FD.prefix);
 						_FD.prefixed_phone = _FD.prefix + _FD.phone.replace(/^0/, '');
-						// console.log(_FD.prefixed_number);
 					}
 
 					//img gesture
 					if (_FD.img) {
 						var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-						// console.log(upload);
 						_FD.img = upload.secure_url;
 						_FD.cloudinary_img_public_id = upload.public_id;
 						if (currentPartner.cloudinary_img_public_id) {
@@ -502,7 +487,6 @@ exports.plugin =
 					if (_FD.prefix && _FD.phone) {
 						_FD.prefix = completePhonePrefix(_FD.prefix);
 						_FD.prefixed_phone = _FD.prefix + _FD.phone.replace(/^0/, '');
-						// console.log(_FD.prefixed_number);
 					}
 
 					//img gesture
@@ -514,7 +498,6 @@ exports.plugin =
 					}
 
 					var partner = await createPartner(_FD);
-					// console.log(partner);
 					if (partner.id) {
 						UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire créé", "1.0");
 						return;
@@ -528,6 +511,7 @@ exports.plugin =
 		else {
 			var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
 			var _partnerHtml = fs.readFileSync(path.join(__dirname, "partner.html")).toString();
+			/**@type {Array<TYPES.T_partner>} */
 			var _partners = [];
 
 			var userHarbours = [];
@@ -633,6 +617,7 @@ exports.plugin =
 					.replace(/__WEBSITE__/g, _partners[i].website)
 					.replace(/__ADDRESS__/g, _partners[i].address)
 					.replace(/__DATE_CREATION__/g, formatedDate)
+					.replace(/__SPOTYRIDE_LINK__/g, _partners[i].spotyrideLink || '');
 			}
 			_indexHtml = _indexHtml.replace("__PARTNERS__", _partnerGen).replace(/undefined/g, '');
 

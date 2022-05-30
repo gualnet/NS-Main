@@ -114,6 +114,12 @@
                                                     name="img">
                                             </div>
                                         </div>
+																				<div class="col-lg-4">
+																					<div class="form-group">
+																							<label class="form-label">Spotyride URL</label>
+																							<input type="url" class="form-control" name="spotyrideLink">
+																					</div>
+																			</div>
                                         <div class="col-lg-11">
                                             <div class="form-group">
                                                 <label class="form-label">Description</label>
@@ -144,6 +150,7 @@
                                                 <th>Téléphone</th>
                                                 <th>Website</th>
                                                 <th>Adresse</th>
+                                                <th>Spotyride URL</th>
                                                 <th>Image</th>
                                                 <th>Remplacer l'image</th>
                                                 <th>Date de creation</th>
@@ -264,6 +271,7 @@
                                 .replace(/__WEBSITE__/g, _partners[i].website)
                                 .replace(/__ADDRESS__/g, _partners[i].address)
                                 .replace(/__DATE_CREATION__/g, formatedDate)
+																.replace(/__SPOTYRIDE_LINK__/g, _partners[i].spotyrideLink || '');
 
                             ids.push(_partners[i].id.replace(/\./g, "_"));
                             gen += _partnerGen;
@@ -369,6 +377,8 @@
             form.appendChild(document.getElementById('img_' + id))
             form.appendChild(document.getElementById('category_' + id))
             form.appendChild(document.getElementById('subcategory_' + id))
+            form.appendChild(document.getElementById('subcategory_' + id))
+            form.appendChild(document.getElementById('spotyrideLink_' + id))
 
             // add category info
             const categoryValue = document.createElement('textarea');
