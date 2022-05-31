@@ -8,8 +8,6 @@
 	<!-- screen loader -->
 	{{element->loader.html}}
 
-
-
 	<!-- Fixed navbar -->
 	<!-- Begin page content -->
 	<main class="flex-shrink-0">
@@ -92,7 +90,38 @@
 						</div>
 						<div class="row">
 							<div class="col">
-								<div id="residentInputs">
+								<div class="d-none" id="residentInput">
+									<div class="form-group floating-form-group">
+										<label class="text-muted" for="category-select" style="color: #446E7B">Ponton</label>
+										<select name="ponton_id" class="form-control" id="ponton-select"></select>
+									</div>
+									<div class="form-group floating-form-group">
+										<label class="text-muted" for="category-select" style="color: #446E7B">Numéro de place</label>
+										<select name="place_id" class="form-control" id="place-select"></select>
+									</div>
+									<div class="form-group floating-form-group">
+										<input name="name" type="text" class="form-control floating-input" id="boat-name" required>
+										<label class="floating-label" style="color: #446E7B">Nom du bateau</label>
+									</div >
+									<div class="form-group floating-form-group">
+										<input name="immatriculation" type="text" class="form-control floating-input" required>
+										<label class="floating-label" style="color: #446E7B">Immatriculation</label>
+									</div >
+									<div class="form-group floating-form-group">
+										<input name="longueur" type="number" class="form-control floating-input" required>
+										<label class="floating-label" style="color: #446E7B">Longueur (en m)</label>
+									</div >
+									<div class="form-group floating-form-group">
+										<input name="largeur" type="text" class="form-control floating-input" required>
+										<label class="floating-label" style="color: #446E7B">Largeur (en m)</label>
+									</div >
+									<div class="form-group floating-form-group">
+										<input name="tirant_eau" type="number" class="form-control floating-input" required>
+										<label class="floating-label" style="color: #446E7B">Tirant d'eau (en m)</label>
+									</div >
+									<div>
+										<input name="is_resident" value="1" hidden>
+									</div >
 								</div>
 							</div>
 						</div>
@@ -148,7 +177,7 @@
 	<script src="js/jquery.cookie.js"></script>
 
 	<!-- Swiper slider  -->
-	<script src="vendor/swiper/js/swiper.min.js"></script>
+	<!-- <script src="vendor/swiper/js/swiper.min.js"></script> -->
 
 	<!-- Masonry js -->
 	<script src="vendor/masonry/masonry.pkgd.min.js"></script>
@@ -172,38 +201,34 @@
 						window.location.href = ("/index");
 
 				}).catch((error) => {
-					console.log(error);
+					console.error(error);
 				})
 			}
 
-			var swiper = new Swiper('.swiper-container', {
-				pagination: {
-					el: '.swiper-pagination',
-				},
-			});
 			fetch("/api/getharbours/" + localStorage['entity_id'], {
 				method: "get"
 			}).then(response => response.json()).then(_data => {
 				var harbours = _data.data;
 				for (var i = 0; i < harbours.length; i++) {
-					console.log(harbours[i].name);
-					console.log(harbours[i].id);
 					if (harbours[i].id == localStorage['harbourid'])
 						document.getElementById("harbourlist").insertAdjacentHTML("beforeend", ('<option value="' + harbours[i].id + '" selected>' + harbours[i].name + '</option>'));
 					else
 						document.getElementById("harbourlist").insertAdjacentHTML("beforeend", ('<option value="' + harbours[i].id + '">' + harbours[i].name + '</option>'));
 				}
-
 			}).catch((error) => {
-				console.log(error);
+				console.error(error);
 			});
 
 			constructCguLink();
+			getPonton();
+			getPlaces();
 		});
 
-		document.getElementById("harbourlist").addEventListener("change", function (event) {
-			getPlaces();
-		})
+		document.querySelector('#ponton-select')
+			.addEventListener('change', (ev) => {
+				const selectedPontonId = ev.target.value;
+				getPlaces(selectedPontonId)
+			});
 
 		const constructCguLink = () => {
 			const harbourName = localStorage['harbourname'];
@@ -213,7 +238,6 @@
 
 		function sendSignupForm() {
 			var form = document.getElementById("signupForm");
-			console.log(form);
 			var formData = new FormData(form);
 
 			if (isResident) {
@@ -231,21 +255,16 @@
 				method: form.method,
 				body: formData
 			}).then(response => response.json()).then(_data => {
-				console.log(_data);
 				if (_data.success) {
 					fetch("/api/adduser", {
 						method: form.method,
 						body: formData,
 					}).then(response => response.json()).then(_data => {
-						console.log(_data);
 						if (_data.success) {
 							var user = _data.data;
-							console.log('la');
 							//user created, now creating the boat if user have boat
 							if (document.getElementById("residentInput")) {
-								console.log('ici');
 								form = document.getElementById("boatform");
-								console.log(form);
 								formData = new FormData(form);
 								formData.append("user", user.id);
 								formData.append("harbour", user.harbourid);
@@ -255,20 +274,17 @@
 										body: formData,
 									}).then(response => response.json()).then(_data => {
 										//localStorage["boat"] = _data.data.id;
-										console.log("boat created");
-										console.log(user);
 										localStorage["user"] = user.id;
 										localStorage["harbourid"] = user.harbourid;
 										localStorage["token"] = user.token;
 										fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
-											console.log(_data.data);
 											localStorage["harbourname"] = _data.data.name;
 											window.location.href = ("/index");
 										}).catch((error) => {
-											console.log(error);
+											console.error(error);
 										});
 									}).catch((error) => {
-										console.log('Error:', error);
+										console.error('Error:', error);
 									});
 							} else {
 								localStorage["user"] = user.id;
@@ -276,11 +292,10 @@
 								localStorage["token"] = user.token;
 
 								fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
-									console.log(_data.data);
 									localStorage["harbourname"] = _data.data.name;
 									window.location.href = ("/index");
 								}).catch((error) => {
-									console.log(error);
+									console.error(error);
 								});
 							}
 						}
@@ -291,7 +306,7 @@
 							document.getElementById("addUserError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
 						}
 					}).catch((error) => {
-						console.log('Error:', error);
+						console.error('Error:', error);
 					});
 
 
@@ -302,60 +317,25 @@
 					document.getElementById("addUserError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger">ERREUR : ' + _data.message + '</div>');
 				}
 			}).catch((error) => {
-				console.log("error");
+				console.error("error");
 			})
 		}
 
-		function showResidentInputs() {
-			if (isResident) return;
+		const showResidentInputs = () => {
 			isResident = true;
-			document.getElementById('yesButton').className = "btn btn-primary";
-			document.getElementById('noButton').className = "btn btn-secondary";
+			const residentFormEl = document.querySelector('#residentInput');
+			residentFormEl.classList.replace('d-none', 'd-block');
+			document.getElementById('yesButton').classList.replace('btn-secondary', 'btn-primary');
+			document.getElementById('noButton').classList.replace('btn-primary', 'btn-secondary');
+		};
 
-			if (document.getElementById("residentInput"))
-				document.getElementById("residentInputs").removeChild(document.getElementById("residentInput"));
-
-			document.getElementById("residentInputs").insertAdjacentHTML('beforeend', '<div id="residentInput">'
-				+ '<div class="form-group floating-form-group">'
-				+ '        <label class="text-muted" for="category-select" style="color: #446E7B">Ponton</label>'
-				+ '        <select name="ponton_id" class="form-control" id="ponton-select">'
-				+ '        </select>'
-				+ '    </div>'
-				+ '</div >'
-				+ '<div class="form-group floating-form-group">'
-				+ '        <label class="text-muted" for="category-select" style="color: #446E7B">Numéro de place</label>'
-				+ '        <select name="place_id" class="form-control" id="place-select">'
-				+ '        </select>'
-				+ '    </div>'
-				+ '</div >'
-				+ '<div class="form-group floating-form-group">'
-				+ '<input name="name" type="text" class="form-control floating-input" id="boat-name" required>'
-				+ '<label class="floating-label" style="color: #446E7B">Nom du bateau</label>'
-				+ '</div >'
-				+ '<div class="form-group floating-form-group">'
-				+ '<input name="immatriculation" type="text" class="form-control floating-input" required>'
-				+ '<label class="floating-label" style="color: #446E7B">Immatriculation</label>'
-				+ '</div >'
-				+ '<div class="form-group floating-form-group">'
-				+ '<input name="longueur" type="number" class="form-control floating-input" required>'
-				+ '<label class="floating-label" style="color: #446E7B">Longueur (en m)</label>'
-				+ '</div >'
-				+ '<div class="form-group floating-form-group">'
-				+ '<input name="largeur" type="text" class="form-control floating-input" required>'
-				+ '<label class="floating-label" style="color: #446E7B">Largeur (en m)</label>'
-				+ '</div >'
-				+ '<div class="form-group floating-form-group">'
-				+ '<input name="tirant_eau" type="number" class="form-control floating-input" required>'
-				+ '<label class="floating-label" style="color: #446E7B">Tirant d\'eau (en m)</label>'
-				+ '</div >'
-				+ '<input name="is_resident" value="1" hidden>'
-				+ '</div >'
-			);
-			getPonton();
-			document.getElementById("ponton-select").addEventListener('change', (event) => {
-				getPlaces(event.target.value);
-			});
-		}
+		const hideResidentInputs = () => {
+			isResident = false;
+			const residentFormEl = document.querySelector('#residentInput');
+			residentFormEl.classList.replace('d-block', 'd-none');
+			document.getElementById('yesButton').classList.replace('btn-primary', 'btn-secondary');
+			document.getElementById('noButton').classList.replace('btn-secondary', 'btn-primary');
+		};
 
 		var dynamicSort = function (property) {
 			var sortOrder = 1;
@@ -371,47 +351,42 @@
 				return result * sortOrder;
 			}
 		}
-		function hideResidentInputs() {
-			document.getElementById('yesButton').className = "btn btn-secondary";
-			document.getElementById('noButton').className = "btn btn-primary";
 
-			if (document.getElementById("residentInput"))
-				document.getElementById("residentInputs").removeChild(document.getElementById("residentInput"));
-
-			//document.getElementById("residentInputs").insertAdjacentHTML('beforeend', '<input id="residentInput" name="is_resident" hidden>');
-		}
 		function getPonton() {
-			fetch("/api/pontons?harbour_id=" + document.getElementById("harbourlist").value, { method: "GET" }).then(response => response.json()).then(_data => {
-				console.log(_data);
-				var pontons = _data.data.sort(dynamicSort("name"));
-				document.getElementById('ponton-select').innerHTML = "";
-				for (var i = 0; i < pontons.length; i++) {
-					if (i == 0)
-						getPlaces(pontons[i].id);
-					if (pontons[i].name != "")
-						document.getElementById('ponton-select').innerHTML += '<option value="' + pontons[i].id + '" >' + pontons[i].name + '</option>';
-				}
-			}).catch((e) => console.error(e));
-		}
-		function getPlaces(_ponton_id) {
-			fetch("/api/placesbyponton?harbour_id=" + document.getElementById("harbourlist").value + "&ponton_id=" + _ponton_id, { method: "GET" }).then(response => response.json()).then(_data => {
-				if (_data.data) {
-					console.log(_data);
-					var places = _data.data.sort(dynamicSort("number"));
-					document.getElementById('place-select').innerHTML = "";
-					for (var i = 0; i < places.length; i++) {
-						document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" >' + places[i].number + '</option>';
+			const harbourId = localStorage['harbourid'];
+			const url = `/api/pontons?harbour_id=${harbourId}`;
+			fetch(url, { method: "GET" })
+				.then(response => response.json())
+				.then(_data => {
+					var pontons = _data.data.sort(dynamicSort("name"));
+					document.getElementById('ponton-select').innerHTML = "";
+					for (var i = 0; i < pontons.length; i++) {
+						if (i == 0)
+							getPlaces(pontons[i].id);
+						if (pontons[i].name != "")
+							document.getElementById('ponton-select').innerHTML += '<option value="' + pontons[i].id + '" >' + pontons[i].name + '</option>';
 					}
-				} else {
-					document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
-				}
-			}).catch((e) => console.error(e));
+				}).catch((e) => console.error(e));
+		};
+
+		function getPlaces(pontonId) {
+			const harbourId = localStorage['harbourid'];
+			const url = `/api/placesbyponton?harbour_id=${harbourId}&ponton_id=${pontonId}`;
+			fetch(url, { method: "GET" })
+				.then(response => response.json())
+				.then(_data => {
+					if (_data.data) {
+						var places = _data.data.sort(dynamicSort("number"));
+						document.getElementById('place-select').innerHTML = "";
+						for (var i = 0; i < places.length; i++) {
+							document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" >' + places[i].number + '</option>';
+						}
+					} else {
+						document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
+					}
+				}).catch((e) => console.error(e));
 		}
 	</script>
 	{{element->footer_app.html}}
 </body>
-
-
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:16 GMT -->
-
 </html>
