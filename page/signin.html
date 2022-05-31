@@ -237,6 +237,7 @@
                         localStorage["user"] = user.id;
                         localStorage["harbourid"] = user.harbourid;
                         localStorage["token"] = user.token;
+                        localStorage["role"] = user.userRole;
                         fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
                             console.log(_data.data);
                             localStorage["harbourname"] = _data.data.name;

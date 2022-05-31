@@ -163,6 +163,10 @@ async function verifyIfExistInUsers(_email, _phone) {
 	});
 }
 
+/**
+ * @param {*} _request 
+ * @returns {Promise<Array<TYPES.T_user>>}
+ */
 async function findByColl(_request) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_userCol, _request, null, function (_err, _data) {
@@ -339,15 +343,19 @@ async function getUserInfos(_req, _res) {
 }
 
 async function loginHandler(req, res) {
-	var user = await findByColl({ "email": req.post.email });
-
-	if (user[0]) {
-		user = user[0];
+	const users = await findByColl({ "email": req.post.email });
+	if (users[0]) {
+		const user = users[0];
 		var password = UTILS.Crypto.createSHA512(user.id + req.post.password);
 		if (user.password == password) {
 			user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
 			await updateUser(user);
-			UTILS.httpUtil.dataSuccess(req, res, "success, user logged", { id: user.id, harbourid: user.harbourid, token: user.token }, "1.0");
+			UTILS.httpUtil.dataSuccess(req, res, "success, user logged", {
+				id: user.id,
+				harbourid: user.harbourid,
+				token: user.token,
+				userRole: user.rolePwa,
+			}, "1.0");
 			return;
 		} else {
 			UTILS.httpUtil.dataError(req, res, "Erreur", "Identifiants incorrects", null, "1.0");
