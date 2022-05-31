@@ -175,7 +175,9 @@
     <script>
 
 				window.onload = () => {
-					if (!navigator.userAgent.toLocaleLowerCase().includes('iphone')) {
+				    const isIphone = navigator.userAgent.toLocaleLowerCase().includes('iphone');
+				    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+					if (!isIphone && !isStandalone) {
 						const addToDeviceEl = document.querySelector('#addtodevice');
 						addToDeviceEl.className = addToDeviceEl.className.replace('d-none', 'd-flex');
 					}
