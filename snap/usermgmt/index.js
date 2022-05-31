@@ -295,7 +295,8 @@ async function addUserHandler(req, res) {
 		req.post.prefix = completePhonePrefix(req.post.prefix);
 	}
 	if (verifyPostReq(req, res, false)) {
-		var user = req.post;
+		/**@type {TYPES.T_user} */
+		const user = req.post;
 
 		user.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
 		var promiseEmail = await findByColl({ email: user.email });
@@ -309,6 +310,7 @@ async function addUserHandler(req, res) {
 			user.password = UTILS.Crypto.createSHA512(user.id + user.password);
 			user.date = Date.now();
 			user.token = UTILS.Crypto.createSHA512(user.id + user.date + user.first_name);
+			user.rolePwa = ENUM.rolesMobileApp.VISITEUR;
 			if (await createUser(user)) {
 				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: user.id, harbourid: user.harbourid, token: user.token }, "1.0");
 				return;
@@ -764,8 +766,8 @@ exports.plugin =
 			var _userGen = "";
 			for (var i = 0; i < _users.length; i++) {
 				let optionsStr = roleOptions.join('');
-				if (_users[i].roleMobileApp) {
-					optionsStr = optionsStr.replace(`>${_users[i].roleMobileApp}`, `selected>${_users[i].roleMobileApp}`);
+				if (_users[i].rolePwa) {
+					optionsStr = optionsStr.replace(`>${_users[i].rolePwa}`, `selected>${_users[i].rolePwa}`);
 				} else {
 					optionsStr = optionsStr.replace(`>${ENUM.rolesMobileApp.VISITEUR}`, `selected>${ENUM.rolesMobileApp.VISITEUR}`);
 				}
