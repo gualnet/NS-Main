@@ -247,7 +247,7 @@
 				const boatInfo = await getBoatInfo(userInfo);
 				if (boatInfo) {
 					const places = await getPlacesFromHarbour(localStorage["harbourid"]);
-					G_Places = places;
+					G_Places = places; // to access the places out of the scope
 					const pontons = await getPontonsFromHarbour(localStorage["harbourid"]);
 	
 					let boatPlace;
@@ -265,9 +265,9 @@
 						}
 					}
 					// keep places for the selected ponton
-					const placesByPonton = places.filter(place => place.pontonId === boatPonton.id);
-					populatePontonDropdown(pontons, boatPonton.id);
-					populatePlacesDropdown(placesByPonton, boatPlace.id);
+					const placesByPonton = places.filter(place => place?.pontonId === boatPonton?.id);
+					populatePontonDropdown(pontons, boatPonton?.id);
+					populatePlacesDropdown(placesByPonton, boatPlace?.id);
 					populateFormInitialInfos(userInfo, boatInfo);
 
 					// add event listener
