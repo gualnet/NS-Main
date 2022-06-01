@@ -165,14 +165,9 @@
 			`;
 
 			fetch('/api/partner/' + localStorage['harbourid'] + '/experience/' + urlParams.get('select')).then(response => response.json()).then(_data => {
-				console.log('_data', _data);
-				var partners = _data.data;
-
+				const partners = _data.data;
 				// sort partners by name alphabetical order
-				_data.data.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
-
-				var sBrowser, sUsrAg = navigator.userAgent;
-				var gpsLink;
+				partners.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
 				for (var i = 0; i < partners.length; i++) {
 
