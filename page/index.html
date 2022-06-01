@@ -1034,6 +1034,49 @@
 	</div>
 
 	<script>
+		window.addEventListener('load', () => {
+			console.log('Window on load event listener');
+			const userRole = localStorage['role'];
+			console.log('userRole',userRole);
+			const token = getUserToken();
+			const userData = fetchUserInfo(token);
+			console.log('userData',userData);
+
+			
+		});
+
+		// If no token is registered, redirect user to the landing
+		const getUserToken = () => {
+			const token = localStorage['token'];
+			if (!token) {
+				const entityId = localStorage['entity_id']
+				window.location.href = `/app/${entityId}/?entity=${entityId}`;
+				return;
+			}
+			return(token);
+		}
+
+		const fetchUserInfo = async (token) => {
+			const url = `/api/getuser`;
+			const bodyData = JSON.stringify({ token });
+
+			try {
+				const response = await fetch(url, {
+					method: 'POST',
+					body: bodyData,
+				});	
+				const resp = await response.json();
+				const userData = resp.data;
+				return(userData);
+			} catch (error) {
+				console.error('error');
+			}
+		}
+
+		const displayForVisitors = () => {
+			// ! show / hide the different parts according to user role
+		};
+
 		const weatherOnClickHandler = () => {
 			const weatherDisableList = [
 				'4eqv44307K', // les sablons
