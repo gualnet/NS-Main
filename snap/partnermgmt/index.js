@@ -686,7 +686,6 @@ exports.plugin =
 					+ '<option value="detente">Détente</option>'
 					+ '<option value="decouverteautre">Autre</option>',
 			};
-
 			var _partnerGen = "";
 			for (var i = 0; i < _partners.length; i++) {
 				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_partners[i].harbour_id);
@@ -711,12 +710,12 @@ exports.plugin =
 					.replace(/__NAME__/g, _partners[i].name)
 					.replace(/__EDITOR_ID__/g, "editor_" + _partners[i].id.replace(/\./g, "_"))
 					.replace(/__DESCRIPTION__/g, _partners[i].description)
-					.replace(/__EMAIL__/g, _partners[i].email)
+					.replace(/__EMAIL__/g, _partners[i].email || '')
 					.replace(/__PREFIX__/g, _partners[i].prefix)
-					.replace(/__PHONE__/g, _partners[i].phone)
-					.replace(/__IMG__/g, _partners[i].img)
-					.replace(/__WEBSITE__/g, _partners[i].website)
-					.replace(/__ADDRESS__/g, _partners[i].address)
+					.replace(/__PHONE__/g, _partners[i].phone || '')
+					.replace(/__IMG__/g, _partners[i].img || '')
+					.replace(/__WEBSITE__/g, _partners[i].website || '')
+					.replace(/__ADDRESS__/g, _partners[i].address || '')
 					.replace(/__DATE_CREATION__/g, formatedDate)
 					.replace(/__SPOTYRIDE_LINK__/g, _partners[i].spotyrideLink || '');
 			}
