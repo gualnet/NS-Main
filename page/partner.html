@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en" class="h-100">
 
-
 {{element->header_app.html}}
 
 <style>
@@ -11,37 +10,126 @@
 		height: calc(100% - 56px);
 	}
 	#partnerDetailsContainer {
+		transform: translate(0px, -30px);
+    background-color: white;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 85%;
+		box-shadow: 1px 3px 8px 0px rgba(0, 0, 0, .16);
+	}
+	#partnerDetailsContainer .top-container {
 		display: flex;
 		flex-direction: row;
-		width: 100%;
-		justify-content: center;
+		height: 70px;
+		justify-content: space-between;
+		width: calc(100% - 20px);
+		margin: 0 10px;
 	}
-	#partnerDetailsContainer .title {
+	#partnerDetailsContainer .top-container .title {
+		-webkit-box-orient: vertical; 
+		-webkit-line-clamp: 1;
 		display: flex;
+		line-clamp: 1;
+		font-family: 'Avenir-Heavy' !important;
+		line-height: 16px;
+		max-height: 100%;
+		letter-spacing: .28px;
+		overflow: hidden;
+		padding: 10px;
+		max-width: calc(100% - 20px);
+		justify-content: center;
 		align-items: center;
-		line-height: 20px;
-		width: calc(100% - 70px);
 	}
-	#partnerDetailsContainer .spotyride-icon {
+	#partnerDetailsContainer .top-container .spotyride-icon {
 		display: flex;
 		height: 70px;
-		width: 70px;
+		width: 100px;
 	}
-	#partnerDetailsContainer.no-icon .title {
+	#partnerDetailsContainer .top-container .spotyride-icon img{
+		border-radius: 5px;
+		height: inherit;
+		object-fit: fill;
+		width: inherit;
+	
+	}
+	#partnerDetailsContainer .top-container.no-icon .title {
 		display: flex;
-		align-items: center;
+		width: 100%;
 		justify-content: center;
-		line-height: 40px;
-		width: calc(100%);
+		align-content: center;
 	}
-	#partnerDetailsContainer.no-icon .spotyride-icon {
+	#partnerDetailsContainer .top-container.no-icon .spotyride-icon {
 		display: none;
 	}
-	#partnerDetailsContainer .spotyride-icon.hidden {
+	#partnerDetailsContainer .middle-container {
+		display: flex;
+		width: 100%;
+		padding: 10px 0px;
+	}
+	#partnerDetailsContainer .middle-container .icons-container {
+		width: 100%;
+		height: fit-content;
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-template-rows: auto auto;
+		row-gap: 10px;
+	}
+	#partnerDetailsContainer .middle-container .icon-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 8px;
+		background-color: #0C5BCC;
+		width: 130px;
+		height: 50px;
+		margin-left: calc((100% - 130px)/2);
+	}
+	#partnerDetailsContainer .middle-container .icon-container.btn-off {
+		background-color: #586679;
+		fill: rgb(177, 177, 177);
+	}
+	#partnerDetailsContainer .middle-container .icon-container a {
+		display: inherit;
+    height: inherit;
+    width: inherit;
+    justify-content: inherit;
+    align-items: inherit;
+	}
+	#partnerDetailsContainer .middle-container .icon-container img {
+		width: 27px;
+	}
+	#partnerDetailsContainer .middle-container .icon-container svg {
+		width: 27px;
+		fill: white;
+	}
+	#partnerDetailsContainer .description-container {
+		display: flex;
+		flex-direction: column;
+		padding: 10px;
+	}
+	#partnerDetailsContainer .description-container.hide {
 		display: none;
+	}
+	#partnerDetailsContainer .description-container .separator {
+		align-self: center;
+		width: 80%;
+		border: 0px;
+		border-top: 2px solid rgba(0, 0, 0, 0.5);
+		margin: 0 0 20px 0;
+	}
+	#partnerDetailsContainer .description-container .text {
+		max-height: 20vh;
+		overflow-y: scroll;
+		text-align: justify;
+		padding: 0 10px;
+		margin: 0 0 10px 0;
 	}
 
-	.bottom-container.hidden {
+
+
+	.bottom-container.hide {
 		display: none;
 	}
 	.bottom-container {
@@ -59,11 +147,12 @@
 		justify-content: space-between;
 		align-items: center;
 		font-size: 20px;
-		color: rgb(40, 100, 219);
+		color: #0C5BCC;
 	}
 	.container.py-3 {
 		position: absolute;
 	}
+
 </style>
 
 <body class="body-scroll d-flex flex-column h-100 menu-overlay">
@@ -78,161 +167,175 @@
             <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
         </nav>
         <div class="product-image-top" style="background-color:white;">
-            <img id="img" class="background" style="height:auto;width:100%;" src="" alt="">
+            <img id="partnerImg" class="background" style="height:auto;width:100%;" src="" alt="">
         </div>
         <!-- page content start -->
-        <div class="container top-30" id="container">
-            <div class="card">
-                <div class="card-body">
-									<div class="top-container no-icon" id="partnerDetailsContainer">
-										<div class="title" id="name"></div>
-										<div class="spotyride-icon">
-											<img src="https://res.cloudinary.com/nauticspot/image/upload/v1653924269/Nauticspot-Next/assets/partners_spotyride_full_ico_ny2ndv.png" alt="spotyride logo" />
-										</div>
-									</div>
-                    <div class="row">
-                        <div class="col" id="phone">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col" id="email">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col" id="website">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col" id="gps_address">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body border-top border-color small text-secondary" id="description" style="text-align: justify;">
-            </div>
-        </div>
-				<div class="bottom-container hidden">
+				<div class="container top-30" id="partnerDetailsContainer">
+
+					<div class="top-container no-icon">
+						<div class="title" id="name"></div>
+						<div class="spotyride-icon">
+							<img id="top-icon" src="https://res.cloudinary.com/nauticspot/image/upload/v1653924269/Nauticspot-Next/assets/partners_spotyride_full_ico_ny2ndv.png" alt="spotyride logo" />
+						</div>
+					</div>
+
+					<!-- Icon box -->
+					<div class="middle-container">
+						<div class="icons-container" id="iconsBox">
+							<div class="icon-container" id="phoneIcon">
+								<a href="">
+									<img src="http://localhost:9090/library/call.png" alt="phone icon" />
+								</a>
+							</div>
+							<div class="icon-container" id="mailIcon">
+								<a href="">
+									<img src="http://localhost:9090/library/mail.png" alt="mail icon" />
+								</a>
+							</div>
+							<div class="icon-container" id="websiteIcon">
+								<a href="" target="_blank">
+									<svg version="1.1" id="websiteSvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+										<g><g><g>
+											<path d="M472.178,34.62H39.822C17.864,34.62,0,52.485,0,74.442c0,17.955,0,345.233,0,363.115 c0,21.958,17.864,39.822,39.822,39.822h432.356c21.958,0,39.822-17.864,39.822-39.822c0-17.89,0-345.165,0-363.115 C512,52.485,494.136,34.62,472.178,34.62z M477.867,437.557c0,3.137-2.552,5.689-5.689,5.689H39.822 c-3.137,0-5.689-2.552-5.689-5.689V153.839h443.733V437.557z M477.867,119.706H34.133V74.442c0-3.137,2.552-5.689,5.689-5.689 h432.356c3.137,0,5.689,2.552,5.689,5.689V119.706z"/>
+											<circle cx="71.805" cy="94.231" r="12.836"/>
+											<circle cx="112.959" cy="94.231" r="12.836"/>
+											<circle cx="154.112" cy="94.231" r="12.836"/>
+											<path d="M385.157,328.686l24.583,24.582c6.664,6.665,17.471,6.666,24.136,0c6.665-6.665,6.665-17.471,0-24.136l-24.583-24.582 c7.501-17.177,4.248-37.959-9.786-51.992c-18.29-18.291-48.052-18.291-66.343,0c-18.291,18.291-18.291,48.052,0,66.343 C347.152,332.888,367.889,336.228,385.157,328.686z M357.301,276.694c4.982-4.982,13.089-4.982,18.071,0 c4.981,4.981,4.982,13.086,0.002,18.068c-0.001,0.001-0.002,0.001-0.003,0.002c-0.001,0.001-0.001,0.002-0.002,0.002 c-4.982,4.979-13.087,4.979-18.068-0.002C352.319,289.783,352.319,281.676,357.301,276.694z"/>
+											<path d="M90.192,358.267h209.969c9.425,0,17.067-7.641,17.067-17.067s-7.641-17.067-17.067-17.067H90.192 c-9.425,0-17.067,7.641-17.067,17.067S80.766,358.267,90.192,358.267z"/>
+										</g></g></g>
+									</svg>
+								</a>
+							</div>
+							<div class="icon-container" id="addressIcon">
+								<a href="" target="_blank">
+									<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 315 315" style="enable-background:new 0 0 315 315;" xml:space="preserve">
+										<g><g><g>
+											<path d="M157.5,0C93.319,0,41.103,52.215,41.103,116.397c0,62.138,106.113,190.466,110.63,195.898 c1.425,1.713,3.538,2.705,5.767,2.705c2.228,0,4.342-0.991,5.767-2.705c4.518-5.433,110.63-133.76,110.63-195.898 C273.897,52.215,221.682,0,157.5,0z M157.5,295.598c-9.409-11.749-28.958-36.781-48.303-65.397 c-34.734-51.379-53.094-90.732-53.094-113.804C56.103,60.486,101.59,15,157.5,15c55.91,0,101.397,45.486,101.397,101.397 c0,23.071-18.359,62.424-53.094,113.804C186.457,258.817,166.909,283.849,157.5,295.598z"/>
+											<path d="M195.657,213.956c-3.432-2.319-8.095-1.415-10.413,2.017c-10.121,14.982-21.459,30.684-33.699,46.67 c-2.518,3.289-1.894,7.996,1.395,10.514c1.36,1.042,2.963,1.546,4.554,1.546c2.254,0,4.484-1.013,5.96-2.941 c12.42-16.22,23.933-32.165,34.219-47.392C199.992,220.938,199.09,216.275,195.657,213.956z"/>
+											<path d="M157.5,57.5C123.589,57.5,96,85.089,96,119s27.589,61.5,61.5,61.5S219,152.911,219,119S191.411,57.5,157.5,57.5z  M157.5,165.5c-25.64,0-46.5-20.86-46.5-46.5s20.86-46.5,46.5-46.5c25.641,0,46.5,20.86,46.5,46.5S183.141,165.5,157.5,165.5z"/>
+										</g></g></g>
+									</svg>
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="description-container" id="partnerDescription">
+						<div class="separator"></div>
+						<div class="text">b</div>
+					</div>
+
+				</div>
+
+				<div class="bottom-container hide">
 					<div class="resa-label">Partenariat avec <img src="https://res.cloudinary.com/nauticspot/image/upload/v1653924269/Nauticspot-Next/assets/partners_spotyride_full_ico_ny2ndv.png" alt="spotyride logo" /></div>
 					<button class="btn btn-lg btn-primary" id="spotiryde-resa">Réserver une activité</button>
 				</div>
 
-        <script>
-            const urlParams = new URLSearchParams(window.location.search);
-            fetch("/api/getpartner/" + urlParams.get("id")).then(response => response.json()).then(_data => {
-                var harbour = _data.data;
-                if (harbour.address) {
-                    var sBrowser, sUsrAg = navigator.userAgent;
-                    if (sUsrAg.indexOf("Safari") > -1) {
-                        sBrowser = "Apple Safari";
-                        document.getElementById("gps_address").insertAdjacentHTML('beforeend', '<a href="http://maps.apple.com/?q=' + harbour.address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + harbour.address + '</a>')
-                    } else {
-                        document.getElementById("gps_address").insertAdjacentHTML('beforeend', '<a href="geo:0,0?q=' + harbour.address + '" class="small text-secondary"><i class="bi bi-geo-alt"></i>' + harbour.address + '</a>')
-                    }
-                }
+				<script>
+					window.addEventListener('load', async () => {
+						try {
+							setReturnButtonLink();
 
-                if (harbour.category == "harbourlife")
-                    harbour.category = "harborlife";
-                else if (harbour.category == "experience")
-                    harbour.category = "experiences";
+							const partner = await fetchPartnerIndo();
+							populatePageContent(partner);
 
-                document.getElementById("return_link").href = "/" + harbour.category + "?select=" + harbour.subcategory;
-                document.getElementById("name").insertAdjacentHTML('beforeend', harbour.name);
-                if (harbour.phone)
-                    document.getElementById("phone").insertAdjacentHTML('beforeend', '<a class="small text-secondary" href="tel:' + harbour.prefixed_phone + '">' + harbour.phone + '</a>');
-                if (harbour.email)
-                    document.getElementById("email").insertAdjacentHTML('beforeend', '<a class="small text-secondary" href="mailto:' + harbour.email + '">' + harbour.email + '</a>');
-                if (harbour.website)
-                    document.getElementById("website").insertAdjacentHTML('beforeend', '<a class="small text-secondary" href="' + harbour.website + '">' + harbour.website + '</a>');
+						} catch (error) {
+							console.error(error);
+						}
+					});
 
-                if (harbour.img) {
-                    document.getElementById('img').src = harbour.img;
-                } else {
-                    switch (harbour.subcategory) {
-                        case "nautic":
-                            document.getElementById('img').src = "/library/Activitenautiques.jpg";
-                            break;
-                        case "terrestres":
-                            document.getElementById('img').src = "/library/Activiteterrestres.jpg";
-                            break;
-                        case "association":
-                            document.getElementById('img').src = "/library/gererassociation.png";
-                            break;
-                        case "equipbourse":
-                            document.getElementById('img').src = "/library/Bourse-aux-equipiers.jpg";
-                            break;
-                        case "experienceautre":
-                            document.getElementById('img').src = "/library/autres-500.png";
-                            break;
-                        case "sos":
-                            document.getElementById('img').src = "/library/bouton-sos-64.png";
-                            break;
-                        case "maintenance":
-                            document.getElementById('img').src = "/library/bouton-maintenance-64.png";
-                            break;
-                        case "accastillage":
-                            document.getElementById('img').src = "/library/bouton-tool-64.png";
-                            break;
-                        case "sante":
-                            document.getElementById('img').src = "/library/bouton-sante-64.png";
-                            break;
-                        case "annonce":
-                            document.getElementById('img').src = "/library/bouton-annonce-64.png";
-                            break;
-                        case "laverie":
-                            document.getElementById('img').src = "/library/laverie-64.png";
-                            break;
-                        case "transport":
-                            document.getElementById('img').src = "/library/transports-64.png";
-                            break;
-                        case "alimentation":
-                            document.getElementById('img').src = "/library/bouton-alimentation-64.png";
-                            break;
-                        case "boutique":
-                            document.getElementById('img').src = "/library/bouton-boutiques-64.png";
-                            break;
-                        case "vieportautre":
-                            document.getElementById('img').src = "/library/autres-64.png";
-                            break;
-                        case "restaurant":
-                            document.getElementById('img').src = "/library/Restaurant.jpg";
-                            break;
-                        case "bar":
-                            document.getElementById('img').src = "/library/Bars.jpg";
-                            break;
-                        case "culture":
-                            document.getElementById('img').src = "/library/Culture.jpg";
-                            break;
-                        case "divertissement":
-                            document.getElementById('img').src = "/library/bien-etre.jpg";
-                            break;
-                        case "detente":
-                            document.getElementById('img').src = "/library/divertissement.png";
-                            break;
-                        case "decouverteautre":
-                            document.getElementById('img').src = "/library/autres-500.png";
-                            break;
-                        default:
-                            document.getElementById('img').src = "/library/autres-500.png";
-                            break;
-                    }
-                }
+					const populatePageContent = (partner) => {
+						console.log('partner',partner)
+						if (partner.img) {
+							const partnerImgEl = document.querySelector('#partnerImg');
+							if (partnerImgEl) partnerImgEl.src = partner.img;
+						}
 
-                if (harbour.description)
-								document.getElementById("description").insertAdjacentHTML('beforeend', harbour.description);
-                if (harbour.spotyrideLink) {
-									document.querySelector('.bottom-container')?.classList.remove('hidden');
-									const spotirydeBtn = document.querySelector('#spotiryde-resa');
-									spotirydeBtn.addEventListener('click', () => { open(harbour.spotyrideLink) });
-									document.querySelector('#partnerDetailsContainer')?.classList.remove('no-icon');
-								}
+						if (partner.name) {
+							const nameEl = document.querySelector('#name');
+							if (nameEl) nameEl.textContent = partner.name;
+						}
 
-                document.getElementById("container").innerHTML = document.getElementById("container").innerHTML.replace(/undefined/g, " ");
+						if (partner.spotyrideLink) {
+							document.querySelector('.bottom-container')?.classList.remove('hide');
+							const spotirydeBtn = document.querySelector('#spotiryde-resa');
+							spotirydeBtn.addEventListener('click', () => { open(partner.spotyrideLink) });
+							document.querySelector('.top-container')?.classList.remove('no-icon');
+						}
 
-            }).catch((error) => {
-                console.log(error);
-            });
-        </script>
+						const phoneIconEl = document.querySelector('#phoneIcon');
+						if (partner.prefixed_phone) {
+							const linkEl = phoneIconEl?.querySelector('a');
+							if (linkEl) linkEl.href = `tel:${partner.prefixed_phone}`;
+							else phoneIconEl.classList.add('btn-off');
+						} else {
+							phoneIconEl.classList.add('btn-off');
+							phoneIconEl.addEventListener('click', (ev) => ev.preventDefault());
+						}
 
+						const mailIconEl = document.querySelector('#mailIcon');
+						if (partner.email) {
+							const linkEl = mailIconEl?.querySelector('a');
+							if (linkEl) linkEl.href = `mailto:${partner.email}`;
+							else mailIconEl.classList.add('btn-off');
+						} else {
+							mailIconEl.classList.add('btn-off');
+							mailIconEl.addEventListener('click', (ev) => ev.preventDefault());
+						}
+						
+						const websiteIconEl = document.querySelector('#websiteIcon');
+						if (partner.website) {
+							const linkEl = websiteIconEl?.querySelector('a');
+							if (linkEl) linkEl.href = partner.website;
+							else websiteIconEl.classList.add('btn-off');
+						} else {
+							websiteIconEl.classList.add('btn-off');
+							websiteIconEl.addEventListener('click', (ev) => ev.preventDefault());
+						}
+
+						const addressIconEl = document.querySelector('#addressIcon');
+						if (partner.address) {
+							const linkEl = addressIconEl?.querySelector('a');
+							if (linkEl) linkEl.href = `maps:${partner.address}`;
+							else addressIconEl.classList.add('btn-off');
+						} else {
+							addressIconEl.classList.add('btn-off');
+							addressIconEl.addEventListener('click', (ev) => ev.preventDefault());
+						}
+
+						const partnerDescriptionEl = document.querySelector('.description-container')
+						if (partner.description) {
+							const textEl = partnerDescriptionEl?.querySelector('.text');
+							if (textEl) textEl.innerHTML = partner.description;
+							else partnerDescriptionEl.classList.add('hide')
+						} else {
+							partnerDescriptionEl.classList.add('hide');
+						}
+					}
+
+					const fetchPartnerIndo = async () => {
+						const urlParams = new URLSearchParams(window.location.search);
+						const partnerId = urlParams.get("id");
+						if (!partnerId) {
+							throw(new Error('Undefined'));
+						}
+						const url = `/api/getpartner/${partnerId}`;
+						const response = await fetch(url);
+						const responseJson = await response.json();
+						if (!responseJson.success) {
+							throw(new Error(responseJson.message));
+						}
+						const partner = responseJson.data;
+						if (!partner) {
+							throw(new Error('No Partner Info found'));
+						}
+						return(partner);
+					}
+
+					const setReturnButtonLink = () => {
+						document.querySelector('#return_link').href = document.referrer;
+					}
+				</script>
         <div class="container py-3">
             {{element->navbar.html}}
         </div>
