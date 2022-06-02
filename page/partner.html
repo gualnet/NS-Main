@@ -184,12 +184,12 @@
 						<div class="icons-container" id="iconsBox">
 							<div class="icon-container" id="phoneIcon">
 								<a href="">
-									<img src="http://localhost:9090/library/call.png" alt="phone icon" />
+									<img src="/library/call.png" alt="phone icon" />
 								</a>
 							</div>
 							<div class="icon-container" id="mailIcon">
 								<a href="">
-									<img src="http://localhost:9090/library/mail.png" alt="mail icon" />
+									<img src="/library/mail.png" alt="mail icon" />
 								</a>
 							</div>
 							<div class="icon-container" id="websiteIcon">
@@ -296,7 +296,12 @@
 						const addressIconEl = document.querySelector('#addressIcon');
 						if (partner.address) {
 							const linkEl = addressIconEl?.querySelector('a');
-							if (linkEl) linkEl.href = `maps:${partner.address}`;
+				            const userAgent = window.navigator.userAgent;
+				            let mapLink = `https://www.google.com/maps/?q=${partner.address}`; // default map link
+				            if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
+				                mapLink = `https://maps.apple.com/?q=${partner.address}` // map link iphone
+				            }
+				            if (linkEl) linkEl.href = mapLink;
 							else addressIconEl.classList.add('btn-off');
 						} else {
 							addressIconEl.classList.add('btn-off');
