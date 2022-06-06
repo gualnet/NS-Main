@@ -70,7 +70,7 @@ async function gitHandler(req, res)
 
 					try
 					{
-						var _obj = { fs: fs, http: gitHttp, dir: _target, url: req.post.url };
+						var _obj = { fs: fs, http: gitHttp, dir: _target, url: req.post.url, ref: req?.post?.branch };
 						
 						await git.clone(_obj);
 						UTILS.Redirect(res, "?success=" + encodeURI("Cloning done"));
@@ -140,5 +140,6 @@ exports.setup =
 {
     title: "Git Sync",
 	description: "Sync your projects and snaps with git",
-	version: "0.0.1",
+	version: "0.0.2",
+	// v0.0.2 - Prise en charge de clonage de branch
 }
