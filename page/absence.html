@@ -107,9 +107,15 @@
 </body>
 
 <style>
+	@font-face {
+		font-family: 'Poppins Regular';
+		font-style: normal;
+		font-weight: normal;
+		src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+	}
   body {
     display: flex;
-    font-family: 'Poppins';
+    font-family: 'Poppins Regular';
   }
 
   ::-webkit-scrollbar {
@@ -140,11 +146,11 @@
   .top-separator {
     height: 0px;
     border-top: 1px solid black;
-    width: 25%;
+    flex-grow: 1;
   }
 
   .page-title {
-    font-family: 'Poppins-SemiBold';
+    font-family: 'Poppins Regular';
     font-size: 20px;
     align-self: center;
     margin: 0 15px;
@@ -279,7 +285,7 @@
   .modal-card-header {
     align-items: center;
     display: flex;
-    font-family: 'Avenir-Medium', 'Poppins-SemiBold';
+    font-family: 'Avenir-Medium', 'Poppins Regular';
     font-size: 21px;
     justify-content: center;
     margin-bottom: 20px;
@@ -289,7 +295,7 @@
   .modal-card-content {
     color: rgb(98, 88, 88);
     display: flex;
-    font-family: 'Avenir-Medium', 'Poppins-SemiBold';
+    font-family: 'Avenir-Medium', 'Poppins Regular';
     font-size: 15px;
     justify-content: space-between;
     margin-bottom: 30px;
