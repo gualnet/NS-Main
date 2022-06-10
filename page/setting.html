@@ -345,19 +345,19 @@
 			};
 
 			const populateFormInitialInfos = (user, boat) => {
-				document.getElementById("first_name").value = user.first_name;
-				document.getElementById("last_name").value = user.last_name;
-				document.getElementById("email").value = user.email;
-				document.getElementById("prefix").value = user.prefix;
-				document.getElementById("phone").value = user.phone;
+				document.getElementById("first_name").value = user.first_name || '';
+				document.getElementById("last_name").value = user.last_name || '';
+				document.getElementById("email").value = user.email || '';
+				document.getElementById("prefix").value = user.prefix || '';
+				document.getElementById("phone").value = user.phone || '';
 
 				if (boat) {
 					document.getElementById("boat_id").value = boat.id;
-					document.getElementById("name").value = boat.name;
-					document.getElementById("immatriculation").value = boat.immatriculation;
-					document.getElementById("longueur").value = boat.longueur;
-					document.getElementById("largeur").value = boat.largeur;
-					document.getElementById("tirant_eau").value = boat.tirant_eau;
+					document.getElementById("name").value = boat.name || '';
+					document.getElementById("immatriculation").value = boat.immatriculation || '';
+					document.getElementById("longueur").value = boat.longueur || '';
+					document.getElementById("largeur").value = boat.largeur || '';
+					document.getElementById("tirant_eau").value = boat.tirant_eau || '';
 				} else {
 					document.querySelector('#boat_form')
 						.querySelector('.card-body')	
