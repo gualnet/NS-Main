@@ -324,6 +324,7 @@
 				}
 				const decoded = await response.json();
 				const places = decoded?.data;
+				places.sort((a, b) => (a.number < b.number) ? -1 : 1);
 				return(places);
 			};
 
