@@ -315,6 +315,74 @@ async function getUserBoatsHandler(_req, _res) {
 	}
 }
 
+
+/*********************
+ * NEW DASHBOARD API *
+ *********************/
+
+/**
+ * 
+ * @param {*} whereOpt 
+ * @returns {Promise<Array<TYPES.T_boat>>}
+ */
+ const getBoatWhere = async (whereOpt) => {
+	return new Promise((resolve, reject) => {
+		STORE.db.linkdb.Find(_boatCol, whereOpt, null, function (_err, _data) {
+			if (_data)
+				resolve(_data);
+			else
+				reject(_err);
+		});
+	});
+}
+ const DASHgetAllBoatsHandler = async (req, res) => {
+	console.log('DASHgetAllBoatsHandler')
+	// TODO CHECK WHO ASKS
+
+	// as admin of one habour get boat for my habour
+	const myHarbourId = '4e2cd2p6mt'
+	try {
+		const boatList = await getBoatWhere({ harbour: myHarbourId });
+		res.end(JSON.stringify({
+			success: true,
+			payload: boatList,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+const DASHgetBoatByIdHandler = async (req, res) => {
+	console.log('DASHgetUserByIdHandler')
+	// TODO CHECK WHO ASKS
+
+	console.log('PARAM', req.param)
+	// as admin of one habour get boat for my habour
+	const myHarbourId = '4e2cd2p6mt'
+	const requestParam = {
+		harbour: myHarbourId,
+		id: req.param.id,
+	};
+	try {
+		const boatList = await getboatWhere(requestParam);
+		res.end(JSON.stringify({
+			success: true,
+			payload: boatList,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
 exports.router = [
 	{
 		on: true,
@@ -345,6 +413,20 @@ exports.router = [
 		route: "/api/get/userboats",
 		handler: getUserBoatsHandler,
 		method: "get",
+	},
+
+	// api dashboard
+	{
+		on: true,
+		route: "/api/boats",
+		handler: DASHgetAllBoatsHandler,
+		method: "get",
+	},
+	{
+		on: true,
+		route: "/api/boats/:id",
+		handler: DASHgetBoatByIdHandler,
+		method: "GET",
 	},
 
 ]
