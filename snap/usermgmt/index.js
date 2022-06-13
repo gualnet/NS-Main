@@ -609,6 +609,58 @@ const setNewPasswordHandler = async (req, res) => {
 	}
 };
 
+/*********************
+ * NEW DASHBOARD API *
+ *********************/
+const DASHgetAllUsersHandler = async (req, res) => {
+	console.log('DASHgetAllUsersHandler')
+	// TODO CHECK WHO ASKS
+
+	// as admin of one habour get user for my habour
+	const myHarbourId = '4e2cd2p6mt'
+	try {
+		const userList = await getUserWhere({ harbourid: myHarbourId });
+		res.end(JSON.stringify({
+			success: true,
+			payload: userList,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+const DASHgetUserByIdHandler = async (req, res) => {
+	console.log('DASHgetUserByIdHandler')
+	// TODO CHECK WHO ASKS
+
+	console.log('PARAM', req.param)
+	// as admin of one habour get user for my habour
+	const myHarbourId = '4e2cd2p6mt'
+	const requestParam = {
+		harbourid: myHarbourId,
+		id: req.param.id,
+	};
+	try {
+		const userList = await getUserWhere(requestParam);
+		res.end(JSON.stringify({
+			success: true,
+			payload: userList,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500);
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
+
 exports.router =
 	[
 		{
@@ -676,7 +728,21 @@ exports.router =
 			route: "/api/user/reset-pwd",
 			handler: setNewPasswordHandler,
 			method: "POST",
-		}
+		},
+
+		// api dashboard
+		{
+			on: true,
+			route: "/api/users",
+			handler: DASHgetAllUsersHandler,
+			method: "GET",
+		},
+		{
+			on: true,
+			route: "/api/users/:id",
+			handler: DASHgetUserByIdHandler,
+			method: "GET",
+		},
 	];
 
 
