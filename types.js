@@ -55,6 +55,9 @@ const ENUM = require('./snap/lib-js/enums');
  * @property {string} user
  * @property {string} harbour
  * @property {number} date
+ * @property {number} longueur
+ * @property {number} largeur
+ * @property {number} tirant_eau
  */
 
 /**

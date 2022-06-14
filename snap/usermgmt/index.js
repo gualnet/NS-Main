@@ -733,13 +733,13 @@ exports.router =
 		// api dashboard
 		{
 			on: true,
-			route: "/api/users",
+			route: "/api-dash/users",
 			handler: DASHgetAllUsersHandler,
 			method: "GET",
 		},
 		{
 			on: true,
-			route: "/api/users/:id",
+			route: "/api-dash/users/:id",
 			handler: DASHgetUserByIdHandler,
 			method: "GET",
 		},

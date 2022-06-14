@@ -418,13 +418,13 @@ exports.router = [
 	// api dashboard
 	{
 		on: true,
-		route: "/api/boats",
+		route: "/api-dash/boats",
 		handler: DASHgetAllBoatsHandler,
 		method: "get",
 	},
 	{
 		on: true,
-		route: "/api/boats/:id",
+		route: "/api-dash/boats/:id",
 		handler: DASHgetBoatByIdHandler,
 		method: "GET",
 	},
