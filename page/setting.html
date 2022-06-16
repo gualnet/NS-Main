@@ -251,24 +251,27 @@
 					const pontons = await getPontonsFromHarbour(localStorage["harbourid"]);
 	
 					let boatPlace;
-					for (const place of places) {
-						if (place.id === boatInfo?.place_id) {
-							boatPlace = place;
-							break;
+					if (places) {
+						for (const place of places) {
+							if (place.id === boatInfo?.place_id) {
+								boatPlace = place;
+								break;
+							}
 						}
-					}
-					let boatPonton;
-					for (const ponton of pontons) {
-						if (ponton.id === boatPlace?.pontonId) {
-							boatPonton = ponton;
-							break;
+						let boatPonton;
+						for (const ponton of pontons) {
+							if (ponton.id === boatPlace?.pontonId) {
+								boatPonton = ponton;
+								break;
+							}
 						}
+						// keep places for the selected ponton
+						const placesByPonton = places?.filter(place => place?.pontonId === boatPonton?.id);
+						populatePontonDropdown(pontons, boatPonton?.id);
+						populatePlacesDropdown(placesByPonton, boatPlace?.id);
 					}
-					// keep places for the selected ponton
-					const placesByPonton = places.filter(place => place?.pontonId === boatPonton?.id);
-					populatePontonDropdown(pontons, boatPonton?.id);
-					populatePlacesDropdown(placesByPonton, boatPlace?.id);
 					populateFormInitialInfos(userInfo, boatInfo);
+					}
 
 					// add event listener
 					document.querySelector('#ponton-select')
@@ -324,7 +327,7 @@
 				}
 				const decoded = await response.json();
 				const places = decoded?.data;
-				places.sort((a, b) => (a.number < b.number) ? -1 : 1);
+				places?.sort((a, b) => (a.number < b.number) ? -1 : 1);
 				return(places);
 			};
 

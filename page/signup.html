@@ -231,9 +231,9 @@
 			});
 
 		const constructCguLink = () => {
-			const harbourName = localStorage['harbourname'];
+			const harbourId = localStorage['harbourid'];
 			const cguLinkEl = document.querySelector('#cguLink');
-			cguLinkEl.href = `/library/cgu_${harbourName}.pdf`;
+			cguLinkEl.href = `/library/cgu_${harbourId}.pdf`;
 		}
 
 		function sendSignupForm() {
