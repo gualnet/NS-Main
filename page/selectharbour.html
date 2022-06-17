@@ -72,35 +72,36 @@
                     img = localStorage['entity_logo'];
                 }
                 document.getElementById("logo").src = localStorage['entity_logo'];
-                document.getElementById("harbourlist").insertAdjacentHTML("beforeend", '<div class="col-lg-4 col-md-6 col-6 pb-4" onclick="selectHarbour(\'' + harbours[i].id + '\',\'' + harbours[i].name + '\');">'
-                    + '<div class="contentport text-center" >'
-                    + '<div class="d-block mb-2 h-100">'
-                    + '<img class="shadow" style="width:125px;height:125px;border-radius:22px;" src="' + img + '" alt="">'
-                    + '</div>'
-                    + '<span>' + harbours[i].name + '</span>'
-                    + '</div>'
-                    + '</div>');
+                document.getElementById("harbourlist").insertAdjacentHTML("beforeend",
+									`<div class="col-lg-4 col-md-6 col-6 pb-4" onclick="selectHarbour('${harbours[i].id}')">
+										<div class="contentport text-center">
+											<div class="d-block mb-2 h-100">
+												<img class="shadow" style="width:125px;height:125px;border-radius:22px;" src="${img}" alt="">
+											</div>
+											<span>${harbours[i].name}</span>
+										</div>
+									</div>`
+								);
             }
         }).catch((error) => {
             console.log(error);
         });
 
-        function selectHarbour(harbourid, harbourname) {
-            localStorage['harbourid'] = harbourid;
-            for (var i = 0; i < harbours.length; i++) {
-                if (harbours[i].id == localStorage['harbourid']) {
-                    console.log(harbours[i].name);
-                    localStorage['harbourname'] = harbourname;
-                    i = harbours.length;
-                }
-            }
-            const url = new URLSearchParams(window.location.search);
-            if (url.get('account') == "false")
-                window.location.href = ("/index");
-            else {
-                window.location.href = ("/signup");
-            }
-        }
+			function selectHarbour(harbourid) {
+				localStorage['harbourid'] = harbourid;
+				for (var i = 0; i < harbours.length; i++) {
+					if (harbours[i].id == localStorage['harbourid']) {
+						localStorage['harbourname'] = harbours[i].name;
+						break;
+					}
+				}
+				const url = new URLSearchParams(window.location.search);
+				if (url.get('account') == "false") {
+					window.location.href = ("/index");
+				} else {
+					window.location.href = ("/signup");
+				}
+			}
     </script>
 
     <!-- Required jquery and libraries -->
