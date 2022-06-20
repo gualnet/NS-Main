@@ -358,7 +358,11 @@
 			fetch(url, { method: "GET" })
 				.then(response => response.json())
 				.then(_data => {
-					var pontons = _data.data.sort(dynamicSort("name"));
+					const pontons = _data?.data?.sort(dynamicSort("name"));
+					if (!pontons) {
+							document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
+							return;
+						}
 					document.getElementById('ponton-select').innerHTML = "";
 					for (var i = 0; i < pontons.length; i++) {
 						if (i == 0)
@@ -376,7 +380,11 @@
 				.then(response => response.json())
 				.then(_data => {
 					if (_data.data) {
-						var places = _data.data.sort(dynamicSort("number"));
+						var places = _data?.data?.sort(dynamicSort("number"));
+						if (!places) {
+							document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
+							return;
+						}
 						document.getElementById('place-select').innerHTML = "";
 						for (var i = 0; i < places.length; i++) {
 							document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" >' + places[i].number + '</option>';
