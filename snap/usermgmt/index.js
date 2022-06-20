@@ -298,7 +298,7 @@ async function addUserHandler(req, res) {
 		var user = req.post;
 
 		var userByEmail = await findByColl({ email: user.email });
-		let userByPhone;
+		let userByPhone = [];
 		if (user.phone) {
 			user.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
 			userByPhone = await findByColl({ phone: user.phone });
