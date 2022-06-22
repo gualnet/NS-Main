@@ -151,7 +151,7 @@
                 pagination: 'false'
             });
 
-            fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+            fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
                 var harbour = _data.data;
                 if (!harbour.email_concierge) {
                     document.getElementById("weather").innerHTML = '<p class="text-secondary text-justify">Aucun mail de conciergerie disponible pour ce port.</p>';

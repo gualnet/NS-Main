@@ -79,7 +79,7 @@ function verifyPostReq(_req, _res, isUpdate) {
         UTILS.httpUtil.dataError(_req, _res, "Error", "téléphone incorrect", "100", "1.0");
         return false;
     }
-    if (!_req.post.harbourid || _req.post.harbourid.length < 1) {
+    if (!_req.post.harbour_id || _req.post.harbour_id.length < 1) {
         UTILS.httpUtil.dataError(_req, _res, "Error", "aucun port séléctionné", "100", "1.0");
         return false;
     }

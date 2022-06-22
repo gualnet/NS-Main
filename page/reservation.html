@@ -190,7 +190,7 @@
         ifrmSrc; 
         
         
-        fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+        fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
             let harbour = _data.data;
             ifrmSrc = "https://www.navily.com/fr/resaweb?port_id=" + harbour.navily_id + "&customer_id=2063604034";
             setScriptVersion();
@@ -215,7 +215,7 @@
                 //document.getElementById("phone").value = user.phone;
                 //document.getElementById("prefix").value = user.prefix;
                 //api/get / userboats
-                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + user.harbourid, { method: "GET" }).then(response => response.json()).then(_data => {
+                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + user.harbour_id, { method: "GET" }).then(response => response.json()).then(_data => {
                     if (_data.success) {
                         const boat = _data.data[0];
                         //document.getElementById("boat_id").value = boat.id;

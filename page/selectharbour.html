@@ -87,10 +87,10 @@
             console.log(error);
         });
 
-			function selectHarbour(harbourid) {
-				localStorage['harbourid'] = harbourid;
+			function selectHarbour(harbour_id) {
+				localStorage['harbour_id'] = harbour_id;
 				for (var i = 0; i < harbours.length; i++) {
-					if (harbours[i].id == localStorage['harbourid']) {
+					if (harbours[i].id == localStorage['harbour_id']) {
 						localStorage['harbourname'] = harbours[i].name;
 						break;
 					}

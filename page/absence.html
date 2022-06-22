@@ -390,7 +390,7 @@
    */
   const getBoatInfo = async () => {
     const res = await fetch(
-      `/api/get/userboats?user_id=${localStorage['user']}&harbour_id=${localStorage["harbourid"]}`,
+      `/api/get/userboats?user_id=${localStorage['user']}&harbour_id=${localStorage["harbour_id"]}`,
       { method: 'GET' }
     );
     const decodedResponse = await res.json();
@@ -404,7 +404,7 @@
    */
   const getAbsences = async () => {
     const response = await fetch(
-      `/api/get/absence?user_id=${localStorage['user']}&harbour_id=${localStorage["harbourid"]}`,
+      `/api/get/absence?user_id=${localStorage['user']}&harbour_id=${localStorage["harbour_id"]}`,
       { method: 'GET' }
     );
     const decodedresponse = await response.json();
@@ -527,7 +527,7 @@
         date_end: endDate,
         user_id: localStorage['user'],
         token: localStorage['token'],
-        harbour_id: localStorage['harbourid'],
+        harbour_id: localStorage['harbour_id'],
         boat_id: boatData.id,
       };
 

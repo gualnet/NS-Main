@@ -626,7 +626,7 @@
             });
         });
 
-        fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+        fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
             fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
                 _data = JSON.parse(_data.data.data);
                 var weather = _data.data.weather;

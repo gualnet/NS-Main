@@ -34,9 +34,9 @@
 		window.addEventListener('load', async () => {
 			const userId = localStorage['user'];
 			const userCategory = (!userId) ? 'visitor' : 'yachtsman';
-			const harbourId = localStorage['harbourid'];
+			const harbour_id = localStorage['harbour_id'];
 
-			const communications = await fetchCommunicationsNotif(harbourId, userCategory);
+			const communications = await fetchCommunicationsNotif(harbour_id, userCategory);
 
 			displayCommunicationsCards(communications)
 		});
@@ -74,11 +74,11 @@
 
 		};
 
-		const fetchCommunicationsNotif = async (harbourId, userCategory) => {
+		const fetchCommunicationsNotif = async (harbour_id, userCategory) => {
 			console.log('fetchCommunicationsNotif')
 			try {
-				const urlCategory = `/api/next/communications?harbour_id=${harbourId}&user_category=${userCategory}`;
-				const urlAll = `/api/next/communications?harbour_id=${harbourId}&user_category=all`;
+				const urlCategory = `/api/next/communications?harbour_id=${harbour_id}&user_category=${userCategory}`;
+				const urlAll = `/api/next/communications?harbour_id=${harbour_id}&user_category=all`;
 
 				const promiseCategory = fetch(urlCategory);
 				const promiseAll = fetch(urlAll);

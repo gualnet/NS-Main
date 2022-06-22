@@ -1034,7 +1034,7 @@
 	</div>
 
 	<script>
-		if (localStorage['harbourid'] === '4e2cd2p6mt') { // rule for gruissan
+		if (localStorage['harbour_id'] === '4e2cd2p6mt') { // rule for gruissan
 			const bureauDuPortTitleEl = document.querySelector('#bureauDuPortTitle');
 			if (bureauDuPortTitleEl) {
 				bureauDuPortTitleEl.innerHTML = bureauDuPortTitleEl.innerHTML.replace('Bureau du port', 'Capitainerie');
@@ -1083,8 +1083,8 @@
 			}
 
 
-			fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-			console.log('_data', _data)
+			fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
+				console.log('_data', _data)
 
 				let harbour = _data.data;
 
@@ -1363,7 +1363,7 @@
 			document.getElementById("securites").hidden = true;
 			document.getElementById("challenges").hidden = true;
 		} else {
-			fetch("/api/get/userboats?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
+			fetch("/api/get/userboats?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
 				if (!_data.success) {
 					document.getElementById("absences").hidden = true;
 					document.getElementById("challenges").hidden = true;
@@ -1373,7 +1373,7 @@
 			});
 		}
 
-		fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+		fetch("/api/partner/active/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 			// console.log('_data',_data);
 			var activeCategory = _data.data.activeCategories;
 			var activeSubCategories = _data.data.activeSubCategories;
@@ -1565,11 +1565,12 @@
 			+ '</div>'
 			+ '</div>';
 
-		fetch("/api/news/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
-			console.log(_data);
+		fetch("/api/news/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 			if (_data.data[0]) {
 				var articles = _data.data.sort(dynamicSort("date")).reverse();
-				for (var i = 0; i < 3; i++) {
+				const MAX_ARTICLES_NUMBER = 3;
+				const articlesLimit = (articles.length < MAX_ARTICLES_NUMBER) ? articles.length : MAX_ARTICLES_NUMBER;
+				for (var i = 0; i < articlesLimit; i++) {
 					var date = new Date(articles[i].date);
 					var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
 					var rowCurrent = newsRow.replace("__ID__", articles[i].id).replace("__TITLE__", articles[i].title).replace("__DATE__", dateFormated).replace("__DESCRIPTION__", articles[i].description);
@@ -1615,12 +1616,13 @@
 			+ '</div>'
 
 
-		fetch("/api/events/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+		fetch("/api/events/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 			console.log('_data', _data);
 			if (_data.data[0]) {
 				var events = _data.data.sort(dynamicSort("date_start")).reverse();
-
-				for (var i = 0; i < 3; i++) {
+				const MAX_EVENTS_NUMBER = 3;
+				const eventsLimit = (events.length < MAX_EVENTS_NUMBER) ? events.length : MAX_EVENTS_NUMBER;
+				for (var i = 0; i < eventsLimit; i++) {
 					var date = new Date(events[i].date);
 					var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
 					var rowCurrent = eventRow.replace("__ID__", events[i].id).replace("__TITLE__", events[i].title).replace("__DATE__", dateFormated).replace("__CONTENT__", events[i].description);

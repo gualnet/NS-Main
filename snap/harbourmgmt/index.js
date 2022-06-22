@@ -236,7 +236,7 @@ async function getHarbourList(req, res) {
 }
 
 async function getHarbourInfos(req, res) {
-    var harbours = await getHarbourById(req.param.harbourid);
+    var harbours = await getHarbourById(req.param.harbour_id);
     UTILS.httpUtil.dataSuccess(req, res, "success, harbour infos", harbours, "1.0");
     return;
 }
@@ -316,7 +316,7 @@ exports.router = [
     },
     {
         on: true,
-        route: "/api/getharbour/:harbourid",
+        route: "/api/getharbour/:harbour_id",
         handler: getHarbourInfos,
         method: "GET",
     },

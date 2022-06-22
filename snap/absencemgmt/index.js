@@ -1,4 +1,4 @@
-require('../../types');
+const TYPES = require('../../types');
 const FM = require('../lib-js/formatDate');
 const erpUsersServices = require('../erpUsers/services');
 const ENUM = require('../lib-js/enums');
@@ -195,7 +195,7 @@ async function createAbsenceHandler(req, res) {
 
 	const newAbsence = { ...req.post };
 
-	newAbsence.date = Date.now();
+	// newAbsence.date = Date.now();
 	newAbsence.previous_date_start = null;
 	newAbsence.previous_date_end = null;
 	newAbsence.created_at = Date.now();
@@ -339,9 +339,10 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		}
 
 		// Get the absences
+		/** @type {Array<TYPES.T_absence>} */
 		const absences = await getAbsencesByHarbourId(harbourId);
 		// ASBSENCE SORT BY DATE
-		absences.sort((A, B) => A.date > B.date ? 1 : -1);
+		absences.sort((A, B) => A.created_at > B.created_at ? 1 : -1);
 
 		const startLimit = new Date;
 		startLimit.setHours(0);
@@ -529,6 +530,7 @@ exports.plugin =
 			var _absenceHtml = fs.readFileSync(path.join(__dirname, "absence.html")).toString();
 
 			//get absences from user role
+			/** @type {TYPES.T_absence} */
 			var _Absences = [];
 			if (_role == "user") {
 				for (var i = 0; i < _harbour_id.length; i++) {
@@ -546,8 +548,8 @@ exports.plugin =
 				}
 
 				let formatedDate = '-';
-				if (_Absences[i].date) {
-					const dateObj = new Date(_Absences[i].date)
+				if (_Absences[i].created_at) {
+					const dateObj = new Date(_Absences[i].created_at)
 					const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
 					const date = splited[0];
 					const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]

@@ -1,4 +1,5 @@
 const ENUM = require('../lib-js/enums');
+const TYPES = require('../../types');
 const { verifyRoleAccess } = require('../lib-js/verify');
 
 const ROLES = ENUM.rolesBackOffice;
@@ -229,56 +230,59 @@ async function getChallengeHandler(req, res) {
         return;
 
 }
+
 async function getSortieUserHandler(req, res) {
-    if(req.post.token) {
-        let user = await STORE.usermgmt.getUserByToken(req.post.token);
-        let date = new Date(Date.now());
-        
-        // console.log(user);
-        if(user[0]) {
-            user = user[0];
-            let userSorties = [];
-            
-            const _sorties = await getSortieQuery({year: date.getFullYear()});
-            // console.log(_sorties);
-            for(var i = 0; i < _sorties.length; i++) {
-                if(_sorties[i].user_ids[0]) {
-                    for (var u = 0; u < _sorties[i].user_ids.length; u++) {
-                        if(_sorties[i].user_ids[u] == user.id) {
-                            _sorties[i].place = await STORE.mapmgmt.getPlaceById(_sorties[i].place_id);
-                            for(var b = 0; b < _sorties[i].boat_ids.length; b++){
-                                let boat = await STORE.boatmgmt.getBoatById(_sorties[i].boat_ids[b]);
-                                // console.log(boat)
-                               if(boat.user == user.id) {
-                                    _sorties[i].boat = boat;
-                                    break;
-                               }
-                            }
-                            userSorties.push(_sorties[i]);
-                            break;
-                        }
-                    }
-                }
-                //await delSortie(_sorties[i].id);
-            }
-            if(userSorties[0]) {
-                UTILS.httpUtil.dataSuccess(req, res, "success", userSorties, "1.0");
-                return;
-            } else {
-                UTILS.httpUtil.dataError(req, res, "No sorties found", "404", "1.0");
-                return;
-            }
-        } else {
-            UTILS.httpUtil.dataError(req, res, "invalid token", "403", "1.0");
-            return;
-        }
-    }else {
-        UTILS.httpUtil.dataError(req, res, "No token", "403", "1.0");
-        return;
-    }
-    res.end();
-    return;
-}
+	const userToken = req.param.userToken;
+	try {
+		if (userToken) {
+			// Get user
+			/** @type {Array<TYPES.T_user>} */
+			const users = await STORE.API_NEXT.getElements('user', { token: userToken });
+			const user = users[0];
+			if (!user) {
+				res.writeHead(403, 'Forbidden', { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({
+					success: false,
+					error: 'Invalid token',
+				}));
+				return;
+			}
+
+			// Get absences
+			/** @type {Array<TYPES.T_absence>} */
+			const absences = await STORE.API_NEXT.getElements('absences', { user_id: user.id });
+			const validAbsences = [];
+			absences.map(absence => {
+				const startDate = new Date(absence.date_start).getTime();
+				const challengeStartDate = new Date('01/01/2022').getTime();
+				const challengeEndDate = new Date('04/15/2022').getTime();
+				if (challengeStartDate < startDate && challengeEndDate > startDate) {
+					validAbsences.push(absence);
+				}
+				const challengeStartDate2 = new Date('10/10/2022').getTime();
+				const challengeEndDate2 = new Date('12/31/2022').getTime();
+				if (challengeStartDate2 < startDate && challengeEndDate2 > startDate) {
+					validAbsences.push(absence);
+				}
+			});
+			console.log('validAbsences',validAbsences);
+			res.end(JSON.stringify({
+				success: true,
+				count: validAbsences.length,
+				absences: validAbsences,
+			}));
+			
+		}
+	} catch (err) {
+		console.error(err);
+		res.writeHead(err.code || 500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			err: 'toto',
+		}));
+	}
+};
+
 async function navilyHandler(req, res) {
     var promise = await UTILS.httpsUtil.httpReqPromise({
         "host": "www.navily.com",
@@ -309,9 +313,9 @@ exports.router =
             method: "GET",
         },
         {
-            route: "/api/sortie/user",
+            route: "/api/sortie/:userToken",
             handler: getSortieUserHandler,
-            method: "POST",
+            method: "GET",
         },
         {
             route: "/api/navily",
@@ -410,7 +414,7 @@ exports.plugin =
                 var boat = await STORE.boatmgmt.getBoatByPlaceId(_Sorties[i].place_id);
                 var currentUser;
                 if(boat[0]) {
-                    var currentUser = await STORE.usermgmt.getUserById(boat[0].user);
+                    var currentUser = await STORE.usermgmt.getUserById(boat[0].user_id);
                     
                     if(currentUser)
                         currentUser = currentUser.id + "\\" + currentUser.first_name + " " + currentUser.last_name;

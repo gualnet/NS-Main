@@ -66,7 +66,7 @@ exports.plugin =
                 let jsn = {};
                 console.log(req.post.db)
                 let tables = Object.keys(req.post.db);
-                console.log(tables);
+                console.log('tables', tables);
                 for(var t = 0; t < tables.length; t++) {
                     jsn[tables[t]] = {};
                     files = Object.keys(req.post.db[tables[t]]);
@@ -75,7 +75,7 @@ exports.plugin =
                         for (var o = 0; o < req.post.db[tables[t]][[files[i]]].length; o++) {
                             let obj = req.post.db[tables[t]][files[i]][o];
                             currentObj = await getById(tables[t], files[i], obj.id);
-                            console.log(jsn[tables[t]][files[i]])
+                            // console.log(jsn[tables[t]][files[i]])
                             if (currentObj.id) {
                                 jsn[tables[t]][files[i]].push(await update(tables[t], files[i], obj));
                             } else {
@@ -84,7 +84,7 @@ exports.plugin =
                         }
                     }
                 }
-
+								console.log('DATA LOAD ENDED');
                 UTILS.httpUtil.dataSuccess(req, res, "Entité mis à jour",jsn, "1.0");
                 return;
             }

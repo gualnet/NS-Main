@@ -143,7 +143,7 @@
 				pagination: 'false'
 			});
 
-			fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+			fetch("/api/partner/active/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 				var activeSubCategories = _data.data.activeSubCategories;
 				if (!activeSubCategories.sos)
 					document.getElementById('sos').hidden = true;
@@ -192,7 +192,7 @@
 				</div>
 			`;
 
-			fetch('/api/partner/' + localStorage['harbourid'] + '/harbourlife/' + urlParams.get('select')).then(response => response.json()).then(_data => {
+			fetch('/api/partner/' + localStorage['harbour_id'] + '/harbourlife/' + urlParams.get('select')).then(response => response.json()).then(_data => {
 				const partners = _data.data;
 				// sort partners by name alphabetical order
 				partners.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);

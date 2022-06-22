@@ -83,7 +83,7 @@ function verifyPostReq(_req, _res, isUpdate) {
 	// 	UTILS.httpUtil.dataError(_req, _res, "Error", "téléphone incorrect", "100", "1.0");
 	// 	return false;
 	// }
-	if (!_req.post.harbourid || _req.post.harbourid.length < 1) {
+	if (!_req.post.harbour_id || _req.post.harbour_id.length < 1) {
 		UTILS.httpUtil.dataError(_req, _res, "Error", "aucun port séléctionné", "100", "1.0");
 		return false;
 	}
@@ -134,10 +134,12 @@ async function getUser() {
 async function getUserByHarbourId(_harbour_id) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_userCol, { harbourid: _harbour_id }, null, function (_err, _data) {
-			if (_data)
+			if (_data) {
 				resolve(_data);
-			else
+			}
+			else {
 				resolve(_err);
+			}
 		});
 	});
 }
@@ -310,10 +312,36 @@ async function addUserHandler(req, res) {
 			delete user.password_confirm;
 			user.id = UTILS.UID.generate();
 			user.password = UTILS.Crypto.createSHA512(user.id + user.password);
-			user.date = Date.now();
-			user.token = UTILS.Crypto.createSHA512(user.id + user.date + user.first_name);
-			if (await createUser(user)) {
-				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: user.id, harbourid: user.harbourid, token: user.token }, "1.0");
+			user.created_at = Date.now();
+			user.token = UTILS.Crypto.createSHA512(user.id + user.created_at + user.first_name);
+			const rawUser = {
+				boat_id: null,
+				category: null,
+				contract_number: null,
+				created_at: null,
+				email: null,
+				enabled: true,
+				first_name: null,
+				harbour_id: null,
+				id: null,
+				last_name: null,
+				onesignal_userid: null,
+				password: null,
+				phone: null,
+				prefix: null,
+				prefixed_phone: null,
+				resetPwdToken: null,
+				roleMobileApp: null,
+				show_communication_module: true,
+				show_reporting_module: true,
+				show_security_module: true,
+				token: null,
+				updated_at: null,
+				username: null,
+			};
+			const newUser = { ...rawUser, ...user };
+			if (await createUser(newUser)) {
+				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: user.id, harbour_id: user.harbour_id, token: user.token }, "1.0");
 				return;
 			}
 			else {
@@ -348,7 +376,7 @@ async function loginHandler(req, res) {
 		if (user.password == password) {
 			user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
 			await updateUser(user);
-			UTILS.httpUtil.dataSuccess(req, res, "success, user logged", { id: user.id, harbourid: user.harbourid, token: user.token }, "1.0");
+			UTILS.httpUtil.dataSuccess(req, res, "success, user logged", { id: user.id, harbour_id: user.harbour_id, token: user.token }, "1.0");
 			return;
 		} else {
 			UTILS.httpUtil.dataError(req, res, "Erreur", "Identifiants incorrects", null, "1.0");
@@ -430,10 +458,10 @@ async function createMailHandler(_req, _res) {
 
 
 async function verifyMailHandler(_req, _res) {
-	var mails = await getMailByHarbour(_req.post.harbourid);
+	var mails = await getMailByHarbour(_req.post.harbour_id);
 	console.log(mails);
 	if (mails.length > 0) {
-		var mail = await getMailByHarbourAndMail(_req.post.harbourid, _req.post.email);
+		var mail = await getMailByHarbourAndMail(_req.post.harbour_id, _req.post.email);
 		console.log(mail);
 		if (mail[0]) {
 			UTILS.httpUtil.dataSuccess(_req, _res, "success", "No mail in base required", null, '1.0');
@@ -751,53 +779,52 @@ exports.plugin =
 			var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
 			var _userHtml = fs.readFileSync(path.join(__dirname, "user.html")).toString();
 			var _mailHtml = fs.readFileSync(path.join(__dirname, "mail.html")).toString();
-			/**@type {Array<import('../../types').T_user>} */
+			/**@type {Array<TYPES.T_user>} */
 			var _users = [];
 			if (_role == "user") {
 				for (var i = 0; i < _harbour_id.length; i++) {
-					_users = _users.concat(await getUserByHarbourId(_harbour_id[i]));
+					_users = _users.concat(await STORE.API_NEXT.getElements('user', { harbour_id: _harbour_id[i]}));
 				}
 			}
 			else if (_role == "admin") {
 				_users = await getUser();
 			}
-
 			const roleOptions = generateRoleOptions(_role);
 
 			var _userGen = "";
 			for (var i = 0; i < _users.length; i++) {
 				let optionsStr = roleOptions.join('');
-				if (_users[i].roleMobileApp) {
-					optionsStr = optionsStr.replace(`>${_users[i].roleMobileApp}`, `selected>${_users[i].roleMobileApp}`);
+				if (_users[i]?.roleMobileApp) {
+					optionsStr = optionsStr.replace(`<option value="${_users[i].roleMobileApp.toUpperCase()}">`, `<option value="${_users[i].roleMobileApp.toUpperCase()}" selected>`);
 				} else {
-					optionsStr = optionsStr.replace(`>${ENUM.rolesMobileApp.VISITEUR}`, `selected>${ENUM.rolesMobileApp.VISITEUR}`);
+					optionsStr = '<option value="" selected> - - </option>' + optionsStr;
 				}
 
-				if (_users[i].category != "visitor") {
-					var currentHarbour = await STORE.harbourmgmt.getHarbourById(_users[i].harbourid);
+				if (_users[i]?.category !== "visitor") {
+					var currentHarbour = await STORE.harbourmgmt.getHarbourById(_users[i]?.harbour_id);
 
 					let formatedDate = '-';
-					if (_users[i].date) {
-						const dateObj = new Date(_users[i].date)
+					if (_users[i].created_at) {
+						const dateObj = new Date(_users[i].created_at)
 						const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
 						const date = splited[0];
 						const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
 						formatedDate = `${date} à ${heure}`;
 					}
 					_userGen += _userHtml.replace(/__ID__/g, _users[i].id)
-						.replace(/__FORMID__/g, _users[i].id.replace(/\./g, "_"))
-						.replace(/__CATEGORY__/g, _users[i].category)
-						.replace(/__ROLE_OPTIONS__/g, roleOptions.join(''))
-						.replace(/__FIRST_NAME__/g, _users[i].first_name)
-						.replace(/__LAST_NAME__/g, _users[i].last_name)
-						.replace(/__EMAIL__/g, _users[i].email)
-						.replace(/__PHONE__/g, _users[i].prefixed_phone)
-						.replace(/__DATETIMEORDER__/g, _users[i].date)
-						.replace(/__DATE__/g, formatedDate)
-						.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-						.replace(/__HARBOUR_ID__/g, currentHarbour.id)
-						.replace(/__CONTRACT_NUMBER__/g, _users[i].contract_number)
-						.replace(/__IS_RESIDENT__/g, _users[i].is_resident)
+					.replace(/__FORMID__/g, _users[i].id.replace(/\./g, "_"))
+					.replace(/__CATEGORY__/g, _users[i].category)
+					.replace(/__ROLE_OPTIONS__/g, optionsStr)
+					.replace(/__FIRST_NAME__/g, _users[i].first_name)
+					.replace(/__LAST_NAME__/g, _users[i].last_name)
+					.replace(/__EMAIL__/g, _users[i].email)
+					.replace(/__PHONE__/g, _users[i].prefixed_phone)
+					.replace(/__DATETIMEORDER__/g, _users[i].created_at)
+					.replace(/__DATE__/g, formatedDate)
+					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
+					.replace(/__HARBOUR_ID__/g, currentHarbour.id)
+					.replace(/__CONTRACT_NUMBER__/g, _users[i].contract_number)
+					.replace(/__IS_RESIDENT__/g, _users[i].is_resident)
 				}
 			}
 			var _mails = [];
@@ -858,5 +885,5 @@ exports.plugin =
 exports.store =
 {
 	getUserById: getUserById,
-	getUserByToken: getUserByToken
+	getUserByToken: getUserByToken,
 }

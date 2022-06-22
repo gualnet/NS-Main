@@ -184,7 +184,7 @@
 
             var formData = new FormData();
             formData.append("token", localStorage["token"])
-            fetch("/api/zones?harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
+            fetch("/api/zones?harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
                 if (_data.success) {
                     const zones = _data.data;
                     if (zones?.length > 1) {
@@ -212,7 +212,7 @@
             return(incidentTypes);
         }
         async function fetchHarbourInfo() {
-            const response = await fetch(`/api/next/harbours?id=${localStorage['harbourid']}`, { method: 'GET' });
+            const response = await fetch(`/api/next/harbours?id=${localStorage['harbour_id']}`, { method: 'GET' });
             const decodedResponse = await response.json();
             const [harbourInfo] = decodedResponse.results;
             // console.log('harbourInfo',harbourInfo)
@@ -266,7 +266,7 @@
 
         var statusoptions = "";
         function updateTicketList() {
-            fetch("/api/get/securite?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
+            fetch("/api/get/securite?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
                 var securites = _data.data.sort(dynamicSort("date")).reverse();
                 console.log(securites);
 
@@ -351,7 +351,7 @@
             var form = document.getElementById("absence_form");
             var formData = new FormData(form);
             formData.append("token", localStorage["token"])
-            formData.append("harbour_id", localStorage["harbourid"])
+            formData.append("harbour_id", localStorage["harbour_id"])
             formData.append("user_id", localStorage["user"])
             fetch("/api/create/securite", { method: "post", body: formData }).then(response => response.json()).then(_data => {
                 console.log(_data);

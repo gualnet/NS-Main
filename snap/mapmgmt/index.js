@@ -476,7 +476,7 @@ async function captorPlaceHandler(_req, _res) {
                         if(boat[0]) {
                             for (var i = 0; i < boat.length; i++) {
                                 boatId[i] = boat[i].id;
-                                userId[i] = boat[i].user
+                                userId[i] = boat[i].user_id
                             }
                         }
                         let dateSortie = Date.now();
@@ -812,25 +812,25 @@ exports.router =
 
         // * API NEXT GEN
         {
-            on: false,
+            on: true,
             route: "/api/next/places",
             handler: getPlaceByHandler,
             method: "GET"
         },
         {
-            on: false,
+            on: true,
             route: "/api/next/places",
             handler: removePlaceByHandler,
             method: "DELETE"
         },
         {
-            on: false,
+            on: true,
             route: "/api/next/zones",
             handler: getZoneByHandler,
             method: "GET"
         },
         {
-            on: false,
+            on: true,
             route: "/api/next/zones",
             handler: deleteZoneByHandler,
             method: "DELETE"

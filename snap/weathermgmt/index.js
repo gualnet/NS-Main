@@ -222,16 +222,15 @@ async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
     console.log('test');
     if (_req.get.entity_id) {
         let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
-        console.log(entity.wlink_vtwo_secretkey);
-        console.log("lol");
+        // console.log(entity.wlink_vtwo_secretkey);
         let stations;
 
         var date = Math.floor(Date.now() / 1000);
         let message = "api-key" + entity.wlink_vtwo_apikey + "t" + date;
         let secretkey = entity.wlink_vtwo_secretkey;
         let api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
-        console.log(api_signature);
-        console.log("api-key" + entity.wlink_vtwo_apikey + "t" + date);
+        // console.log(api_signature);
+        // console.log("api-key" + entity.wlink_vtwo_apikey + "t" + date);
         if (entity.weather_api == "wlv2") {
             var promise = await UTILS.httpsUtil.httpReqPromise({
                 "host": "api.weatherlink.com",

@@ -125,7 +125,7 @@
 				pagination: 'false'
 			});
 
-			fetch("/api/partner/active/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+			fetch("/api/partner/active/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 				var activeSubCategories = _data.data.activeSubCategories;
 				if (!activeSubCategories.nautic)
 					document.getElementById('nautic').hidden = true;
@@ -164,7 +164,7 @@
 				</div>
 			`;
 
-			fetch('/api/partner/' + localStorage['harbourid'] + '/experience/' + urlParams.get('select')).then(response => response.json()).then(_data => {
+			fetch('/api/partner/' + localStorage['harbour_id'] + '/experience/' + urlParams.get('select')).then(response => response.json()).then(_data => {
 				const partners = _data.data;
 				// sort partners by name alphabetical order
 				partners.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);

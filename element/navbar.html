@@ -29,7 +29,7 @@
     else if (currentLocation == "profil")
         document.getElementById('navbar-profil').src = "/library/toolbar-profile-blue-48.png";
         
-    fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+    fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
         let harbour = _data.data;
         var sBrowser, sUsrAg = navigator.userAgent;
                 if (sUsrAg.indexOf("Safari") > -1) {
@@ -43,7 +43,7 @@
 		window.addEventListener('load', async (ev) => {
 			const userId = localStorage['user'];
 			const userCategory = (!userId) ? 'visitor' : 'yachtsman';
-			const harbourId = localStorage['harbourid'];
+			const harbourId = localStorage['harbour_id'];
 
 			const communications = await fetchCommunicationsNavbar(harbourId, userCategory);
 			checkIfUnreadCommunications(userId, communications);

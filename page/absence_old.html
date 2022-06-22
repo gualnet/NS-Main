@@ -204,7 +204,7 @@
             fetch("/api/getuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
                 user = _data.data;
                 document.getElementById("user_id").value = user.id;
-                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
+                fetch("/api/get/userboats?user_id=" + user.id + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
                     var boat = _data.data[0]
                     document.getElementById("boat_id").value = boat.id;
                     updateAbsenceList();
@@ -233,7 +233,7 @@
         }
 
         function updateAbsenceList() {
-            fetch("/api/get/absence?user_id=" + user.id + "&harbour_id=" + localStorage["harbourid"], { method: "get" }).then(response => response.json()).then(_data => {
+            fetch("/api/get/absence?user_id=" + user.id + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
                 var absences = _data.data?.sort(dynamicSort("date")).reverse();
                 ;
                 document.getElementById("absences").innerHTML = "";
@@ -268,7 +268,7 @@
             var form = document.getElementById("absence_form");
             var formData = new FormData(form);
             formData.append("token", localStorage["token"])
-            formData.append("harbour_id", localStorage["harbourid"])
+            formData.append("harbour_id", localStorage["harbour_id"])
             fetch("/api/create/absence", { method: "post", body: formData }).then(response => response.json()).then(_data => {
                 console.log('_data:', _data);
                 if (_data.success) {

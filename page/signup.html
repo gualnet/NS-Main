@@ -65,9 +65,9 @@
 					</div>
 
 					<div class="form-group floating-form-group" style="display: none;">
-						<label class="text-muted" for="harbourId" style="color: #446E7B" style="color: #446E7B">Votre port de
+						<label class="text-muted" for="harbour_id" style="color: #446E7B" style="color: #446E7B">Votre port de
 							plaisance:</label>
-						<select name="harbourid" class="form-control" id="harbourlist" style="color: #446E7B">
+						<select name="harbour_id" class="form-control" id="harbourlist" style="color: #446E7B">
 						</select>
 					</div>
 					<div class="form-group my-4 text-secondary">
@@ -210,7 +210,7 @@
 			}).then(response => response.json()).then(_data => {
 				var harbours = _data.data;
 				for (var i = 0; i < harbours.length; i++) {
-					if (harbours[i].id == localStorage['harbourid'])
+					if (harbours[i].id == localStorage['harbour_id'])
 						document.getElementById("harbourlist").insertAdjacentHTML("beforeend", ('<option value="' + harbours[i].id + '" selected>' + harbours[i].name + '</option>'));
 					else
 						document.getElementById("harbourlist").insertAdjacentHTML("beforeend", ('<option value="' + harbours[i].id + '">' + harbours[i].name + '</option>'));
@@ -231,9 +231,9 @@
 			});
 
 		const constructCguLink = () => {
-			const harbourId = localStorage['harbourid'];
+			const harbour_id = localStorage['harbour_id'];
 			const cguLinkEl = document.querySelector('#cguLink');
-			cguLinkEl.href = `/library/cgu_${harbourId}.pdf`;
+			cguLinkEl.href = `/library/cgu_${harbour_id}.pdf`;
 		}
 
 		function sendSignupForm() {
@@ -267,7 +267,7 @@
 								form = document.getElementById("boatform");
 								formData = new FormData(form);
 								formData.append("user", user.id);
-								formData.append("harbour", user.harbourid);
+								formData.append("harbour", user.harbour_id);
 								fetch("/api/addboat",
 									{
 										method: form.method,
@@ -275,9 +275,9 @@
 									}).then(response => response.json()).then(_data => {
 										//localStorage["boat"] = _data.data.id;
 										localStorage["user"] = user.id;
-										localStorage["harbourid"] = user.harbourid;
+										localStorage["harbour_id"] = user.harbour_id;
 										localStorage["token"] = user.token;
-										fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+										fetch("/api/getharbour/" + localStorage["harbour_id"]).then(response => response.json()).then(_data => {
 											localStorage["harbourname"] = _data.data.name;
 											window.location.href = ("/index");
 										}).catch((error) => {
@@ -288,10 +288,10 @@
 									});
 							} else {
 								localStorage["user"] = user.id;
-								localStorage["harbourid"] = user.harbourid;
+								localStorage["harbour_id"] = user.harbour_id;
 								localStorage["token"] = user.token;
 
-								fetch("/api/getharbour/" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+								fetch("/api/getharbour/" + localStorage["harbour_id"]).then(response => response.json()).then(_data => {
 									localStorage["harbourname"] = _data.data.name;
 									window.location.href = ("/index");
 								}).catch((error) => {
@@ -353,8 +353,8 @@
 		}
 
 		function getPonton() {
-			const harbourId = localStorage['harbourid'];
-			const url = `/api/pontons?harbour_id=${harbourId}`;
+			const harbour_id = localStorage['harbour_id'];
+			const url = `/api/pontons?harbour_id=${harbour_id}`;
 			fetch(url, { method: "GET" })
 				.then(response => response.json())
 				.then(_data => {
@@ -374,8 +374,8 @@
 		};
 
 		function getPlaces(pontonId) {
-			const harbourId = localStorage['harbourid'];
-			const url = `/api/placesbyponton?harbour_id=${harbourId}&ponton_id=${pontonId}`;
+			const harbour_id = localStorage['harbour_id'];
+			const url = `/api/placesbyponton?harbour_id=${harbour_id}&ponton_id=${pontonId}`;
 			fetch(url, { method: "GET" })
 				.then(response => response.json())
 				.then(_data => {

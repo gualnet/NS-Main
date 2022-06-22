@@ -246,9 +246,9 @@
 				const userInfo = await getUserInfos(userToken);
 				const boatInfo = await getBoatInfo(userInfo);
 				if (boatInfo) {
-					const places = await getPlacesFromHarbour(localStorage["harbourid"]);
+					const places = await getPlacesFromHarbour(localStorage["harbour_id"]);
 					G_Places = places; // to access the places out of the scope
-					const pontons = await getPontonsFromHarbour(localStorage["harbourid"]);
+					const pontons = await getPontonsFromHarbour(localStorage["harbour_id"]);
 	
 					let boatPlace;
 					if (places) {
@@ -300,7 +300,7 @@
 			};
 
 			const getBoatInfo = async (user) => {
-				const url = `/api/get/userboats?user_id=${user.id}&harbour_id=${user.harbourid}`;
+				const url = `/api/get/userboats?user_id=${user.id}&harbour_id=${user.harbour_id}`;
 				const fetchOptions = { method: 'GET' };
 				const response = await fetch(url, fetchOptions);
 				if (!response.ok) {
@@ -317,8 +317,8 @@
 				return(boatInfo);
 			};
 
-			const getPlacesFromHarbour = async (harbourId) => {
-				const url = `/api/places?harbour_id=${harbourId}`;
+			const getPlacesFromHarbour = async (harbour_id) => {
+				const url = `/api/places?harbour_id=${harbour_id}`;
 				const response = await fetch(url);
 				if (!response.ok) {
 					console.error(response);
@@ -330,8 +330,8 @@
 				return(places);
 			};
 
-			const getPontonsFromHarbour = async (harbourId) => {
-				const url = `/api/zones?harbour_id=${localStorage['harbourid']}`;
+			const getPontonsFromHarbour = async (harbour_id) => {
+				const url = `/api/zones?harbour_id=${localStorage['harbour_id']}`;
 				const response = await fetch(url, { method: 'GET' });
 				if (!response.ok) {
 					console.error(response);
@@ -427,7 +427,7 @@
 				});
 
         function disconnect() {
-            localStorage.removeItem("harbourid");
+            localStorage.removeItem("harbour_id");
             localStorage.removeItem("harbourname");
             localStorage.removeItem("user");
             localStorage.removeItem("token");
@@ -458,7 +458,7 @@
             var form = document.getElementById("boat_form");
             var formData = new FormData(form);
             formData.append("token", localStorage["token"])
-            formData.append("harbour", localStorage["harbourid"])
+            formData.append("harbour", localStorage["harbour_id"])
 
             fetch("/api/updateboat", { method: "post", body: formData }).then(response => response.json()).then(_data => {
                 if (_data.success) {

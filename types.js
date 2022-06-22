@@ -37,7 +37,6 @@ const ENUM = require('./snap/lib-js/enums');
  * @property {EpochTimeStamp} previous_date_end
  * @property {EpochTimeStamp} previous_date_start
  * @property {EpochTimeStamp} updated_at
- * @property {number} date - Deprec, use created_at instead
  * @property {string} boat_id
  * @property {string} harbour_id
  * @property {string} id
@@ -52,8 +51,8 @@ const ENUM = require('./snap/lib-js/enums');
  * @property {string} name
  * @property {string} immatriculation
  * @property {string} is_resident
- * @property {string} user
- * @property {string} harbour
+ * @property {string} user_id
+ * @property {string} harbour_id
  * @property {number} date
  */
 
@@ -199,16 +198,22 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 
 /**
  * @typedef T_user - users referenced in nauticspot user db -> mobile app access
+ * @property {Array<string> || string} onesignal_userid
+ * @property {boolean} enabled - 1 || 0 is the account ready to be used
+ * @property {boolean} show_communication_module
+ * @property {boolean} show_reporting_module
+ * @property {boolean} show_security_module
  * @property {ENUM.rolesMobileApp} roleMobileApp
  * @property {EpochTimeStamp} created_at 
- * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} date - deprec - use created_at or updated_at
  * @property {EpochTimeStamp} updated_at 
  * @property {string || undefined} resetPwdToken - 
+ * @property {string} boat_id
  * @property {string} category
  * @property {string} contract_number
  * @property {string} email
  * @property {string} first_name
- * @property {string} harbourid
+ * @property {string} harbour_id
  * @property {string} id
  * @property {string} last_name
  * @property {string} password
@@ -216,6 +221,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} prefix
  * @property {string} prefixed_phone
  * @property {string} token
+ * @property {string} username - conform IAS servira de login
  */
 
 /**

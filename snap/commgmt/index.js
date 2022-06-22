@@ -461,7 +461,7 @@ async function registerOneSignalUserIdHandler(_req, _res) {
                             return;
                         }
                     }
-                    
+
                     user.onesignal_userid.push(_req.get.onesignal_userid);
 
                     let promise = await updateUser(user);
@@ -480,19 +480,19 @@ async function registerOneSignalUserIdHandler(_req, _res) {
             }
         }
     // if user a visitor
-    } else if (_req.get.onesignal_userid && _req.get.harbourid) {
+    } else if (_req.get.onesignal_userid && _req.get.harbour_id) {
 
         let user = await getUserByOnesignalId(_req.get.onesignal_userid);
         // if onesignal id not in db
         if (!user[0]) {
-            let promise = await createUser({ onesignal_userid: _req.get.onesignal_userid, category: "visitor", harbourid: _req.get.harbourid });
+            let promise = await createUser({ onesignal_userid: _req.get.onesignal_userid, category: "visitor", harbour_id: _req.get.harbour_id });
             UTILS.httpUtil.dataSuccess(_req, _res, "success", promise, "1.0");
             return;
         //change harbour if in db
         } else {
             let update = {};
             update.id = user[0].id;
-            update.harbourid = _req.get.harbourid;
+            update.harbour_id = _req.get.harbour_id;
             var promise = await updateUser(update);
 
             UTILS.httpUtil.dataSuccess(_req, _res, "Onesignal Userid visitor already in db", promise, "1.0");

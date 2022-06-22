@@ -187,7 +187,7 @@
         </div>
 
         <script>
-            fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+            fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
                 var harbour = _data.data;
                 var sBrowser, sUsrAg = navigator.userAgent;
                 if (sUsrAg.indexOf("Safari") > -1) {
@@ -319,7 +319,7 @@
                         if (_data.success) {
                             //document.getElementById("sanitary_code").insertAdjacentHTML('beforeend', harbour.sanitary_code);
                             //document.getElementById("wifi_pass").insertAdjacentHTML('beforeend', );
-                            fetch("/api/getharbour/" + localStorage['harbourid']).then(response => response.json()).then(_data => {
+                            fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
                                 navigator.clipboard.writeText(_data.data.wifi_pass);
                                 document.getElementById("wifiCopyButton").hidden = true;
                                 document.getElementById("wifiCopiedButton").hidden = false;

@@ -147,7 +147,7 @@
 
         "use strict"
         $(window).on('load', function () {
-            fetch("/api/map?harbour_id=" + localStorage["harbourid"]).then(response => response.json()).then(_data => {
+            fetch("/api/map?harbour_id=" + localStorage["harbour_id"]).then(response => response.json()).then(_data => {
                 console.log(_data);
                 if (_data.success) {
                     document.getElementById("svg_container").innerHTML = _data.data.map;
@@ -406,7 +406,7 @@
             }).catch((e) => { console.error(e) });
         });
         function refreshData() {
-            fetch("/api/emplacements?harbour_id=" + localStorage["harbourid"], { method: "GET" }).then(response => response.json()).then(_data => {
+            fetch("/api/emplacements?harbour_id=" + localStorage["harbour_id"], { method: "GET" }).then(response => response.json()).then(_data => {
                 if (_data.success) {
                     console.log(_data);
                     var bouees = _data.data[0];

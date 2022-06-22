@@ -51,7 +51,7 @@ function verifyPostReq(_req, _res) {
 		UTILS.httpUtil.dataError(_req, _res, "Error", "Numéro de contrat requis", "100", "1.0");
 		return false;
 	}
-	if (!_req.post.harbourid || _req.post.harbourid.length < 1) {
+	if (!_req.post.harbour_id || _req.post.harbour_id.length < 1) {
 		UTILS.httpUtil.dataError(_req, _res, "Error", "Id de l'utilisateur requis", "100", "1.0");
 		return false;
 	}
@@ -229,7 +229,6 @@ async function deleteBoatHandler(_req, _res) {
 
 //Handler to update boat
 async function updateBoatHandler(_req, _res) {
-	console.log(_req.post);
 	var user;
 	if (!_req.post.token || _req.post.token.length < 1) {
 		UTILS.httpUtil.dataError(_req, _res, "Error", "Utilisateur non connecté", "100", "1.0");
@@ -269,18 +268,15 @@ async function updateBoatHandler(_req, _res) {
 	if (_req.post.id) {
 		delete _req.post.token;
 		var boat = await updateBoat(_req.post);
-		console.log(boat);
 		UTILS.httpUtil.dataSuccess(_req, _res, "Bateau mis à jour", "1.0")
 		return;
 
 	} else {
 		delete _req.post.token;
-		_req.post.user = user[0].id;
+		_req.post.user_id = user[0].id;
 		_req.post.date = Date.now();
 
 		var boat = await createBoat(_req.post);
-		console.log("bateau créer");
-		console.log(boat);
 		UTILS.httpUtil.dataSuccess(_req, _res, "Bateau créer", "1.0")
 		return;
 
@@ -300,8 +296,11 @@ async function verifyFormBoatHandler(_req, _res) {
 
 // handle that return the boat of the user
 async function getUserBoatsHandler(_req, _res) {
+	console.log('getUserBoatsHandler', _req.get)
 	if (_req.get.user_id && _req.get.harbour_id) {
-		var boats = await getBoatByUserIdAndHarbourId(_req.get.user_id, _req.get.harbour_id);
+		const { user_id, harbour_id } = _req.get;
+		const boats = await STORE.API_NEXT.getElements('boat', { user_id, harbour_id });
+		console.log('boats',boats)
 		if (boats[0]) {
 			UTILS.httpUtil.dataSuccess(_req, _res, 'success', boats, '1.0');
 			return;
@@ -388,25 +387,25 @@ exports.plugin =
 			//get html files
 			var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
 			var _boatHtml = fs.readFileSync(path.join(__dirname, "boat.html")).toString();
-
+			/**@type {Array<TYPES.T_boat>} */
 			var _boats = [];
 
 			//get boats from user role
 			if (_role == "user") {
 				for (var i = 0; i < _harbour_id.length; i++) {
-					_boats = _boats.concat(await getBoatByHarbourId(_harbour_id[i]));
+					_boats = _boats.concat(await STORE.API_NEXT.getElements('boat', { harbour_id: _harbour_id[i] }));
 				}
 			}
-			else if (_role == "admin")
+			else if (_role == "admin") {
 				_boats = await getBoat();
-
+			}
 			//modify html dynamically <
 			var _boatGen = "";
 			let isPlaceAttributed;
 			for (var i = 0; i < _boats.length; i++) {
 				isPlaceAttributed = false;
-				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_boats[i].harbour);
-				let places = await STORE.mapmgmt.getPlaceByHarbourId(_boats[i].harbour);
+				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_boats[i].harbour_id);
+				let places = await STORE.mapmgmt.getPlaceByHarbourId(_boats[i].harbour_id);
 				places = places.sort((a, b) => a.number < b.number ? -1 : 1);
 				// set places lists
 				var places_select = "";
@@ -424,16 +423,16 @@ exports.plugin =
 					places_select += '<option value="" selected> - - </option>'
 				}
 
-				var currentUser = await STORE.usermgmt.getUserById(_boats[i].user);
+				var currentUser = await STORE.usermgmt.getUserById(_boats[i].user_id);
 
 				_boatGen += _boatHtml.replace(/__ID__/g, _boats[i].id)
 					.replace(/__FORMID__/g, _boats[i].id.replace(/\./g, "_"))
 					.replace(/__NAME__/g, _boats[i].name)
 					.replace(/__PLACE__/g, places_select)
-					.replace(/__USER__/g, _boats[i].user + "\\" + currentUser.first_name + " " + currentUser.last_name)
+					.replace(/__USER__/g, _boats[i].user_id + "\\" + currentUser.first_name + " " + currentUser.last_name)
 					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-					.replace(/__HARBOUR_ID__/g, currentHarbour.id)
-					.replace(/__IMMATRICULATION__/g, _boats[i].immatriculation)
+					.replace(/__HARBOUR_ID__/g, currentHarbour.id || 'NONE')
+					.replace(/__IMMATRICULATION__/g, _boats[i].immatriculation || '- -')
 					.replace(/__LONGUEUR__/g, _boats[i].longueur)
 					.replace(/__LARGEUR__/g, _boats[i].largeur)
 					.replace(/__TIRANT_EAU__/g, _boats[i].tirant_eau)
