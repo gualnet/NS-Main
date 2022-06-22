@@ -71,11 +71,11 @@ function verifyPostReq(_req, _res, isUpdate) {
 	// 	UTILS.httpUtil.dataError(_req, _res, "Error", "Numéro de téléphone requis", "100", "1.0");
 	// 	return false;
 	// }
-	if (!_req.post.prefix || _req.post.prefix.length < 1) {
-		UTILS.httpUtil.dataError(_req, _res, "Error", "Préfixe du numéro de téléphone requis", "100", "1.0");
-		return false;
-	}
-	if (verifyPhonePrefix(_req.post.prefix)) {
+	// if (!_req.post.prefix || _req.post.prefix.length < 1) {
+	// 	UTILS.httpUtil.dataError(_req, _res, "Error", "Préfixe du numéro de téléphone requis", "100", "1.0");
+	// 	return false;
+	// }
+	if (_req.post.prefix && verifyPhonePrefix(_req.post.prefix)) {
 		UTILS.httpUtil.dataError(_req, _res, "Error", "Préfixe du numéro de téléphone invalide", "100", "1.0");
 		return false;
 	}
