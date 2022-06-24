@@ -1,3 +1,4 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 
@@ -20,13 +21,14 @@ var _userCol = "user";
 
 // v.1.0.0 -> change link from native app to pwa
 // v.1.1.0 -> add role access rights
+// v.1.2.0 -> change link from pwa to native app
 
 exports.setup =
 {
 	on: true,
 	title: 'qrcode',
 	description: "A plugin to manage the QRCODEs",
-	version: '1.1.0',
+	version: '1.2.0',
 }
 
 async function getAdminById(_id) {
@@ -41,57 +43,58 @@ async function getAdminById(_id) {
 }
 
 async function createImage(_target) {
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		QRCode.toDataURL(_target, function (err, url) {
-			resolve(url);
+			if (err) {
+				reject(err);
+			} else {
+				resolve(url);
+			}
 		});
 	});
 }
 
 async function delQRCODE(_id) {
-	if (!_id) {
-		resolve();
-		return;
-	}
-	var _search =
-	{
-		id: _id,
-	};
-
-	return new Promise(resolve => {
-		STORE.db.linkdb.Delete(_qrCol, _search, function (_err, _data) {
-			resolve(_data);
+	return new Promise((resolve, reject) => {
+		if (!_id) {
+			reject(new Error(`delQRCODE invalid param '_id' provided [${_id}]`));
+		}
+		const _search = { id: _id };
+		STORE.db.linkdb.Delete(_qrCol, _search, function (err, _data) {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(_data);
+			}
 		});
 	});
 }
 
 
 async function getQRCODE(_id) {
-	var _search = {};
-	if (_id) {
-		_search.id = _id;
-	}
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
+		if (!_id) {
+			reject(new Error(`delQRCODE invalid param '_id' provided [${_id}]`));
+		}
+		const _search = { id: _id };
 		STORE.db.linkdb.Find(_qrCol, _search, null, function (_err, _data) {
 			if (_data) {
 				resolve(_data);
-			}
-			else {
-				resolve(_err);
+			} else {
+				reject(_err);
 			}
 		});
 	});
 }
 
 async function saveQRCODE(_obj) {
-	return new Promise(resolve => {
+	return new Promise((resolve, reject) => {
 		_obj.updatedAt = Date.now();
 		STORE.db.linkdb.Save(_qrCol, _obj, function (_err, _data) {
 			if (_data) {
 				resolve(_data);
-			}
-			else {
-				resolve(_err);
+			} else {
+				reject(_err);
 			}
 		});
 	});
