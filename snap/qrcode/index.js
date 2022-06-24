@@ -70,13 +70,12 @@ async function delQRCODE(_id) {
 	});
 }
 
-
 async function getQRCODE(_id) {
 	return new Promise((resolve, reject) => {
-		if (!_id) {
-			reject(new Error(`delQRCODE invalid param '_id' provided [${_id}]`));
+		const _search = {};
+		if (_id) {
+			_search.id = _id;
 		}
-		const _search = { id: _id };
 		STORE.db.linkdb.Find(_qrCol, _search, null, function (_err, _data) {
 			if (_data) {
 				resolve(_data);
@@ -106,6 +105,7 @@ exports.plugin =
 	desc: "Manage QRCODES",
 	role: "admin",
 	handler: async (req, res) => {
+		// Check access rights
 		const admin = await getAdminById(req.userCookie.data.id);
 		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
@@ -123,6 +123,8 @@ exports.plugin =
 			const qrCodeObj = {
 				title: req.post.title,
 				appLink: req.post.appLink,
+				apple: req.post.apple,
+				android: req.post.android,
 				createdAt: Date.now(),
 				updatedAt: Date.now(),
 			}
@@ -143,7 +145,9 @@ exports.plugin =
 			var _tmp = _qr;
 			_tmp = _tmp.replace(/__ID__/g, _data[i].id);
 			_tmp = _tmp.replace(/__TITLE__/g, _data[i].title);
-			_tmp = _tmp.replace(/__APP_LINK__/g, _data[i].appLink || '-');
+			_tmp = _tmp.replace(/__APP_LINK__/g, _data[i]?.appLink || '-');
+			_tmp = _tmp.replace(/__APPLE__/g, _data[i]?.apple || '-');
+			_tmp = _tmp.replace(/__ANDROID__/g, _data[i]?.android || '-');
 			_tmp = _tmp.replace(/__IMG__/g, await createImage(`${OPTION.HOST_BASE_URL}/${_qrCol}/${_data[i].id}`));
 			_tmp = _tmp.replace(/__URL__/g, `${OPTION.HOST_BASE_URL}/${_qrCol}/${_data[i].id}`);
 			_list += _tmp;
@@ -159,11 +163,16 @@ exports.plugin =
  */
 async function qrHandler(req, res) {
 	/**@type {qrcode} */
-	var [_result] = await getQRCODE(req.param.id);
+	const _result = await getQRCODE(req.param.id);
 
-	console.log('QRCODE READIRECT TO', `${OPTION.HOST_BASE_URL}${_result.appLink}`)
 	if (_result) {
-		UTILS.Redirect(res, `${OPTION.HOST_BASE_URL}${_result.appLink}`);
+		res.setHeader("Content-Type", "text/html; charset=utf-8");
+		res.end(
+			_landing
+				.replace("__TITLE__", _result[0].title)
+				.replaceAll("__APPLE__", _result[0]?.apple || '/')
+				.replaceAll("__ANDROID__", _result[0]?.android || '/')
+		);
 	}
 	else {
 		UTILS.Redirect(res, "/");
