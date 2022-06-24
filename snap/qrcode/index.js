@@ -133,8 +133,21 @@ exports.plugin =
 			}
 			try {
 				const result = await saveQRCODE(qrCodeObj);
+				res.setHeader("Content-Type", "application/json");
+				res.end(JSON.stringify({
+					success: true,
+					results: result
+				}));
+				return;
 			} catch (error) {
 				console.error('[ERROR]', error);
+				res.writeHead(500, 'Failure', "Content-Type: application/json");
+				res.setHeader("Content-Type", "application/json");
+				res.end(JSON.stringify({
+					success: false,
+					message: 'Unknown Internal Server Error',
+				}));
+				return;
 			}
 		}
 

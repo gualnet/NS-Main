@@ -128,7 +128,6 @@
 
         function sendUpdateForm(id) {
             var form = document.getElementById(id);
-            console.log(form);
             var formData = new FormData(form);
 
             fetch(form.action,
@@ -136,7 +135,6 @@
                     method: form.method,
                     body: formData
                 }).then(response => response.json()).then(_data => {
-                    console.log(_data);
                     if (_data.success) {
                         location.reload();
                     }
@@ -150,7 +148,7 @@
                     if (document.getElementById("error"))
                         document.getElementById("qrError").removeChild(document.getElementById("error"));
 
-                    document.getElementById("qrError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+                    document.getElementById("qrError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + error.message + '</div>');
                 });
         }
     </script>
