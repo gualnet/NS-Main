@@ -117,4 +117,17 @@
 		</button>
 	</div>
 </body>
+<script>
+	const isIphone = navigator.userAgent.toLocaleLowerCase().includes('iphone');
+	const isAndroid = navigator.userAgent.toLocaleLowerCase().includes('android');
+	if (isIphone && '__APPLE__' !== '/') {
+		console.log('APPLE', '__APPLE__')
+		window.location = '__APPLE__';
+	} else if (isAndroid && '__ANDROID__' !== '/') {
+		console.log('ANDROID', '__ANDROID__')
+		window.location = '__ANDROID__';
+	} else {
+		console.log('STAY HERE')
+	}
+</script>
 </html>
