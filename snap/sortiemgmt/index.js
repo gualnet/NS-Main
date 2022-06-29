@@ -248,28 +248,27 @@ async function getSortieUserHandler(req, res) {
 				return;
 			}
 
-			// Get absences
-			/** @type {Array<TYPES.T_absence>} */
-			const absences = await STORE.API_NEXT.getElements('absences', { user_id: user.id });
-			const validAbsences = [];
-			absences.map(absence => {
-				const startDate = new Date(absence.date_start).getTime();
+			// Get sorties
+			/** @type {Array<TYPES.T_sortie>} */
+			const sorties = await STORE.API_NEXT.getElements('sorties', { boat_id: user.boat_id });
+			const validSorties = [];
+			sorties.map(sortie => {
+				const startDate = sortie.datetime_out;
 				const challengeStartDate = new Date('01/01/2022').getTime();
 				const challengeEndDate = new Date('04/15/2022').getTime();
 				if (challengeStartDate < startDate && challengeEndDate > startDate) {
-					validAbsences.push(absence);
+					validSorties.push(sortie);
 				}
 				const challengeStartDate2 = new Date('10/10/2022').getTime();
 				const challengeEndDate2 = new Date('12/31/2022').getTime();
 				if (challengeStartDate2 < startDate && challengeEndDate2 > startDate) {
-					validAbsences.push(absence);
+					validSorties.push(sortie);
 				}
 			});
-			console.log('validAbsences',validAbsences);
 			res.end(JSON.stringify({
 				success: true,
-				count: validAbsences.length,
-				absences: validAbsences,
+				count: validSorties.length,
+				sorties: validSorties,
 			}));
 			
 		}

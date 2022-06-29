@@ -312,7 +312,7 @@ const getAbsencesHandler = async (req, res) => {
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			usersCount: boats.length,
+			boatsCount: boats.length,
 			boats: boats,
 		}));
 
@@ -396,7 +396,6 @@ const deleteAbsencesHandler = async (req, res) => {
 	console.log('deleteAbsencesHandler');
 	try {
 		const searchObj = { ...req.get };
-
 		/**@type {Array<TYPES.T_absence>} */
 		const deletedObj = await deleteElement('absences', searchObj);
 		console.log('Deleted absence', deletedObj)
@@ -417,6 +416,61 @@ const deleteAbsencesHandler = async (req, res) => {
 	}
 };
 
+// OUTINGS
+const getSortiesHandler = async (req, res) => {
+	try {
+		const searchOpt = { ...req.get };
+		/** @type {Array<TYPES.T_sortie>} */
+		const outings = await getElements('sorties', searchOpt);
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			outingsCount: outings.length,
+			outings: outings,
+		}));
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
+const createSortiesHandler = async (req, res) => {
+	try {
+		const { place_id, boat_id, harbour_id, datetime_out,
+			datetime_in, duration, is_notification_sent } = req.body;
+		if (! boat_id) throw(new Error('boat id is missing'));
+		if (! date_start) throw(new Error('date_start is missing'));
+		if (! date_end) throw(new Error('date_end is missing'));
+		const newOuting = {
+			place_id: place_id || null,
+			boat_id: boat_id || null,
+			harbour_id: harbour_id || null,
+			datetime_out: datetime_out || null,
+			datetime_in: datetime_in || null,
+			duration: duration || null,
+			is_notification_sent: is_notification_sent || null,
+			created_at: Date.now(),
+			edited_at: null,
+			deleted_at: nulll
+		};
+		/**@type {TYPES.T_sortie} */
+		const createdOuting = await createElement('sorties', newOuting);
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			outing: createdOuting,
+		}));
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error,
+		}));
+	}
+}
 
 exports.router = [
 	// USERS
@@ -494,4 +548,29 @@ exports.router = [
 		handler: deleteAbsencesHandler,
 		method: "DELETE",
 	},
+	// OUTINGS
+	{
+		on: true,
+		route: "/api/next/outings",
+		handler: getSortiesHandler,
+		method: "GET",
+	},
+	{
+		on: true,
+		route: "/api/next/outings",
+		handler: createSortiesHandler,
+		method: "POST",
+	},
+	// {
+	// 	on: true,
+	// 	route: "/api/next/absences",
+	// 	handler: updateAbsencesHandler,
+	// 	method: "PUT",
+	// },
+	// {
+	// 	on: true,
+	// 	route: "/api/next/absences",
+	// 	handler: deleteAbsencesHandler,
+	// 	method: "DELETE",
+	// },
 ];

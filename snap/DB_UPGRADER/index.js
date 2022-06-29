@@ -158,7 +158,7 @@ const importUsersProcess = () => {
 	const userData = JSON.parse(userJsonData);
 	/**@type {Array<TYPES.T_user>} */
 	const userList = userData[2].data;
-	
+
 
 	const userToHarbour = importUserToHarbourLinkTable();
 	const userToHarbourMap = {};
@@ -561,6 +561,7 @@ const deleteIasUsers = async (req, res) => {
 	}
 };
 
+// ABSENCES
 const absenceTemplate = {
 	created_at: null,
 	date_end: null,
@@ -668,30 +669,113 @@ const importAbsencesProcess = async () => {
 
 const importAbsencesHandler = async (req, res) => {
 	try {
-	const absences = await importAbsencesProcess();
-	const promises = [];
-	absences.map(absence => {
-		promises.push(createElement('absences', absence));
-	});
-	
-	const endResults = await Promise.all(promises);
+		const absences = await importAbsencesProcess();
+		const promises = [];
+		absences.map(absence => {
+			promises.push(createElement('absences', absence));
+		});
 
-	res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
-	res.end(JSON.stringify({
-		count: endResults.length,
-		absences: endResults || [],
-	}));
-} catch (error) {
-	console.error('[ERROR]', error);
-	res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
-	res.end(JSON.stringify({
-		success: false,
-		error,
-	}));
-}
+		const endResults = await Promise.all(promises);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			count: endResults.length,
+			absences: endResults || [],
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
 
 };
 
+// SORTIES
+const importSortiesProcess = async () => {
+	const outingPath = `${__dirname}/IAS_outing.json`;
+	const outingJson = fs.readFileSync(outingPath, { encoding: 'utf-8' });
+	const outingsObj = JSON.parse(outingJson);
+	/** @type {Array<TYPES.T_sortie>} */
+	const outingList = outingsObj[2].data;
+
+	/** @type {Array<TYPES.T_boat>} */
+	const boats = await STORE.API_NEXT.getElements('boat', { harbour_id: '4e.mx_85wK'});
+
+	const boatsMapboatIasIdToboat = {};
+	boats.map(boat => {
+		boatsMapboatIasIdToboat[boat.ias_id] = boat;
+	});
+
+	// Match IAS index
+	outingList.map(sortie => {
+		sortie.ias_id = sortie.id;
+		sortie.id = undefined;
+
+		const iasBoatId = sortie.boat_id;
+		if (sortie.boat_id) {
+			sortie.ias_boat_id = iasBoatId;
+			sortie.boat_id = boatsMapboatIasIdToboat[iasBoatId].id;
+
+			const iasPlaceId = sortie.place_id;
+			sortie.ias_place_id = iasPlaceId;
+			sortie.place_id = boatsMapboatIasIdToboat[iasBoatId].place_id;
+		}
+		if (sortie.harbour_id) {
+			const iasHarbourId = sortie.harbour_id;
+			sortie.ias_harbour_id = iasHarbourId;
+			sortie.harbour_id = harbourIdMatchTable[iasHarbourId];
+		}
+
+		if (sortie.datetime_out) {
+			sortie.datetime_out = new Date(sortie.datetime_out).getTime();
+		}
+		if (sortie.datetime_in) {
+			sortie.datetime_in = new Date(sortie.datetime_in).getTime();
+		}
+		if (sortie.created_at) {
+			sortie.created_at = new Date(sortie.created_at).getTime();
+		}
+		if (sortie.edited_at) {
+			sortie.edited_at = new Date(sortie.edited_at).getTime();
+		}
+		if (sortie.deleted_at) {
+			sortie.deleted_at = new Date(sortie.deleted_at).getTime();
+		}
+
+		if (typeof(sortie.duration) === 'string') {
+			sortie.duration = parseInt(sortie.duration);
+		}
+	});
+	return(outingList);
+}
+
+const importOutingsHandler = async (req, res) => {
+	try {
+		/** @type {Array<TYPES.T_sortie>} */
+		const sorties = await importSortiesProcess();
+		/** @type {Array<Promise<TYPES.T_sortie>>} */
+		const promises = [];
+		sorties.map(sortie => {
+			promises.push(STORE.API_NEXT.createElement('sorties', sortie));
+		});
+		const results = await Promise.all(promises);
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			count: results.length,
+			absences: results,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+}
 
 exports.router = [
 	{
@@ -741,6 +825,12 @@ exports.router = [
 		route: "/api-dev/ias-users",
 		handler: deleteIasUsers,
 		method: "DELETE",
+	},
+	{
+		on: true,
+		route: "/api-dev/import-outings",
+		handler: importOutingsHandler,
+		method: "GET",
 	},
 ];
 

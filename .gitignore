@@ -10,6 +10,7 @@ option/
 
 # Files
 .DS_Store
+snap/DB_UPGRADER/*.json
 
 #temp
 untrack_/
