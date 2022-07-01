@@ -113,68 +113,95 @@ const fetchOnMessageHandler = (msg, seqno) => {
 			buffer += chunk.toString('utf8');
 		});
 		stream.once('end', async () => {
+			// console.log('Message END')
 			if (info.which !== 'TEXT') {
+				// Get the details of the email (From, To, Subjectm, Date)
 				const headerContent = Imap.parseHeader(buffer);
 				console.log(`${prefix} Parsed Header: ${inspect(headerContent)}`)
 				msgData.header = headerContent;
-			} else {
-				const isAttachmentPart = buffer.split('Content-Disposition: attachment;').length > 1 ? true : false;
-				if (isAttachmentPart) {
-					const attachmentData = getBodyAttachementData(buffer);
-					console.log(`${prefix} --> attachmentData filename`, attachmentData.fileName);
-					msgData.fileName = attachmentData.fileName;
-					msgData.content = attachmentData.content;
-
-					// upload file on cloudi
-					const filePath = path.join(__dirname, msgData?.fileName || 'noname.doc');
-					console.log(prefix,'filePath', filePath);
-					console.log('\nUPLOAD TO CLOUDINARY', msgData.fileName)
-					const upload = await STORE.cloudinary.uploadFile(
-						Buffer.from(msgData.content, 'base64'),
-						msgData.fileName,
-						undefined,
-						{ cloudinaryPath: '/test/' },
-					);
-					// console.log('upload', upload)
-					registerWeatherForecastLinkToHarbour(upload.secure_url, upload.public_id, msgData.header.from)
-				}
 			}
 		});
 	});
 	msg.once('attributes', (attribute) => {
-		console.log('\n\n------------------')
-		console.log(`${prefix} Attributes ${inspect(attribute, false, 8)}`)
-		console.log('------------------')
-	})
+		// console.log('\n\n------------------')
+		// console.log(`${prefix} Attributes ${inspect(attribute, false, 8)}`)
+		// console.log('------------------')
+		// Find attachements details in email attributes
+		const attachments = findAttachmentParts(attribute.struct);
+		console.log(`${prefix} found ${attachments.length} attachment(s)`)
+
+		attachments.map(attachment => {
+			if (!attachment.params?.name?.toLowerCase().includes('anglais')
+			&& !attachment.params?.name?.toLowerCase().includes('italien')) {
+				console.log(prefix + 'Fetching attachment %s', attachment.params.name);
+				const f = connexion.fetch(attribute.uid, {
+					bodies: [attachment.partID],
+					struct: true,
+				});
+				//build function to process attachment message
+				f.on('message', buildAttMessageFunction(attachment, msgData));
+			} else {
+				console.log(prefix + 'Skip attachment %s', attachment.params.name);
+			}
+		})
+	});
 
 	msg.on('end', async () => {
 		console.log('\n------------------')
 		console.log(`${prefix}-> END`);
-		console.log('------------------')
 		console.log('------------------\n\n')
 	});
 }
 
-/**
- * @param {string} body 
- * @returns {{ fileName: string, content: string }}
- */
-const getBodyAttachementData = (body) => {
-	const attachementPart = body.split('Content-Disposition: attachment;')[1];
-	const strArr = attachementPart.split('\r\n');
-	// strArr[0]) // filename="bulletin_Port5jours_20220505.pdf";
-	// strArr[1]) // size=971845; creation-date="Thu, 05 May 2022 05:01:18 GMT";
-	// strArr[2]) // modification-date="Thu, 05 May 2022 06:54:01 GMT"
-	// strArr[3]) // Content-ID: <97203D7240D4194697E993AFEE549C06@EURPRD10.PROD.OUTLOOK.COM>
-	// strArr[4]) // Content-Transfer-Encoding: base64
-	// strArr[5]) // \n
-	// strArr[6]) // First line of our attachment content
-	// strArr[...]) // content of our attachment
-	// strArr[strArr.length -4]) // Last line of our attachement content
-	const fileName = strArr[0].split('=')[1]?.replaceAll("\"", '').replace(";", '');
-	const content = strArr.slice(6, (strArr.length - 3)).join('');
-	return ({ fileName, content });
-}
+function findAttachmentParts(struct, attachments) {
+	attachments = attachments || [];
+	for (var i = 0, len = struct.length, r; i < len; ++i) {
+		if (Array.isArray(struct[i])) {
+			findAttachmentParts(struct[i], attachments);
+		} else {
+			if (struct[i].disposition && ['inline', 'attachment'].indexOf(struct[i].disposition.type.toLowerCase()) > -1) {
+				attachments.push(struct[i]);
+			}
+		}
+	}
+	return attachments;
+};
+
+function buildAttMessageFunction(attachment, msgData) {
+	const filename = attachment.params.name;
+	const encoding = attachment.encoding;
+	const header = msgData.header;
+
+	return function (msg, seqno) {
+		var prefix = '(#' + seqno + ') ';
+		msg.on('body', async function (stream, info) {
+
+			let buffer = '';
+			stream.on('data', (chunk) => {
+				buffer += chunk.toString('utf8');
+			});
+			stream.on('end', async () => {
+				// upload file on cloudi
+				console.log('\nUPLOAD TO CLOUDINARY', filename)
+				const upload = await STORE.cloudinary.uploadFile(
+					Buffer.from(buffer, encoding),
+					filename,
+					undefined,
+					{
+						cloudinaryPath: '/Nauticspot-Next/auto-weather-forecast',
+						isFileNameUsed: true,
+						eraseLocal
+					},
+				);
+				// console.log('upload',upload)
+				registerWeatherForecastLinkToHarbour(upload.secure_url, upload.public_id, header);
+			})
+		});
+		msg.once('end', function () {
+			console.log(`${prefix} Attachment downloaded: ${filename}`);
+		});
+	};
+};
 
 /**
  * 
@@ -182,12 +209,11 @@ const getBodyAttachementData = (body) => {
  * @returns {Promise<void>}
  */
 const fetchMessage = async (msgSource) => {
-	console.log('fetchMessage', msgSource);
 	return (new Promise((resolve, reject) => {
 		const fetchReq = connexion.seq.fetch(msgSource, {
 			bodies: ['HEADER.FIELDS (FROM TO SUBJECT DATE)', 'TEXT'],
+			struct: true,
 		});
-		// console.log('fetchReq', fetchReq)
 		fetchReq.addListener('message', fetchOnMessageHandler)
 		fetchReq.addListener('error', (err) => {
 			console.log('[ERROR - FETCH]', err);
@@ -239,13 +265,12 @@ const initialiseImapConnection = () => {
 }
 
 const weatherAutoLoader = async (req, res) => {
-	console.log('weatherAutoLoader');
+	console.log('ENDPOINT [/api/weather/loader] => weatherAutoLoader');
 	try {
 		// initialiseImapConnection();
-
 		// const boxes = await getBoxes();
-		// console.log('BOXES', boxes)
-		// console.log('INBOX', boxes['INBOX'].children)
+		// console.log('BOXES', boxes);
+		// console.log('INBOX', boxes['INBOX'].children);
 
 		await fetchMessage('1:*');
 
@@ -257,41 +282,58 @@ const weatherAutoLoader = async (req, res) => {
 	}
 }
 
-const domainTable = {
-	"portlanapoule.com": 'ElFV4x2R7Y',
-}
+const HEADER_TABLE = [ // From
+	[ 'SPL PORTS DE MENTON', ['EgiqgIFh7K', 'Nxs1tMY37Y'] ],
+	[ 'PORT DE PLAISANCE DE GRUISSAN', ['4e2cd2p6mt'] ],
+	[ 'PORT LA NAPOULE CAPITAINERIE', ['ElFV4x2R7Y'] ],
+	[ 'PORT CARNON', ['Nx6KHMP2mY'] ],
+	[ 'REGIE DU PORT LEUCATE', ['EgDGCtXVVK'] ],
+	[ 'Météo France Produits  <production.sud-est@meteo.fr>', ['BxqaMWYBqc'] ],
+]
 
-const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailStr) => {
-	console.log('registerWeatherForecastLinkToHarbour')
-	console.log('secureUrl', secureUrl);
-	console.log('publicId', publicId);
-	console.log('emailStr', emailStr);
+const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHeaders) => {
+	const emailFrom = emailHeaders.from[0];
+	const emailTo = emailHeaders.to[0];
 	// extract email
-	let emailDomain = emailStr[0].split('@')[1].replace('>', '');
-	console.log('001 -> emailDomain', emailDomain);
+	/**@type {Array<TYPES.T_harbour['id']>} */
+	let harbourId = undefined;
+	HEADER_TABLE.map(entries => {
+		if (emailFrom.includes(entries[0])) {
+			harbourId = entries[1];
+			console.log('MATCH', emailFrom, 'From', harbourId);
+		}
+		if (!harbourId && emailTo.includes(entries[0])) {
+			harbourId = entries[1];
+			console.log('MATCH', emailTo, 'To', harbourId);
+		}
+	})
 
-
-	/**@type {Array<TYPES.T_harbour>} */
-	const [harbour] = await STORE.harbourmgmt.getHarboursWhere({ id: domainTable[emailDomain] });
-	if (!harbour) {
-		console.log('[ERROR] NO harbour found')
+	if (!harbourId) {
+		console.log('[ERROR] NO harbour found',emailHeaders)
 		return
 	}
-	console.log('[INFO] harbour found', harbour.name);
-	const date = new Date();
-	/**@type {TYPES.T_weather} */
-	const newWeatherObj = {
-		harbour_id: harbour.id,
-		title: `Météo du ${date.getDate()}`,
-		img: secureUrl,
-		cloudinary_img_public_id: publicId,
-		date: Date.now(),
-		created_at: Date.now(),
-		updated_at: Date.now(),
-	};
-	const weather = await STORE.weathermgmt.createWeather(newWeatherObj)
-	console.log('weather', weather)
-
+	try {
+		/**@type {Array<Promise<TYPES.T_harbour>>} */
+		const promises = [];
+		harbourId.map(harbourId => {
+			const date = new Date();
+			/**@type {TYPES.T_weather} */
+			const newWeatherObj = {
+				harbour_id: harbourId,
+				title: `Météo du ${date.toLocaleDateString().split('-').reverse().join('-')}`,
+				img: secureUrl,
+				cloudinary_img_public_id: publicId,
+				date: Date.now(),
+				created_at: Date.now(),
+				updated_at: Date.now(),
+			};
+			promises.push(STORE.weathermgmt.createWeather(newWeatherObj));
+		})
+		const results = await Promise.all(promises);
+		console.log('Weather object created:',results);
+	} catch (error) {
+		console.log('[ERROR]', error)
+	}
 }
 
 exports.onLoad = () => {
@@ -322,4 +364,3 @@ exports.router = [{
 	method: "GET",
 	handler: weatherAutoLoader,
 }];
-
