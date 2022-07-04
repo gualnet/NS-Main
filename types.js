@@ -286,4 +286,15 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} id
  * @property {string} is_notification_sent
  * @property {string} place_id
+
+/**
+ * @typedef T_weather
+ * @property {EpochTimeStamp} created_at
+ * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} updated_at
+ * @property {string} cloudinary_img_public_id
+ * @property {string} id
+ * @property {string} img
+ * @property {string} title
+ * @property {T_harbour['id']} harbour_id
  */

@@ -27,7 +27,7 @@ cloudinary.config({
  */
 var uploadFile = async function (_file, _fileName, _nameFormat, options = {}) {
     return new Promise(resolve => {
-        var isFileNameUsed = false;
+        var isFileNameUsed = options.isFileNameUsed || false;
         if (_nameFormat) {
             // get file extension
             var split = _fileName.split('.');
