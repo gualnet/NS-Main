@@ -1,6 +1,7 @@
 const ENUM = require('../lib-js/enums');
 const TYPES = require('../../types');
 const verifyRoleAccess = require('../lib-js/verify').verifyRoleAccess;
+const fetch = require('node-fetch');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -501,6 +502,59 @@ async function registerOneSignalUserIdHandler(_req, _res) {
     }
 }
 
+/**
+ * 
+ * @param {TYPES.T_communication} notification 
+ */
+const sendGoodbarberPushNotification = async (notification) => {
+	try {
+		console.log('sendGoodbarberPushNotification');
+		console.log('notification',notification);
+
+		const harbour = await getHarbourById(notification.harbour_id);
+		console.log('harbour', harbour);
+		const entity = await getEntityById(harbour.id_entity);
+		console.log('entity', entity);
+		
+		// const gbbAppId = '3175184';
+		const gbbAppId = '317518';
+		const gbbApiKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzE3NTE4NCwidGltZXN0YW1wIjoiMjAyMi0wNy0wNCAwNzo1MDoyNi4';
+		const eventType = notification.category;
+		const text = notification.message.replace('<p>', '').replace('</p>', '');
+		const msg = `${eventType}: ${text}`;
+		console.log('MSG:\n', msg)
+
+		const response = await fetch(
+			`https://classic.goodbarber.dev/publicapi/v1/general/push/${gbbAppId}/`,
+			{
+				method: 'POST',
+				headers: { 
+					'content-type': 'application/json',
+					token: gbbApiKey,
+				},
+				body: JSON.stringify({
+					platform: 'all',
+					message: msg,
+				})
+			}
+		);
+
+		console.log('==>', response.ok);
+		if (response.ok) {
+			const resp = await response.json();
+			console.log('resp',resp)
+			return(true);
+		} else {
+			const resp = await response.json();
+			console.log('Err resp',resp)
+			throw(new Error(resp.error_description));
+		}
+	} catch (error) {
+		console.error('[ERROR]', error);
+		throw error;
+	}
+};
+
 // DB Where getter/setter
 /**
  * @typedef findCommunicationsOptions
@@ -742,10 +796,11 @@ exports.plugin =
 
                         _FD.read_id = [];
 
-                        var promise = await sendNotification(_FD);
-                        if (promise.response) {
-                            if (promise.users_id)
-                                _FD.users_id = promise.users_id;
+												const isPushSent = await sendGoodbarberPushNotification(_FD)
+                        // var promise = await sendNotification(_FD);
+                        if (isPushSent) {
+                            // if (promise.users_id)
+                            //     _FD.users_id = promise.users_id;
 
 
                             var com = await createCom(_FD);
