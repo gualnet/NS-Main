@@ -158,6 +158,8 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} wlink_vone_user
  * @property {string} wlink_vtwo_apikey
  * @property {string} wlink_vtwo_secretkey
+ * @property {string} gbbAppId
+ * @property {string} gbbApiKey
  */
 
 /**

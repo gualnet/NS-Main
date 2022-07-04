@@ -60,7 +60,11 @@ async function getComById(_id) {
         });
     });
 }
-
+/**
+ * 
+ * @param {string} _id 
+ * @returns {TYPES.T_entity}
+ */
 async function getEntityById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdb.FindById(_entityCol, _id, null, function (_err, _data) {
@@ -218,7 +222,11 @@ async function getAdminById(_id) {
         });
     });
 }
-
+/**
+ * 
+ * @param {string} _id 
+ * @returns {TYPES.T_harbour}
+ */
 async function getHarbourById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdb.FindById(_harbourCol, _id, null, function (_err, _data) {
@@ -516,21 +524,20 @@ const sendGoodbarberPushNotification = async (notification) => {
 		const entity = await getEntityById(harbour.id_entity);
 		console.log('entity', entity);
 		
-		// const gbbAppId = '3175184';
-		const gbbAppId = '317518';
-		const gbbApiKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MzE3NTE4NCwidGltZXN0YW1wIjoiMjAyMi0wNy0wNCAwNzo1MDoyNi4';
-		const eventType = notification.category;
+		let eventType = notification.category.toLocaleLowerCase().split('');
+		eventType[0] = eventType[0].toUpperCase();
+		eventType = eventType.join('');
 		const text = notification.message.replace('<p>', '').replace('</p>', '');
 		const msg = `${eventType}: ${text}`;
 		console.log('MSG:\n', msg)
 
 		const response = await fetch(
-			`https://classic.goodbarber.dev/publicapi/v1/general/push/${gbbAppId}/`,
+			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
 			{
 				method: 'POST',
 				headers: { 
 					'content-type': 'application/json',
-					token: gbbApiKey,
+					token: entity.gbbApiKey,
 				},
 				body: JSON.stringify({
 					platform: 'all',
@@ -775,6 +782,7 @@ exports.plugin =
                             _FD.link = addProtocolToUrl(_FD.link);
 
                         _FD.date = Date.now();
+                        _FD.created_at = Date.now();
 
                         //img gesture
                         if (_FD.img) {
@@ -862,7 +870,7 @@ exports.plugin =
                     _Coms[i].user_category = "Visiteurs";
                 }
 
-                var date = new Date(_Coms[i].date);
+                var date = new Date(_Coms[i].created_at || _Coms[i].date);
                 var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
 
                 date = new Date(_Coms[i].date_start);
@@ -887,7 +895,7 @@ exports.plugin =
                     .replace(/__PJ__/g, _Coms[i].pj)
                     .replace(/__IMG__/g, _Coms[i].img)
                     .replace(/__DATE__/g, dateFormated)
-                    .replace(/__DATETIMEORDER__/g, _Coms[i].date)
+                    .replace(/__DATETIMEORDER__/g, _Coms[i].created_at)
             }
             _indexHtml = _indexHtml.replace("__COMS__", _comGen).replace(/undefined/g, '');
 
