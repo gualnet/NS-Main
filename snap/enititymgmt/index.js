@@ -646,6 +646,8 @@ exports.plugin =
 					.replace(/__WLINK_VONE_TOKEN__/g, _entities[i].wlink_vone_token)
 					.replace(/__WLINK_VTWO_APIKEY__/g, _entities[i].wlink_vtwo_apikey)
 					.replace(/__WLINK_VTWO_SECRETKEY__/g, _entities[i].wlink_vtwo_secretkey)
+					.replace(/__GBB_APP_ID__/g, _entities[i].gbbAppId)
+					.replace(/__GBB_API_KEY__/g, _entities[i].gbbApiKey)
 
 			}
 			_indexHtml = _indexHtml.replace("__ENTITIES__", _entityGen).replace(/undefined/g, '');

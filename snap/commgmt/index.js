@@ -1,6 +1,7 @@
 const ENUM = require('../lib-js/enums');
 const TYPES = require('../../types');
 const verifyRoleAccess = require('../lib-js/verify').verifyRoleAccess;
+const fetch = require('node-fetch');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -59,7 +60,11 @@ async function getComById(_id) {
         });
     });
 }
-
+/**
+ * 
+ * @param {string} _id 
+ * @returns {TYPES.T_entity}
+ */
 async function getEntityById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdb.FindById(_entityCol, _id, null, function (_err, _data) {
@@ -217,7 +222,11 @@ async function getAdminById(_id) {
         });
     });
 }
-
+/**
+ * 
+ * @param {string} _id 
+ * @returns {TYPES.T_harbour}
+ */
 async function getHarbourById(_id) {
     return new Promise(resolve => {
         STORE.db.linkdb.FindById(_harbourCol, _id, null, function (_err, _data) {
@@ -501,6 +510,54 @@ async function registerOneSignalUserIdHandler(_req, _res) {
     }
 }
 
+/**
+ * 
+ * @param {TYPES.T_communication} notification 
+ */
+const sendGoodbarberPushNotification = async (notification) => {
+	try {
+		const harbour = await getHarbourById(notification.harbour_id);
+		const entity = await getEntityById(harbour.id_entity);
+		if (!entity.gbbAppId || !entity.gbbApiKey) {
+			throw(new Error('Missing Goodbarber auth informations'))
+		}
+		
+		let eventType = notification.category.toLocaleLowerCase().split('');
+		eventType[0] = eventType[0].toUpperCase();
+		eventType = eventType.join('');
+		const text = notification.message.replace('<p>', '').replace('</p>', '');
+		const msg = `${eventType}: ${text}`;
+
+		const response = await fetch(
+			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
+			{
+				method: 'POST',
+				headers: { 
+					'content-type': 'application/json',
+					token: entity.gbbApiKey,
+				},
+				body: JSON.stringify({
+					platform: 'all',
+					message: msg,
+				})
+			}
+		);
+
+		if (response.ok) {
+			const resp = await response.json();
+			console.log('resp',resp)
+			return(true);
+		} else {
+			const resp = await response.json();
+			console.log('Err resp',resp)
+			throw(new Error(resp.error_description));
+		}
+	} catch (error) {
+		console.error('[ERROR]', error);
+		throw error;
+	}
+};
+
 // DB Where getter/setter
 /**
  * @typedef findCommunicationsOptions
@@ -721,6 +778,7 @@ exports.plugin =
                             _FD.link = addProtocolToUrl(_FD.link);
 
                         _FD.date = Date.now();
+                        _FD.created_at = Date.now();
 
                         //img gesture
                         if (_FD.img) {
@@ -742,10 +800,11 @@ exports.plugin =
 
                         _FD.read_id = [];
 
-                        var promise = await sendNotification(_FD);
-                        if (promise.response) {
-                            if (promise.users_id)
-                                _FD.users_id = promise.users_id;
+												const isPushSent = await sendGoodbarberPushNotification(_FD)
+                        // var promise = await sendNotification(_FD);
+                        if (isPushSent) {
+                            // if (promise.users_id)
+                            //     _FD.users_id = promise.users_id;
 
 
                             var com = await createCom(_FD);
@@ -807,7 +866,7 @@ exports.plugin =
                     _Coms[i].user_category = "Visiteurs";
                 }
 
-                var date = new Date(_Coms[i].date);
+                var date = new Date(_Coms[i].created_at || _Coms[i].date);
                 var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
 
                 date = new Date(_Coms[i].date_start);
@@ -832,7 +891,7 @@ exports.plugin =
                     .replace(/__PJ__/g, _Coms[i].pj)
                     .replace(/__IMG__/g, _Coms[i].img)
                     .replace(/__DATE__/g, dateFormated)
-                    .replace(/__DATETIMEORDER__/g, _Coms[i].date)
+                    .replace(/__DATETIMEORDER__/g, _Coms[i].created_at)
             }
             _indexHtml = _indexHtml.replace("__COMS__", _comGen).replace(/undefined/g, '');
 
