@@ -190,7 +190,7 @@ function buildAttMessageFunction(attachment, msgData) {
 					{
 						cloudinaryPath: '/Nauticspot-Next/auto-weather-forecast',
 						isFileNameUsed: true,
-						eraseLocal
+						// eraseLocal
 					},
 				);
 				// console.log('upload',upload)
