@@ -516,20 +516,17 @@ async function registerOneSignalUserIdHandler(_req, _res) {
  */
 const sendGoodbarberPushNotification = async (notification) => {
 	try {
-		console.log('sendGoodbarberPushNotification');
-		console.log('notification',notification);
-
 		const harbour = await getHarbourById(notification.harbour_id);
-		console.log('harbour', harbour);
 		const entity = await getEntityById(harbour.id_entity);
-		console.log('entity', entity);
+		if (!entity.gbbAppId || !entity.gbbApiKey) {
+			throw(new Error('Missing Goodbarber auth informations'))
+		}
 		
 		let eventType = notification.category.toLocaleLowerCase().split('');
 		eventType[0] = eventType[0].toUpperCase();
 		eventType = eventType.join('');
 		const text = notification.message.replace('<p>', '').replace('</p>', '');
 		const msg = `${eventType}: ${text}`;
-		console.log('MSG:\n', msg)
 
 		const response = await fetch(
 			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
@@ -546,7 +543,6 @@ const sendGoodbarberPushNotification = async (notification) => {
 			}
 		);
 
-		console.log('==>', response.ok);
 		if (response.ok) {
 			const resp = await response.json();
 			console.log('resp',resp)
