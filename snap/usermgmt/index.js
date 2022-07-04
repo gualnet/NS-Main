@@ -340,8 +340,9 @@ async function addUserHandler(req, res) {
 				username: null,
 			};
 			const newUser = { ...rawUser, ...user };
-			if (await createUser(newUser)) {
-				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: user.id, harbour_id: user.harbour_id, token: user.token }, "1.0");
+			const createdUser = await createUser(newUser);
+			if (createdUser) {
+				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: createdUser.id, harbour_id: createdUser.harbour_id, token: createdUser.token }, "1.0");
 				return;
 			}
 			else {

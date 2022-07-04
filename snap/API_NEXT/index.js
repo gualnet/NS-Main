@@ -45,6 +45,9 @@ async function updateElement(tableName, searchObj, updateObj) {
 };
 // DELETE
 async function deleteElement(tableName, searchObj) {
+	if (Object.keys(searchObj).length < 1) {
+		throw(new Error('Must specify at least 1 search value'));
+	}
 	return new Promise((resolve, reject) => {
 		STORE.db.linkdb.Delete(tableName, searchObj, function (_err, _data) {
 			if (_data)

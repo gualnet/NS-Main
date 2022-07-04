@@ -266,8 +266,8 @@
 							if (document.getElementById("residentInput")) {
 								form = document.getElementById("boatform");
 								formData = new FormData(form);
-								formData.append("user", user.id);
-								formData.append("harbour", user.harbour_id);
+								formData.append("user_id", user.id);
+								formData.append("harbour_id", user.harbour_id);
 								fetch("/api/addboat",
 									{
 										method: form.method,
