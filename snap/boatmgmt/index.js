@@ -191,7 +191,13 @@ async function getAdminById(_id) {
 async function addBoatHandler(_req, _res) {
 	_req.post.date = Date.now();
 	delete _req.post.ponton_id;
+	/**@type {TYPES.T_boat} */
 	var boat = await createBoat(_req.post);
+
+	/**@type {Array<TYPES.T_user>} */
+	const [user] = await STORE.API_NEXT.getElements('user', { id: _req.post.user_id });
+	user.boat_id = boat.id;
+	await STORE.API_NEXT.updateElement('user', { id: user.id }, user)
 	boat.enabled = false;
 	UTILS.httpUtil.dataSuccess(_req, _res, "Bateau enregistré", "1.0")
 }
@@ -296,11 +302,9 @@ async function verifyFormBoatHandler(_req, _res) {
 
 // handle that return the boat of the user
 async function getUserBoatsHandler(_req, _res) {
-	console.log('getUserBoatsHandler', _req.get)
 	if (_req.get.user_id && _req.get.harbour_id) {
 		const { user_id, harbour_id } = _req.get;
 		const boats = await STORE.API_NEXT.getElements('boat', { user_id, harbour_id });
-		console.log('boats',boats)
 		if (boats[0]) {
 			UTILS.httpUtil.dataSuccess(_req, _res, 'success', boats, '1.0');
 			return;
