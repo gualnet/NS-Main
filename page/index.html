@@ -313,7 +313,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-4 px-2" onclick="window.location.href = ('/camera');">
+								<div class="col-4 px-2" id="cameraBtn" onclick="window.location.href = ('/camera');">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 25px;"
@@ -1034,6 +1034,10 @@
 	</div>
 
 	<script>
+		window.addEventListener('load', () => {
+			displayCameraBtn();
+		});
+
 		if (localStorage['harbour_id'] === '4e2cd2p6mt') { // rule for gruissan
 			const bureauDuPortTitleEl = document.querySelector('#bureauDuPortTitle');
 			if (bureauDuPortTitleEl) {
@@ -1053,6 +1057,27 @@
 			}
 		};
 
+		/**
+		 * Check if the camera button should be displayed or not
+		 */
+		const displayCameraBtn = async () => {
+			try {
+				const cameraBtnEl = document.querySelector('#cameraBtn');
+				const harbourId = localStorage['harbour_id'];
+				const response = await fetch(`/api/camera/${harbourId}`);
+				if (!response.ok) {
+					cameraBtnEl.style.display = 'none';
+					return;
+				}
+				const cameras = (await response.json()).data || [];
+				if (cameras.length > 0) {
+					return;
+				}
+				cameraBtnEl.style.display = 'none';
+			} catch (error) {
+				console.error(error);
+			}
+		}
 
 		fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
 			let weather_api = "wwo";
@@ -1641,6 +1666,7 @@
 		}).catch((error) => {
 			console.log(error);
 		});
+
 	</script>
 
 
