@@ -777,6 +777,103 @@ const importOutingsHandler = async (req, res) => {
 	}
 }
 
+const fixUsersHandler = async (req, res) => {
+	try {
+		/** @type {Array<TYPES.T_user>} */
+		const allUsers = await getElementsWhere('user', {});
+		/** @type {Array<TYPES.T_boat>} */
+		const allBoats = await getElementsWhere('boat', {});
+
+		const usersWithoutBoats = allUsers.filter(user => !user.boat_id)
+		console.log('LEN', usersWithoutBoats.length)
+
+		const usersWithoutBoatsMap = {};
+		usersWithoutBoats.map(user => usersWithoutBoatsMap[user.id] = user);
+		console.log(usersWithoutBoats.length);
+
+		const boatMap = {};
+		allBoats.map(boat => boatMap[boat.user_id] = boat.id);
+
+		usersWithoutBoats.map((user, index) => {
+			const foundBoatId = boatMap[user.id];
+			if (foundBoatId) {
+				user.boat_id = foundBoatId
+			}
+		})
+
+		const promises = [];
+		usersWithoutBoats.map(user => {
+			promises.push(updateElementWhere('user', { id: user.id }, user));
+		});
+		const updatedUsers = await Promise.all(promises);
+		
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' })
+		res.end(JSON.stringify({
+			success: true,
+			countAll: allUsers.length,
+			countWithout: usersWithoutBoats.length,
+			countUpdated: updatedUsers.length,
+			users: updatedUsers,
+		}));
+
+
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500)
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
+const fixBoatsHandler = async (req, res) => {
+	try {
+		/** @type {Array<TYPES.T_boat>} */
+		const allBoats = await STORE.API_NEXT.getElements('boat', {});
+		const boatsWithoutHarbour = allBoats.filter(boat => boat.harbour_id === null || !boat.harbour_id);
+
+		/** @type {Array<TYPES.T_user>} */
+		const allUsers = await STORE.API_NEXT.getElements('user', {});
+		const usersWithBoats = allUsers.filter(user => user.boat_id && user.harbour_id);
+
+		const mapBoatIdToHarbourId = {};
+		usersWithBoats.map(user => {
+			mapBoatIdToHarbourId[user.boat_id] = user.harbour_id;
+		});
+
+		boatsWithoutHarbour.map(boat => {
+			const harbourId = mapBoatIdToHarbourId[boat.id];
+			if (harbourId) {
+				boat.harbour_id = harbourId;
+			} else {
+			}
+		})
+		
+		/** @type {Promises<Array<TYPES.T_boat>>} */
+		const promises = [];
+		boatsWithoutHarbour.map(boat => {
+			promises.push(STORE.API_NEXT.updateElement('boat', {id: boat.id}, boat));
+		});
+		const results = await Promise.all(promises);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' })
+		res.end(JSON.stringify({
+			success: true,
+			count: results.length,
+			boats: results,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500)
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
 exports.router = [
 	{
 		on: true,
@@ -832,6 +929,18 @@ exports.router = [
 		handler: importOutingsHandler,
 		method: "GET",
 	},
+	{
+		on: true,
+		route: "/api-dev/fix-users",
+		handler: fixUsersHandler,
+		method: "GET",
+	},
+	{
+		on: true,
+		route: "/api-dev/fix-boats",
+		handler: fixBoatsHandler,
+		method: "GET",
+	},
 ];
 
 exports.handler = async (req, res) => {
@@ -843,5 +952,9 @@ exports.plugin = {};
 exports.setup = {
 	title: "DB_UPGRADER",
 	description: "Manage DB data structures",
-	version: "0.0.1",
+	version: "1.0.2",
 }
+/*
+	1.0.1 - add /api-dev/fix-users endpoint
+	1.0.2 - add /api-dev/fix-boats endpoint - add fill boat.harbour_id where it is missing
+*/
