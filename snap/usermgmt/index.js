@@ -570,7 +570,6 @@ const getUserWhere = async (whereOpt) => {
 
 
 const resetPasswordRequestHandler = async (req, res) => {
-	console.log('resetPasswordRequestHandler');
 	try {
 		// GET USER INFO
 		const [user] = await getUserWhere({ email: req.get.email });
@@ -637,6 +636,42 @@ const setNewPasswordHandler = async (req, res) => {
 	} catch (error) {
 		console.error('[ERROR]', error);
 		res.writeHead(500);
+		res.end(JSON.stringify({ success: false }));
+	}
+};
+
+const autoDeleteUserAccount = async (req, res) => {
+	try {
+		const authToken = req.headers['token'];
+
+		/** @type {Array<TYPES.T_user>} */
+		const [user] = await STORE.API_NEXT.getElements('user', { token: authToken });
+		if (!user) {
+			res.writeHead(401, 'Unauthorized', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				message: 'Invalid user token'
+			}));
+			return;
+		}
+
+		/** @type {Array<TYPES.T_boat>} */
+		const deletedBoats = await STORE.API_NEXT.deleteElement('boat', { user_id: user.id });
+		/** @type {Array<TYPES.T_absence>} */
+		const deletedAbsences = await STORE.API_NEXT.deleteElement('absences', { user_id: user.id });
+		/** @type {Array<TYPES.T_user>} */
+		const deletedUser = await STORE.API_NEXT.deleteElement('user', { id: user.id });
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			deletedUser,
+			deletedAbsences,
+			deletedBoats,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error)
+		res.writeHead(500, 'Internal Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({ success: false }));
 	}
 };
@@ -708,6 +743,12 @@ exports.router =
 			route: "/api/user/reset-pwd",
 			handler: setNewPasswordHandler,
 			method: "POST",
+		},
+		{
+			on: true,
+			route: "/api/users/delete-my-account",
+			handler: autoDeleteUserAccount,
+			method: "DELETE",
 		}
 	];
 
