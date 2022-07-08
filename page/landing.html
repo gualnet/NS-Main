@@ -135,7 +135,7 @@
                     <p style="color: #0090A8; margin-left: 15px">1ère connexion ?</p>
                 </div>
                 <div class="col-6 col-lg-6 col-md-6 col-sm-6 p-1">
-                    <a id="validate_button" onclick="changePage('/selectharbour?account=true');" href="/selectharbour?account=true" style="padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.05em; right: 15px; position: relative; bottom: 8px; font-size: 9px;" class="btn btn-block btn-danger btn-lg btn-lgft">S'ENREGISTRER &nbsp;&nbsp;<i class="fa fa-angle-left fa fa-angle-right" style="font-size: 11px;"></i></a>
+                    <a id="validate_button" onclick="changePage('/selectharbour?account=true');" style="color: #FFF; padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.15em; right: 15px; position: relative; bottom: 8px; font-size: 10px;" class="btn btn-block btn-danger btn-lg btn-lgft">S'ENREGISTRER &nbsp;&nbsp;<i class="fa fa-angle-left fa fa-angle-right" style="font-size: 11px;"></i></a>
                 </div>
             </div>
             <!-- <div class="row">
@@ -180,13 +180,15 @@
 				};
 
         var urlParam = new URLSearchParams(window.location.search);
-        function changePage(_url) {
-            var urlPara = new URLSearchParams(window.location.search);
-
-            if (urlParam.get("osid"))
-                localStorage['onesignal_userid'] = urlPara.get("osid");
-
-            window.location.href = _url;
+        function changePage(url) {
+					if (url.includes('selectharbour')) {
+						url += `&entity_name=${localStorage['entity_name']}`;
+						url += `&entity_id=${localStorage['entity_id']}`;
+					}
+					var urlPara = new URLSearchParams(window.location.search);
+					if (urlParam.get("osid"))
+							localStorage['onesignal_userid'] = urlPara.get("osid");
+					window.location.href = url;
         }
         "use strict"
         var urlParam = new URLSearchParams(window.location.search);
