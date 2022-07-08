@@ -53,39 +53,57 @@
     </style>
 
     <script>
-        var harbours;
-        fetch("/api/getharbours/" + localStorage['entity_id'], {
+			var harbours;
+			window.addEventListener('load', () => {
+				setLocalStorageVars();
+				fetchHarbours();
+			});
+
+			/*
+				Needed on Android device app
+			*/
+			const setLocalStorageVars = () => {
+				const urlParams = new URLSearchParams(window.location.search);
+				if (!localStorage['entity_id']) {
+					localStorage['entity_id'] = urlParams.get('entity_id');
+				}
+				if (!localStorage['entity_name']) {
+					localStorage['entity_name'] = urlParams.get('entity_name');
+				}
+			}
+
+			const fetchHarbours = () => {
+				const entity_id = 
+				fetch("/api/getharbours/" + localStorage['entity_id'], {
             method: "get"
         }).then(response => response.json()).then(_data => {
-            harbours = _data.data;
-            console.log(harbours.length);
-            if (harbours.length < 2) {
-                selectHarbour(harbours[0].id, harbours[0].name)
-            }
-            for (var i = 0; i < harbours.length; i++) {
-                console.log(harbours[i].name);
-                console.log(harbours[i].id);
-                var img;
-                if (harbours[i].img) {
-                    img = harbours[i].img;
-                } else {
-                    img = localStorage['entity_logo'];
-                }
-                document.getElementById("logo").src = localStorage['entity_logo'];
-                document.getElementById("harbourlist").insertAdjacentHTML("beforeend",
-									`<div class="col-lg-4 col-md-6 col-6 pb-4" onclick="selectHarbour('${harbours[i].id}')">
-										<div class="contentport text-center">
-											<div class="d-block mb-2 h-100">
-												<img class="shadow" style="width:125px;height:125px;border-radius:22px;" src="${img}" alt="">
-											</div>
-											<span>${harbours[i].name}</span>
-										</div>
-									</div>`
-								);
-            }
+					harbours = _data.data || [];
+					console.log(harbours.length);
+
+					const harbourListEl = document.getElementById("harbourlist");
+
+					harbours.map(harbour => {
+						console.log('harbour: ', harbour.id, harbour.name);
+						const img = harbour.img || localStorage['entity_logo'];
+						document.getElementById("logo").src = img;
+						harbourListEl.insertAdjacentHTML('beforeend',
+							`<div class="col-lg-4 col-md-6 col-6 pb-4" onclick="selectHarbour('${harbour.id}')">
+								<div class="contentport text-center">
+									<div class="d-block mb-2 h-100">
+										<img class="shadow" style="width:125px;height:125px;border-radius:22px;" src="${img}" alt="">
+									</div>
+									<span>${harbour.name}</span>
+								</div>
+							</div>`
+						)
+					});
+					if (harbours.length < 2) {
+						selectHarbour(harbours[0].id);
+					}
         }).catch((error) => {
             console.log(error);
         });
+			}
 
 			function selectHarbour(harbour_id) {
 				localStorage['harbour_id'] = harbour_id;
@@ -123,7 +141,7 @@
     <script src="js/color-scheme-demo.js"></script>
 
     <!-- page level custom script -->
-    <script>
+    <!-- <script>
         "use strict"
         $(window).on('load', function () {
             var swiper = new Swiper('.swiper-container', {
@@ -132,7 +150,7 @@
                 },
             });
         });
-    </script>
+    </script> -->
     {{element->footer_app.html}}
 </body>
 <!-- Mirrored from maxartkiller.com/website/Nauticspot/landing.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:16 GMT -->
