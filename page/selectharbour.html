@@ -64,11 +64,13 @@
 			*/
 			const setLocalStorageVars = () => {
 				const urlParams = new URLSearchParams(window.location.search);
-				if (!localStorage['entity_id']) {
-					localStorage['entity_id'] = urlParams.get('entity_id');
+				const entityId = urlParams.get('entity_id');
+				const entityName = urlParams.get('entity_name');
+				if (entityId) {
+					localStorage['entity_id'] = entityId;
 				}
-				if (!localStorage['entity_name']) {
-					localStorage['entity_name'] = urlParams.get('entity_name');
+				if (entityName) {
+					localStorage['entity_name'] = entityName;
 				}
 			}
 
@@ -78,10 +80,7 @@
             method: "get"
         }).then(response => response.json()).then(_data => {
 					harbours = _data.data || [];
-					console.log(harbours.length);
-
 					const harbourListEl = document.getElementById("harbourlist");
-
 					harbours.map(harbour => {
 						console.log('harbour: ', harbour.id, harbour.name);
 						const img = harbour.img || localStorage['entity_logo'];
@@ -97,7 +96,7 @@
 							</div>`
 						)
 					});
-					if (harbours.length < 2) {
+					if (harbours.length < 2 && harbours[0]) {
 						selectHarbour(harbours[0].id);
 					}
         }).catch((error) => {
