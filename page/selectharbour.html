@@ -22,7 +22,7 @@
 
     <!-- Begin page content -->
 		<main class="flex-shrink-0">
-			<div class="container">
+			<div class="container" id="topCtn">
 				<div class="row text-center text-lg-left" id="harbourlist">
 						<div class="col-12">
 								<img id="logo" style="width:100%;height:auto" class="pb-4" src="" alt="">
@@ -33,7 +33,7 @@
 				</div>
 			</div>
 
-			<div class="container corse-layout hide">
+			<div class="container corse-layout hide" id="topCtnCorse">
 					<div class="row text-center text-lg-left" id="harbourlist">
 							<div class="col-12" id="headerCtn">
 								<div id="logoCtn">
@@ -63,7 +63,7 @@
         body {
             font-family: 'Poppins Regular' !important;
         }
-				.container .hide {
+				.container.hide {
 					display: none;
 				}
 				.corse-layout > #headerCtn {
@@ -88,8 +88,8 @@
 			var harbours;
 			window.addEventListener('load', () => {
 				setLocalStorageVars();
+				applyRulesPortsCorses();
 				fetchHarbours();
-				
 			});
 
 			/*
@@ -117,7 +117,6 @@
 					harbours.map(harbour => {
 						console.log('harbour: ', harbour.id, harbour.name);
 						const img = harbour.img || localStorage['entity_logo'];
-						document.getElementById("logo").src = img;
 						harbourListEl.insertAdjacentHTML('beforeend',
 							`<div class="col-lg-4 col-md-6 col-6 pb-4" onclick="selectHarbour('${harbour.id}')">
 								<div class="contentport text-center">
@@ -132,16 +131,25 @@
 					if (harbours.length < 2 && harbours[0]) {
 						selectHarbour(harbours[0].id);
 					}
-					applyRulesPortsCorses();
         }).catch((error) => {
             console.log(error);
         });
 			};
 
 			const applyRulesPortsCorses = () => {
-				if (localStorage['entity_id'] !== 'BgSNKrOB59') return;
+				const topCtnEl = document.querySelector('#topCtn');
 
-				document.getElementById("logo").src = localStorage['entity_logo'];
+				if (localStorage['entity_id'] !== 'BgSNKrOB59') {
+					const logoEl = topCtnEl.querySelector("#logo");
+					logoEl.src = localStorage['entity_logo'];
+					return;
+				}
+
+				topCtnEl.innerHTML = '';
+				const topCtnCorseEl = document.querySelector('#topCtnCorse');
+				topCtnCorseEl.classList.remove('hide');
+				const logoEl = topCtnCorseEl.querySelector("#logo");
+				logoEl.src = localStorage['entity_logo'];
 			}
 
 			function selectHarbour(harbour_id) {
