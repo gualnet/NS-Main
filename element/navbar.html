@@ -45,6 +45,8 @@
 			const userCategory = (!userId) ? 'visitor' : 'yachtsman';
 			const harbourId = localStorage['harbour_id'];
 
+			hideProfilAccessPortsCorses();
+
 			const communications = await fetchCommunicationsNavbar(harbourId, userCategory);
 			checkIfUnreadCommunications(userId, communications);
 		});
@@ -77,6 +79,14 @@
 					break;
 				}
 			}
-		}
+		};
+
+		const hideProfilAccessPortsCorses = () => {
+			if (localStorage['entity_id'] === 'BgSNKrOB59') {
+				const profilBtnEl = document.querySelector('#navbar-profil');
+				const profilBtnWrapper = profilBtnEl.parentElement.parentElement;
+				profilBtnWrapper.style.display = 'none';
+			}
+		};
 
 </script>
