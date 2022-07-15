@@ -42,9 +42,10 @@
 		});
 
 		const displayCommunicationsCards = (comms = []) => {
+			comms.sort((a, b) => a.date < b.date ? 1 : -1);
 			comms.map(comm => {
 				let row = commsRow;
-				const isNew = (comm.read_id.includes(localStorage['user'])) ? false : true;
+				const isNew = (comm.read_id?.includes(localStorage['user'])) ? false : true;
 
 				const timestamp = comm.created_at || comm.date;
 				const dateObj = new Date(timestamp);
