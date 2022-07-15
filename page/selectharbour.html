@@ -160,11 +160,16 @@
 						break;
 					}
 				}
+
 				const url = new URLSearchParams(window.location.search);
-				if (url.get('account') == "false") {
-					window.location.href = ("/index");
+				if (localStorage['entity_id'] !== 'BgSNKrOB59') {
+					if (url.get('account') == "false") {
+						window.location.href = ("/index");
+					} else {
+						window.location.href = ("/signup");
+					}
 				} else {
-					window.location.href = ("/signup");
+					window.location.href = ("/index-corse");
 				}
 			}
     </script>
