@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+
+	<style>
+		#compassContainer {
+			width: 100px;
+			height: 100px;
+			margin: 0 auto;
+		}
+
+		#compassRing {
+			height: 100px;
+			width: 100px;
+			border: 2px solid #F79F79;
+			border-radius: 50%;
+		}
+
+		#pointerContain {
+			height: 90px;
+			z-index: -50;
+			position: absolute;
+			-webkit-transform: rotate(20deg);
+			-webkit-transform-origin: bottom;
+			transform: rotate(300deg);
+			transform-origin: center;
+		}
+
+		#pointer {
+			margin: 0 auto;
+			width: 0;
+			height: 0;
+			border-left: 17px solid transparent;
+			border-right: 17px solid transparent;
+			border-bottom: 30px solid #F79F79;
+			-moz-border-radius: 50%;
+			-webkit-border-radius: 50%;
+			border-radius: 50%;
+		}
+
+		#direction {
+			height: 100%;
+			width: 100%;
+			top: -70%;
+			left: 20%;
+			font-size: 2em;
+			font-family: sans-serif;
+			color: white;
+			position: relative;
+			z-index: 100;
+		}
+
+
+		.cardmeteo {
+			background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("/img/img-meteo/bg-plage2.jpg");
+			background-position-x: 0%, 0%;
+			background-position-y: 0%, 0%;
+			background-size: auto, auto;
+			background-size: cover;
+			background-position: 50% 50%;
+			width: 100%;
+			height: auto;
+			border-radius: 20px;
+			box-shadow: 0px 8px 16px 4px;
+			margin-top: 20px;
+			margin-bottom: 20px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+
+		#compassContainer {
+			width: 100px;
+			height: 100px;
+			margin: 0 auto;
+		}
+
+		#compassRing {
+			height: 100px;
+			width: 100px;
+			border: 4px solid #fff;
+			border-radius: 50%;
+		}
+
+		#compassRingventjaune {
+			height: 100px;
+			width: 100px;
+			border-left: 20px solid transparent;
+			border-right: 20px solid transparent;
+			border-bottom: 10px solid transparent;
+			border-bottom-color: #ffc107;
+			border-radius: 50%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 9;
+			-webkit-transform: rotate(180deg);
+			-webkit-transform-origin: bottom;
+			transform: rotate(180deg);
+			transform-origin: center;
+		}
+
+		#pointerContain {
+			display: flex;
+			vertical-align: middle;
+			color: #fff;
+			margin: auto;
+			width: 100%;
+			height: 100%;
+		}
+
+		#content-wth {
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+
+		.bg-bssl-index {
+			background-image: url(img/img-meteo/bg-bssl.png);
+			background-repeat: no-repeat;
+			background-size: contain;
+			background-position: center;
+			padding: 15px;
+			width: 100px;
+			height: auto;
+		}
+	</style>
+
+	<!-- screen loader -->
+	{{element->loader.html}}
+
+	<!-- Begin page content -->
+	<main class="flex-shrink-0">
+		<!-- Fixed navbar -->
+		{{element->navheader.html}}
+		<nav class="navbar navbar-light fixed-top" style="margin-top:30px;">
+			<a id="return_link" class="navbar-brand" href="/index">
+				<i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i>
+			</a>
+		</nav>
+
+		<div class="card text-white bg-light mt-5 mb-3 ml-3 mr-3 rounded" id="weather_card" onclick="weatherOnClickHandler()">
+			<div class="card-body rounded" style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
+				<div class="row">
+					<div class="col">
+						<div class="justify-content-center">
+							<p class="text-center text1" id="meteo_desc"></p>
+						</div>
+						<div id="content-wth">
+							<div class="row">
+								<div class="col-6">
+									<div>
+										<h2 class="mr-2 mt-0 ml-2 mb-4" id="temperature" style="display: flex;">
+											<i class="large-font wi wi-thermometer"></i>
+											<span class="large-font" id="temperature"></span><span class="time-font">°C</span>
+										</h2>
+									</div>
+									<div>
+										<p class="ml-auto mr-4 mb-0 med-font" style="display: flex;">
+											<i class="med-font wi wi-raindrops"></i>
+											<span class="med-font" id="humidity" style="display: flex;"></span><span
+												class="med-font">mm</span>
+										</p>
+									</div>
+									<div>
+										<p class="ml-auto mb-0 med-font" style="display: flex;">
+											<i class="med-font bi bi-speedometer2"></i>
+											<span class="med-font" id="pressure"></span><span class="med-font">hPa</span>
+										</p>
+									</div>
+								</div>
+								<div class="col-6">
+									<div class="row">
+										<div class="col" id="wind_direction">
+											<div class="bg-bssl-index">
+												<div id="compassContainer" style="transform: rotate(180deg);">
+													<div id="compassRing">
+														<div id="pointerContain" style="transform: rotate(180deg);">
+															<p style="margin: auto; text-align: center;">
+																<i class="bi bi-wind"></i>
+																<br>
+																<span id="wind_speed"></span>
+																<span>nd</span>
+															</p>
+														</div>
+													</div>
+													<div id="compassRingventjaune">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container py-3">
+			<div class="row" style="display: block;margin:auto;margin-top:5vh;" id="weather"></div>
+			{{element->navbar.html}}
+		</div>
+
+	</main>
+
+	<!-- Required jquery and libraries -->
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+	<!-- cookie js -->
+	<script src="js/jquery.cookie.js"></script>
+
+	<!-- Swiper slider  js-->
+	<script src="vendor/swiper/js/swiper.min.js"></script>
+
+	<!-- Masonry js -->
+	<script src="vendor/masonry/masonry.pkgd.min.js"></script>
+
+	<!-- nouislider js -->
+	<script src="vendor/nouislider/nouislider.min.js"></script>
+
+	<!-- Customized jquery file  -->
+	<script src="js/main.js"></script>
+	<script src="js/color-scheme-demo.js"></script>
+
+	<!-- page level custom script -->
+	<script>
+		window.addEventListener('load', async () => {
+			const harbour = await fetchHarbourData();
+			console.log('>>harbour', harbour)
+			const forecast = await fetchWeatherForecastLink();
+			console.log('>>forecast', forecast)
+
+			displayForecastLinkBtn({ forecastLink: forecast.img });
+			fetchWeatherByCoords(harbour);
+
+		});
+
+		const fetchWeatherForecastLink = async () => {
+			try {
+				const url = `/api/weather/${localStorage["harbour_id"]}`;
+				const resp = await fetch(url);
+				const jsonResp = await resp.json();
+				// console.log('jsonResp', jsonResp);
+				const weatherForecastData = jsonResp.data;
+				// console.log('weatherData', weatherForecastData);
+				return (weatherForecastData);
+			} catch (error) {
+				console.error('[ERROR]', error);
+				document.getElementById("weather").innerHTML = `
+					<p class="text-secondary text-justify" style="padding-top:100px;">
+						Aucun bulletin météo publié pour ce port.
+					</p>
+				`;
+			}
+		};
+
+		const displayForecastLinkBtn = (opt = {}) => {
+			const forecastLink = opt.forecastLink;
+			if (forecastLink) {
+				document.getElementById("weather").innerHTML = `
+					<a class="btn btn-primary" style="font-size:12px;width:100%" target="_blank" href="${forecastLink}">
+						Ouvrir le bulletin météo
+					</a>
+				`;
+			} else {
+				document.getElementById("weather").innerHTML = `
+					<p class="text-secondary text-justify" style="padding-top:100px;">
+						Aucun bulletin météo publié pour ce port.
+					</p>
+				`;
+			}
+		};
+
+
+		const fetchHarbourData = async () => {
+			try {
+				const url = `/api/getharbour/${localStorage['harbour_id']}`;
+				const resp = await fetch(url);
+				const jsonResp = await resp.json();
+				console.log('jsonResp', jsonResp);
+				const harbour = jsonResp.data;
+				console.log('harbour', harbour);
+				return (harbour);
+			} catch (error) {
+				console.error('[ERROR]', error);
+			}
+		};
+
+		const fetchWeatherByCoords = async (harbour) => {
+			try {
+				const url = `/api/weather/coord?latitude=${harbour.latitude}&longitude=${harbour.longitude}`;
+				const resp = await fetch(url);
+				const jsonResp = await resp.json();
+				console.log('jsonResp', jsonResp);
+				const weather = JSON.parse(jsonResp.data.data).data.weather;
+				console.log('weather', weather);
+				// console.log('weather2', weather.data);
+				// console.log('weather3', weather.data.weather);
+				const date = new Date();
+				const hour = date.getHours();
+				const minutes = date.getMinutes();
+				const hhmm = hour + minutes;
+
+				const cloudy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337758/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/nuageux_2.1_dsd7ga.png"
+				const rainy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337759/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain-2_dyyoyk.png"
+				const sunCloudy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337759/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sun_cloud-afternoon_sqr3a6.jpg"
+				const nightClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337760/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/Lune_i1ckbh.jpg"
+				const sunsetClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337761/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunset_bpfwzj.png"
+				const rainHeavy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337765/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain_kztbgd.png"
+				const sunshineClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337766/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunshine_rzbzqh.png"
+
+				console.log('weatherCode', weather[0].hourly[hour].weatherCode);
+				switch (weather[0].hourly[hour].weatherCode) {
+					case '395':	//Moderate or heavy snow in area with thunder
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '392':	//Patchy light snow in area with thunder
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '389':	//Moderate or heavy rain in area with thunder
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '386':	//Patchy light rain in area with thunder
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '377':	//Moderate or heavy showers of ice pellets
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '374':	//Light showers of ice pellets
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '371':	//Moderate or heavy snow showers
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '368':	//Light snow showers
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '365':	//Moderate or heavy sleet showers
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '362':	//Light sleet showers
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '359':	//Torrential rain shower
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '356':	//Moderate or heavy rain shower
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '353':	//Light rain shower
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '350':	//Ice pellets
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '338':	//Heavy snow
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '335':	//Patchy heavy snow
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '332':	//Moderate snow
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '326':	//Light snow
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '323':	//Patchy light snow
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+					case '308':	//Heavy rain
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '305':	//Heavy rain at times
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '302':	//Moderate rain
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '299':	//Moderate rain at times
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '263':	//Patchy light drizzle
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '200':	//Thundery outbreaks in nearby
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '329':	//Patchy moderate snow
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+						break;
+					case '320':	//Moderate or heavy sleet
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '317':	//Light sleet
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '314':	//Moderate or Heavy freezing rain
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '311':	//Light freezing rain
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '284':	//Heavy freezing drizzle
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '281':	//Freezing drizzle
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '266':	//Light drizzle
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '260':	//Freezing fog
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '248':	//Fog
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '230':	//Blizzard
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '227':	//Blowing snow
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '185':	//Patchy freezing drizzle nearby
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '182':	//Patchy sleet nearby
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '143':	//Mist
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '122':	//Overcast
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '119':	//Cloudy
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '116':	//Partly Cloudy
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + cloudy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '179':	//Patchy snow nearby
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '176':	//Patchy rain nearby
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '296':	//Light rain
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '293':	//Patchy light rain
+						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainy + "');background-position: center;background-size: 100% auto;");
+						break;
+					case '113':	//Clear/Sunny
+						var sunrise = weather[0].astronomy[0].sunrise.split(':')[0]
+						var sunset = weather[0].astronomy[0].sunset.split(':')[0]
+						sunset = parseInt(sunset) + 12;
+						if (sunrise == '12')
+							sunrise = 0;
+						sunrise = parseInt(sunrise);
+						if (hour >= sunrise && hour <= sunrise + 1)
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunsetClearsky + "');background-position: center;background-size: 100% auto;");
+						else if (hour <= sunset && hour >= sunset - 1)
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunsetClearsky + "');background-position: center;background-size: 100% auto;");
+						else if (hour > sunset || hour < sunrise)
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + nightClearsky + "');background-position: center;background-size: 100% auto;");
+						else
+							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + sunshineClearsky + "');background-position: center;background-size: 100% auto;");
+						break;
+					default:
+						console.log(`Sorry, we are out of.`);
+				}
+
+
+				document.getElementById("meteo_desc").innerHTML = (weather[0].hourly[hour].lang_fr[0].value);
+				document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + weather[0].hourly[hour].tempC + "°C");
+				document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + weather[0].hourly[hour].precipMM);
+				document.getElementById("pressure").innerHTML = (weather[0].hourly[hour].pressure);
+				document.getElementById("compassRingventjaune").style.transform = "rotate(" + weather[0].hourly[hour].winddirDegree + "deg)";
+				document.getElementById("wind_speed").innerHTML = (Math.trunc(weather[0].hourly[hour].windspeedKmph / 1.852) + " ");
+			} catch (error) {
+				console.error('[ERROR]', error);
+			}
+		};
+
+		const displayWeatherData = async () => {
+
+		};
+
+
+
+	</script>
+	{{element->footer_app.html}}
+</body>
+
+</html>
