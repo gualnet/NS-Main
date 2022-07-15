@@ -771,9 +771,10 @@
 				if (!harbour.email_concierge) {
 					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
 				}
-				if (!harbour.erp_link || !localStorage['token']) {
+				const erpLinkEl = document.getElementById('erp_link');
+				if (erpLinkEl && (!harbour.erp_link || !localStorage['token'])) {
 					document.getElementById('erp_link').hidden = true;
-				} else {
+				} else if (erpLinkEl) {
 					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
 				}
 			}).catch((error) => {
