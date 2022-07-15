@@ -21,19 +21,32 @@
 
 
     <!-- Begin page content -->
-    <main class="flex-shrink-0">
+		<main class="flex-shrink-0">
+			<div class="container" id="topCtn">
+				<div class="row text-center text-lg-left" id="harbourlist">
+						<div class="col-12">
+								<img id="logo" style="width:100%;height:auto" class="pb-4" src="" alt="">
+						</div>
+						<div class="col-12">
+								<p class="text-secondary pd-4">Sélectionnez un port<p>
+						</div>
+				</div>
+			</div>
 
-        <div class="container">
-            <div class="row text-center text-lg-left" id="harbourlist">
-                <div class="col-12">
-                    <img id="logo" style="width:100%;height:auto" class="pb-4" src="" alt="">
-                </div>
-                <div class="col-12">
-                    <p class="text-secondary pd-4">Sélectionnez un port<p>
-                </div>
-            </div>
-        </div>
-    </main>
+			<div class="container corse-layout hide" id="topCtnCorse">
+					<div class="row text-center text-lg-left" id="harbourlist">
+							<div class="col-12" id="headerCtn">
+								<div id="logoCtn">
+									<img id="logo" class="" src="" alt="">
+								</div>
+								<div id="descriptionText">Informations et réservations de vos ports favoris !</div>
+							</div>
+							<div class="col-12">
+									<p class="text-secondary pd-4">Sélectionnez un port<p>
+							</div>
+					</div>
+			</div>
+		</main>
 
     <style>
         @font-face {
@@ -50,12 +63,32 @@
         body {
             font-family: 'Poppins Regular' !important;
         }
+				.container.hide {
+					display: none;
+				}
+				.corse-layout > #headerCtn {
+					display: flex;
+					flex-direction: column;
+					/* justify-content: space-around; */
+				}
+				#logoCtn {
+					height: 50%;
+					width: auto;
+				}
+				#logo {
+					height: 100%;
+				}
+				#descriptionText {
+					color: #033B8A;
+					font-size: 16pt;
+				}
     </style>
 
     <script>
 			var harbours;
 			window.addEventListener('load', () => {
 				setLocalStorageVars();
+				applyRulesPortsCorses();
 				fetchHarbours();
 			});
 
@@ -84,7 +117,6 @@
 					harbours.map(harbour => {
 						console.log('harbour: ', harbour.id, harbour.name);
 						const img = harbour.img || localStorage['entity_logo'];
-						document.getElementById("logo").src = img;
 						harbourListEl.insertAdjacentHTML('beforeend',
 							`<div class="col-lg-4 col-md-6 col-6 pb-4" onclick="selectHarbour('${harbour.id}')">
 								<div class="contentport text-center">
@@ -102,6 +134,22 @@
         }).catch((error) => {
             console.log(error);
         });
+			};
+
+			const applyRulesPortsCorses = () => {
+				const topCtnEl = document.querySelector('#topCtn');
+
+				if (localStorage['entity_id'] !== 'BgSNKrOB59') {
+					const logoEl = topCtnEl.querySelector("#logo");
+					logoEl.src = localStorage['entity_logo'];
+					return;
+				}
+
+				topCtnEl.innerHTML = '';
+				const topCtnCorseEl = document.querySelector('#topCtnCorse');
+				topCtnCorseEl.classList.remove('hide');
+				const logoEl = topCtnCorseEl.querySelector("#logo");
+				logoEl.src = localStorage['entity_logo'];
 			}
 
 			function selectHarbour(harbour_id) {
@@ -112,11 +160,16 @@
 						break;
 					}
 				}
+
 				const url = new URLSearchParams(window.location.search);
-				if (url.get('account') == "false") {
-					window.location.href = ("/index");
+				if (localStorage['entity_id'] !== 'BgSNKrOB59') {
+					if (url.get('account') == "false") {
+						window.location.href = ("/index");
+					} else {
+						window.location.href = ("/signup");
+					}
 				} else {
-					window.location.href = ("/signup");
+					window.location.href = ("/index-corse");
 				}
 			}
     </script>

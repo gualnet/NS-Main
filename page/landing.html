@@ -196,11 +196,14 @@
         if (urlParam.get("osid"))
             localStorage['onesignal_userid'] = urlParam.get("osid");
 
+				// swiper init
         var swiper = new Swiper('.swiper-container', {
             pagination: {
                 el: '.swiper-pagination',
             },
         });
+
+				// fetch user session
         var data = new FormData();
         data.append("token", localStorage["token"]);
         if (localStorage['token']) {
@@ -232,8 +235,18 @@
 
 
 
-                    if (urlParam.get('entity') == '4eqv44307K')
-                        document.getElementById('validate_button')?.setAttribute("style", "background-color: #FB9101;padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.05em; right: 15px; position: relative; bottom: 8px; font-size: 9px;");
+                    if (urlParam.get('entity') == '4eqv44307K') {
+											document.getElementById('validate_button')?.setAttribute("style", "background-color: #FB9101;padding: 6px 30px; padding-bottom: 10px;padding-top: 10px; letter-spacing: 0.05em; right: 15px; position: relative; bottom: 8px; font-size: 9px;");
+										}
+
+										// Les Ports Corses
+										if (localStorage['entity_id'] === 'BgSNKrOB59') {
+											let url = '/selectharbour?account=true';
+											url += `&entity_name=${localStorage['entity_name']}`;
+											url += `&entity_id=${localStorage['entity_id']}`;
+											console.log('url',url);
+											window.location.href = url;
+										}
 
                     document.getElementById('img').src = entity.img;
                     document.getElementById('logo').src = localStorage['entity_logo'];
@@ -241,7 +254,7 @@
             }).catch((error) => {
                 console.log(error);
             });
-        }
+					}
         else if (localStorage['harbour_id'])
             window.location.href = "/index";
         else {
