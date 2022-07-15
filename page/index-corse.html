@@ -6,7 +6,7 @@
 
 <body class="body-scroll d-flex flex-column h-100 menu-overlay">
 	<!-- __TPL_ONESIGNAL__ -->
-	{{element->onesignal.html}}
+	<!-- {{element->onesignal.html}} -->
 	<!-- screen loader -->
 	<!-- __TPL_LOADER__ -->
 	{{element->loader.html}}
@@ -87,10 +87,8 @@
 			}
 
 			.top-container #harbourName {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				font-size: 16pt;
+				font-size: 14pt;
+				text-align: center;
 			}
 
 			.top-container #harbourSlogan {
@@ -98,7 +96,19 @@
 				justify-content: center;
 				align-items: center;
 				color: cornflowerblue;
-				font-size: 12pt;
+				font-size: 10pt;
+				border-radius: 10px;
+			}
+
+			/* RESERVATION */
+			.resa-container {
+				background-color: #004577;
+				margin: 0px 2rem;
+				color: white;
+				padding: 10px;
+				text-align: center;
+				font-size: 1em;
+				border-radius: 10px;
 			}
 		</style>
 
@@ -109,6 +119,13 @@
 			</div>
 		</div>
 
+		
+		<a target="_blank" href="https://www.resaportcorse.com/">
+		<div class="resa-container">
+				Je réserve ma place
+			</div>
+		</a>
+			
 		<div class="container mt-4">
 			<div class="row">
 				<div class="col">
@@ -141,22 +158,6 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-4 px-2" id="cameraBtn" onclick="window.location.href = ('/camera');">
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span style="width:80px; height:80px;border-radius: 25px;"
-												class="d-flex justify-content-center shadow">
-												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
-													src="/library/camera-icon.png">
-											</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Caméras</span>
-										</div>
-									</div>
-								</div>
 								<div id="map_pdf" class="col-4 px-2" onclick="window.location.href = ('/map');">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
@@ -169,7 +170,7 @@
 									</div>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary  pb-2 pt-2">Plan d'eau</span>
+											<span class="text-secondary  pb-2 pt-2">Plan du port</span>
 										</div>
 									</div>
 								</div>
@@ -189,39 +190,6 @@
 										</div>
 									</div>
 								</div>
-
-								<div id="absences" class="col-4 px-2" onclick="window.location.href = ('/absence');">
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span style="width:80px; height:80px;border-radius: 25px;"
-												class="d-flex justify-content-center shadow">
-												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
-													src="/library/navigation-icon.png">
-											</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2" style="text-align: center;">Déclaration d'absences</span>
-										</div>
-									</div>
-								</div>
-								<div id="securites" class="col-4 px-2" onclick="window.location.href = ('/securite');">
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span style="width:80px; height:80px;border-radius: 25px;"
-												class="d-flex justify-content-center shadow">
-												<img style="width:80px; height:80px;align-self:center;border-radius: 15px;" class="image-boxed"
-													src="/library/securite-icon.jpg">
-											</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Incidents</span>
-										</div>
-									</div>
-								</div>
 								<div id="conciergerie_button" class="col-4 px-2" onclick="window.location.href = ('/conciergerie');">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
@@ -238,67 +206,39 @@
 										</div>
 									</div>
 								</div>
-								<div id="marees" class="col-4 px-2" onclick="window.open('https://maree.info/','_blank');">
+								<div id="faq_button" class="col-4 px-2">
+									<a target="_blank" href="https://www.lesportscorses.com/questions-frequentes/">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 25px;"
 												class="d-flex justify-content-center shadow">
 												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
-													src="/library/mare-icon.png">
+													src="/library/bell-icon.png">
 											</span>
 										</div>
 									</div>
+									</a>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Marées</span>
+											<span class="text-secondary pb-2 pt-2">FAQ</span>
 										</div>
 									</div>
 								</div>
-								<div id="reservation" class="col-4 px-2" onclick="window.location.href = ('/reservation');">
+								<div id="faq_button" class="col-4 px-2">
+									<a target="_blank" href="https://www.lesportscorses.com/bonnes-pratiques/">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 25px;"
 												class="d-flex justify-content-center shadow">
 												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
-													src="/library/resa-icon.png">
+													src="/library/bell-icon.png">
 											</span>
 										</div>
 									</div>
+									</a>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Réservation</span>
-										</div>
-									</div>
-								</div>
-								<div id="challenges" class="col-4 px-2" onclick="window.location.href = ('/challenges');">
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span style="width:80px; height:80px;border-radius: 25px;"
-												class="d-flex justify-content-center shadow">
-												<img style="width:80px; height:80px;align-self:center;" class="image-boxed"
-													src="/library/icon-challenge.png">
-											</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Challenges</span>
-										</div>
-									</div>
-								</div>
-								<div id="erp_link" class="col-4 px-2" onclick="window.location.href = ('/');">
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span style="width:80px; height:80px;border-radius: 25px;"
-												class="d-flex justify-content-center shadow">
-												<img style="width:80px; height:80px; align-self:center;" class="image-boxed"
-													src="https://res.cloudinary.com/nauticspot/image/upload/v1653295724/GUERILLA%20-%20NAUTICSPOT/Boutons%20bureau%20du%20port/espace-plaisanciers_a5p0lw.png">
-											</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2" style="text-align: center;">Espace Plaisancier</span>
+											<span class="text-secondary pb-2 pt-2">Environnement</span>
 										</div>
 									</div>
 								</div>
@@ -823,35 +763,16 @@
 
 		const displayInfoInTopContainer = () => {
 			const harbourNameEl = document.querySelector('#harbourName');
-			harbourNameEl.innerHTML = localStorage['harbourname'];
+			harbourNameEl.innerHTML = `Bienvenue au port de ${localStorage['harbourname']}`;
 		}
 
 		fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
 			let weather_api = "wwo";
-			let entity = _data.data;
-			if (_data.success) {
-				if (!entity.absence_module) {
-					console.log("dev asb")
-					document.getElementById("absences").hidden = true;
-				}
-
-				if (!entity.security_module) {
-					console.log("dev sec")
-					document.getElementById("securites").hidden = true;
-				}
-
-				if (!entity.marees_module) {
-					document.getElementById("marees").hidden = true;
-				} else if (entity.maree_id) {
-					document.getElementById("marees").onclick = function () { window.open('https://maree.info/' + entity.maree_id, '_blank'); }
-				}
-				if (!entity.challenges_module) {
-					document.getElementById("challenges").hidden = true;
-				}
-				if (entity.weather_api)
-					weather_api = entity.weather_api
-				else
-					weather_api = "";
+			const entity = _data.data;
+			if (_data.success && entity.weather_api) {
+				weather_api = entity.weather_api
+			} else {
+				weather_api = "";
 			}
 
 
@@ -862,9 +783,9 @@
 
 				if (harbour.email_concierge === ' ') delete harbour.email_concierge;
 
-				if (!harbour.navily_id) {
-					document.getElementById("reservation").hidden = true;
-				}
+				// if (!harbour.navily_id) {
+				// 	document.getElementById("reservation").hidden = true;
+				// }
 				if (harbour.harbour_map)
 					document.getElementById("map_pdf").onclick = function () { window.open(harbour.harbour_map) }
 				else
@@ -873,13 +794,11 @@
 				if (!harbour.email_concierge) {
 					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
 				}
-
 				if (!harbour.erp_link || !localStorage['token']) {
 					document.getElementById('erp_link').hidden = true;
 				} else {
 					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
 				}
-
 			}).catch((error) => {
 				console.log(error);
 			});
@@ -887,23 +806,7 @@
 			console.log(error);
 		});
 
-		if (!localStorage["user"]) {
-			document.getElementById("absences").hidden = true;
-			document.getElementById("securites").hidden = true;
-			document.getElementById("challenges").hidden = true;
-		} else {
-			fetch("/api/get/userboats?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
-				if (!_data.success) {
-					document.getElementById("absences").hidden = true;
-					document.getElementById("challenges").hidden = true;
-				}
-			}).catch((error) => {
-				console.log(error);
-			});
-		}
-
 		fetch("/api/partner/active/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
-			// console.log('_data',_data);
 			var activeCategory = _data.data.activeCategories;
 			var activeSubCategories = _data.data.activeSubCategories;
 
@@ -1170,6 +1073,13 @@
 		}).catch((error) => {
 			console.log(error);
 		});
+
+		const openLinkInNewTab = () => {
+			window.open(
+				'https://www.lesportscorses.com/questions-frequentes/',
+				'_blank'
+			);
+		}
 
 	</script>
 
