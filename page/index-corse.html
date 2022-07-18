@@ -544,7 +544,7 @@
 		<div class="container mt-4" id="discovery_link">
 			<div class="row">
 				<div class="col">
-					<h4>Patrimoine<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+					<h4>Découverte<i style="float:right;" class="bi bi-arrow-right"></i></h4>
 				</div>
 			</div>
 		</div>
@@ -612,6 +612,19 @@
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652956491/Nauticspot-Next/partenaires/loisirs_ciiyig.png">
 										<span class="">Loisirs</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="patrimoine">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=patrimoine')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="">
+										<span class="">Patrimoine</span>
 									</div>
 								</div>
 							</div>
@@ -899,6 +912,10 @@
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=detente')");
 				else if (activeSubCategories.decouverteautre)
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=decouverteautre')");
+				else if (activeSubCategories.decouverteautre)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=decouverteautre')");
+				else if (activeSubCategories.patrimoine)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=patrimoine')");
 
 
 				if (!activeSubCategories.restaurant)
@@ -913,6 +930,8 @@
 					document.getElementById('detente').hidden = true;
 				if (!activeSubCategories.decouverteautre)
 					document.getElementById('decouverteautre').hidden = true;
+				if (!activeSubCategories.patrimoine)
+					document.getElementById('patrimoine').hidden = true;
 			} else {
 				document.getElementById('discovery').hidden = true;
 				document.getElementById('discovery_link').hidden = true;
@@ -921,31 +940,6 @@
 		}).catch((error) => {
 			console.log(error);
 		});
-
-		var subCategoryHarbourLife = '<option value="sos">S.O.S.</option>'
-			+ '<option value="maintenance">Maintenance</option>'
-			+ '<option value="accastillage">Accastillage</option>'
-			+ '<option value="sante">Santé</option>'
-			+ '<option value="annonce">Annonce</option>'
-			+ '<option value="laverie">Laverie</option>'
-			+ '<option value="transport">Transport</option>'
-			+ '<option value="alimentation">alimentation</option>'
-			+ '<option value="vieportautre">Autre</option>';
-
-		var subCategoryExperience = '<option value="nautic">Activités nautiques</option>'
-			+ '<option value="terrestres">Activités terrestres</option>'
-			+ '<option value="association">Association</option>'
-			+ '<option value="equipbourse">Bourse aux équipiers</option>'
-			+ '<option value="experienceautre">Autre</option>';
-
-		var subCategoryDiscovery = '<option value="restaurant">Restaurants</option>'
-			+ '<option value="bar">Bar</option>'
-			+ '<option value="culture">Culture</option>'
-			+ '<option value="divertissement">Divertissement</option>'
-			+ '<option value="detente">Détente</option>'
-			+ '<option value="decouverteautre">Autre</option>';
-
-
 
 		var dynamicSort = function (property) {
 			var sortOrder = 1;

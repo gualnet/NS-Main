@@ -348,6 +348,9 @@ async function getActivePartnersCategoryHandler(_req, _res) {
 			case 'vendeurLoueurEx':
 				data.activeSubCategories.vendeurLoueurEx = true;
 				break;
+			case 'patrimoine':
+				data.activeSubCategories.patrimoine = true;
+				break;
 		}
 	}
 	UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
@@ -684,6 +687,7 @@ exports.plugin =
 					+ '<option value="culture">Culture</option>'
 					+ '<option value="divertissement">Loisirs</option>'
 					+ '<option value="detente">Détente</option>'
+					+ '<option value="patrimoine">Patrimoine</option>'
 					+ '<option value="decouverteautre">Autre</option>',
 			};
 
