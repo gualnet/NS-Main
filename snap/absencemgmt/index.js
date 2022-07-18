@@ -177,6 +177,7 @@ async function getBoatById(boatId) {
 
 //handler that return absence by user id and harbour id
 async function getAbsenceHandler(req, res) {
+    console.log('[INFO] /api/get/absence')
 	try {
 		const data = await getAbsenceByUserIdAndHarbourId(req.get.user_id, req.get.harbour_id);
 		UTILS.httpUtil.dataSuccess(req, res, "success", data, "1.0");
@@ -202,19 +203,16 @@ async function createAbsenceHandler(req, res) {
 	newAbsence.updated_at = newAbsence.created_at;
 
 	var harbour = await STORE.harbourmgmt.getHarbourById(req.post.harbour_id);
-	// console.log('harbour',harbour)
 
 	if (harbour) {
 		var absence = await createAbsence(newAbsence);
-		console.log('absence',absence)
 		if (absence.id) {
-			//get data from db
-			var user = await STORE.usermgmt.getUserById(absence.user_id);
-			var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
-			var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
-
-			//prepare mail
-			const startDate = new Date(absence.date_start)
+				//get data from db
+				var user = await STORE.usermgmt.getUserById(absence.user_id);
+				var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
+				// var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
+				//prepare mail
+				const startDate = new Date(absence.date_start)
 				.toLocaleDateString('fr-FR')
 				.split('-')
 				.reverse()
@@ -224,18 +222,16 @@ async function createAbsenceHandler(req, res) {
 				.split('-')
 				.reverse()
 				.join('/');
-			var subject = "Declaration d'absence";
-			var body = `
-				<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
-				<h1>Bonjour</h1>
-				<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} a déclaré une absence du ${startDate} au ${endDate}.</p>
-				<p style="font-size: 10pt">À bientôt,</p>
-				<p style="font-size: 10pt">L'équipe Nauticspot</p>
-			`;
-
-			//send mail
+				var subject = "Declaration d'absence";
+				var body = `
+							<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
+							<h1>Bonjour</h1>
+							<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} a déclaré une absence du ${startDate} au ${endDate}.</p>
+							<p style="font-size: 10pt">À bientôt,</p>
+							<p style="font-size: 10pt">L'équipe Nauticspot</p>
+							`;
+				//send mail
 			await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
-
 			UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
 			return;
 		}
@@ -243,7 +239,6 @@ async function createAbsenceHandler(req, res) {
 			UTILS.httpUtil.dataError(req, res, "Error", "error", "100", "1.0");
 			return;
 		}
-
 	} else {
 		UTILS.httpUtil.dataError(req, res, "Error", "error", "100", "1.0");
 		return;
@@ -294,7 +289,6 @@ async function updateAbsenceHandler(req, res) {
 
 		//send mail
 		await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
-
 		res.end(JSON.stringify({
 			success: true,
 			payload: result,
