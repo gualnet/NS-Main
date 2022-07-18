@@ -33,6 +33,10 @@
 				font-family: 'Poppins Regular' !important;
 			}
 
+			.hide {
+				display: none;
+			}
+
 			/* Vie au port section */
 			.harbouLifeCategoryBtn {
 				position: relative;
@@ -120,7 +124,7 @@
 		</div>
 
 		
-		<a target="_blank" href="https://www.resaportcorse.com/">
+		<a target="_blank" href="https://www.resaportcorse.com/" id="resaBtn">
 		<div class="resa-container">
 				Je réserve ma place
 			</div>
@@ -736,11 +740,19 @@
 	<script>
 		window.addEventListener('load', () => {
 			displayInfoInTopContainer();
+			displayResaButton();
 		});
 
 		const displayInfoInTopContainer = () => {
 			const harbourNameEl = document.querySelector('#harbourName');
 			harbourNameEl.innerHTML = `Bienvenue au port de ${localStorage['harbourname']}`;
+		}
+
+		const displayResaButton = () => {
+			const resaBtnEl = document.querySelector('#resaBtn');
+			if (localStorage['harbour_id'] === 'HeIrt89Ccc' && resaBtnEl) {
+				resaBtnEl.classList.add('hide');
+			}
 		}
 
 		fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
