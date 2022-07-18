@@ -19,6 +19,13 @@
             <img id="img" class="background" src="" alt="">
         </div>
         <!-- page content start -->
+
+				<style>
+					.hide {
+						display: none;
+					}
+				</style>
+
         <div class="container top-30" id="container">
             <div class="card" style="border-radius: 25px;" id="menuInfo">
                 <div class="card-body" style="margin: 0 20px 0 20px">
@@ -60,7 +67,7 @@
                         <a id="harbour_map" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5">Plan du port</span></a>
                     </div>
                     <div class="col-6">
-                        <a id="price_list" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5; text-align: right">Grille tarifaire</span></a>
+                        <a id="price_list" target="_blank" class="small vm hide"><span style="font-size: 12px; color: #1D68D5; text-align: right">Grille tarifaire</span></a>
                     </div>
                     <div class="col-6" id="pj">
                         <a id="pj_link" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5" id="pj_name"></span></a>
@@ -194,7 +201,6 @@
 					const displayHarbourRules = () => {
 						const harbourId = localStorage['harbour_id'];
 						if (harbourId === 'BxqaMWYBqc') { // bonifacio
-							console.log('COUCOU');
 							const linksCtnEl = document.querySelector('#linksCtn');
 							linksCtnEl.insertAdjacentHTML('beforeend', `
 								<div class="col-6">
@@ -285,7 +291,12 @@
                 }
 
                 document.getElementById("harbour_map").href = harbour.harbour_map;
-                document.getElementById("price_list").href = harbour.price_list;
+
+								const priceListBtnEl = document.getElementById("price_list");
+								if (harbour.price_list && priceListBtnEl) {
+									priceListBtnEl.href = harbour.price_list;
+									priceListBtnEl.classList.remove('hide');
+								}
 
                 var data = new FormData();
                 data.append("token", localStorage["token"]);
