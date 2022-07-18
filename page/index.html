@@ -1036,7 +1036,15 @@
 	<script>
 		window.addEventListener('load', () => {
 			displayCameraBtn();
+			portsCorsesRedirection();
 		});
+
+		const portsCorsesRedirection = () => {
+			const entityId = localStorage['entity_id'];
+			if (entityId === 'BgSNKrOB59') {
+				window.location = '/index-corse';
+			}
+		}
 
 		if (localStorage['harbour_id'] === '4e2cd2p6mt') { // rule for gruissan
 			const bureauDuPortTitleEl = document.querySelector('#bureauDuPortTitle');
