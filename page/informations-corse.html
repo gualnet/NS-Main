@@ -224,11 +224,11 @@
 							if (sUsrAg.indexOf("Safari") > -1) {
 								sBrowser = "Apple Safari";
 								document.getElementById("gps_adress").insertAdjacentHTML('beforeend', `
-									<a href="http://maps.apple.com/?sll=${latitude},${longitude}" class="small text-secondary">${latitude}, ${longitude}</a>
+									<a href="https://maps.apple.com/?q=${harbour.address}" class="small text-secondary">${latitude}, ${longitude}</a>
 								`);
 							} else {
 								document.getElementById("gps_adress").insertAdjacentHTML('beforeend', `
-									<a href="geo:${latitude},${longitude}?z=15" class="small text-secondary">${latitude},${longitude}</a>
+									<a href="geo:0,0?q=${harbour.address}" class="small text-secondary">${latitude},${longitude}</a>
 								`);
 							}
 
