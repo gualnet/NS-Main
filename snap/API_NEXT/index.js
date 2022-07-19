@@ -218,8 +218,8 @@ const getBoatsHandler = async (req, res) => {
 };
 
 const createBoatsHandler = async (req, res) => {
-	console.log('createBoatsHandler')
 	try {
+		console.log('createBoatsHandler')
 		// console.log('req.body', req.body);
 		const { place_id, name, immatriculation,
 			is_resident, user, harbour } = req.body;
@@ -257,6 +257,10 @@ const updateBoatsHandler = async (req, res) => {
 	try {
 		const searchObj = { ...req.get };
 		const updteObj = { ...req.body };
+
+		if (Object.keys(searchObj).length < 1) {
+			throw new(Error('You must specify at least one search param'));
+		}
 
 		/**@type {Array<TYPES.T_boat>} */
 		const updatedBoats = await updateElement('boat', searchObj, updteObj);
@@ -475,6 +479,121 @@ const createSortiesHandler = async (req, res) => {
 	}
 }
 
+// Zones
+const getZonesHandler = async (req, res) => {
+	try {
+		console.log('getZonesHandler')
+		const searchOpt = { ...req.get };
+		// console.log('searchOpt', searchOpt)
+		/** @type {Array<TYPES.T_zone>} */
+		const foundObj = await getElements('zone', searchOpt);
+		console.log('found zones', foundObj)
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: foundObj.length,
+			zones: foundObj,
+		}));
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
+const createZonesHandler = async (req, res) => {
+	try {
+		console.log('createZonesHandler');
+		// console.log('req.body', req.body);
+		const { harbour_id, name, type } = req.body;
+		// Validation
+		if (!harbour_id) throw(new Error('harbour_id is missing'));
+		if (!name) throw(new Error('name is missing'));
+		if (!type) throw(new Error('type is missing'));
+		const newZone = {
+			id: null,
+			harbour_id: req.body.harbour_id || null,
+			name: req.body.name || null,
+			type: req.body.type || null,
+		};
+		/**@type {TYPES.T_zone} */
+		const createdZone = await createElement('zone', newZone);
+		console.log('Created zone', createdZone);
+
+		res.end(JSON.stringify({
+			success: true,
+			count: zones.length,
+			zones: zones,
+		}));
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
+const updateZonesHandler = async (req, res) => {
+	try {
+		console.log('updateZonesHandler');
+		// console.log('req.body', req.body);
+		const searchObj = { ...req.get };
+		const updateObj = { ...req.body };
+		
+		if (Object.keys(searchObj).length < 1) {
+			throw new Error('You must specify at least one search param');
+		}
+
+		/**@type {Array<TYPES.T_zone>} */
+		const updatedZone = await updateElement('zone', searchObj, updateObj);
+		console.log('Updated zone', updatedZone);
+
+
+		res.end(JSON.stringify({
+			success: true,
+			count: updatedZone.length,
+			zones: updatedZone,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		console.log('COUCOU')
+		res.end(JSON.stringify({
+			success: false,
+			error,
+		}));
+	}
+};
+
+const deleteZonesHandler = async (req, res) => {
+	try {
+		console.log('deleteZonesHandler')
+		const searchObj = { ...req.get };
+		// console.log('searchObj', searchObj);
+
+		/**@type {Array<TYPES.T_zone>} */
+		const deletedObj = await deleteElement('boat', searchObj);
+		console.log('Deleted zones', deletedObj)
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: deletedObj.length,
+			zones: deletedObj,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error,
+		}));
+	}
+};
+
 exports.router = [
 	// USERS
 	{
@@ -549,6 +668,31 @@ exports.router = [
 		on: true,
 		route: "/api/next/absences",
 		handler: deleteAbsencesHandler,
+		method: "DELETE",
+	},
+	// ZONES
+	{
+		on: true,
+		route: "/api/next/zones",
+		handler: getZonesHandler,
+		method: "GET",
+	},
+	{
+		on: true,
+		route: "/api/next/zones",
+		handler: createZonesHandler,
+		method: "POST",
+	},
+	{
+		on: true,
+		route: "/api/next/zones",
+		handler: updateZonesHandler,
+		method: "PUT",
+	},
+	{
+		on: true,
+		route: "/api/next/zones",
+		handler: deleteZonesHandler,
 		method: "DELETE",
 	},
 	// OUTINGS

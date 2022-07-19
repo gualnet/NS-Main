@@ -149,10 +149,18 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+		<style>
+			.delete-btn:hover {
+				cursor: pointer;
+			}
+			.save-btn:hover {
+				cursor: pointer;
+			}
+		</style>
+
     <script>
         var placeTable;
         var pontonTable;
@@ -249,17 +257,73 @@
             });
         });
 
-        var zoneHtml = '<tr>'
-            + '<form method="POST" enctype="multipart/form-data" id="__FORMID__">'
-            + '   <td><input name="id" type="hidden" value="__ID__">__ID__</td>'
-            + '      <td>__HARBOUR_NAME__</td>'
-            + '     <td><input name="name" value="__NAME__"></td>'
-            + '        <td>'
-            + '           <a href="#" onclick="if(confirm(\'Delete __ID__ ?\'))document.location.href=\' ? zone_id = __ID__ & mode=delete& type=zone\';"> <i class="fe fe-trash"></i></a>'
-            + '          <button type="button" class="btn" onclick="sendUpdateZoneForm(\'__FORMID__\');"> <i class="fa fa-save"></i></button>'
-            + '     </td>'
-            + '  </form>'
-            + '</tr>'
+        const zoneHtml = `
+					<tr id='pontonRow-__ID__'>
+						<td><input name="id" type="hidden" value="__ID__">__ID__</td>
+						<td>__HARBOUR_NAME__</td>
+						<td><input id="zoneName" name="name" value="__NAME__"></td>
+						<td style="display: flex;">
+							<div class="delete-btn" onclick="deleteRequest('pontonRow-__ID__')"><i class="fe fe-trash" style="color: #0000EEAA;margin: 0 5px;"></i></div>
+							<div class="save-btn" onclick="updateRequest('pontonRow-__ID__')"><i class="fa fa-save" style="color: black;margin: 0 5px;"></i></dev>
+						</td>
+					</tr>
+				`;
+
+				const updateRequest = async (elementId) => {
+					try {
+						console.log('updateRequest', elementId);
+						const rowEl = document.querySelector(`#${elementId}`);
+						if (!rowEl) {
+							throw new Error('zone row element not found')
+						}
+						const zoneNameEl = rowEl.querySelector(`#zoneName`);
+						if (!zoneNameEl) {
+							throw new Error('input name element not found')
+						}
+						const id = elementId.split('-')[1];
+						const name = zoneNameEl.value;
+						const body = JSON.stringify({ id, name });
+						const response = await fetch(`/api/next/zones/?id=${id}`, {
+							method: 'PUT',
+							body,
+						});
+						const respJson = await response.json()
+						const respData = respJson.data;
+					} catch (error) {
+						console.error('Error', error);
+						alert('Error on update !')
+					} finally {
+						window.location.reload();
+					}
+				};
+
+				const deleteRequest = async (elementId) => {
+					console.log('deleteRequest', elementId);
+					try {
+						const rowEl = document.querySelector(`#${elementId}`);
+						if (!rowEl) {
+							throw new Error('zone row element not found')
+						}
+						const zoneNameEl = rowEl.querySelector(`#zoneName`);
+						if (!zoneNameEl) {
+							throw new Error('input name element not found')
+						}
+						const id = elementId.split('-')[1];
+						const name = zoneNameEl.value;
+						const body = JSON.stringify({ id, name });
+						const response = await fetch(`/api/next/zones/?id=${id}`, {
+							method: 'DELETE',
+							body,
+						});
+						const respJson = await response.json()
+						const respData = respJson.data;
+					} catch (error) {
+						console.error('Error', error);
+						alert('Error on delete !')
+					} finally {
+						window.location.reload();
+					}
+				};
 
         document.getElementById('harbourid_ponton').addEventListener('change', function (e) {
             var ids = []
@@ -276,10 +340,11 @@
                         var _zones = _data.data;
                         var _zoneGen = "";
                         for (var i = 0; i < _zones.length; i++) {
-                            _zoneGen += zoneHtml.replace(/__ID__/g, _zones[i].id)
-                                .replace(/__FORMID__/g, _zones[i].id.replace(/\./g, "_"))
-                                .replace(/__NAME__/g, _zones[i].name)
-                                .replace(/__HARBOUR_NAME__/g, e.target.options[e.target.selectedIndex].text)
+													const temp = zoneHtml.replace(/__ID__/g, _zones[i].id)
+													.replace(/__FORMID__/g, _zones[i].id.replace(/\./g, "_"))
+													.replace(/__NAME__/g, _zones[i].name)
+													.replace(/__HARBOUR_NAME__/g, e.target.options[e.target.selectedIndex].text)
+													_zoneGen += temp;
                         }
                         document.getElementById("ponton_result").innerHTML = "";
                         document.getElementById("ponton_result").insertAdjacentHTML('beforeend', _zoneGen);
@@ -389,36 +454,36 @@
                 });
         }
 
-        function sendUpdateZoneForm(id) {
-            var form = document.getElementById(id);
-            console.log(form);
-            var formData = new FormData(form);
-            formData.append("type", 'zone');
+        // function sendUpdateZoneForm(id) {
+        //     var form = document.getElementById(id);
+        //     console.log(form);
+        //     var formData = new FormData(form);
+        //     formData.append("type", 'zone');
 
-            fetch(form.action,
-                {
-                    method: form.method,
-                    body: formData
-                }).then(response => response.json()).then(_data => {
-                    console.log(_data);
-                    if (_data.success) {
-                        location.reload();
-                    }
-                    else {
-                        if (document.getElementById("error"))
-                            document.getElementById("userError").removeChild(document.getElementById("error"));
+        //     fetch(form.action,
+        //         {
+        //             method: form.method,
+        //             body: formData
+        //         }).then(response => response.json()).then(_data => {
+        //             console.log(_data);
+        //             if (_data.success) {
+        //                 location.reload();
+        //             }
+        //             else {
+        //                 if (document.getElementById("error"))
+        //                     document.getElementById("userError").removeChild(document.getElementById("error"));
 
-                        document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
-                        alert(_data.message);
-                    }
-                }).catch((error) => {
-                    if (document.getElementById("error"))
-                        document.getElementById("userError").removeChild(document.getElementById("error"));
+        //                 document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+        //                 alert(_data.message);
+        //             }
+        //         }).catch((error) => {
+        //             if (document.getElementById("error"))
+        //                 document.getElementById("userError").removeChild(document.getElementById("error"));
 
-                    document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
-                    alert(_data.message);
-                });
-        }
+        //             document.getElementById("userError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+        //             alert(_data.message);
+        //         });
+        // }
 
         function sendUpdateForm(id) {
             var form = document.getElementById(id);
