@@ -210,7 +210,7 @@ async function createAbsenceHandler(req, res) {
 				//get data from db
 				var user = await STORE.usermgmt.getUserById(absence.user_id);
 				var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
-				// var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
+				var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
 				//prepare mail
 				const startDate = new Date(absence.date_start)
 				.toLocaleDateString('fr-FR')
@@ -226,7 +226,7 @@ async function createAbsenceHandler(req, res) {
 				var body = `
 							<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
 							<h1>Bonjour</h1>
-							<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} a déclaré une absence du ${startDate} au ${endDate}.</p>
+							<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} place n°${place.number} a déclaré une absence du ${startDate} au ${endDate}.</p>
 							<p style="font-size: 10pt">À bientôt,</p>
 							<p style="font-size: 10pt">L'équipe Nauticspot</p>
 							`;
@@ -280,12 +280,12 @@ async function updateAbsenceHandler(req, res) {
 		//prepare mail
 		var subject = "Modification d'absence";
 		var body = `
-					<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
-					<h2>Bonjour</h2>
-					<p style="font-size: 12pt">Le bateau  place n° "${place.number}" vous signale son absence du "${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}" au lieu de l'absence initiale du "${FM.formatDate(absence.previous_date_start)} au ${FM.formatDate(absence.previous_date_end)}".</p>
-					<p style="font-size: 10pt">À bientôt,</p>
-					<p style="font-size: 10pt">L'équipe Nauticspot</p>
-					`;
+			<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
+			<h2>Bonjour</h2>
+			<p style="font-size: 12pt">Le bateau place n° "${place.number}" vous signale son absence du "${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}" au lieu de l'absence initiale du "${FM.formatDate(absence.previous_date_start)} au ${FM.formatDate(absence.previous_date_end)}".</p>
+			<p style="font-size: 10pt">À bientôt,</p>
+			<p style="font-size: 10pt">L'équipe Nauticspot</p>
+		`;
 
 		//send mail
 		await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
