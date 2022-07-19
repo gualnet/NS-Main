@@ -845,6 +845,19 @@
 							</div>
 						</div>
 					</div>
+					<div class="swiper-slide harbouLifeCategoryBtn" id="patrimoine">
+						<div class="row">
+							<div class="col" onclick="window.location.href = ('/discovery?select=patrimoine')">
+								<div class="row">
+									<div class="col">
+										<img class="shadow"
+											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png">
+										<span class="">Patrimoine</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="swiper-slide harbouLifeCategoryBtn" id="decouverteautre">
 						<div class="row">
 							<div class="col" onclick="window.location.href = ('/discovery?select=decouverteautre')">
@@ -1510,7 +1523,8 @@
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=detente')");
 				else if (activeSubCategories.decouverteautre)
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=decouverteautre')");
-
+				else if (activeSubCategories.patrimoine)
+					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=patrimoine')");
 
 				if (!activeSubCategories.restaurant)
 					document.getElementById('restaurant').hidden = true;
@@ -1524,6 +1538,8 @@
 					document.getElementById('detente').hidden = true;
 				if (!activeSubCategories.decouverteautre)
 					document.getElementById('decouverteautre').hidden = true;
+				if (!activeSubCategories.patrimoine)
+					document.getElementById('patrimoine').hidden = true;
 			} else {
 				document.getElementById('discovery').hidden = true;
 				document.getElementById('discovery_link').hidden = true;
