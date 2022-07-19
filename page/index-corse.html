@@ -88,6 +88,7 @@
 				position: absolute;
 				transform: translate(0px, 300%);
 				width: 80%;
+				box-shadow: 5px 0px 25px 0px #00000011;
 			}
 
 			.top-container #harbourName {
@@ -116,7 +117,7 @@
 			}
 		</style>
 
-		<div class="top-container">
+		<div class="top-container" id="topCtn">
 			<div id="heroTextContainer">
 				<div id="harbourName"></div>
 				<div id="harbourSlogan">_</div>
@@ -794,6 +795,12 @@
 				let harbour = _data.data;
 
 				if (harbour.email_concierge === ' ') delete harbour.email_concierge;
+
+				if (harbour.img) {
+					const topCtnEl = document.querySelector('#topCtn');
+					if (!topCtnEl) return;
+					topCtnEl.style.backgroundImage = `url(${harbour.img})`;
+				}
 
 				// if (!harbour.navily_id) {
 				// 	document.getElementById("reservation").hidden = true;
