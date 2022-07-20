@@ -30,14 +30,14 @@
         document.getElementById('navbar-profil').src = "/library/toolbar-profile-blue-48.png";
         
     fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
-        let harbour = _data.data;
-        var sBrowser, sUsrAg = navigator.userAgent;
-                if (sUsrAg.indexOf("Safari") > -1) {
-                    sBrowser = "Apple Safari";
-                    document.getElementById("harbourmap").href = 'http://maps.apple.com/?q=' + harbour.address;
-                } else {
-                    document.getElementById("harbourmap").href = 'geo:0,0?q=' + harbour.address;
-                }
+			const harbourMapEl = document.getElementById("harbourmap");
+			if (harbourMapEl) {
+				const userAgent = window.navigator.userAgent;
+				let mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
+				if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
+						mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
+				}
+			}
     }).catch((e) => console.error(e))
 
 		window.addEventListener('load', async (ev) => {
