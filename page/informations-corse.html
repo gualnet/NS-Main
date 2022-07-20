@@ -286,7 +286,11 @@
                     document.getElementById("sanitaryButtons").hidden = true;
                 }
 
-                document.getElementById("harbour_map").href = harbour.harbour_map;
+								if (harbour.harbour_map) {
+									document.getElementById("harbour_map").href = harbour.harbour_map;
+								} else {
+									document.getElementById("harbour_map").style.display = 'none';
+								}
 
 								const priceListBtnEl = document.getElementById("price_list");
 								if (harbour.price_list && priceListBtnEl) {
