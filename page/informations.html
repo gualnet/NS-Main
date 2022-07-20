@@ -195,23 +195,22 @@
 
         <script>
             fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
-                var harbour = _data.data;
-                var sBrowser, sUsrAg = navigator.userAgent;
-                if (sUsrAg.indexOf("Safari") > -1) {
-                    sBrowser = "Apple Safari";
-                    document.getElementById("gps_adress").insertAdjacentHTML('beforeend', '<a href="http://maps.apple.com/?q=' + harbour.address + '" class="small text-secondary">' + harbour.address + '</a>')
-                } else {
-                    document.getElementById("gps_adress").insertAdjacentHTML('beforeend', '<a href="geo:0,0?q=' + harbour.address + '" class="small text-secondary">' + harbour.address + '</a>')
-                }
-
+              const harbour = _data.data;
+							const userAgent = window.navigator.userAgent;
+							const gpsAdressEl = document.getElementById("gps_adress");
+							if (gpsAdressEl) {
+								let link = `https://www.google.com/maps/?q=${harbour.address}`;
+								if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
+									link = `https://maps.apple.com/?q=${harbour.address}`;
+								}
+								gpsAdressEl.insertAdjacentHTML('beforeend', `<a href="${link}" class="small text-secondary">${harbour.address}</a>`);
+							}
 
                 if (harbour.img) {
                     document.getElementById('img').src = harbour.img;
                 } else {
                     document.getElementById('img').src = localStorage['entity_logo'];
                 }
-
-
 
                 //document.getElementById("address").insertAdjacentHTML('beforeend', harbour.address);
                 document.getElementById("buoy").insertAdjacentHTML('beforeend', harbour.buoy);
