@@ -177,7 +177,7 @@ async function getBoatById(boatId) {
 
 //handler that return absence by user id and harbour id
 async function getAbsenceHandler(req, res) {
-    console.log('[INFO] /api/get/absence')
+	console.log('[INFO] /api/get/absence')
 	try {
 		const data = await getAbsenceByUserIdAndHarbourId(req.get.user_id, req.get.harbour_id);
 		UTILS.httpUtil.dataSuccess(req, res, "success", data, "1.0");
@@ -207,30 +207,20 @@ async function createAbsenceHandler(req, res) {
 	if (harbour) {
 		var absence = await createAbsence(newAbsence);
 		if (absence.id) {
-				//get data from db
-				var user = await STORE.usermgmt.getUserById(absence.user_id);
-				var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
-				var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
-				//prepare mail
-				const startDate = new Date(absence.date_start)
-				.toLocaleDateString('fr-FR')
-				.split('-')
-				.reverse()
-				.join('/');
-			const endDate = new Date(absence.date_end)
-				.toLocaleDateString('fr-FR')
-				.split('-')
-				.reverse()
-				.join('/');
-				var subject = "Declaration d'absence";
-				var body = `
+			//get data from db
+			var user = await STORE.usermgmt.getUserById(absence.user_id);
+			var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
+			var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
+			//prepare mail
+			var subject = "Declaration d'absence";
+			var body = `
 							<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
 							<h1>Bonjour</h1>
-							<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} place n°${place.number} a déclaré une absence du ${startDate} au ${endDate}.</p>
+							<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} place n°${place.number} a déclaré une absence du ${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}.</p>
 							<p style="font-size: 10pt">À bientôt,</p>
 							<p style="font-size: 10pt">L'équipe Nauticspot</p>
 							`;
-				//send mail
+			//send mail
 			await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
 			UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
 			return;
@@ -380,7 +370,7 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		absencesOfTheDay.map(absence => boatsPromises.push(getBoatById(absence.boat_id)));
 		/**@type {Array<T_boat>} */
 		const boats = await Promise.all(boatsPromises);
-		
+
 		const placesPromises = [];
 		boats.map(boat => placesPromises.push(STORE.mapmgmt.getPlaceById(boat.place_id)));
 		/** @type {Array<T_place>} */
@@ -466,7 +456,7 @@ exports.plugin =
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
 
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('No access rights');
 			return;

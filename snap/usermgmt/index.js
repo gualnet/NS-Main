@@ -622,6 +622,7 @@ const setNewPasswordHandler = async (req, res) => {
 				message: 'Ressource not found',
 				description: 'This token is invalid',
 			}));
+			return;
 		}
 		const newPasswordHash = UTILS.Crypto.createSHA512(user.id + password);
 
