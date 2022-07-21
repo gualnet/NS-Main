@@ -29,7 +29,8 @@
     else if (currentLocation == "profil")
         document.getElementById('navbar-profil').src = "/library/toolbar-profile-blue-48.png";
         
-    fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
+    fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(data => {
+			const harbour = data.data
 			const harbourMapEl = document.getElementById("harbourmap");
 			if (harbourMapEl) {
 				const userAgent = window.navigator.userAgent;
