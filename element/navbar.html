@@ -38,6 +38,7 @@
 				if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
 						mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
 				}
+				harbourMapEl.href = mapLink;
 			}
     }).catch((e) => console.error(e))
 
