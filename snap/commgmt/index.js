@@ -446,7 +446,6 @@ async function sendNotification(_notification) {
 
 //Handler to register a new onesignal id
 async function registerOneSignalUserIdHandler(_req, _res) {
-
     //get current user if user id in request
     var currentUser;        
     if (_req.get.userid) {
@@ -529,14 +528,9 @@ const sendGoodbarberPushNotification = async (notification) => {
 			"security": "Sécurité",
 		}
 		const eventType = TRANSLATE_EVENT_TYPE[notification.category.toLocaleLowerCase()];
-
-		// Transform raw received text with potential html tag to full text
-		const html = notification.message;
-		const div = document.createElement("div");
-		div.innerHTML = html;
-		const text = div.textContent || div.innerText || "";
-		// limit text to the first 120 chars.
-		const msg = `${eventType}: ${text.slice(0, 120)}...`;
+		// limit text to the first 200 chars.
+		const text = notification?.title?.length > 200 ? `${notification?.title.slice(0, 200)}...` : notification.text;
+		const msg = `${eventType}: ${text}`;
 
 		const response = await fetch(
 			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
@@ -811,7 +805,11 @@ exports.plugin =
 
                         _FD.read_id = [];
 
-												const isPushSent = await sendGoodbarberPushNotification(_FD)
+												const isPushSent = await sendGoodbarberPushNotification(_FD).catch((err) => {
+													console.error('[ERROR]',err)
+													UTILS.httpUtil.dataError(req, res, "erreur lors de l'envoi de la notification", "1.0");
+													return;
+												})
                         // var promise = await sendNotification(_FD);
                         if (isPushSent) {
                             // if (promise.users_id)
@@ -878,7 +876,7 @@ exports.plugin =
                 }
 
                 var date = new Date(_Coms[i].created_at || _Coms[i].date);
-                var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
+                const dateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
 
                 date = new Date(_Coms[i].date_start);
                 var startDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
