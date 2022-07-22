@@ -162,7 +162,7 @@
                             searchPlaceholder: 'Votre recherche'
                         },
                         paging: false,
-                        "order": [[2, "desc"]],
+                        "order": [[13, "desc"]],
                         "info": false,
                     });
             });
@@ -170,7 +170,11 @@
         function sendCreateForm() {
             var form = document.getElementById("createForm");
             var formData = new FormData(form);
-            formData.append("message", document.getElementById('editor').firstChild.innerHTML);
+						// Transform raw received text with potential html tag to full text
+            const div = document.createElement("div");
+						div.innerHTML = document.getElementById('editor').firstChild.innerHTML;
+						const text = div.textContent || div.innerText || "";
+            formData.append("message", text);
             fetch(form.action,
                 {
                     method: form.method,
