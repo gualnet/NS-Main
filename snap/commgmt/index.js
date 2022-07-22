@@ -511,7 +511,6 @@ async function registerOneSignalUserIdHandler(_req, _res) {
 }
 
 /**
- * 
  * @param {TYPES.T_communication} notification 
  */
 const sendGoodbarberPushNotification = async (notification) => {
@@ -522,11 +521,22 @@ const sendGoodbarberPushNotification = async (notification) => {
 			throw(new Error('Missing Goodbarber auth informations'))
 		}
 		
-		let eventType = notification.category.toLocaleLowerCase().split('');
-		eventType[0] = eventType[0].toUpperCase();
-		eventType = eventType.join('');
-		const text = notification.message.replace('<p>', '').replace('</p>', '');
-		const msg = `${eventType}: ${text}`;
+		const TRANSLATE_EVENT_TYPE = {
+			"other": "Autre",
+			"weather": "Météo",
+			"event": "Événement",
+			"maintenance": "Travaux",
+			"security": "Sécurité",
+		}
+		const eventType = TRANSLATE_EVENT_TYPE[notification.category.toLocaleLowerCase()];
+
+		// Transform raw received text with potential html tag to full text
+		const html = notification.message;
+		const div = document.createElement("div");
+		div.innerHTML = html;
+		const text = div.textContent || div.innerText || "";
+		// limit text to the first 120 chars.
+		const msg = `${eventType}: ${text.slice(0, 120)}...`;
 
 		const response = await fetch(
 			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
@@ -539,7 +549,7 @@ const sendGoodbarberPushNotification = async (notification) => {
 				body: JSON.stringify({
 					platform: 'all',
 					message: msg,
-				})
+				}),
 			}
 		);
 
@@ -548,9 +558,10 @@ const sendGoodbarberPushNotification = async (notification) => {
 			console.log('resp',resp)
 			return(true);
 		} else {
-			const resp = await response.json();
-			console.log('Err resp',resp)
-			throw(new Error(resp.error_description));
+			console.error('Err ',response)
+			const resp = await response?.json();
+			console.error('Err resp',resp)
+			throw(new Error(response.error_description));
 		}
 	} catch (error) {
 		console.error('[ERROR]', error);
