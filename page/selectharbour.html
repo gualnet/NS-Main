@@ -113,6 +113,7 @@
             method: "get"
         }).then(response => response.json()).then(_data => {
 					harbours = _data.data || [];
+					harbours = harbours.sort((A, B) => (A.name < B.name) ? -1 : 1);
 					const harbourListEl = document.getElementById("harbourlist");
 					harbours.map(harbour => {
 						console.log('harbour: ', harbour.id, harbour.name);
