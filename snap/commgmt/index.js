@@ -529,7 +529,7 @@ const sendGoodbarberPushNotification = async (notification) => {
 		}
 		const eventType = TRANSLATE_EVENT_TYPE[notification.category.toLocaleLowerCase()];
 		// limit text to the first 200 chars.
-		const text = notification?.title?.length > 200 ? `${notification?.title.slice(0, 200)}...` : notification.text;
+		const text = notification?.title?.length > 200 ? `${notification?.title.slice(0, 200)}...` : notification.title;
 		const msg = `${eventType}: ${text}`;
 
 		const response = await fetch(
