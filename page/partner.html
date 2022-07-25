@@ -244,11 +244,46 @@
 						}
 					});
 
+					const getPartnerImgLink = (subcategory) => {
+						const mapImgToSubcategory = {
+							sos: 'https://res.cloudinary.com/nauticspot/image/upload/v1652953549/Nauticspot-Next/partenaires/SOS_jrboxy.png',
+							maintenance: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454035/Nauticspot-Next/partenaires/Maintenance_ns71zp.png',
+							accastillage: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Accastillage_fb0glq.png',
+							alimentation: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454042/Nauticspot-Next/partenaires/Alimentation_g6l6jl.png',
+							sante: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Sant%C3%A9_ot5lak.png',
+							annonce: 'https://res.cloudinary.com/nauticspot/image/upload/v1652956258/Nauticspot-Next/partenaires/annonces_cxaz1j.png',
+							laverie: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454039/Nauticspot-Next/partenaires/Laverie_gwrc01.png',
+							transport: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png',
+							boutique: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454040/Nauticspot-Next/partenaires/Commerces_zgtayw.png',
+							vendeurLoueurHl: 'https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png',
+							vieportautre: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png',
+							nautic: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png',
+							vendeurLoueurEx: 'https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png',
+							terrestres: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png',
+							association: 'https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png',
+							equipbourse: 'https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png',
+							experienceautre: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png',
+							restaurant: 'https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/restaurant_puz279.png',
+							bar: 'https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/bar_lqdraf.png',
+							culture: 'https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png',
+							detente: 'https://res.cloudinary.com/nauticspot/image/upload/v1652776957/Nauticspot-Next/partenaires/spa_vjrula.png',
+							divertissement: 'https://res.cloudinary.com/nauticspot/image/upload/v1652956491/Nauticspot-Next/partenaires/loisirs_ciiyig.png',
+							patrimoine: 'https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png',
+							mouillages: 'https://res.cloudinary.com/nauticspot/image/upload/v1658744354/Nauticspot-Next/partenaires/mouillages_qypytw.png',
+							decouverteautre: 'https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png',
+						};
+
+						return(mapImgToSubcategory[subcategory]);
+					};
+
 					const populatePageContent = (partner) => {
-						console.log('partner',partner)
-						if (partner.img) {
-							const partnerImgEl = document.querySelector('#partnerImg');
-							if (partnerImgEl) partnerImgEl.src = partner.img;
+						// console.log('partner',partner)
+						const partnerImgEl = document.querySelector('#partnerImg');
+						if (partner.img && partnerImgEl) {
+							partnerImgEl.src = partner.img;
+						} else if (partnerImgEl) {
+							const imgLink = getPartnerImgLink(partner.subcategory);
+							partnerImgEl.src = imgLink;
 						}
 
 						if (partner.name) {
