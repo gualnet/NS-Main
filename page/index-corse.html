@@ -163,7 +163,7 @@
 										</div>
 									</div>
 								</div>
-								<div id="map_pdf" class="col-4 px-2" onclick="window.location.href = ('/map');">
+								<div id="map_pdf" class="col-4 px-2" onclick="">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 25px;"
@@ -230,7 +230,7 @@
 									</div>
 								</div>
 								<div id="faq_button" class="col-4 px-2">
-									<a target="_blank" href="https://www.lesportscorses.com/bonnes-pratiques/">
+									<a target="_blank" href="http://localhost:9090/library/bonifacio-faq.pdf">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 15px;"
@@ -788,10 +788,7 @@
 				weather_api = "";
 			}
 
-
 			fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
-				console.log('_data', _data)
-
 				let harbour = _data.data;
 
 				if (harbour.email_concierge === ' ') delete harbour.email_concierge;
@@ -802,14 +799,6 @@
 					topCtnEl.style.backgroundImage = `url(${harbour.img})`;
 				}
 
-				// if (!harbour.navily_id) {
-				// 	document.getElementById("reservation").hidden = true;
-				// }
-				if (harbour.harbour_map)
-					document.getElementById("map_pdf").onclick = function () { window.open(harbour.harbour_map) }
-				else
-					document.getElementById("map_pdf").hidden = true;
-
 				if (!harbour.email_concierge) {
 					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
 				}
@@ -818,6 +807,16 @@
 					document.getElementById('erp_link').hidden = true;
 				} else if (erpLinkEl) {
 					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
+				}
+
+				const mapPdfEl = document.getElementById("map_pdf");
+				if (mapPdfEl) {
+					const userAgent = window.navigator.userAgent;
+					let mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
+					if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
+							mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
+					}
+					mapPdfEl.addEventListener('click', () => window.location.href = mapLink);
 				}
 			}).catch((error) => {
 				console.log(error);
