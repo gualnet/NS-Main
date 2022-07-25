@@ -351,6 +351,9 @@ async function getActivePartnersCategoryHandler(_req, _res) {
 			case 'patrimoine':
 				data.activeSubCategories.patrimoine = true;
 				break;
+			case 'mouillages':
+				data.activeSubCategories.mouillages = true;
+				break;
 		}
 	}
 	UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
@@ -688,6 +691,7 @@ exports.plugin =
 					+ '<option value="divertissement">Loisirs</option>'
 					+ '<option value="detente">Détente</option>'
 					+ '<option value="patrimoine">Patrimoine</option>'
+					+ '<option value="mouillages">Mouillages</option>'
 					+ '<option value="decouverteautre">Autre</option>',
 			};
 

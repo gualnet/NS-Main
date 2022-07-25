@@ -40,6 +40,14 @@
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652956491/Nauticspot-Next/partenaires/loisirs_ciiyig.png'); background-size: cover;">
 							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=divertissement')">Loisirs</span>
 						</div>
+						<div class="swiper-slide nav-btn" id="patrimoine"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=divertissement')">Patrimoine</span>
+						</div>
+						<div class="swiper-slide nav-btn" id="mouillages"
+							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1658744354/Nauticspot-Next/partenaires/mouillages_qypytw.png'); background-size: cover;">
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=divertissement')">Mouillages</span>
+						</div>
 						<div class="swiper-slide nav-btn" id="decouverteautre"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
 							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=decouverteautre')">Autre</span>
@@ -127,6 +135,10 @@
 					document.getElementById('divertissement').hidden = true;
 				if (!activeSubCategories.detente)
 					document.getElementById('detente').hidden = true;
+				if (!activeSubCategories.patrimoine)
+					document.getElementById('patrimoine').hidden = true;
+				if (!activeSubCategories.mouillages)
+					document.getElementById('mouillages').hidden = true;
 				if (!activeSubCategories.decouverteautre)
 					document.getElementById('decouverteautre').hidden = true;
 			}).catch((error) => {
@@ -199,9 +211,7 @@
 					}
 
 					document.getElementById("content").insertAdjacentHTML('beforeend', currentRow);
-
 				}
-
 			}).catch((error) => {
 				console.log(error);
 			});
