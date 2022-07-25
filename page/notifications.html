@@ -78,24 +78,16 @@
 		const fetchCommunicationsNotif = async (harbour_id, userCategory) => {
 			console.log('fetchCommunicationsNotif')
 			try {
-				const urlCategory = `/api/next/communications?harbour_id=${harbour_id}&user_category=${userCategory}`;
-				const urlAll = `/api/next/communications?harbour_id=${harbour_id}&user_category=all`;
-
-				const promiseCategory = fetch(urlCategory);
-				const promiseAll = fetch(urlAll);
-				const resp = await Promise.all([promiseCategory, promiseAll]);
-				const decodedCategory = await resp[0].json();
-				const decodedAll = await resp[1].json();
-
-				const comms = [...decodedCategory, ...decodedAll];
+				const url = `/api/next/communications?harbour_id=${harbour_id}`;
+				const response = await fetch(url);
+				const respJson = await response.json();
+				const comms = respJson || [];
 				return (comms);
 			} catch (error) {
 				console.error(error);
 				return ([]);
 			}
 		};
-
-
 
 		var dynamicSort = function (property) {
 			var sortOrder = 1;
