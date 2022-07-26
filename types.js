@@ -298,3 +298,19 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} title
  * @property {T_harbour['id']} harbour_id
  */
+
+/**
+ * @typedef T_event
+ * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} created_at - deprec
+ * @property {EpochTimeStamp} date_end
+ * @property {EpochTimeStamp} date_start
+ * @property {string} category
+ * @property {string} cloudinary_img_public_id
+ * @property {string} content
+ * @property {string} description
+ * @property {string} harbour_id
+ * @property {string} id
+ * @property {string} img
+ * @property {string} title
+ */

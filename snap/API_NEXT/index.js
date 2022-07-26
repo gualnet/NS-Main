@@ -5,6 +5,14 @@
 // DELETE
 const TYPES = require('../../types');
 
+const TABLES = {
+	USERS: 'user',
+	BOATS: 'boat',
+	ABSENCES: 'absences',
+	SORTIES: 'sorties',
+	ZONES: 'zone',
+	EVENTS: 'events',
+};
 
 exports.handler = async (req, res) => {
 	res.end('Hello Snap!');
@@ -72,7 +80,7 @@ const getUsersHandler = async (req, res) => {
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
 		/** @type {Array<TYPES.T_user>} */
-		const users = await getElements('user', searchOpt);
+		const users = await getElements(TABLES.USERS, searchOpt);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -85,7 +93,7 @@ const getUsersHandler = async (req, res) => {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -123,7 +131,7 @@ const createUsersHandler = async (req, res) => {
 		const newUser = { ...emptyUser, ...req.body };
 		newUser.created_at = Date.now();
 
-		const createdUser = await createElement('user', newUser);
+		const createdUser = await createElement(TABLES.USERS, newUser);
 		console.log('Created User', createdUser);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -148,7 +156,7 @@ const updateUsersHandler = async (req, res) => {
 		const updteObj = { ...req.body };
 
 		/**@type {TYPES.T_user} */
-		const updatedUser = await updateElement('user', searchObj, updteObj);
+		const updatedUser = await updateElement(TABLES.USERS, searchObj, updteObj);
 		console.log('Updated User', updatedUser)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -172,7 +180,7 @@ const deleteUsersHandler = async (req, res) => {
 		const searchObj = { ...req.get };
 
 		/**@type {Array<TYPES.T_user>} */
-		const deletedObj = await deleteElement('user', searchObj);
+		const deletedObj = await deleteElement(TABLES.USERS, searchObj);
 		console.log('Deleted Users', deletedObj)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -199,7 +207,7 @@ const getBoatsHandler = async (req, res) => {
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
 		/** @type {Array<TYPES.T_user>} */
-		const boats = await getElements('boat', searchOpt);
+		const boats = await getElements(TABLES.BOATS, searchOpt);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -212,7 +220,7 @@ const getBoatsHandler = async (req, res) => {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -234,7 +242,7 @@ const createBoatsHandler = async (req, res) => {
 			created_at: Date.now(),
 		};
 		/**@type {TYPES.T_boat} */
-		const createdBoat = await createElement('boat', newBoat);
+		const createdBoat = await createElement(TABLES.BOATS, newBoat);
 		console.log('Created Boat', createdBoat);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -263,7 +271,7 @@ const updateBoatsHandler = async (req, res) => {
 		}
 
 		/**@type {Array<TYPES.T_boat>} */
-		const updatedBoats = await updateElement('boat', searchObj, updteObj);
+		const updatedBoats = await updateElement(TABLES.BOATS, searchObj, updteObj);
 		console.log('Updated Boats', updatedBoats)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -288,7 +296,7 @@ const deleteBoatsHandler = async (req, res) => {
 		const searchObj = { ...req.get };
 
 		/**@type {Array<TYPES.T_boat>} */
-		const deletedObj = await deleteElement('boat', searchObj);
+		const deletedObj = await deleteElement(TABLES.BOATS, searchObj);
 		console.log('Deleted boats', deletedObj)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -314,7 +322,7 @@ const getAbsencesHandler = async (req, res) => {
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
 		/** @type {Array<TYPES.T_absence>} */
-		const boats = await getElements('absences', searchOpt);
+		const boats = await getElements(TABLES.ABSENCES, searchOpt);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -327,7 +335,7 @@ const getAbsencesHandler = async (req, res) => {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -355,7 +363,7 @@ const createAbsencesHandler = async (req, res) => {
 			user_id: user_id || null,
 		};
 		/**@type {TYPES.T_absence} */
-		const createdAbsence = await createElement('absences', newAbsence);
+		const createdAbsence = await createElement(TABLES.ABSENCES, newAbsence);
 		console.log('Created Boat', createdAbsence);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -380,7 +388,7 @@ const updateAbsencesHandler = async (req, res) => {
 		const updteObj = { ...req.body };
 
 		/**@type {Array<TYPES.T_absence>} */
-		const updatedAbsences = await updateElement('absences', searchObj, updteObj);
+		const updatedAbsences = await updateElement(TABLES.ABSENCES, searchObj, updteObj);
 		console.log('Updated Boats', updatedAbsences)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -404,7 +412,7 @@ const deleteAbsencesHandler = async (req, res) => {
 	try {
 		const searchObj = { ...req.get };
 		/**@type {Array<TYPES.T_absence>} */
-		const deletedObj = await deleteElement('absences', searchObj);
+		const deletedObj = await deleteElement(TABLES.ABSENCES, searchObj);
 		console.log('Deleted absence', deletedObj)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -428,7 +436,7 @@ const getSortiesHandler = async (req, res) => {
 	try {
 		const searchOpt = { ...req.get };
 		/** @type {Array<TYPES.T_sortie>} */
-		const outings = await getElements('sorties', searchOpt);
+		const outings = await getElements(TABLES.SORTIES, searchOpt);
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
@@ -439,7 +447,7 @@ const getSortiesHandler = async (req, res) => {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -464,7 +472,7 @@ const createSortiesHandler = async (req, res) => {
 			deleted_at: nulll
 		};
 		/**@type {TYPES.T_sortie} */
-		const createdOuting = await createElement('sorties', newOuting);
+		const createdOuting = await createElement(TABLES.SORTIES, newOuting);
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
@@ -486,7 +494,7 @@ const getZonesHandler = async (req, res) => {
 		const searchOpt = { ...req.get };
 		// console.log('searchOpt', searchOpt)
 		/** @type {Array<TYPES.T_zone>} */
-		const foundObj = await getElements('zone', searchOpt);
+		const foundObj = await getElements(TABLES.ZONES, searchOpt);
 		console.log('found zones', foundObj)
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -498,7 +506,7 @@ const getZonesHandler = async (req, res) => {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -519,7 +527,7 @@ const createZonesHandler = async (req, res) => {
 			type: req.body.type || null,
 		};
 		/**@type {TYPES.T_zone} */
-		const createdZone = await createElement('zone', newZone);
+		const createdZone = await createElement(TABLES.ZONES, newZone);
 		console.log('Created zone', createdZone);
 
 		res.end(JSON.stringify({
@@ -531,7 +539,7 @@ const createZonesHandler = async (req, res) => {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -548,9 +556,8 @@ const updateZonesHandler = async (req, res) => {
 		}
 
 		/**@type {Array<TYPES.T_zone>} */
-		const updatedZone = await updateElement('zone', searchObj, updateObj);
+		const updatedZone = await updateElement(TABLES.ZONES, searchObj, updateObj);
 		console.log('Updated zone', updatedZone);
-
 
 		res.end(JSON.stringify({
 			success: true,
@@ -560,10 +567,9 @@ const updateZonesHandler = async (req, res) => {
 	} catch (error) {
 		console.error('[ERROR]', error);
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
-		console.log('COUCOU')
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -572,10 +578,9 @@ const deleteZonesHandler = async (req, res) => {
 	try {
 		console.log('deleteZonesHandler')
 		const searchObj = { ...req.get };
-		// console.log('searchObj', searchObj);
 
 		/**@type {Array<TYPES.T_zone>} */
-		const deletedObj = await deleteElement('boat', searchObj);
+		const deletedObj = await deleteElement(TABLES.ZONES, searchObj);
 		console.log('Deleted zones', deletedObj)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -585,11 +590,129 @@ const deleteZonesHandler = async (req, res) => {
 			zones: deletedObj,
 		}));
 	} catch (error) {
-		console.error(error)
+		console.error(error);
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
 			error: error,
+		}));
+	}
+};
+
+// EVENTS - events
+const getEventsHandler = async (req, res) => {
+	try {
+		console.log('getEventsHandler')
+		const searchOpt = { ...req.get };
+		// console.log('searchOpt', searchOpt)
+		/** @type {Array<TYPES.T_e>} */
+		const foundObj = await getElements(TABLES.EVENTS, searchOpt);
+		console.log('Found Events', foundObj)
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: foundObj.length,
+			events: foundObj,
+		}));
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const createEventsHandler = async (req, res) => {
+	console.log('createEventsHandler')
+	try {
+		console.log('req.body', req.body)
+		const emptyEvent = {
+			harbour_id: null,
+			title: null,
+			date_start: null,
+			date_end: null,
+			img: null,
+			content: null,
+			description: null,
+			date: null,
+			category: null,
+			cloudinary_img_public_id: null,
+			id: null,
+		};
+		/**@type {TYPES.T_event} */
+		const newEvent = { ...emptyEvent, ...req.body };
+		newEvent.created_at = Date.now();
+		newEvent.date = newEvent.created_at
+
+		const createdEvent = await createElement(TABLES.EVENTS, newEvent);
+		console.log('Created Event', createdEvent);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			event: createdEvent,
+		}));
+
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error,
+		}));
+	}
+};
+
+const updateEventsHandler = async (req, res) => {
+	console.log('updateEventsHandler')
+	try {
+		const searchObj = { ...req.get };
+		const updteObj = { ...req.body };
+
+		/**@type {TYPES.T_event} */
+		const updatedEvent = await updateElement(TABLES.EVENTS, searchObj, updteObj);
+		console.log('Updated Event', updatedEvent)
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			event: updatedEvent,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const deleteEventsHandler = async (req, res) => {
+	try {
+		console.log('deleteEventsHandler')
+		const searchObj = { ...req.get };
+
+		if (Object.keys(searchObj).length < 1) {
+			throw new Error('Empty search parameters, at least 1 param must be provided.');
+		}
+
+		/**@type {Array<TYPES.T_event>} */
+		const deletedObj = await deleteElement(TABLES.EVENTS, searchObj);
+		console.log('Deleted events', deletedObj)
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: deletedObj.length,
+			events: deletedObj,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
 		}));
 	}
 };
@@ -720,4 +843,29 @@ exports.router = [
 	// 	handler: deleteAbsencesHandler,
 	// 	method: "DELETE",
 	// },
+	{
+		on: true,
+		route: "/api/next/events",
+		handler: getEventsHandler,
+		method: "GET",
+	},
+	{
+		on: true,
+		route: "/api/next/events",
+		handler: createEventsHandler,
+		method: "POST",
+	},
+	{
+		on: true,
+		route: "/api/next/events",
+		handler: updateEventsHandler,
+		method: "PUT",
+	},
+	{
+		on: true,
+		route: "/api/next/events",
+		handler: deleteEventsHandler,
+		method: "DELETE",
+	},
+	getEventsHandler
 ];
