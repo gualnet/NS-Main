@@ -220,7 +220,7 @@
 									</div>
 								</div>
 								<div id="environnement_button" class="col-4 px-2">
-									<a target="_blank" href="https://www.lesportscorses.com/bonnes-pratiques/">
+									<a target="_blank" href="">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 15px;"
@@ -760,6 +760,7 @@
 			displayResaButton();
 			changeNavbarSettings();
 			setFaqLink();
+			setEnvLink();
 		});
 
 		const changeNavbarSettings = () => {
@@ -792,18 +793,33 @@
 			};
 			const harbourID = localStorage['harbour_id'];
 			const link = faqLinks[harbourID] || undefined;
-			console.log('link',link)
 			if (!link) {
-				console.log('01')
 				const faqBtnEL = document.querySelector('#faq_button');
-				console.log('faqBtnEL',faqBtnEL)
 				faqBtnEL.style.display = 'none';
 			} else {
-				console.log('02')
 				const faqBtnEL = document.querySelector('#faq_button');
-				console.log('faqBtnEL', faqBtnEL)
 				const aEL = faqBtnEL.querySelector('a');
-				console.log('aEL', aEL)
+				aEL.href = link;
+			}
+		};
+		const setEnvLink = () => {
+			const faqLinks = {
+				"SlUyrmPHE9": "https://www.lesportscorses.com/ajaccio/environnement/", // Ajaccio
+				"BxqaMWYBqc": "https://www.lesportscorses.com/bonifacio/environnement/", // Bonifacio
+				"HeIrt89Ccc": "https://www.lesportscorses.com/carghese/environnement/", // Cargese
+				"rxHL7ucAo9": "https://www.lesportscorses.com/macinaggio/environnement/", // Macinaggio
+				"HgfhlHtaq9": "https://www.lesportscorses.com/porto-vecchio/environnement/", // Porto Vecchio
+				"rl4ZBaUpjc": "https://www.lesportscorses.com/propriano/environnement/", // Propriano
+			};
+			const harbourID = localStorage['harbour_id'];
+			const link = faqLinks[harbourID] || undefined;
+			console.log('link',link)
+			if (!link) {
+				const faqBtnEL = document.querySelector('#environnement_button');
+				faqBtnEL.style.display = 'none';
+			} else {
+				const faqBtnEL = document.querySelector('#environnement_button');
+				const aEL = faqBtnEL.querySelector('a');
 				aEL.href = link;
 			}
 		}
