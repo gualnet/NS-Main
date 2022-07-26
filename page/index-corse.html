@@ -83,7 +83,7 @@
 				display: flex;
 				flex-direction: column;
 				height: 10vh;
-				justify-content: space-between;
+				justify-content: center;
 				padding: 10px;
 				position: absolute;
 				transform: translate(0px, 300%);
@@ -94,15 +94,6 @@
 			.top-container #harbourName {
 				font-size: 14pt;
 				text-align: center;
-			}
-
-			.top-container #harbourSlogan {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				color: cornflowerblue;
-				font-size: 10pt;
-				border-radius: 10px;
 			}
 
 			/* RESERVATION */
@@ -120,7 +111,6 @@
 		<div class="top-container" id="topCtn">
 			<div id="heroTextContainer">
 				<div id="harbourName"></div>
-				<div id="harbourSlogan">_</div>
 			</div>
 		</div>
 
@@ -212,7 +202,7 @@
 									</div>
 								</div>
 								<div id="faq_button" class="col-4 px-2">
-									<a target="_blank" href="/library/bonifacio-faq.pdf">
+									<a target="_blank" href="">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 15px;"
@@ -229,7 +219,7 @@
 										</div>
 									</div>
 								</div>
-								<div id="faq_button" class="col-4 px-2">
+								<div id="environnement_button" class="col-4 px-2">
 									<a target="_blank" href="https://www.lesportscorses.com/bonnes-pratiques/">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
@@ -769,6 +759,7 @@
 			displayInfoInTopContainer();
 			displayResaButton();
 			changeNavbarSettings();
+			setFaqLink();
 		});
 
 		const changeNavbarSettings = () => {
@@ -782,13 +773,38 @@
 
 		const displayInfoInTopContainer = () => {
 			const harbourNameEl = document.querySelector('#harbourName');
-			harbourNameEl.innerHTML = `Bienvenue au port de ${localStorage['harbourname']}`;
+			harbourNameEl.innerHTML = `Bienvenue au port de </br> ${localStorage['harbourname']}`;
 		}
 
 		const displayResaButton = () => {
 			const resaBtnEl = document.querySelector('#resaBtn');
 			if (localStorage['harbour_id'] === 'HeIrt89Ccc' && resaBtnEl) {
 				resaBtnEl.classList.add('hide');
+			}
+		}
+
+		const setFaqLink = () => {
+			const faqLinks = {
+				"SlUyrmPHE9": "https://www.lesportscorses.com/ajaccio/questions-frequentes-2/", // Ajaccio
+				"HgfhlHtaq9": "https://www.lesportscorses.com/porto-vecchio/questions-frequentes-2/", // Porto Vecchio
+				"BxqaMWYBqc": "https://www.lesportscorses.com/bonifacio/questions-frequentes-2/", // Bonifacio
+				"rl4ZBaUpjc": "https://www.lesportscorses.com/propriano/questions-frequentes-2/", // Propriano
+			};
+			const harbourID = localStorage['harbour_id'];
+			const link = faqLinks[harbourID] || undefined;
+			console.log('link',link)
+			if (!link) {
+				console.log('01')
+				const faqBtnEL = document.querySelector('#faq_button');
+				console.log('faqBtnEL',faqBtnEL)
+				faqBtnEL.style.display = 'none';
+			} else {
+				console.log('02')
+				const faqBtnEL = document.querySelector('#faq_button');
+				console.log('faqBtnEL', faqBtnEL)
+				const aEL = faqBtnEL.querySelector('a');
+				console.log('aEL', aEL)
+				aEL.href = link;
 			}
 		}
 
