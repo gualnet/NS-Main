@@ -59,7 +59,10 @@
                                 <li id="nav_" class="nav-item my-2">
                                     <a class="nav-link pl-0 text-nowrap" href="#"><img class="d-none d-md-inline" id="entity_img"></a><span id="entity_name" class="d-none d-md-inline"></span>
                                 </li>
-                                <li id="nav_boatmgmt" class="nav-item py-2 w-100 active bg-theme-color-active" onclick="switchPlugin('boatmgmt');">
+																<li id="nav_commgmt" class="nav-item py-2 w-100 active bg-theme-color-active" onclick="switchPlugin('commgmt');">
+																	<a class="nav-link pl-0" href="#"><i class="fa fa-commenting-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Communications</span></span></a>
+																</li>
+                                <li id="nav_boatmgmt" class="nav-item py-2" onclick="switchPlugin('boatmgmt');">
                                     <a class="nav-link pl-0" href="#"><i class="fa fa-ship fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Bateaux</span></a>
                                 </li>
                                 <li id="nav_cameramgmt" class="nav-item py-2">
@@ -89,9 +92,6 @@
                                 <li id="nav_weathermgmt" class="nav-item py-2" onclick="switchPlugin('weathermgmt');">
                                     <a class="nav-link pl-0" href="#"><i class="fa fa-sun-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Météo</span></span></a>
                                 </li>
-                                <li id="nav_commgmt" class="nav-item py-2" onclick="switchPlugin('commgmt');">
-                                    <a class="nav-link pl-0" href="#"><i class="fa fa-commenting-o fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Communications</span></span></a>
-                                </li>
                                 <li id="nav_absencemgmt" class="nav-item py-2" onclick="switchPlugin('absencemgmt');">
                                     <a class="nav-link pl-0" href="#"><i class="fa fa-exchange fa-fw float-left"></i> <span class="ml-2 overflow-hidden float-right">Absences</span></a>
                                 </li>
@@ -120,7 +120,7 @@
                         </nav>
                     </div>
                     <div class="col-10 p-0 m-0">
-                        <iframe id="plugin_display" class="p-0 m-0" src="/admin/plugin/boatmgmt" style="border:none;height:100% !important;width:100%;"></iframe>
+                        <iframe id="plugin_display" class="p-0 m-0" src="/admin/plugin/commgmt" style="border:none;height:100% !important;width:100%;"></iframe>
                     </div>
                 </div>
             </div>
