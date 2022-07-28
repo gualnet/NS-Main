@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Reservation ext</title>
+  <link rel="stylesheet" href="/css/pages/magelan-resa.css">
+  <script src="/js/pages/magelan-resa.js"></script>
+</head>
+<body>
+  <div id="mainWrapper">
+
+		<!-- RESERVATION FORM -->
+		<div class="form-ctn">
+			<div class="form-top">
+				<div class="form-selector active">Réserver mon escale</div>
+				<div class="form-selector">Mes réservations</div>
+			</div>
+			<div class="form-content">
+				<div class="section">
+					<div class="section-title-ctn flex-row">
+						<i class="anchor-ico"></i>
+						<div class="title">Préparer mon escale</div>
+					</div>
+					<div class="harbour-selector-ctn">
+						<select>
+							<option value="" disabled selected>--Veuillez choisir un port--</option>
+							<option value="ajaccio">Ajaccio</option>
+							<option value="bonifacio">Bonifacio</option>
+							<option value="cargese">Cargese</option>
+							<option value="macinaggio">Macinaggio</option>
+							<option value="porto-vecchio">Porto-Vecchio</option>
+							<option value="propriano">Propriano</option>
+						</select>
+					</div>
+					<div class="date-button-ctn">
+							<div class="flex-col">
+								<div class="label">Arrivée</div>
+								<input id="input-date-end" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
+							</div>
+							<div class="flex-col">
+								<div class="label">Départ</div>
+								<input id="input-date-end" name="date_end" type="date" class="form-control floating-input modal-date-input" required>
+						</div>
+					</div>
+				</div>
+				<div class="section">
+					<div class="section-title-ctn flex-row">
+						<i class="ship-ico"></i>
+						<div class="title">Mon bateau</div>
+						<div class="">Modifier</div>
+					</div>
+					<div class="boat-details-ctn">
+						<div class="flex-row">
+							<div class="size-ctn flex-row">
+								<div class="label">L</div>
+								<div class="display-bubble">14,30</div>
+							</div>
+							<div class="size-ctn  flex-row">
+								<div class="label">l</div>
+								<div class="display-bubble">3,4</div>
+							</div>
+						</div>
+						<div class="boat-types-ctn flex-row">
+							<div class="main-button">Voilier</div>
+							<div class="main-button">Monocoque</div>
+						</div>
+					</div>
+				</div>
+				<div class="section">
+					<div class="stay-details-ctn">
+						<div class="section-title-ctn flex-row">
+							<!-- <div class="icon">lune</div> -->
+							<i class="moon-ico"></i>
+							<div class="text">Nombre de nuits</div>
+							<div class="display-bubble">2</div>
+						</div>
+						<div class="section-title-ctn flex-row">
+							<!-- <div class="icon">lune</div> -->
+							<i class="moon-ico"></i>
+							<div class="text">Coût du sejour</div>
+							<div class="display-bubble">99,00€</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="text-area-ctn">
+					<div class="section-title-ctn flex-row">
+						<i class="comments-ico"></i>
+						<div class="title">Commentaire</div>
+					</div>
+					<textarea name="comment" cols="40" rows="5" placeholder="Laissez un message à l’attention de la capitainerie."></textarea>
+				</div>
+				<div class="action-button-ctn">
+					<div class="main-button">Réserver avec Magelan eResa</div>
+				</div>
+			</div>
+		</div>
+		<!-- RESERVATION FORM END -->
+
+
+
+
+	</div>
+</body>
+</html>
