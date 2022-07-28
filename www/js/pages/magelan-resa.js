@@ -1,0 +1,1 @@
+console.log('RESA_MAGELAN_JS');
