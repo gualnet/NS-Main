@@ -219,7 +219,6 @@ async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
     return;
 }
 async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
-    console.log('test');
     if (_req.get.entity_id) {
         let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
         // console.log(entity.wlink_vtwo_secretkey);
@@ -254,8 +253,6 @@ async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
             const sensors = JSON.parse(promise.data);
             sensorsDetails = sensors.sensors;
         }
-        // console.log('weather sensors', sensorsDetails);
-
 
         let weather;
         date = Math.floor(Date.now() / 1000);

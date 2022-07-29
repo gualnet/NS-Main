@@ -1184,7 +1184,7 @@
 					var rainHeavy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337765/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain_kztbgd.png"
 					var sunshineClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337766/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunshine_rzbzqh.png"
 
-					console.log(weather[0].hourly[hour].weatherCode);
+					// console.log('weatherCode', weather[0].hourly[hour].weatherCode);
 					//case WeatherCode	Condition	DayIcon	NightIcon
 					switch (weather[0].hourly[hour].weatherCode) {
 						case '395':	//Moderate or heavy snow in area with thunder
@@ -1368,26 +1368,37 @@
 							console.log('/api/weather/wlink/vtwo', _data);
 							if (_data.success) {
 								let _wlDataISS;
+								let issDataStructType;
 								let _wlDataBaro;
 								// sensors list are not allways sorted the same way, we need to find the correct type
 								for (let sensor of _data.data.sensors) {
 									if (sensor.category === 'ISS') { // ISS => Integrated Sensor Suite
 										_wlDataISS = sensor.data[0];
+										issDataStructType = sensor.data_structure_type;
 									}
 									if (sensor.category === 'Barometer') {
 										_wlDataBaro = sensor.data[0];
 									}
 								}
-								document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlDataISS.temp - 32) / 1.8000).toFixed(1) + "°C");
-								document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlDataISS.rainfall_daily_mm).toFixed(2));
-								const convertionFactor = 0.02953; // 1 Hectopascal [hPa] = 0,029 529 980 164 712 Inch of mercury [inHg]
-								const pressureInHpa = Math.round(_wlDataBaro.bar_absolute / convertionFactor);
-								document.getElementById("pressure").innerHTML = (pressureInHpa);
-								document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir_last + "deg)"//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
-								//document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
-								// document.getElementById("wind_speed").innerHTML = parseFloat(_wlDataISS.wind_speed_avg_last_1_min).toFixed(2);
-								document.getElementById("wind_speed").innerHTML = parseInt(Math.round(_wlDataISS.wind_speed_avg_last_1_min));
 
+								if (issDataStructType !== 2) {
+									document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlDataISS.temp - 32) / 1.8000).toFixed(1) + "°C");
+									document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlDataISS.rainfall_daily_mm).toFixed(2));
+								} else {
+									document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + parseFloat((_wlDataISS.temp_out - 32) / 1.8000).toFixed(1) + "°C");
+									document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + parseFloat(_wlDataISS.rain_day_mm).toFixed(2));
+								}
+								if (_wlDataBaro) {
+									const convertionFactor = 0.02953; // 1 Hectopascal [hPa] = 0,029 529 980 164 712 Inch of mercury [inHg]
+									const pressureInHpa = Math.round(_wlDataBaro.bar_absolute / convertionFactor);
+									document.getElementById("pressure").innerHTML = (pressureInHpa);
+									document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir_last + "deg)"
+									document.getElementById("wind_speed").innerHTML = parseInt(Math.round(_wlDataISS.wind_speed_avg_last_1_min));
+								} else {
+									document.getElementById("pressure").parentElement.parentElement.style.display = 'none';
+									document.getElementById("compassRingventjaune").style.transform = "rotate(" + _wlDataISS.wind_dir + "deg)"
+									document.getElementById("wind_speed").innerHTML = parseInt(Math.round(_wlDataISS.wind_speed));
+								}
 							}
 						}).catch((e) => console.error(e));
 					} else {
