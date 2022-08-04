@@ -1671,10 +1671,17 @@
 			+ '</div>'
 			+ '</div>'
 
+		const sleep = (ms) => {
+			return(new Promise((res, rej) => {
+				setTimeout(() => {
+					res();
+				}, ms);
+			}));
+		};
 
-		fetch("/api/events/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
+		fetch("/api/events/" + localStorage['harbour_id']).then(response => response.json()).then(async _data => {
 			if (_data.data[0]) {
-				var events = _data.data.sort(dynamicSort("date_start"));
+				const events = _data.data.sort((a, b) => new Date(a.date_end).toISOString() < new Date(b.date_end).toISOString());
 				const MAX_EVENTS_NUMBER = 3;
 				const eventsLimit = (events.length < MAX_EVENTS_NUMBER) ? events.length : MAX_EVENTS_NUMBER;
 				for (var i = 0; i < eventsLimit; i++) {
