@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+	<!-- screen loader -->
+	<!-- {{element->loader.html}} -->
+
+	<!-- Begin page content -->
+	<main class="flex-shrink-0">
+		<!-- Fixed navbar -->
+		{{element->navheader.html}}
+		<nav class="navbar navbar-light fixed-top" style="margin-top:35px;">
+			<a id="return_link" class="navbar-brand" href="/offers"><i style="font-size:30px;"
+					class="bi bi-arrow-left-circle-fill"></i></a>
+		</nav>
+		<!-- page content start -->
+		<div class="product-image-top" style="background-color:white;">
+			<img id="img" style="width:100%;height:auto" src="img/image-3.png" alt="">
+		</div>
+		<div class="container top-30" id="container">
+			<div class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+							<h5 id="title"></h5>
+						</div>
+					</div>
+					<div class="row pt-2">
+						<div class="col">
+							<p class="text-muted small" id="description"></p>
+						</div>
+					</div>
+					<div class="row pt-2">
+						<div class="col border-top border-color">
+							<p class="text-muted small" id="duree"></p>
+						</div>
+					</div>
+				</div>
+				<div class="card-body border-top border-color" style="text-align: justify;">
+					<p class="small text-secondary" id="content">
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<br />
+		<br />
+		<br />
+
+		<div class="container py-3">
+			{{element->navbar.html}}
+		</div>
+
+	</main>
+
+	<script>
+		window.addEventListener('load', async () => {
+			const offer = await fetchOffer();
+			displayOffer(offer);
+		});
+
+		const fetchOffer = async () => {
+			try {
+				const urlParams = new URLSearchParams(window.location.search);
+				const offerId = urlParams.get('id');
+				if (!offerId) {
+					throw new Error('No param id found in url');
+				}
+				const resp = await fetch(`/api/offers/${offerId}`);
+				console.log('resp',resp);
+				const respJson = await resp.json();
+				console.log('respJson',respJson);
+				const offer = respJson.offer;
+				console.log('offer',offer);
+				return(offer[0]);
+			} catch (error) {
+				console.error(error);
+				alert('Error !');
+			}
+		};
+
+		const displayOffer = (offer = []) => {
+			console.log('displayOffer', offer);
+			const titleEl = document.querySelector('#title');
+			if (titleEl) titleEl.innerHTML = offer.title;
+			const descriptionEl = document.querySelector('#description');
+			if (descriptionEl) descriptionEl.innerHTML = offer.description;
+			const contentEl = document.querySelector('#content');
+			if (contentEl) contentEl.innerHTML = offer.content;
+			const imgEl = document.querySelector('#img');
+			if (imgEl) imgEl.src = offer.img || localStorage['entity_logo'];
+			const dureeEl = document.querySelector('#duree');
+			if (dureeEl) {
+				const startDate = offer.date_start.split('-').reverse().join('/');
+				const endDate = offer.date_end.split('-').reverse().join('/');
+				dureeEl.innerHTML = `Du ${startDate} au ${endDate}`;
+			}
+		};
+
+	</script>
+
+</body>
+{{element->footer_app.html}}
+
+</html>
