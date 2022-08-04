@@ -593,6 +593,7 @@ exports.plugin =
                     .replace(/__FUEL__/g, _harbours[i].fuel)
                     .replace(/__WIFI__/g, _harbours[i].wifi)
                     .replace(/__WIFI_PASS__/g, _harbours[i].wifi_pass)
+                    .replace(/__GOOGLE_MAP_LINK__/g, _harbours[i].google_map_link)
                     .replace(/__IMG__/g, _harbours[i].img)
                     .replace(/__HARBOUR_MAP__/g, _harbours[i].harbour_map)
                     .replace(/__PRICE_LIST__/g, _harbours[i].price_list)
