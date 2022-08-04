@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<style>
+	@font-face {
+		font-family: 'Poppins Regular';
+		font-style: normal;
+		font-weight: normal;
+		src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+	}
+
+	* {
+		font-family: 'Poppins Regular' !important;
+	}
+
+	body {
+		background: url("../background2.png") #FFF fixed;
+		font-family: 'Poppins Regular' !important;
+	}
+
+	main {
+		flex-grow: 1;
+	}
+
+	#frame-ctn {
+		/* background-color: red; */
+		height: calc(100% - 70px);
+		width: 100%;
+		display: flex;
+	}
+</style>
+
+<!-- __TPL_HEADER_APP__ -->
+{{element->header_app.html}}
+
+<body class="body-scroll d-flex flex-column h-100 menu-overlay">
+	<!-- __TPL_ONESIGNAL__ -->
+	{{element->onesignal.html}}
+
+	<!-- Begin page content -->
+	<main class="flex-shrink-0">
+		<!-- Fixed navbar -->
+		<!-- __TPL_NAVHEADER__ -->
+		{{element->navheader.html}}
+
+		<div id="frame-ctn">
+			<iframe id="frame" src="" width="100%" height="100%"></iframe>
+		</div>
+
+		<div class="container py-3">
+			<!-- __TPL_NAVBAR__ -->
+			{{element->navbar.html}}
+		</div>
+	</main>
+
+	<script>
+		window.addEventListener('load', async () => {
+			const harbour = await fetchHarbour();
+			dispatchData(harbour);
+		});
+
+		const fetchHarbour = async () => {
+			const harbourId = localStorage['harbour_id'];
+			const resp = await fetch(`/api/getharbour/${harbourId}`);
+			const respJson = await resp.json();
+			const harbour = respJson.data;
+			return(harbour);
+		};
+
+		const dispatchData = (harbour) => {
+			const frameEl = document.querySelector('#frame');
+			if (!frameEl) return;
+			frameEl.src = harbour.google_map_link;
+		}
+	</script>
+
+
+
+	<!-- __TPL_FOOTER_APP__ -->
+	{{element->footer_app.html}}
+</body>
+
+</html>
