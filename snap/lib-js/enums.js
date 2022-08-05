@@ -62,10 +62,25 @@ const rolesMobileApp = {
   PROFESSIONNEL: 'Professionnel',
   ADMINISTRATEUR: 'Administrateur',
   SUPER_ADMIN: 'Super Admin',
+};
+
+/**
+ * BD TABLE NAMES
+ */
+const TABLES = {
+	USERS: 'user',
+	BOATS: 'boat',
+	ABSENCES: 'absences',
+	SORTIES: 'sorties',
+	ZONES: 'zone',
+	EVENTS: 'events',
+	HARBOURS: 'harbour',
+	OFFERS: 'offers',
 }
 
 module.exports = {
   incidentsTypes,
   rolesMobileApp,
   rolesBackOffice,
+	TABLES,
 };

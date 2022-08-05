@@ -4,15 +4,9 @@
 // PUT replaces the resource in its entirety. Use PATCH if request updates part of the resource. we dont use patch here yet
 // DELETE
 const TYPES = require('../../types');
+const ENUMS = require('../lib-js/enums')
 
-const TABLES = {
-	USERS: 'user',
-	BOATS: 'boat',
-	ABSENCES: 'absences',
-	SORTIES: 'sorties',
-	ZONES: 'zone',
-	EVENTS: 'events',
-};
+const TABLES = ENUMS.TABLES;
 
 exports.handler = async (req, res) => {
 	res.end('Hello Snap!');
@@ -717,6 +711,125 @@ const deleteEventsHandler = async (req, res) => {
 	}
 };
 
+
+// OFFERS
+const getOffersHandler = async (req, res) => {
+	try {
+		console.log('getOffersHandler')
+		const searchOpt = { ...req.get };
+		// console.log('searchOpt', searchOpt)
+		/** @type {Array<TYPES.T_offer>} */
+		const foundObj = await getElements(TABLES.OFFERS, searchOpt);
+		console.log('Found Offers', foundObj)
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: foundObj.length,
+			offers: foundObj,
+		}));
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const createOffersHandler = async (req, res) => {
+	console.log('createOffersHandler')
+	try {
+		console.log('req.body', req.body)
+		const emptyOffer = {
+			content: null,
+			created_at: null,
+			date_end: null,
+			date_start: null,
+			deleted_at: null,
+			description: null,
+			harbour_id: null,
+			id: null,
+			img: null,
+			title: null,
+			updated_at: null,
+		};
+		/**@type {TYPES.T_offer} */
+		const newOffer = { ...emptyOffer, ...req.body };
+		newOffer.created_at = new Date().toLocaleString();
+		console.log('newOffer', newOffer);
+
+		const createdOffer = await createElement(TABLES.OFFERS, newOffer);
+		console.log('Created Offer', createdOffer);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			offer: createdOffer,
+		}));
+
+	} catch (error) {
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error,
+		}));
+	}
+};
+
+const updateOffersHandler = async (req, res) => {
+	console.log('updateOffersHandler')
+	try {
+		const searchObj = { ...req.get };
+		const updteObj = { ...req.body };
+
+		/**@type {TYPES.T_offer} */
+		const updatedOffer = await updateElement(TABLES.OFFERS, searchObj, updteObj);
+		console.log('Updated Offer', updatedOffer)
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			offer: updatedOffer,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const deleteOffersHandler = async (req, res) => {
+	try {
+		console.log('deleteOffersHandler')
+		const searchObj = { ...req.get };
+
+		if (Object.keys(searchObj).length < 1) {
+			throw new Error('Empty search parameters, at least 1 param must be provided.');
+		}
+
+		/**@type {Array<TYPES.T_event>} */
+		const deletedObj = await deleteElement(TABLES.OFFERS, searchObj);
+		console.log('Deleted offers', deletedObj)
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: deletedObj.length,
+			offers: deletedObj,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
 exports.router = [
 	// USERS
 	{
@@ -843,6 +956,7 @@ exports.router = [
 	// 	handler: deleteAbsencesHandler,
 	// 	method: "DELETE",
 	// },
+	// EVENTS
 	{
 		on: true,
 		route: "/api/next/events",
@@ -867,5 +981,29 @@ exports.router = [
 		handler: deleteEventsHandler,
 		method: "DELETE",
 	},
-	getEventsHandler
+	// OFFERS
+	{
+		on: true,
+		route: "/api/next/offers",
+		handler: getOffersHandler,
+		method: "GET",
+	},
+	{
+		on: true,
+		route: "/api/next/offers",
+		handler: createOffersHandler,
+		method: "POST",
+	},
+	{
+		on: true,
+		route: "/api/next/offers",
+		handler: updateOffersHandler,
+		method: "PUT",
+	},
+	{
+		on: true,
+		route: "/api/next/offers",
+		handler: deleteOffersHandler,
+		method: "DELETE",
+	},
 ];
