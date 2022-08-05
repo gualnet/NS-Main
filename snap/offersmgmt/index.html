@@ -195,7 +195,6 @@
 			contentEl.firstChild.classList.add('ql-blank');
 			contentEl.firstChild.innerHTML = '<p><br></p>';
 		};
-
 		const selectHarbourChangeHandler = async (ev) => {
 			try {
 				const selectedHarbourId = ev.target.value;
@@ -316,7 +315,7 @@
 
 				const url = `/api/offers/${id}`
 				const resp = await fetch(url, {
-					method: 'PUT',
+          method: 'PUT',
 					body: formData,
 					headers: new Headers({ "Authorization": `Bearer ${localStorage['token']}` }),
 				});
