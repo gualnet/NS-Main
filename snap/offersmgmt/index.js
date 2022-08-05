@@ -148,8 +148,8 @@ const createOfferHandler = async (req, res) => {
 			title: req.body?.title || null,
 			description: req.body?.description || null,
 			content: req.body?.content || null,
-			date_start: new Date(req.body?.date_start).toLocaleString() || null,
-			date_end: new Date(req.body?.date_end).toLocaleString() || null,
+			date_start: req.body?.date_start || null,
+			date_end: req.body?.date_end || null,
 			img: req.body?.img || null,
 			harbour_id: req.body?.harbour_id || null,
 		}
@@ -171,11 +171,8 @@ const createOfferHandler = async (req, res) => {
 		} else {
 			newOffer.content = newOffer.content?.replaceAll('<p>', '').replaceAll('</p>', '\n');
 		}
-		console.log('newOffer', newOffer);
 
-		// let offer = [];
 		let offer = await STORE.API_NEXT.createElement(ENUMS.TABLES.OFFERS, newOffer);
-
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -196,12 +193,11 @@ const updateOfferHandler = async (req, res) => {
 	try {
 		console.log('updateOfferHandler');
 
-		console.log('req.field', req.field);
-		console.log('req.param', req.param);
+		// console.log('\n========req.field=========\n', req.field);
+		// console.log('\n========req.param=========\n', req.param);
+		// console.log('\n========req.body=========\n', req.body);
 		const { offerId } = req.param
-		console.log('offerId', offerId);
-
-		console.log('req.body', req.body);
+		// console.log('offerId', offerId);
 
 		const offer = {
 			title: req.body.title || null,
