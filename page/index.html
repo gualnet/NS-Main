@@ -474,7 +474,7 @@
 										</div>
 									</div>
 								</div>
-								<div id="erp_link" class="col-4 px-2" onclick="window.location.href = ('/offers');">
+								<div id="offers_btn" class="col-4 px-2 hide" onclick="window.location.href = ('/offers');">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 25px;"
@@ -1079,7 +1079,24 @@
 		window.addEventListener('load', () => {
 			displayCameraBtn();
 			portsCorsesRedirection();
+			checkOffers();
 		});
+
+		const checkOffers = async () => {
+			try {
+				const resp = await fetch(`/api/offers/harbour/${localStorage['harbour_id']}`, { method: 'GET' });
+				const respJson = await resp.json();
+				console.log('respJson',respJson)
+				const offersCount = respJson.count;
+				if (offersCount > 0) {
+					const offersBtnEl = document.querySelector('#offers_btn');
+					offersBtnEl.classList.remove('hide');
+				}
+			} catch (error) {
+				console.error('ERROR', error);
+				alert('Error: index-001');
+			}
+		};
 
 		const portsCorsesRedirection = () => {
 			const entityId = localStorage['entity_id'];
@@ -1809,6 +1826,9 @@
 		body {
 			background: url("../background2.png") #FFF fixed;
 			font-family: 'Poppins Regular' !important;
+		}
+		.hide {
+			display: none;
 		}
 	</style>
 
