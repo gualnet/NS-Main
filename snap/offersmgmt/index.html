@@ -280,14 +280,20 @@
 				const divDescription = document.createElement("div");
 				divDescription.innerHTML = document.querySelector(`#row_desc_${id}`).firstChild.innerHTML;
 				const textDescription = divDescription.textContent || divDescription.innerText || "";
+				formData.append("description", textDescription);
 
 				const divContent = document.createElement("div");
 				divContent.innerHTML = document.querySelector(`#row_content_${id}`).firstChild.innerHTML;
 				const textContent = divContent.textContent || divContent.innerText || "";
+				formData.append("content", textContent);
 
-				// formData.append("img", document.querySelector(`#row_img_${id}`).value);
 				formData.append("date_start", document.querySelector(`#row_date_start_${id}`).value);
 				formData.append("date_end", document.querySelector(`#row_date_end_${id}`).value);
+
+				const imgEl = document.querySelector(`#row_img_${id}`);
+				console.dir(imgEl);
+				const fileBlob = imgEl.files[0];
+				formData.append("img", fileBlob);
 
 				const resp = await fetch(`/api/offers/${id.replace('form_', '')}`, {
 					method: 'PUT',
@@ -296,13 +302,11 @@
 				});
 
 				const respJson = await resp.json();
-				console.log('respJson', respJson);
-
 				const offers = await getofferByHarbour();
 				const rows = createOfferRows(offers);
 				displayOffers(rows);
 			} catch (error) {
-				console.error('error')
+				console.error('error', error);
 				alert('ERROR !')
 			}
 		};

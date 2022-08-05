@@ -212,6 +212,14 @@ const updateOfferHandler = async (req, res) => {
 			img: req.body.img || null,
 			updated_at: new Date().toLocaleString(),
 		}
+
+		if (offer.img) {
+			const upload = await STORE.cloudinary.uploadFile(offer.img, req.field["img"].filename);
+			console.log(upload);
+			offer.img = upload.secure_url;
+			offer.cloudinary_img_public_id = upload.public_id;
+		}
+
 		console.log('Offer to update', offer);
 
 		const updatedObj = await STORE.API_NEXT.updateElement(ENUMS.TABLES.OFFERS, { id: offerId }, offer);
