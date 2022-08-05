@@ -110,13 +110,13 @@ const getOfferByIdHandler = async (req, res) => {
 const getOffersByHarbourIdHandler = async (req, res) => {
 	try {
 		const userCookie = req.userCookie;
-		console.log('userCookie', userCookie);
+		// console.log('userCookie', userCookie);
 
-		console.log('req.param', req.param)
+		// console.log('req.param', req.param)
 		const harbourId = req.param.harbourId
 
 		let offers = await STORE.API_NEXT.getElements(ENUMS.TABLES.OFFERS, { harbour_id: harbourId });
-		console.log('offers', offers);
+		// console.log('offers', offers);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -205,19 +205,15 @@ const updateOfferHandler = async (req, res) => {
 			content: req.body.content || null,
 			date_start: req.body.date_start || null,
 			date_end: req.body.date_end || null,
-			img: req.body.img || null,
+			// img: req.body.img || null,
 			updated_at: new Date().toLocaleString(),
 		}
-
-		if (offer.img) {
-			const upload = await STORE.cloudinary.uploadFile(offer.img, req.field["img"].filename);
+		if (req.body.img && !req.body.img.includes('https://res.cloudinary.com')) {
+			const upload = await STORE.cloudinary.uploadFile(req.body.img, req.field["img"].filename);
 			console.log(upload);
 			offer.img = upload.secure_url;
 			offer.cloudinary_img_public_id = upload.public_id;
 		}
-
-		console.log('Offer to update', offer);
-
 		const updatedObj = await STORE.API_NEXT.updateElement(ENUMS.TABLES.OFFERS, { id: offerId }, offer);
 		console.log('updatedObj', updatedObj);
 

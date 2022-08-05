@@ -54,35 +54,35 @@
 										<div class="col-lg-12">
 											<div class="form-group">
 												<label class="form-label">Titre</label>
-												<input class="form-control" name="title" required>
+												<input id="titleInput" class="form-control" name="title" required>
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-6 col-sm-6">
 											<div class="form-group">
 												<label class="form-label">Date de début</label>
-												<input type="date" class="form-control" name="date_start" required>
+												<input id="startDate" type="date" class="form-control" name="date_start" required>
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-6 col-sm-6">
 											<div class="form-group">
 												<label class="form-label">Date de fin</label>
-												<input type="date" class="form-control" name="date_end" required>
+												<input id="endDate" type="date" class="form-control" name="date_end" required>
 											</div>
 										</div>
 										<div class="col-lg-12">
 											<div class="form-group">
 												<label class="form-label">image</label>
-												<input type="file" class="form-control" accept="image/png, image/jpg" name="img">
+												<input id="img" type="file" class="form-control" accept="image/png, image/jpg" name="img">
 											</div>
 										</div>
-										<div class="col-lg-12">
+										<div class="col-lg-12 mb-6">
 											<div class="form-group">
 												<label class="form-label">Description(255 caractères)</label>
 												<div id="description">
 												</div>
 											</div>
 										</div>
-										<div class="col-lg-12">
+										<div class="col-lg-12 mt-7 mb-7">
 											<div class="form-group">
 												<label class="form-label">Contenu</label>
 												<div id="editor">
@@ -179,6 +179,22 @@
 			}
 		};
 
+		const cleanCreateFormFields = () => {
+			const titleInputEl = document.querySelector('#titleInput');
+			titleInputEl.value = null;
+			const startDateEl = document.querySelector('#startDate');
+			startDateEl.value = null;
+			const endDateEl = document.querySelector('#endDate');
+			endDateEl.value = null;
+			const imgEl = document.querySelector('#img');
+			imgEl.value = null;
+			const descriptionEl = document.querySelector('#description');
+			descriptionEl.firstChild.classList.add('ql-blank');
+			descriptionEl.firstChild.innerHTML = '<p><br></p>';
+			const contentEl = document.querySelector('#editor');
+			contentEl.firstChild.classList.add('ql-blank');
+			contentEl.firstChild.innerHTML = '<p><br></p>';
+		};
 		const selectHarbourChangeHandler = async (ev) => {
 			try {
 				const selectedHarbourId = ev.target.value;
@@ -187,19 +203,16 @@
 				const offers = await getofferByHarbour(selectedHarbourId)
 				const rows = createOfferRows(offers, selectedHarbourId)
 				displayOffers(rows)
+				cleanCreateFormFields();
 			} catch (error) {
 				console.error('Error', error);
 			}
 		};
 
 		const getofferByHarbour = async (harbourId = G_SelectedHarbourId) => {
-			console.log('getofferByHarbour', harbourId)
 			const response = await fetch(`/api/offers/harbour/${harbourId}`);
-			console.log('response', response)
 			const jsonResp = await response.json();
-			console.log('jsonResp', jsonResp)
 			const offers = jsonResp.offers;
-			console.log('offers', offers)
 			return(offers);
 		}
 
@@ -244,12 +257,17 @@
 
 		const sendCreateForm = async () => {
 			const form = document.getElementById("createForm");
-			console.log('form', form);
-
 			const formData = new FormData(form);
-			formData.append("content", document.getElementById('editor').firstChild.innerHTML);
-			formData.append("description", document.getElementById('description').firstChild.innerHTML);
-			console.log('formData', formData);
+
+			const divContent = document.createElement("div");
+			divContent.innerHTML = document.querySelector(`#row_content_${id}`).firstChild.innerHTML;
+			const textContent = divContent.textContent || divContent.innerText || "";
+			formData.append("content", textContent);
+
+			const divDescription = document.createElement("div");
+			divDescription.innerHTML = document.querySelector(`#row_desc_${id}`).firstChild.innerHTML;
+			const textDescription = divDescription.textContent || divDescription.innerText || "";
+			formData.append("description", textDescription);
 
 			try {
 				const resp = await fetch('/api/offers', {
@@ -257,12 +275,10 @@
 					body: formData,
 					headers: new Headers({ "Authorization": `Bearer ${localStorage['token']}` }),
 				});
-				console.log('resp', resp);
-
 				const offers = await getofferByHarbour()
 				const rows = createOfferRows(offers)
 				displayOffers(rows)
-
+				cleanCreateFormFields();
 			} catch (error) {
 				console.error('error')
 				alert('ERROR !')
@@ -270,7 +286,6 @@
 		};
 
 		const sendUpdateForm = async (id) => {
-			console.log('sendUpdateForm', id);
 			try {
 				const form = document.querySelector(`#form_${id}`);
 
@@ -291,12 +306,16 @@
 				formData.append("date_end", document.querySelector(`#row_date_end_${id}`).value);
 
 				const imgEl = document.querySelector(`#row_img_${id}`);
-				console.dir(imgEl);
+				console.log('files', imgEl.files)
 				const fileBlob = imgEl.files[0];
-				formData.append("img", fileBlob);
+				console.log('fileBlob', fileBlob)
+				if (fileBlob) {
+					formData.append("img", fileBlob);
+				}
 
-				const resp = await fetch(`/api/offers/${id.replace('form_', '')}`, {
-					method: 'PUT',
+				const url = `/api/offers/${id}`
+				const resp = await fetch(url, {
+          method: 'PUT',
 					body: formData,
 					headers: new Headers({ "Authorization": `Bearer ${localStorage['token']}` }),
 				});
@@ -313,14 +332,11 @@
 
 		const sendDeleteRequest = async (id) => {
 			try {
-				console.log('sendDeleteRequest', id)
-
 				const resp = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
 				const respJson = await resp.json();
-				console.log('respJson', respJson);
 
-				const offers = await getofferByHarbour()
-				const rows = createOfferRows(offers)
+				const offers = await getofferByHarbour();
+				const rows = createOfferRows(offers);
 				displayOffers(rows)
 			} catch (error) {
 				console.error('error')
