@@ -75,14 +75,14 @@
 												<input id="img" type="file" class="form-control" accept="image/png, image/jpg" name="img">
 											</div>
 										</div>
-										<div class="col-lg-12">
+										<div class="col-lg-12 mb-6">
 											<div class="form-group">
 												<label class="form-label">Description(255 caractères)</label>
 												<div id="description">
 												</div>
 											</div>
 										</div>
-										<div class="col-lg-12">
+										<div class="col-lg-12 mt-7 mb-7">
 											<div class="form-group">
 												<label class="form-label">Contenu</label>
 												<div id="editor">
@@ -211,13 +211,9 @@
 		};
 
 		const getofferByHarbour = async (harbourId = G_SelectedHarbourId) => {
-			console.log('getofferByHarbour', harbourId)
 			const response = await fetch(`/api/offers/harbour/${harbourId}`);
-			console.log('response', response)
 			const jsonResp = await response.json();
-			console.log('jsonResp', jsonResp)
 			const offers = jsonResp.offers;
-			console.log('offers', offers)
 			return(offers);
 		}
 
@@ -262,12 +258,17 @@
 
 		const sendCreateForm = async () => {
 			const form = document.getElementById("createForm");
-			console.log('form', form);
-
 			const formData = new FormData(form);
-			formData.append("content", document.getElementById('editor').firstChild.innerHTML);
-			formData.append("description", document.getElementById('description').firstChild.innerHTML);
-			console.log('formData', formData);
+
+			const divContent = document.createElement("div");
+			divContent.innerHTML = document.querySelector(`#row_content_${id}`).firstChild.innerHTML;
+			const textContent = divContent.textContent || divContent.innerText || "";
+			formData.append("content", textContent);
+
+			const divDescription = document.createElement("div");
+			divDescription.innerHTML = document.querySelector(`#row_desc_${id}`).firstChild.innerHTML;
+			const textDescription = divDescription.textContent || divDescription.innerText || "";
+			formData.append("description", textDescription);
 
 			try {
 				const resp = await fetch('/api/offers', {
@@ -275,8 +276,6 @@
 					body: formData,
 					headers: new Headers({ "Authorization": `Bearer ${localStorage['token']}` }),
 				});
-				console.log('resp', resp);
-
 				const offers = await getofferByHarbour()
 				const rows = createOfferRows(offers)
 				displayOffers(rows)
@@ -288,7 +287,6 @@
 		};
 
 		const sendUpdateForm = async (id) => {
-			console.log('sendUpdateForm', id);
 			try {
 				const form = document.querySelector(`#form_${id}`);
 
@@ -309,11 +307,15 @@
 				formData.append("date_end", document.querySelector(`#row_date_end_${id}`).value);
 
 				const imgEl = document.querySelector(`#row_img_${id}`);
-				console.dir(imgEl);
+				console.log('files', imgEl.files)
 				const fileBlob = imgEl.files[0];
-				formData.append("img", fileBlob);
+				console.log('fileBlob', fileBlob)
+				if (fileBlob) {
+					formData.append("img", fileBlob);
+				}
 
-				const resp = await fetch(`/api/offers/${id.replace('form_', '')}`, {
+				const url = `/api/offers/${id}`
+				const resp = await fetch(url, {
 					method: 'PUT',
 					body: formData,
 					headers: new Headers({ "Authorization": `Bearer ${localStorage['token']}` }),
@@ -331,14 +333,11 @@
 
 		const sendDeleteRequest = async (id) => {
 			try {
-				console.log('sendDeleteRequest', id)
-
 				const resp = await fetch(`/api/offers/${id}`, { method: 'DELETE' });
 				const respJson = await resp.json();
-				console.log('respJson', respJson);
 
-				const offers = await getofferByHarbour()
-				const rows = createOfferRows(offers)
+				const offers = await getofferByHarbour();
+				const rows = createOfferRows(offers);
 				displayOffers(rows)
 			} catch (error) {
 				console.error('error')
