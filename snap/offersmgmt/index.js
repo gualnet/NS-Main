@@ -44,25 +44,29 @@ const serveIndexPageHandler = async (req, res) => {
 		console.log('adminUser.role', adminUser.role);
 		if (adminUser.role === 'admin') {
 			userHarbours = await STORE.API_NEXT.getElements(ENUMS.TABLES.HARBOURS, {});
-			console.log('userHarbours', userHarbours.length);
 		} else if (adminUser.role === 'user') {
 			const userHabourIds = adminUser.data.harbour_id;
 			const promises = [];
 			userHabourIds.map(harbourId => {
 				promises.push(STORE.API_NEXT.getElements(ENUMS.TABLES.HARBOURS, { id: harbourId }));
 			});
-			const harbours = await Promise.all(promises);
+			const [harbours] = await Promise.all(promises);
 			userHarbours.push(...harbours);
 		}
 
-		let harbourSelectHtml = '<option value=""> - - - </option>';
-		userHarbours.map(harbour => {
-			harbourSelectHtml += `<option id="opt_${harbour.id}" value="${harbour.id}">${harbour.name}</option>`;
+		let harbourSelectHtml = '';
+		userHarbours.map((harbour, idx) => {
+			if (idx === 0) {
+				harbourSelectHtml += `<option id="opt_${harbour.id}" value="${harbour.id}" selected>${harbour.name}</option>`;
+			} else {
+				harbourSelectHtml += `<option id="opt_${harbour.id}" value="${harbour.id}">${harbour.name}</option>`;
+			}
 		});
 
 		let indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
-		indexHtml = indexHtml.replace('__HARBOUR_SELECT_OPTIONS__', harbourSelectHtml);
-
+		indexHtml = indexHtml
+			.replace('__HARBOUR_SELECT_OPTIONS__', harbourSelectHtml)
+			.replace('__SELECTED_HARBOUR_ID__', userHarbours[0].id || 'null');
 
 		res.setHeader("Content-Type", "text/html");
 		res.end(indexHtml);
