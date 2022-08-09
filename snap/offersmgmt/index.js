@@ -46,7 +46,7 @@ const serveIndexPageHandler = async (req, res) => {
 			userHarbours = await STORE.API_NEXT.getElements(ENUMS.TABLES.HARBOURS, {});
 			console.log('userHarbours', userHarbours.length);
 		} else if (adminUser.role === 'user') {
-			const userHabourIds = admin.data.harbour_id;
+			const userHabourIds = adminUser.data.harbour_id;
 			const promises = [];
 			userHabourIds.map(harbourId => {
 				promises.push(STORE.API_NEXT.getElements(ENUMS.TABLES.HARBOURS, { id: harbourId }));
