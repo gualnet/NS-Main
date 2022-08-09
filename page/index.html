@@ -1185,9 +1185,8 @@
 				if (!harbour.navily_id) {
 					document.getElementById("reservation").hidden = true;
 				}
-				if (harbour.google_map_link) {
-					document.getElementById("map_pdf").onclick = () => window.open('/ggl-map');
-				} else if (harbour.harbour_map) {
+				
+				if (harbour.harbour_map) {
 					document.getElementById("map_pdf").onclick = function () { window.open(harbour.harbour_map) }
 				} else {
 					document.getElementById("map_pdf").hidden = true;
