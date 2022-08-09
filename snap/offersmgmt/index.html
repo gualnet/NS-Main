@@ -126,29 +126,38 @@
 	</div>
 
 	<script>
-		let G_Table, G_SelectedHarbourId;
+		let G_Table;
+		let G_SelectedHarbourId = '__SELECTED_HARBOUR_ID__';
 
-		window.addEventListener('load', () => {
-			initDatatable();
+		window.addEventListener('load', async () => {
+			await initDatatable();
 			initQuill();
+
+			const offers = await getofferByHarbour(G_SelectedHarbourId);
+			const rows = createOfferRows(offers, G_SelectedHarbourId);
+			displayOffers(rows);
 
 			console.log('addEventListener - LOAD')
 			const harboursSelectEl = document.querySelector('#harboursSelect');
 			harboursSelectEl.addEventListener('change', selectHarbourChangeHandler);
 		});
 
-		const initDatatable = () => {
-			require(['datatables', 'jquery'], function (datatable, $) {
-				G_Table = $('.datatable').DataTable({
-					language: {
-						search: '<span></span>',
-						searchPlaceholder: 'Votre recherche'
-					},
-					paging: false,
-					"order": [[9, "desc"]], // Date de création
-					"info": false,
+
+		const initDatatable = async () => {
+			return(new Promise((resolve, reject) => {
+				require(['datatables', 'jquery'], function (datatable, $) {
+					G_Table = $('.datatable').DataTable({
+						language: {
+							search: '<span></span>',
+							searchPlaceholder: 'Votre recherche'
+						},
+						paging: false,
+						"order": [[9, "desc"]], // Date de création
+						"info": false,
+					});
+					resolve();
 				});
-			});
+			}))
 		}
 
 		const initQuill = () => {
@@ -196,9 +205,9 @@
 				const selectedHarbourId = ev.target.value;
 				G_SelectedHarbourId = selectedHarbourId;
 
-				const offers = await getofferByHarbour(selectedHarbourId)
-				const rows = createOfferRows(offers, selectedHarbourId)
-				displayOffers(rows)
+				const offers = await getofferByHarbour(selectedHarbourId);
+				const rows = createOfferRows(offers, selectedHarbourId);
+				displayOffers(rows);
 				cleanCreateFormFields();
 			} catch (error) {
 				console.error('Error', error);
@@ -252,7 +261,6 @@
 		}
 
 		const sendCreateForm = async () => {
-			console.log('G_SelectedHarbourId', G_SelectedHarbourId)
 			if (!G_SelectedHarbourId) {
 				alert('Pas de port sélectionné !');
 				return;
