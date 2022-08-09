@@ -421,7 +421,6 @@ exports.plugin =
 								//update harbour
 								var currentHarbour = await getHarbourById(req.post.id);
                 if (verifyPostReq(req, res)) {
-
                     //img gesture
                     if (req.post.img) {
                         var upload = await STORE.cloudinary.uploadFile(req.post.img, req.field["img"].filename);
@@ -470,6 +469,7 @@ exports.plugin =
 										if (!req.post.wifi) req.post.wifi = '';
 										if (!req.post.wifi_pass) req.post.wifi_pass = '';
 										if (!req.post.sanitary_code) req.post.sanitary_code = '';
+										if (!req.post.portal_code) req.post.portal_code = '';
 
                     console.log('UPDATE POST', req.post);
                     var harbour = await updateHarbour(req.post);
@@ -519,7 +519,7 @@ exports.plugin =
                     }
 
                     var harbour = await createHarbour(req.post);
-                    console.log(harbour);
+                    // console.log('created harbour: ', harbour);
                     if (harbour.id) {
                         UTILS.httpUtil.dataSuccess(req, res, "Success", "Port créé", "1.0");
                         return;
@@ -591,6 +591,7 @@ exports.plugin =
                     .replace(/__TOILET__/g, _harbours[i].toilet)
                     .replace(/__SANITARY_CODE__/g, _harbours[i].sanitary_code)
                     .replace(/__FUEL__/g, _harbours[i].fuel)
+                    .replace(/__PORTAL_CODE__/g, _harbours[i].portal_code)
                     .replace(/__WIFI__/g, _harbours[i].wifi)
                     .replace(/__WIFI_PASS__/g, _harbours[i].wifi_pass)
                     .replace(/__GOOGLE_MAP_LINK__/g, _harbours[i].google_map_link)
