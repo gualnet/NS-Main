@@ -9,14 +9,18 @@ exports.setup = {
 }
 
 const loginHandler = async (req, res) => {
+	console.clear();
+	console.log('====loginHandler====');
 	try {
 		const login = req.get.login;
 		const pass = req.get.password;
 		const keyUser = OPTION.MAGELAN_USER_KEY;
 
 		const url = `https://appli.magelan-eresa.com/appliLogin/${login}/${pass}/${keyUser}`;
+		console.log('url', url);
 
 		const response = await axios.get(url);
+		console.log('response', response.data);
 		if (response.data.CodeErr === '2') {
 			throw new Error(response.data?.MessageErr || 'Unknown Internal Error');
 		}
