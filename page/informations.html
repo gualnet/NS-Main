@@ -24,6 +24,9 @@
 					.hide {
 						display: none;
 					}
+					#wifiCopyButton {
+						overflow-wrap: break-word;
+					}
 				</style>
 				
         <div class="container top-30" id="container">
@@ -131,6 +134,16 @@
                             </button>
                         </div>
                     </div>
+                    <div class="row" id="portalButtons">
+                        <div class="col" style="margin-top: 10px;">
+                            <button id="portalCodeButton" onclick="showPortalCode();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0;width: 175px; height: 50px; box-shadow: 0px 2px 16px #999">
+                                <span style="color: #0C5BCC">Code portail</span>  <img class="fit-picture" src="/library/eye.png" style="width: 27px; padding-left: 10px;">
+                            </button>
+                            <button id="portalCode" onclick="showPortalButton();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0;width: 100%; height: 50px; box-shadow: 0px 2px 16px #999" hidden>
+                                <span style="color: #0C5BCC" id="portal_code"></span>  <i style="color: #0C5BCC !important; font-size: 27px;" class="bi bi-unlock-fill"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="row" id="wifiButtons">
                         <div class="col" style="margin-top: 10px; margin-bottom: 40px">
                             <button id="wifiButton" onclick="showWifiCode();" style="border-radius: 50px; background-color: #0C5BCC; border-color: #FFF0;width: 175px; height: 50px; box-shadow: 0px 2px 16px #999">
@@ -196,6 +209,7 @@
         <script>
             fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
               const harbour = _data.data;
+							// console.log('harbour', harbour);
 							const userAgent = window.navigator.userAgent;
 							const gpsAdressEl = document.getElementById("gps_adress");
 							if (gpsAdressEl) {
@@ -230,6 +244,7 @@
                 document.getElementById("mail").href = 'mailto:' + harbour.email;
                 document.getElementById("places").insertAdjacentHTML('beforeend', harbour.places);
                 document.getElementById("shower").insertAdjacentHTML('beforeend', harbour.showers);
+								document.getElementById("portalCode").insertAdjacentHTML('afterbegin', harbour.portal_code);
                 //document.getElementById("technical_informations").insertAdjacentHTML('beforeend', harbour.technical_informations);
                 document.getElementById("tirantdeau").insertAdjacentHTML('beforeend', harbour.tirantdeau);
                 document.getElementById("toilet").insertAdjacentHTML('beforeend', harbour.toilet);
@@ -237,7 +252,7 @@
                 document.getElementById("touristwebsite").href = harbour.touristwebsite;
                 document.getElementById("vfh").insertAdjacentHTML('beforeend', harbour.vfh);
                 document.getElementById("water").insertAdjacentHTML('beforeend', harbour.water);
-                document.getElementById("wifi").insertAdjacentHTML('beforeend', harbour.wifi);
+                document.getElementById("wifi").insertAdjacentHTML('beforeend', harbour.wifi_pass);
                 document.getElementById("lundi").insertAdjacentHTML('beforeend', harbour.lundi);
                 document.getElementById("mardi").insertAdjacentHTML('beforeend', harbour.mardi);
                 document.getElementById("mercredi").insertAdjacentHTML('beforeend', harbour.mercredi);
@@ -245,6 +260,7 @@
                 document.getElementById("vendredi").insertAdjacentHTML('beforeend', harbour.vendredi);
                 document.getElementById("samedi").insertAdjacentHTML('beforeend', harbour.samedi);
                 document.getElementById("dimanche").insertAdjacentHTML('beforeend', harbour.dimanche);
+
 
                 if (harbour.pj) {
                     document.getElementById("pj_link").href = harbour.pj;
@@ -254,11 +270,15 @@
                     document.getElementById("pj").hidden = true;
                 }
 
-                if (harbour?.wifi?.length === 0) {
-                    document.getElementById("wifiButtons").hidden = true;
+                if (!harbour.wifi || harbour.wifi.length === 0) {
+									document.getElementById("wifiButtons").hidden = true;
                 }
-                if (harbour?.sanitary_code?.length === 0) {
+                if (!harbour.sanitary_code || harbour.sanitary_code.length === 0) {
                     document.getElementById("sanitaryButtons").hidden = true;
+                }
+
+                if (!harbour.portal_code || harbour.portal_code.length === 0) {
+                  document.getElementById("portalButtons").hidden = true;
                 }
 
                 if (harbour.harbour_map) {
@@ -314,6 +334,15 @@
                 document.getElementById("sanitaryCodeButton").hidden = false;
                 document.getElementById("sanitaryCode").hidden = true;
             }
+            
+						function showPortalCode() {
+							document.getElementById("portalCodeButton").hidden = true;
+							document.getElementById("portalCode").hidden = false;
+						}
+						function showPortalButton() {
+							document.getElementById("portalCodeButton").hidden = false;
+							document.getElementById("portalCode").hidden = true;
+						}
 
             function showWifiCode() {
                 document.getElementById("wifiButton").hidden = true;
@@ -323,7 +352,6 @@
                 document.getElementById("wifiButton").hidden = false;
                 document.getElementById("wifiCopyButton").hidden = true;
                 document.getElementById("wifiCopiedButton").hidden = true;
-
             }
             function copyWifiCode() {
 
@@ -339,6 +367,11 @@
                                 document.getElementById("wifiCopyButton").hidden = true;
                                 document.getElementById("wifiCopiedButton").hidden = false;
 
+																setTimeout(() => {
+																	document.getElementById("wifiCopyButton").hidden = false;
+																	document.getElementById("wifiCopiedButton").hidden = true;
+																}, 1500);
+
                             }).catch((error) => {
                                 console.log(error);
                             })
@@ -348,7 +381,6 @@
                     })
                 }
             }
-
         </script>
 
         <div class="container py-3">
