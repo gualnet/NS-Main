@@ -33,12 +33,17 @@
 		const harbour = data.data
 		const harbourMapEl = document.getElementById("harbourmap");
 		if (harbourMapEl) {
-			const userAgent = window.navigator.userAgent;
-			let mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
-			if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
-					mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
+			if (harbour.google_map_link) {
+				harbourMapEl.href = '/ggl-map'; // embed external google map
+			} else if (harbour.address) {
+				let mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
+				if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
+						mapLink = `https://maps.apple.com/?q=${harbour.address}` //
+				}
+				harbourMapEl.href = mapLink;
+			} else {
+				document.getElementById("map_pdf").hidden = true;
 			}
-			harbourMapEl.href = mapLink;
 		}
 	}).catch((e) => console.error(e))
 
