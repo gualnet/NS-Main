@@ -116,6 +116,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} prefixed_phone_urgency
  * @property {string} price_list
  * @property {string} samedi
+ * @property {string} portal_code
  * @property {string} sanitary_code
  * @property {string} showers
  * @property {string} technical_informations
