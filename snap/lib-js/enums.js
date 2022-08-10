@@ -76,6 +76,7 @@ const TABLES = {
 	EVENTS: 'events',
 	HARBOURS: 'harbour',
 	OFFERS: 'offers',
+	WEATHER: 'weather',
 }
 
 module.exports = {

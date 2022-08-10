@@ -8,6 +8,14 @@ const ENUMS = require('../lib-js/enums')
 
 const TABLES = ENUMS.TABLES;
 
+exports.setup = {
+  on: true,
+  title: 'API NEXT',
+  description: 'some next level endpoints',
+  version: '1.1.0',
+  api: true,
+}
+
 exports.handler = async (req, res) => {
 	res.end('Hello Snap!');
 }
@@ -830,6 +838,66 @@ const deleteOffersHandler = async (req, res) => {
 	}
 };
 
+// METEO
+const deleteMeteoHandler = async (req, res) => {
+	try {
+		console.log('deleteMeteoHandler')
+		console.log('req.get', req.get);
+		const searchObj = { ...req.get };
+		console.log('searchObj', searchObj);
+
+		if (Object.keys(searchObj).length < 1) {
+			throw new Error('Empty search parameters, at least 1 param must be provided.');
+		}
+
+		const id = req.get.id;
+
+		/**@type {Array<TYPES.T_weather['id']>} */
+		let idArr = [];
+		if (id.charAt(0) !== '[') {
+			idArr.push(id);
+		} else if (id.charAt(0) === '[') {
+			idArr = Array.from(id.slice(1,id.length - 1))
+				.join('')
+				.split(',');
+		}
+
+		/**@type {Promise<Array<TYPES.T_weather>>} */
+		let promises = [];
+		idArr.map(id => {
+			searchObj.id = id;
+			console.log('searchObj', searchObj);
+			promises.push(deleteElement(TABLES.WEATHER, searchObj));
+		});
+
+		/**@type {Array<Array<TYPES.T_weather>>} */
+		const deletedObjArr = await Promise.all(promises)
+		const deletedObj = deletedObjArr.flat();
+
+		console.log('Deleted weather', deletedObj)
+
+		deletedObj.map(async weather => {
+			console.log('Delete cloudinary', weather.cloudinary_img_public_id)
+			const res = await STORE.cloudinary.deleteFile(weather.cloudinary_img_public_id);
+			console.log('Delete res', res);
+		})
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: deletedObj.length,
+			offers: deletedObj,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
 exports.router = [
 	// USERS
 	{
@@ -1004,6 +1072,13 @@ exports.router = [
 		on: true,
 		route: "/api/next/offers",
 		handler: deleteOffersHandler,
+		method: "DELETE",
+	},
+	// WEATHER
+	{
+		on: true,
+		route: "/api/next/weathers",
+		handler: deleteMeteoHandler,
 		method: "DELETE",
 	},
 ];
