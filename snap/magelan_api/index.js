@@ -251,6 +251,38 @@ const listUserBoats = async (req, res) => {
 	}
 };
 
+const addReservation = async (req, res) => {
+	console.clear();
+	console.log('addReservation');
+	try {
+
+		const { boatId, portId, startDate, endDate,
+			comments, login, token } = req.get;
+		const keyUser = OPTION.MAGELAN_USER_KEY;
+		const url = `https://appli.magelan-eresa.com/appliGetLstBoat/${boatId}/${portId}/${startDate}/${endDate}/${comments}/${login}/${token}/${keyUser}`;
+		console.log('url', url);
+
+		const response = await axios.get(url);
+		console.log('response', response.data);
+		if (response.data.CodeErr === '2') {
+			throw new Error(response.data?.MessageErr || 'Unknown Internal Error');
+		}
+
+		res.writeHead(response.status, response.statusText, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			data: response.data,
+		}));
+	} catch (error) {
+		logAxiosError(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
 exports.router = [
 	{
     on: true,
@@ -275,6 +307,12 @@ exports.router = [
     route: "/api/eresa/list-boats",
     method: "GET",
     handler: listUserBoats,
+  },
+	{
+    on: true,
+    route: "/api/eresa/add-reservation",
+    method: "GET",
+    handler: addReservation,
   },
 ];
 

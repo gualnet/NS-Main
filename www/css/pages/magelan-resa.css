@@ -277,6 +277,19 @@ body {
 	justify-content: space-between;
 	align-items: center;
 }
+.action-button-ctn.success > .main-button {
+	background-color: green;
+	justify-content: center;
+	align-items: center;
+}
+.action-button-ctn.error > .main-button {
+	background-color: red;
+	justify-content: center;
+	align-items: center;
+}
+.action-button-ctn.disabled > .main-button {
+	background-color: grey;
+}
 
 /* reservation list */
 .resa-list-ctn {

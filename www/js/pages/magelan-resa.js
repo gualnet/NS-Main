@@ -38,7 +38,30 @@ window.addEventListener('load', () => {
  */
 const reservationClickHandler = async (ev) => {
 	console.log('reservationClickHandler', ev);
-	
+	const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+	if (actionBtnCtnEl.classList.contains('disabled')) {
+		console.log('NO OP')
+		return;
+	}
+
+	const resaOptions = {};
+	resaOptions.harbourId = getFormHarbourId();
+	// console.log('harbourId', resaOptions.harbourId);
+	resaOptions.startDate = getFormArrivalDate();
+	// console.log('startDate', resaOptions.startDate);
+	resaOptions.endDate = getFormDepartureDate();
+	// console.log('endDate', resaOptions.endDate);
+	resaOptions.comments = getFormComments();
+	// console.log('comments', resaOptions.comments);
+	resaOptions.login = localStorage['magelanLogin'];
+	// console.log('login', resaOptions.login);
+	resaOptions.token = localStorage['magelanToken'];
+	// console.log('token', resaOptions.token);
+	const boatList = await getUserBoatList();
+	// console.log('boatList', boatList);
+	if (boatList[0].bateau_id) resaOptions.boatId = boatList[0].bateau_id;
+
+	requestAddReservation(resaOptions)
 };
 
 const harbourSelectChangeHandler = () => {
@@ -235,23 +258,23 @@ const updateNightsCounter = (dateStart, dateEnd) => {
 const updateTotalPrice = async () => {
 	try {
 		const harbourId = getFormHarbourId();
-		console.log('harbourId', harbourId);
+		// console.log('harbourId', harbourId);
 		const startDate = getFormArrivalDate();
-		console.log('startDate', startDate);
+		// console.log('startDate', startDate);
 		const endDate = getFormDepartureDate();
-		console.log('endDate', endDate);
+		// console.log('endDate', endDate);
 		const longueur = getFormBoatLongueur();
-		console.log('longueur', longueur);
+		// console.log('longueur', longueur);
 		const largeur = getFormBoatLargeur();
-		console.log('largeur', largeur);
+		// console.log('largeur', largeur);
 		const boatType = getFormBoatType();
-		console.log('boatType', boatType);
+		// console.log('boatType', boatType);
 		const comments = getFormComments();
-		console.log('comments', comments);
+		// console.log('comments', comments);
 		const login = localStorage['magelanLogin'];
-		console.log('login', login);
+		// console.log('login', login);
 		const token = localStorage['magelanToken'];
-		console.log('token', token);
+		// console.log('token', token);
 
 		document.querySelector('#priceSpinnerCtn').classList.remove('hide');
 		document.querySelector('#input-price-count').classList.add('hide');
@@ -265,12 +288,13 @@ const updateTotalPrice = async () => {
 
 		const price = estimatedPriceArr[0]?.total || '-';
 
-
 		const priceEl = document.querySelector('#input-price-count');
 		priceEl.value = `${price} €`;
 		document.querySelector('#priceSpinnerCtn').classList.add('hide');
 		document.querySelector('#input-price-count').classList.remove('hide');
 
+		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+		actionBtnCtnEl.classList.remove('disabled');
 	} catch (error) {
 		console.error('ERROR', error);
 		// alert(error);
@@ -378,3 +402,32 @@ const getUserBoatList = async () => {
 		alert(error);
 	}
 }
+
+const requestAddReservation = async (options) => {
+	try {
+		const startDate = options.startDate.replaceAll('-', '');
+		const endDate = options.endDate.replaceAll('-', '');
+
+		const url = `/api/eresa/add-reservation/?boatId=${options.boatId}&portId=${options.harbourId}&startDate=${startDate}&endDate=${endDate}&comments="${options.comments}"&login=${options.login}&token=${options.token}`;
+		console.log('===>url',url)
+
+		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+		const reservationBtnEl = document.querySelector('#reservationBtn');
+		reservationBtnEl.innerHTML = 'Demande en cours...';
+
+		const resp = await fetch(url);
+		const respJson = await resp.json();
+		console.log('respJson', respJson);
+		if (success === false) {
+			throw new Error('Ooops une petite erreur est survenue');
+		}
+
+		actionBtnCtnEl.classList.add('success');
+		reservationBtnEl.innerText = 'Succes';
+	} catch (error) {
+		console.error('Error', error);
+		actionBtnCtnEl.classList.add('error');
+		reservationBtnEl.innerText = 'Erreur';
+		alert(error);
+	}
+};
