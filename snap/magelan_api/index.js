@@ -144,59 +144,50 @@ const getPriceResaHandler =  async (req, res) => {
 	}
 }
 
-// {
+// const FAKE_DATA_1 = {
 //   res_login: 'contact@nauticspot.fr',
 //   res_token: '',
 //   List: {
-//     '328418': {
-//       resa_id: '328418',
-//       resa_numero: 'R002220810235286',
-//       resa_date_debut: '20231204',
-//       resa_date_fin: '20231206',
-//       resa_bateau_nom: 'TEST',
-//       resa_bateau_immat: 'NO',
-//       resa_bateau_pavillon: 'France',
-//       resa_bateau_longueur: '7.60',
-//       resa_bateau_largeur: '2.20',
-//       resa_note: '',
-//       resa_arrhes: '0.00',
-//       resa_port_id: '2',
-//       resa_port_nom: 'Port Charles Ornano',
-//       resa_port_ville: 'Ajaccio',
-//       resa_status: 'Annulée',
-//       resa_status_couleur: '#999999'
-//     }
-//   },
+// 		'328418': {
+// 			resa_id: '328418',
+// 			resa_numero: 'R002220810235286',
+// 			resa_date_debut: '20231204',
+// 			resa_date_fin: '20231206',
+// 			resa_bateau_nom: 'TEST',
+// 			resa_bateau_immat: 'NO',
+// 			resa_bateau_pavillon: 'France',
+// 			resa_bateau_longueur: '7.60',
+// 			resa_bateau_largeur: '2.20',
+// 			resa_note: '',
+// 			resa_arrhes: '0.00',
+// 			resa_port_id: '2',
+// 			resa_port_nom: 'Port Charles Ornano',
+// 			resa_port_ville: 'Ajaccio',
+// 			resa_status: 'Annulée',
+// 			resa_status_couleur: '#999999'
+// 		},
+// 		'328419': {
+// 			resa_id: '328419',
+// 			resa_numero: 'R002220810235286',
+// 			resa_date_debut: '20231204',
+// 			resa_date_fin: '20231206',
+// 			resa_bateau_nom: 'TEST',
+// 			resa_bateau_immat: 'NO',
+// 			resa_bateau_pavillon: 'France',
+// 			resa_bateau_longueur: '7.60',
+// 			resa_bateau_largeur: '2.20',
+// 			resa_note: '',
+// 			resa_arrhes: '0.00',
+// 			resa_port_id: '2',
+// 			resa_port_nom: 'Port Charles Ornano',
+// 			resa_port_ville: 'Ajaccio',
+// 			resa_status: 'Demande à traiter',
+// 			resa_status_couleur: '#808000'
+// 		}
+// 	},
 //   CodeErr: '1',
 //   MessageErr: ''
 // }
-
-const FAKE_DATA_1 = {
-  res_login: 'contact@nauticspot.fr',
-  res_token: '',
-  List: {
-    '328418': {
-      resa_id: '328418',
-      resa_numero: 'R002220810235286',
-      resa_date_debut: '20231204',
-      resa_date_fin: '20231206',
-      resa_bateau_nom: 'TEST',
-      resa_bateau_immat: 'NO',
-      resa_bateau_pavillon: 'France',
-      resa_bateau_longueur: '7.60',
-      resa_bateau_largeur: '2.20',
-      resa_note: '',
-      resa_arrhes: '0.00',
-      resa_port_id: '2',
-      resa_port_nom: 'Port Charles Ornano',
-      resa_port_ville: 'Ajaccio',
-      resa_status: 'Demande à traiter',
-      resa_status_couleur: '#808000'
-    }
-  },
-  CodeErr: '1',
-  MessageErr: ''
-}
 
 const listUserReservations = async (req, res) => {
 	console.clear();
@@ -206,23 +197,18 @@ const listUserReservations = async (req, res) => {
 		const { login, token } = req.get;
 		const keyUser = OPTION.MAGELAN_USER_KEY;
 
-		// const url = `https://appli.magelan-eresa.com/appliGetLstResa/${login}/${token}/${keyUser}`;
-		// console.log('url', url);
-		// const response = await axios.get(url);
-		// console.log('response', response.data);
-		// if (response.data.CodeErr === '2') {
-		// 	throw new Error(response.data?.MessageErr || 'Unknown Internal Error');
-		// }
-
-		const response = {
-			status: 200,
-			statusText: 'FAKE RESPONSE'
+		const url = `https://appli.magelan-eresa.com/appliGetLstResa/${login}/${token}/${keyUser}`;
+		console.log('url', url);
+		const response = await axios.get(url);
+		console.log('response', response.data);
+		if (response.data.CodeErr === '2') {
+			throw new Error(response.data?.MessageErr || 'Unknown Internal Error');
 		}
+
 		res.writeHead(response.status, response.statusText, { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			// data: response.data.List,
-			data: FAKE_DATA_1.List,
+			data: response.data.List,
 		}));
 	} catch (error) {
 		logAxiosError(error);

@@ -277,7 +277,7 @@ const getUserReservationList = async () => {
 		const respJson = await resp.json();
 		console.log('respJson', respJson);
 		
-		const reservations = Object.values(respJson.data.resaList)[0];
+		const reservations = Object.values(respJson.data);
 		console.log('reservations', reservations);
 
 		const htmlRow = [];
@@ -297,16 +297,16 @@ const getUserReservationList = async () => {
 			const statusColor = reservation.resa_status_couleur;
 
 			htmlRow.push(`
-				<div class="list-row">
-					<div>
+				<div class="resa-card">
+					<div class="resa-card-row">
 						<div>${harbourName}</div>
 						<div>${startDate} - ${endDate}</div>
 					</div>
-					<div>
+					<div class="resa-card-row">
 						<div>Statut</div>
 						<div style="color:${statusColor}">${status}</div>
 					</div>
-					<div>
+					<div class="resa-card-row">
 						<div>Action</div>
 						<div>confirmée</div>
 					</div>
