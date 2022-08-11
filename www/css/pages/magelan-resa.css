@@ -18,6 +18,8 @@ html {
 body {
 	align-items: center;
 	background-image: url('/library/Background.png');
+	backdrop-filter: blur(20px);
+
 	background-size: cover;
 	display: flex;
 	font-family: 'Poppins Regular';
@@ -51,7 +53,7 @@ body {
 
 .form-ctn {
 	background-color: rgba(255, 255, 255, 0.01);
-	backdrop-filter: blur(20px);
+	/* backdrop-filter: blur(20px); */
 	border-radius: 20px;
 	box-shadow: 5px 0px 25px 0px #00000011;
 	display: flex;
@@ -149,7 +151,7 @@ body {
 }
 
 .harbour-selector-ctn select {
-	height: 4em;
+	height: 3em;
 	width: 100%;
 	border-radius: 40px;
 	font-size: 1em;
@@ -163,14 +165,10 @@ body {
 	font-size: 2em;
 	/* border: 1px solid blue; */
 }
-.date-button-ctn > div:first-of-type {
-	/* border: 1px solid green; */
+.date-button-ctn .flex-col {
+	justify-content: center;
+	align-items: center;
 	width: 50%;
-}
-.date-button-ctn > div:last-of-type {
-	width: 50%;
-	align-items: flex-end;
-	/* border: 1px solid yellow; */
 
 }
 .date-button-ctn > div > .label {

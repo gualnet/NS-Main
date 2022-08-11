@@ -28,7 +28,7 @@
 					</div>
 					<div class="harbour-selector-ctn">
 						<select id="harbourSelect">
-							<option value="" disabled selected>--Veuillez choisir un port--</option>
+							<option value="" disabled selected>Veuillez choisir un port</option>
 							<option value="2">Ajaccio</option>
 							<option value="5001">Bonifacio</option>
 							<!-- <option value="?">Cargese</option> -->
@@ -39,7 +39,7 @@
 					</div>
 					<div class="date-button-ctn">
 							<div class="flex-col">
-								<div class="label">Arrivée</div>
+								<div class="label" id="arriveeBtn">Arrivée</div>
 								<input id="input-date-start" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
 							</div>
 							<div class="flex-col">
@@ -66,8 +66,9 @@
 							</div>
 						</div>
 						<div class="boat-types-ctn flex-row">
+							<button id="boatTypeMonocoqueBtn" type="button" class="btn btn-outline-primary active">Monocoque</button>
 							<button id="boatTypeVoilierBtn" type="button" class="btn btn-outline-primary" checked>Voilier</button>
-							<button id="boatTypeMonocoqueBtn" type="button" class="btn btn-outline-primary">Monocoque</button>
+							
 						</div>
 					</div>
 				</div>
@@ -77,7 +78,7 @@
 							<!-- <div class="icon">lune</div> -->
 							<i class="moon-ico"></i>
 							<div class="text">Nombre de nuits</div>
-							<input class="display-bubble" id="input-night-count" name="night-count" type="text" class="form-control floating-input modal-date-input" placeholder="0" />
+							<input class="display-bubble" id="input-night-count" name="night-count" type="text" class="form-control floating-input modal-date-input" placeholder="0" disabled/>
 
 						</div>
 						<div class="section-title-ctn flex-row">
@@ -89,7 +90,7 @@
 									<span class="visually-hidden">Loading...</span>
 								</div>
 							</div>
-							<input class="display-bubble" id="input-price-count" name="price-count" type="text" class="form-control floating-input modal-date-input" placeholder="0 €" />
+							<input class="display-bubble" id="input-price-count" name="price-count" type="text" class="form-control floating-input modal-date-input" placeholder="0 €" disabled/>
 						</div>
 					</div>
 				</div>
@@ -125,7 +126,6 @@
 			</div>
 			<!-- RESERVATION LIST END -->
 		</div>
-
 
 	</div>
 </body>

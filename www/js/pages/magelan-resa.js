@@ -1,5 +1,4 @@
 
-
 window.addEventListener('load', () => {
 	console.log('EVENT LOAD');
 
@@ -23,6 +22,9 @@ window.addEventListener('load', () => {
 	newResaBtnEl.addEventListener('click', formSelectorHandler)
 	const listResaBtnEl = document.querySelector('#listResaBtn');
 	listResaBtnEl.addEventListener('click', formSelectorHandler)
+
+	const arriveeBtnEl = document.querySelector('#arriveeBtn');
+	arriveeBtnEl.addEventListener('click', arriveeBtnClickHandler);
 
 	displayBoatData();
 });
@@ -99,6 +101,14 @@ const formSelectorHandler = (ev) => {
 		formContentNewEl.classList.add('hide');
 		formContentListEl.classList.remove('hide');
 	}
+};
+
+const arriveeBtnClickHandler = (ev) => {
+	console.log('arriveeBtnClickHandler');
+
+	/**@type {HTMLInputElement} */
+	const pickerEl = document.querySelector('#input-date-start');
+	pickerEl.click();
 };
 
 
@@ -316,7 +326,6 @@ const getUserReservationList = async () => {
 
 		const resaListCtnEl = document.querySelector('#resaListCtn');
 		resaListCtnEl.innerHTML = htmlRow.join('');
-
 	} catch (error) {
 		console.error('Error', error);
 		alert(error);
@@ -350,7 +359,13 @@ const getUserBoatList = async () => {
 		const resp = await fetch(url);
 		const respJson = await resp.json();
 		console.log('respJson', respJson);
-		
+		if (respJson.success === false) {
+			if (respJson.error === "Error: INVALID TOKEN") {
+				window.location = '/magelan-login';
+				return;
+			}
+		}
+
 		const boats = respJson.data;
 		console.log('boats', boats);
 
