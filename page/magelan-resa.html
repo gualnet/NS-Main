@@ -16,30 +16,31 @@
 		<!-- RESERVATION FORM -->
 		<div class="form-ctn">
 			<div class="form-top">
-				<div class="form-selector active">Réserver mon escale</div>
-				<div class="form-selector">Mes réservations</div>
+				<div class="form-selector active" id="newResaBtn">Réserver mon escale</div>
+				<div class="form-selector" id="listResaBtn">Mes réservations</div>
 			</div>
-			<div class="form-content">
+			<!-- NEW RESERVATION FORM -->
+			<div class="form-content" id="formNewResa">
 				<div class="section">
 					<div class="section-title-ctn flex-row">
 						<i class="anchor-ico"></i>
 						<div class="title">Préparer mon escale</div>
 					</div>
 					<div class="harbour-selector-ctn">
-						<select>
+						<select id="harbourSelect">
 							<option value="" disabled selected>--Veuillez choisir un port--</option>
-							<option value="ajaccio">Ajaccio</option>
-							<option value="bonifacio">Bonifacio</option>
-							<option value="cargese">Cargese</option>
-							<option value="macinaggio">Macinaggio</option>
-							<option value="porto-vecchio">Porto-Vecchio</option>
-							<option value="propriano">Propriano</option>
+							<option value="2">Ajaccio</option>
+							<option value="5001">Bonifacio</option>
+							<!-- <option value="?">Cargese</option> -->
+							<option value="9">Macinaggio</option>
+							<option value="11">Porto-Vecchio</option>
+							<option value="12">Propriano</option>
 						</select>
 					</div>
 					<div class="date-button-ctn">
 							<div class="flex-col">
 								<div class="label">Arrivée</div>
-								<input id="input-date-end" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
+								<input id="input-date-start" name="date_start" type="date" class="form-control floating-input modal-date-input" required>
 							</div>
 							<div class="flex-col">
 								<div class="label">Départ</div>
@@ -65,8 +66,8 @@
 							</div>
 						</div>
 						<div class="boat-types-ctn flex-row">
-							<button type="button" class="btn btn-outline-primary">Voilier</button>
-							<button type="button" class="btn btn-outline-primary">Monocoque</button>
+							<button id="boatTypeVoilierBtn" type="button" class="btn btn-outline-primary" checked>Voilier</button>
+							<button id="boatTypeMonocoqueBtn" type="button" class="btn btn-outline-primary">Monocoque</button>
 						</div>
 					</div>
 				</div>
@@ -83,7 +84,12 @@
 							<!-- <div class="icon">lune</div> -->
 							<i class="moon-ico"></i>
 							<div class="text">Coût du sejour</div>
-							<input class="display-bubble" id="input-night-count" name="night-count" type="text" class="form-control floating-input modal-date-input" placeholder="0 €" />
+							<div class="spinner-ctn hide" id="priceSpinnerCtn">
+								<div class="spinner-border text-primary" id="totalPriceSpinner" role="status">
+									<span class="visually-hidden">Loading...</span>
+								</div>
+							</div>
+							<input class="display-bubble" id="input-price-count" name="price-count" type="text" class="form-control floating-input modal-date-input" placeholder="0 €" />
 
 						</div>
 					</div>
@@ -94,20 +100,32 @@
 						<i class="comments-ico"></i>
 						<div class="title">Commentaire</div>
 					</div>
-					<textarea name="comment" cols="40" rows="5" placeholder="Laissez un message à l’attention de la capitainerie."></textarea>
+					<textarea id="commentsArea" name="comment" cols="40" rows="5" placeholder="Laissez un message à l’attention de la capitainerie."></textarea>
 				</div>
 				<div class="action-button-ctn">
-					<div class="main-button">
+					<div class="main-button" id="reservationBtn">
 						Réserver avec Magelan eResa
 						<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
 						</svg>
 					</div>
 				</div>
 			</div>
+			<!-- NEW RESERVATION FORM END -->
+
+			<!-- RESERVATION LIST START -->
+			<div class="form-content hide" id="formListResa">
+				<div class="section">
+					<div class="section-title-ctn flex-row">
+						<i class="anchor-ico"></i>
+						<div class="title">En cours</div>
+					</div>
+					<div class="list-ctn" id="resaListCtn">
+						
+					</div>
+				</div>
+			</div>
+			<!-- RESERVATION LIST END -->
 		</div>
-		<!-- RESERVATION FORM END -->
-
-
 
 
 	</div>

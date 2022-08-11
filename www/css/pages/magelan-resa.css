@@ -94,6 +94,15 @@ body {
 	flex-grow: 1;
 	justify-content: space-around;
 }
+.form-ctn > .form-content.hide {
+	display: none;
+}
+.form-ctn > .form-content#formListResa {
+	display: block;
+}
+.form-ctn > .form-content#formListResa.hide {
+	display: none;
+}
 
 .section-title-ctn {
 	display: flex;
@@ -135,12 +144,16 @@ body {
 	justify-content: center;
 	margin-bottom: 1em;
 }
+#harbourSelect.error {
+	border: 1px solid red;
+}
 
 .harbour-selector-ctn select {
 	height: 4em;
 	width: 100%;
 	border-radius: 40px;
 	font-size: 1em;
+	text-align: center;
 }
 
 .date-button-ctn {
@@ -181,7 +194,6 @@ body {
 	flex-direction: column;
 	margin-bottom: 1em;
 }
-
 .boat-details-ctn .size-ctn {
 	display: flex;
 	width: 50%;
@@ -217,7 +229,6 @@ body {
 .stay-details-ctn .text {
 	width: 60%;
 }
-
 .stay-details-ctn .display-bubble {
 	width: 30%;
 	background-color: white;
@@ -227,6 +238,22 @@ body {
 	font-size: 1em;
 	padding: 5px 0;
 }
+.stay-details-ctn .display-bubble.hide {
+	display: none;
+}
+.stay-details-ctn .spinner-ctn {
+	width: 30%;
+	background-color: white;
+	border-radius: 40px;
+	border: 0px;
+	text-align: center;
+	font-size: 1em;
+	padding: 5px 0;
+}
+.stay-details-ctn .spinner-ctn.hide {
+	display: none;
+}
+
 
 .text-area-ctn {
 	margin-bottom: 1em;

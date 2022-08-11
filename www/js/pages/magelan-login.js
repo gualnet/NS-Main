@@ -46,8 +46,11 @@ const fetchLoginMagelan = async (login, password) => {
 		if (!jsonResp.success) {
 			// Error do something
 		}
+		console.log('jsonResp', jsonResp.data);
+		const magelanLogin = jsonResp.data.login;
 		const magelanToken = jsonResp.data.token;
 		if (magelanToken) {
+			localStorage['magelanLogin'] = magelanLogin;
 			localStorage['magelanToken'] = magelanToken;
 			window.location.href = '/magelan-resa';
 		} else {
