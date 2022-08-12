@@ -229,7 +229,9 @@
 		}
 
 		const createOfferRows = (offers = [], harbourId = G_SelectedHarbourId) => {
-			const harbourName = document.querySelector(`#opt_${harbourId}`).innerHTML;
+			const harbourOptionEl = document.getElementById(`opt_${harbourId}`);
+			const harbourName = harbourOptionEl?.innerHTML || '';
+
 			let rows = '';
 			offers.map(offer => {
 				rows += `
@@ -269,16 +271,12 @@
 			const form = document.getElementById("createForm");
 			const formData = new FormData(form);
 
-			const divContent = document.createElement("div");
-
-			const descriptionEl = document.querySelector(`#description`);
-			divContent.innerHTML = descriptionEl.innerHTML;
-			const descriptionText = divContent.textContent || divContent.innerText || "";
+			const descriptionEl = form.querySelector(`#description`);
+			const descriptionText = descriptionEl.firstChild.innerHTML;
 			formData.append("description", descriptionText);
 			
-			const contentEl = document.querySelector(`#editor`);
-			divContent.innerHTML = contentEl.innerHTML;
-			const contentText = divContent.textContent || divContent.innerText || "";
+			const contentEl = form.querySelector(`#editor`);
+			const contentText = contentEl.firstChild.innerHTML;
 			formData.append("content", contentText);
 
 			try {
@@ -304,15 +302,13 @@
 				const formData = new FormData(form);
 				formData.append("title", document.querySelector(`#title_${id}`).value);
 
-				const divDescription = document.createElement("div");
-				divDescription.innerHTML = document.querySelector(`#row_desc_${id}`).firstChild.innerHTML;
-				const textDescription = divDescription.textContent || divDescription.innerText || "";
-				formData.append("description", textDescription);
-
-				const divContent = document.createElement("div");
-				divContent.innerHTML = document.querySelector(`#row_content_${id}`).firstChild.innerHTML;
-				const textContent = divContent.textContent || divContent.innerText || "";
-				formData.append("content", textContent);
+				const descriptionEl = document.getElementById(`row_desc_${id}`);
+				const descriptionText = descriptionEl.firstChild.firstChild.innerHTML;
+				formData.append("description", descriptionText);
+				
+				const contentEl = document.getElementById(`row_content_${id}`);
+				const contentText = contentEl.firstChild.firstChild.innerHTML;
+				formData.append("content", contentText);
 
 				formData.append("date_start", document.querySelector(`#row_date_start_${id}`).value);
 				formData.append("date_end", document.querySelector(`#row_date_end_${id}`).value);
