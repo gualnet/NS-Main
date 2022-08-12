@@ -34,11 +34,11 @@
 		const harbourMapEl = document.getElementById("harbourmap");
 		if (harbourMapEl) {
 			if (harbour.google_map_link) {
-				harbourMapEl.href = '/ggl-map'; // embed external google map
+				harbourMapEl.href = harbour.google_map_link; // embed external google map
 			} else if (harbour.address) {
 				let mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
-				if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
-						mapLink = `https://maps.apple.com/?q=${harbour.address}` //
+				if (navigator.userAgent.toLowerCase().indexOf('iphone') !== -1) {
+					mapLink = `https://maps.apple.com/?q=${harbour.address}` //
 				}
 				harbourMapEl.href = mapLink;
 			} else {
