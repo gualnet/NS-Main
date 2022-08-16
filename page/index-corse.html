@@ -758,19 +758,9 @@
 		window.addEventListener('load', () => {
 			displayInfoInTopContainer();
 			displayResaButton();
-			changeNavbarSettings();
 			setFaqLink();
 			setEnvLink();
 		});
-
-		const changeNavbarSettings = () => {
-			const navbarHeaderEl = document.querySelector('#navbarHeader');
-			if (!navbarHeaderEl) return;
-			navbarHeaderEl.addEventListener('click', (ev) => {
-				ev.preventDefault();
-				window.location = '/selectharbour?account=true'
-			});
-		}
 
 		const displayInfoInTopContainer = () => {
 			const harbourNameEl = document.querySelector('#harbourName');

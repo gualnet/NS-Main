@@ -6,19 +6,58 @@
         <!--<div class="col-8">-->
         <!--    <h5 style="white-space:pre-warp;"><span style="color:#000000;" id="harbour_name"></span></h5>-->
         <!--</div>-->
-        <div class="col-2">
-            <img id="nav_entity_logo" style="height:24px;" src="" />
-        </div>
+				<div class="col-2">
+					<img id="returnBtn" style="height:24px;" src="/library/nav-header-return.png" />
+				</div>
         <div class="col-8 d-flex justify-content-center">
             <h5 style="white-space:pre-warp;"><span style="color:#000000;" id="harbour_name"></span></h5>
         </div>
-        <div class="col-2">
-            <!--EMPTY-->
-        </div>
+				<div class="col-2">
+					<img id="nav_entity_logo" style="height:24px;" src="" />
+				</div>
     </div>
     <script>
-        document.getElementById("harbour_name").innerHTML = localStorage["harbourname"];
-        document.getElementById("nav_entity_logo").src = localStorage["entity_logo"];
+			window.addEventListener('load', () => {
+				document.getElementById("harbour_name").innerHTML = localStorage["harbourname"];
+				document.getElementById("nav_entity_logo").src = localStorage["entity_logo"];
+
+				corseRules();
+			});
+
+			const corseRules = () => {
+				if (localStorage['entity_id'] !== 'BgSNKrOB59') return; // abort if not corse entity
+
+				const navbarHeaderEl = document.querySelector('#navbarHeader');
+				if (!navbarHeaderEl) return;
+
+				if (location.pathname.includes('index-corse')) {
+					navbarHeaderEl.addEventListener('click', (ev) => {
+						ev.preventDefault();
+						window.location = '/selectharbour?account=true';
+					});
+				} else if (location.pathname.includes('events')) {
+					navbarHeaderEl.addEventListener('click', (ev) => {
+						ev.preventDefault();
+						window.location = '/index-corse';
+					});
+				} else if (location.pathname.includes('event')) {
+					navbarHeaderEl.addEventListener('click', (ev) => {
+						ev.preventDefault();
+						window.location = '/events';
+					});
+				} else if (location.pathname.includes('articles')) {
+					navbarHeaderEl.addEventListener('click', (ev) => {
+						ev.preventDefault();
+						window.location = '/index-corse';
+					});
+				} else if (location.pathname.includes('actualite')) {
+					navbarHeaderEl.addEventListener('click', (ev) => {
+						ev.preventDefault();
+						window.location = '/articles';
+					});
+				}
+			};
+
     </script>
 </header>
 <style>
