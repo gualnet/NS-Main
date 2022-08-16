@@ -44,11 +44,17 @@
 						<label class="floating-label" style="color: #446E7B">Email</label>
 					</div>
 					<div class="form-group floating-form-group">
-						<input name="password" type="password" class="form-control floating-input" required>
+						<input id="passwordInput" name="password" type="password" class="form-control floating-input" required>
 						<label class="floating-label" style="color: #446E7B">Mot de passe</label>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="passwordHideBtn" onchange="tooglePasswordVisibility()">
+							<label class="form-check-label fs-1" for="flexCheckDefault">
+								Voir le mot de passe
+							</label>
+						</div>
 					</div>
 					<div class="form-group floating-form-group">
-						<input name="password_confirm" type="password" class="form-control floating-input" required>
+						<input id="passwordCheckInput" name="password_confirm" type="password" class="form-control floating-input" required>
 						<label class="floating-label" style="color: #446E7B">Confirmer mot de passe</label>
 					</div>
 					<div class="form-group floating-form-group" style="display: none;">
@@ -394,6 +400,28 @@
 					}
 				}).catch((e) => console.error(e));
 		}
+	
+		
+		const tooglePasswordVisibility = () => {
+				passwordHideBtn
+				const pwdVisibilityBtnEl = document.querySelector('#passwordHideBtn');
+				const passwordInputEl = document.querySelector('#passwordInput');
+				const passwordCheckInputEl = document.querySelector('#passwordCheckInput');
+				if (!pwdVisibilityBtnEl || !passwordInputEl || !passwordCheckInputEl) {
+					console.warn('ERROR');
+					return;
+				};
+
+				if (pwdVisibilityBtnEl.checked) {
+					passwordInputEl.type = 'text';
+					passwordCheckInputEl.type = 'text';
+				} else {
+					passwordInputEl.type = 'password';
+					passwordCheckInputEl.type = 'password';
+				}
+			};
+
+
 	</script>
 	{{element->footer_app.html}}
 </body>
