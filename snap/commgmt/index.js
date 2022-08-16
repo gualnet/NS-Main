@@ -519,18 +519,10 @@ const sendGoodbarberPushNotification = async (notification) => {
 		if (!entity.gbbAppId || !entity.gbbApiKey) {
 			throw(new Error('Missing Goodbarber auth informations'))
 		}
-		
-		const TRANSLATE_EVENT_TYPE = {
-			"other": "Autre",
-			"weather": "Météo",
-			"event": "Événement",
-			"maintenance": "Travaux",
-			"security": "Sécurité",
-		}
-		const eventType = TRANSLATE_EVENT_TYPE[notification.category.toLocaleLowerCase()];
+ 
 		// limit text to the first 200 chars.
 		const text = notification?.title?.length > 200 ? `${notification?.title.slice(0, 200)}...` : notification.title;
-		const msg = `${eventType}: ${text}`;
+		const msg = `${harbour.name}: ${text}`;
 
 		const response = await fetch(
 			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
@@ -546,7 +538,7 @@ const sendGoodbarberPushNotification = async (notification) => {
 				}),
 			}
 		);
-
+		
 		if (response.ok) {
 			const resp = await response.json();
 			console.log('resp',resp)
