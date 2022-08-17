@@ -1090,7 +1090,7 @@
 
 		fetch("/api/events/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 			if (_data.data[0]) {
-				var events = _data.data.sort(dynamicSort("date_start"));
+				var events = _data.data.sort(dynamicSort("date_start")) || [];
 				const MAX_EVENTS_NUMBER = 3;
 				const eventsLimit = (events.length < MAX_EVENTS_NUMBER) ? events.length : MAX_EVENTS_NUMBER;
 				for (var i = 0; i < eventsLimit; i++) {
