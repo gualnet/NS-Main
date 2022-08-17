@@ -1630,6 +1630,7 @@
 				return result * sortOrder;
 			}
 		}
+
 		var newsRow = '<div class="row">'
 			+ '<div class="col">'
 			+ '<div class="card product-card-small mb-3" onclick="window.location.href = (\'/actualite?id=__ID__\');">'
@@ -1706,17 +1707,9 @@
 			+ '</div>'
 			+ '</div>'
 
-		const sleep = (ms) => {
-			return(new Promise((res, rej) => {
-				setTimeout(() => {
-					res();
-				}, ms);
-			}));
-		};
-
 		fetch("/api/events/" + localStorage['harbour_id']).then(response => response.json()).then(async _data => {
 			if (_data.data[0]) {
-				const events = _data.data.sort((a, b) => new Date(a.date_end).toISOString() < new Date(b.date_end).toISOString());
+				const events = _data.data.sort((a, b) => new Date(a.date_start).toISOString() < new Date(b.date_start).toISOString() ? -1 : 1);
 				const MAX_EVENTS_NUMBER = 3;
 				const eventsLimit = (events.length < MAX_EVENTS_NUMBER) ? events.length : MAX_EVENTS_NUMBER;
 				for (var i = 0; i < eventsLimit; i++) {
@@ -1729,7 +1722,6 @@
 					} else {
 						rowCurrent = rowCurrent.replace('__IMG__', localStorage['entity_logo'])
 					}
-
 					document.getElementById("events_container").insertAdjacentHTML("beforeend", rowCurrent);
 				}
 			} else {
