@@ -1709,7 +1709,9 @@
 
 		fetch("/api/events/" + localStorage['harbour_id']).then(response => response.json()).then(async _data => {
 			if (_data.data[0]) {
-				const events = _data.data.sort((a, b) => new Date(a.date_start).toISOString() < new Date(b.date_start).toISOString() ? -1 : 1);
+				let events = _data.data.sort((a, b) => new Date(a.date_start).toISOString() < new Date(b.date_start).toISOString() ? -1 : 1);
+				const today = new Date().getTime();
+				events = events.filter(event => event.date_end > today );
 				const MAX_EVENTS_NUMBER = 3;
 				const eventsLimit = (events.length < MAX_EVENTS_NUMBER) ? events.length : MAX_EVENTS_NUMBER;
 				for (var i = 0; i < eventsLimit; i++) {
