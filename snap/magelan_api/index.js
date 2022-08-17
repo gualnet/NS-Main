@@ -47,7 +47,6 @@ const logAxiosError = (error) => {
 // ********
 
 const loginHandler = async (req, res) => {
-	console.clear();
 	console.log('====loginHandler====');
 	try {
 		const login = req.get.login;
@@ -82,7 +81,6 @@ const loginHandler = async (req, res) => {
 };
 
 const getPriceResaHandler =  async (req, res) => {
-	console.clear();
 	console.log('====getPriceResaHandler====');
 
 	// ! pas de prise en compte du champs commentaire par eResa
@@ -190,7 +188,6 @@ const getPriceResaHandler =  async (req, res) => {
 // }
 
 const listUserReservations = async (req, res) => {
-	console.clear();
 	console.log('listUserReservations');
 
 	try {
@@ -221,7 +218,6 @@ const listUserReservations = async (req, res) => {
 };
 
 const listUserBoats = async (req, res) => {
-	console.clear();
 	console.log('listUserBoats');
 
 	try {
@@ -252,10 +248,8 @@ const listUserBoats = async (req, res) => {
 };
 
 const addReservation = async (req, res) => {
-	console.clear();
 	console.log('addReservation');
 	try {
-
 		const { boatId, portId, startDate, endDate,
 			comments, login, token } = req.get;
 		const keyUser = OPTION.MAGELAN_USER_KEY;

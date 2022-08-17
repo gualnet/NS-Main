@@ -28,7 +28,7 @@ const clickOnConnexionBtnHandler = async (ev) => {
 };
 
 const fetchLoginMagelan = async (login, password) => {
-	console.log('fetchLoginMagelan')
+	console.log('fetchLoginMagelan');
 	try {
 		const url = `/api/eresa/login/?login=${login}&password=${password}`
 		console.log('url',url)

@@ -1,3 +1,5 @@
+let G_boatList = []; // keep the fetched boat list
+let G_selectedBoat; // keep the selected boat object id within G_boatList like G_boatList[G_selectedBoat] = boat object
 
 window.addEventListener('load', () => {
 	console.log('EVENT LOAD');
@@ -25,6 +27,9 @@ window.addEventListener('load', () => {
 
 	const arriveeBtnEl = document.querySelector('#arriveeBtn');
 	arriveeBtnEl.addEventListener('click', arriveeBtnClickHandler);
+
+	const boatEditBtnEl = document.querySelector('#boatEditBtn');
+	boatEditBtnEl.addEventListener('click', boatEditOnClickHandler);
 
 	displayBoatData();
 });
@@ -57,10 +62,9 @@ const reservationClickHandler = async (ev) => {
 	// console.log('login', resaOptions.login);
 	resaOptions.token = localStorage['magelanToken'];
 	// console.log('token', resaOptions.token);
-	const boatList = await getUserBoatList();
-	// console.log('boatList', boatList);
-	if (boatList[0].bateau_id) resaOptions.boatId = boatList[0].bateau_id;
 
+	resaOptions.boatId = getSelectedBoatId();
+	
 	requestAddReservation(resaOptions)
 };
 
@@ -134,9 +138,35 @@ const arriveeBtnClickHandler = (ev) => {
 	pickerEl.click();
 };
 
+/**
+ * @param {PointerEvent} ev 
+ */
+const boatEditOnClickHandler = (ev) => {
+	console.log('boatEditOnClickHandler');
+	console.log('EV', ev);
+	document.querySelector('#boatEditModal').style.display = 'block';
+	displayBoatsInEditModal();
+};
+
+const boatCloseModalBtnOnClickHandler = (ev) => {
+	console.log('boatCloseModalBtnOnClickHandler');
+	document.querySelector('#boatEditModal').style.display = 'none';
+};
+
+const boatEditRowOnClickHandler = (index) => {
+	console.log('boatEditRowOnClickHandler');
+	console.log('index', index)
+	G_selectedBoat = index;
+	const selectedBoat = G_boatList[G_selectedBoat];
+	console.log('selectedBoat', selectedBoat)
+	
+	document.querySelector('#boatEditModal').style.display = 'none';
+	setFormBoatLongueur(selectedBoat.bateau_longueur)
+	setFormBoatLargeur(selectedBoat.bateau_largeur)
+}
 
 // ************
-// FORM GETTERS
+// FORM GETTERS SETTERS
 // ************
 
 const getFormHarbourId = () => {
@@ -200,6 +230,13 @@ const getFormBoatLongueur = () => {
 	}
 	return(longueur)
 };
+const setFormBoatLongueur = (value) => {
+	if (!value || value === '') {
+		console.warn('Empty value not accepted as longueur value')
+	}
+	const longueurEl = document.querySelector('#input-boat-longueur');
+	longueurEl.value = value;
+};
 
 const getFormBoatLargeur = () => {
 	const largeurEl = document.querySelector('#input-boat-largeur');
@@ -210,6 +247,13 @@ const getFormBoatLargeur = () => {
 		throw(new Error('Veuillez specifier la largeur du bateau'));
 	}
 	return(largeur)
+};
+const setFormBoatLargeur = (value) => {
+	if (!value || value === '') {
+		console.warn('Empty value not accepted as largeur value')
+	}
+	const largeurEl = document.querySelector('#input-boat-largeur');
+	largeurEl.value = value;
 };
 
 const getFormBoatType = () => {
@@ -367,6 +411,8 @@ const displayBoatData = async () => {
 		console.warn('No boat found');
 		return;
 	}
+	G_boatList = boats;
+	G_selectedBoat = 0;
 
 	const boatLongueurEl = document.querySelector('#input-boat-longueur');
 	boatLongueurEl.value = boat.bateau_longueur;
@@ -386,8 +432,8 @@ const getUserBoatList = async () => {
 		if (respJson.success === false) {
 			if (respJson.error === "Error: INVALID TOKEN") {
 				window.location = '/magelan-login';
-				return;
 			}
+			return;
 		}
 
 		const boats = respJson.data;
@@ -431,3 +477,31 @@ const requestAddReservation = async (options) => {
 		alert(error);
 	}
 };
+
+const displayBoatsInEditModal = async () => {
+	const boatRows = [];
+	G_boatList = await getUserBoatList();
+	G_boatList.map((boat, index) => {
+		const selectedClass = (index === G_selectedBoat) ? ' active' : '';
+		boatRows.push(`
+			<div class="boat-row${selectedClass}" id="bemBoatRow_${boat.bateau_id}" onclick="boatEditRowOnClickHandler(${index})">
+				<div class="boat-row__name">${boat.bateau_nom}</div>
+				<div class="boat-row__longueur">${boat.bateau_longueur}</div>
+				<div class="boat-row__largeur">${boat.bateau_largeur}</div>
+				<div class="boat-row__tirant">${boat.bateau_tirant}</div>
+			</div>
+		`);
+	});
+
+	const bemBodyCtnEl = document.querySelector('#bemBodyCtn');
+	bemBodyCtnEl.innerHTML = '';
+	bemBodyCtnEl.insertAdjacentHTML('afterbegin', boatRows.join(''));
+};
+
+const getSelectedBoatId = async () => {
+	let selectedBoatId;
+	if (G_boatList?.length > 0 && G_selectedBoat !== undefined) {
+		selectedBoatId = G_boatList[G_selectedBoat];
+	}
+	return(selectedBoatId);
+}
