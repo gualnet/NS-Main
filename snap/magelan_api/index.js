@@ -253,9 +253,8 @@ const addReservation = async (req, res) => {
 		const { boatId, portId, startDate, endDate,
 			comments, login, token } = req.get;
 		const keyUser = OPTION.MAGELAN_USER_KEY;
-		const url = `https://appli.magelan-eresa.com/appliGetLstBoat/${boatId}/${portId}/${startDate}/${endDate}/${comments}/${login}/${token}/${keyUser}`;
+		const url = `https://appli.magelan-eresa.com/appliAddResa/${boatId}/${portId}/${startDate}/${endDate}/${comments}/${login}/${token}/${keyUser}`;
 		console.log('url', url);
-
 		const response = await axios.get(url);
 		console.log('response', response.data);
 		if (response.data.CodeErr === '2') {

@@ -63,7 +63,8 @@ const reservationClickHandler = async (ev) => {
 	resaOptions.token = localStorage['magelanToken'];
 	// console.log('token', resaOptions.token);
 
-	resaOptions.boatId = getSelectedBoatId();
+	resaOptions.boatId = await getSelectedBoatId();
+	console.log('resaOptions.boatId', resaOptions.boatId)
 	
 	requestAddReservation(resaOptions)
 };
@@ -453,14 +454,12 @@ const requestAddReservation = async (options) => {
 	try {
 		const startDate = options.startDate.replaceAll('-', '');
 		const endDate = options.endDate.replaceAll('-', '');
-
 		const url = `/api/eresa/add-reservation/?boatId=${options.boatId}&portId=${options.harbourId}&startDate=${startDate}&endDate=${endDate}&comments="${options.comments}"&login=${options.login}&token=${options.token}`;
 		console.log('===>url',url)
 
 		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
 		const reservationBtnEl = document.querySelector('#reservationBtn');
 		reservationBtnEl.innerHTML = 'Demande en cours...';
-
 		const resp = await fetch(url);
 		const respJson = await resp.json();
 		console.log('respJson', respJson);
@@ -499,9 +498,12 @@ const displayBoatsInEditModal = async () => {
 };
 
 const getSelectedBoatId = async () => {
-	let selectedBoatId;
+	console.log('getSelectedBoatId', G_boatList);
+	let selectedBoat;
 	if (G_boatList?.length > 0 && G_selectedBoat !== undefined) {
-		selectedBoatId = G_boatList[G_selectedBoat];
+		selectedBoat = G_boatList[G_selectedBoat];
 	}
+	const selectedBoatId = selectedBoat.bateau_id;
+	console.log('selectedBoatId', selectedBoatId);
 	return(selectedBoatId);
 }
