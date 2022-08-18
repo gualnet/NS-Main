@@ -100,10 +100,18 @@ body {
 	display: none;
 }
 .form-ctn > .form-content#formListResa {
-	display: block;
+	display: flex;
+	justify-content: inherit;
+	height: 100%;
 }
 .form-ctn > .form-content#formListResa.hide {
 	display: none;
+}
+
+.section#formListResaSection {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
 }
 
 .section-title-ctn {
@@ -142,6 +150,19 @@ body {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
+}
+.resa-card-sub-section {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	height: 50%;
+	overflow: scroll;
+}
+.resa-card-sub-section.half-height {
+	height: 50%;
+}
+.resa-card-sub-section.full-height {
+	height: 100%;
 }
 
 .harbour-selector-ctn {
@@ -377,4 +398,9 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+/*  */
+.hide {
+	display: none;
 }

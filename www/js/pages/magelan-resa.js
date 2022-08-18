@@ -166,9 +166,9 @@ const boatEditRowOnClickHandler = (index) => {
 	setFormBoatLargeur(selectedBoat.bateau_largeur)
 }
 
-// ************
+// ********************
 // FORM GETTERS SETTERS
-// ************
+// ********************
 
 const getFormHarbourId = () => {
 	/** @type {HTMLSelectElement}  */
@@ -355,27 +355,41 @@ const getUserReservationList = async () => {
 		const resp = await fetch(url);
 		const respJson = await resp.json();
 		console.log('respJson', respJson);
-		
 		const reservations = Object.values(respJson.data);
-		console.log('reservations', reservations);
+
+		const today = new Date().toLocaleDateString().split('/').reverse().join(''); // date of today fotmat: YYYYMMDD
 
 		const htmlRow = [];
+		const htmlRowOld = [];
 		Object.values(reservations).map(reservation => {
-			console.log('RES', reservation);
 			const harbourName = reservation.resa_port_ville;
-			const yyStart = reservation.resa_date_debut.slice(2, 4);
-			const mmStart = reservation.resa_date_debut.slice(4, 6);
-			const ddStart = reservation.resa_date_debut.slice(6, 8);
-			const yyEnd = reservation.resa_date_fin.slice(2, 4);
-			const mmEnd = reservation.resa_date_fin.slice(4, 6);
-			const ddEnd = reservation.resa_date_fin.slice(6, 8);
-
-			const startDate = `${ddStart}/${mmStart}/${yyStart}`;
-			const endDate = `${ddEnd}/${mmEnd}/${yyEnd}`;
-			const status = reservation.resa_status;
-			const statusColor = reservation.resa_status_couleur;
-
-			htmlRow.push(`
+				const yyStart = reservation.resa_date_debut.slice(2, 4);
+				const mmStart = reservation.resa_date_debut.slice(4, 6);
+				const ddStart = reservation.resa_date_debut.slice(6, 8);
+				const yyEnd = reservation.resa_date_fin.slice(2, 4);
+				const mmEnd = reservation.resa_date_fin.slice(4, 6);
+				const ddEnd = reservation.resa_date_fin.slice(6, 8);
+	
+				const startDate = `${ddStart}/${mmStart}/${yyStart}`;
+				const endDate = `${ddEnd}/${mmEnd}/${yyEnd}`;
+				const status = reservation.resa_status;
+				const statusColor = reservation.resa_status_couleur;
+			if (reservation.resa_date_fin > today) {
+				htmlRow.push(`
+					<div class="resa-card">
+						<div class="resa-card-row">
+							<div>${harbourName}</div>
+							<div>${startDate} - ${endDate}</div>
+						</div>
+						<div class="resa-card-row">
+							<div>Statut</div>
+							<div style="color:${statusColor}">${status}</div>
+						</div>
+					</div>
+				`);
+			} else {
+				// Old Resa
+				htmlRowOld.push(`
 				<div class="resa-card">
 					<div class="resa-card-row">
 						<div>${harbourName}</div>
@@ -385,16 +399,26 @@ const getUserReservationList = async () => {
 						<div>Statut</div>
 						<div style="color:${statusColor}">${status}</div>
 					</div>
-					<div class="resa-card-row">
-						<div>Action</div>
-						<div>confirmée</div>
-					</div>
 				</div>
 			`);
+			}
 		})
 
+		
+		const resaNewSectionTitleCtnEl = document.querySelector('#resaNewSectionTitleCtn');
+		const resaOldSectionTitleCtnEl = document.querySelector('#resaOldSectionTitleCtn');
+		const resaOldListCtnEl = document.querySelector('#resaOldListCtn');
 		const resaListCtnEl = document.querySelector('#resaListCtn');
-		resaListCtnEl.innerHTML = htmlRow.join('');
+		resaListCtnEl.innerHTML = htmlRow.join(''); // place new or empty resa list
+		if (htmlRowOld.length > 0) {
+			// place old resa by dividing the space in 2
+			resaOldSectionTitleCtnEl.classList.remove('hide');
+			resaOldListCtnEl.innerHTML = htmlRowOld.join('');
+		} else {
+			// if no old resa allocate full space to display new resa
+			resaNewSectionTitleCtnEl.classList.replace('half-height', 'full-height');
+			resaOldSectionTitleCtnEl.classList.add('hide');
+		}
 	} catch (error) {
 		console.error('Error', error);
 		alert(error);
@@ -402,7 +426,7 @@ const getUserReservationList = async () => {
 };
 
 const displayBoatData = async () => {
-	const boats = await getUserBoatList();
+	const boats = await fetchUserBoatList();
 	if (!boats) {
 		console.warn('No boats found');
 		return;
@@ -423,7 +447,7 @@ const displayBoatData = async () => {
 	boatLargeurEl.value = boat.bateau_largeur;
 }
 
-const getUserBoatList = async () => {
+const fetchUserBoatList = async () => {
 	try {
 		const url = `/api/eresa/list-boats/?login=${localStorage['magelanLogin']}&token=${localStorage['magelanToken']}`;
 
@@ -479,7 +503,7 @@ const requestAddReservation = async (options) => {
 
 const displayBoatsInEditModal = async () => {
 	const boatRows = [];
-	G_boatList = await getUserBoatList();
+	G_boatList = await fetchUserBoatList();
 	G_boatList.map((boat, index) => {
 		const selectedClass = (index === G_selectedBoat) ? ' active' : '';
 		boatRows.push(`
