@@ -154,7 +154,7 @@ const boatCloseModalBtnOnClickHandler = (ev) => {
 	document.querySelector('#boatEditModal').style.display = 'none';
 };
 
-const boatEditRowOnClickHandler = (index) => {
+const boatEditRowOnClickHandler = async (index) => {
 	console.log('boatEditRowOnClickHandler');
 	console.log('index', index)
 	G_selectedBoat = index;
@@ -164,6 +164,7 @@ const boatEditRowOnClickHandler = (index) => {
 	document.querySelector('#boatEditModal').style.display = 'none';
 	setFormBoatLongueur(selectedBoat.bateau_longueur)
 	setFormBoatLargeur(selectedBoat.bateau_largeur)
+	await updateTotalPrice();
 }
 
 // ********************
