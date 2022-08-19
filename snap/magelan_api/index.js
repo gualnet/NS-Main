@@ -6,6 +6,7 @@ exports.setup = {
   description: 'proxy to interface magelan eresa api',
   version: '1.0.0',
   api: true,
+	category: "External API",
 }
 
 // ********
