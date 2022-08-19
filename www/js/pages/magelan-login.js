@@ -33,19 +33,31 @@ const fetchLoginMagelan = async (login, password) => {
 		const url = `/api/eresa/login/?login=${login}&password=${password}`
 		console.log('url',url)
 
-		const loginBtnEl = document.querySelector('#login-btn');
-		loginBtnEl.classList.add('success');
 		const loginTextEl = document.querySelector('#loginText');
 		loginTextEl.classList.add('hide');
-		loginTextEl.innerHTML = 'Success';
+		
 		const loginSpinnerEl = document.querySelector('#loginSpinner');
 		loginSpinnerEl.classList.remove('hide');
 
 		const res = await fetch(url);
+		console.log('res', res)
+		if (res.ok === false) {
+			throw new Error(res.statusText);
+		}
 		const jsonResp = await res.json();
 		if (!jsonResp.success) {
 			// Error do something
+			throw new Error('Error');
 		}
+
+		console.log('XXXX')
+		const loginBtnEl = document.querySelector('#login-btn');
+		loginBtnEl.classList.add('success');
+		loginSpinnerEl.classList.add('hide');
+		loginTextEl.innerHTML = 'Success';
+		loginTextEl.classList.remove('hide');
+
+
 		console.log('jsonResp', jsonResp.data);
 		const magelanLogin = jsonResp.data.login;
 		const magelanToken = jsonResp.data.token;
