@@ -415,7 +415,10 @@ async function updateUserHandler(_req, _res) {
 		if (user[0]) {
 			user = user[0];
 			var update = _req.post;
-			update.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
+			update.prefixed_phone = user.prefix || '';
+			if (user.phone) {
+				update.prefixed_phone += user.phone.replace(/^0/, '');
+			}
 			update.id = user.id;
 			const updatedUsers = await updateUser(update);
 			UTILS.httpUtil.dataSuccess(_req, _res, "User authentified", null, "1.0");
