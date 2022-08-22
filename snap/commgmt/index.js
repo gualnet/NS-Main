@@ -519,10 +519,26 @@ const sendGoodbarberPushNotification = async (notification) => {
 		if (!entity.gbbAppId || !entity.gbbApiKey) {
 			throw(new Error('Missing Goodbarber auth informations'))
 		}
- 
+
 		// limit text to the first 200 chars.
 		const text = notification?.title?.length > 200 ? `${notification?.title.slice(0, 200)}...` : notification.title;
-		const msg = `${harbour.name}: ${text}`;
+		let msg = '';
+
+		// is there many harbours within the entity and adapt the notification message accordingly
+		const entityHarbours = await STORE.API_NEXT.getElements(ENUM.TABLES.HARBOURS, { id_entity: entity.id });
+		if (entityHarbours.length > 1) {
+			msg = `${harbour.name}: ${text}`;
+		} else {
+			const TRANSLATE_EVENT_TYPE = {
+				"other": "Autre",
+				"weather": "Météo",
+				"event": "Événement",
+				"maintenance": "Travaux",
+				"security": "Sécurité",
+			}
+			const eventType = TRANSLATE_EVENT_TYPE[notification.category.toLocaleLowerCase()];
+			msg = `${eventType}: ${text}`;
+		}
 
 		const response = await fetch(
 			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
