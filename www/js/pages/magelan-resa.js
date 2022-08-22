@@ -73,9 +73,6 @@ const harbourSelectChangeHandler = () => {
  */
 const boatTypeBtnClickHandler = (ev) => {
 	const target = ev.target;
-	console.log('target', target)
-	console.log('id', target.id)
-
 	const VoilierEl = document.querySelector('#boatTypeVoilierBtn');
 	const MonocoqueEl = document.querySelector('#boatTypeMonocoqueBtn');
 	if (target.id === VoilierEl.id) {
@@ -351,8 +348,6 @@ const updateTotalPrice = async () => {
 };
 
 const getUserReservationList = async () => {
-	console.log('getUserReservationList');
-
 	try {
 		const url = `/api/eresa/list-reservations/?login=${localStorage['magelanLogin']}&token=${localStorage['magelanToken']}`;
 
@@ -360,6 +355,7 @@ const getUserReservationList = async () => {
 		const respJson = await resp.json();
 		console.log('respJson', respJson);
 		const reservations = Object.values(respJson.data);
+		reservations.sort((a, b) => b.resa_date_debut - a.resa_date_debut);
 
 		const today = new Date().toLocaleDateString().split('/').reverse().join(''); // date of today fotmat: YYYYMMDD
 
