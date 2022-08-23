@@ -256,11 +256,11 @@ async function getSortieUserHandler(req, res) {
 				const startDate = sortie.datetime_out;
 				const challengeStartDate = new Date('01/01/2022').getTime();
 				const challengeEndDate = new Date('04/15/2022').getTime();
+				const challengeStartDate2 = new Date('10/10/2022').getTime();
+				const challengeEndDate2 = new Date('12/31/2022').getTime();
 				if (challengeStartDate < startDate && challengeEndDate > startDate) {
 					validSorties.push(sortie);
 				}
-				const challengeStartDate2 = new Date('10/10/2022').getTime();
-				const challengeEndDate2 = new Date('12/31/2022').getTime();
 				if (challengeStartDate2 < startDate && challengeEndDate2 > startDate) {
 					validSorties.push(sortie);
 				}
@@ -272,12 +272,12 @@ async function getSortieUserHandler(req, res) {
 			}));
 			
 		}
-	} catch (err) {
-		console.error(err);
+	} catch (error) {
+		console.error('[ERROR]', error);
 		res.writeHead(err.code || 500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			err: 'toto',
+			error,
 		}));
 	}
 };
