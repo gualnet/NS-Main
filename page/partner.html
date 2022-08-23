@@ -162,9 +162,6 @@
     <main class="flex-shrink-0">
         <!-- Fixed navbar -->
         {{element->navheader.html}}
-        <nav class="navbar navbar-light fixed-top" style="margin-top:30px;">
-            <a id="return_link" class="navbar-brand" href="/index"><i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i></a>
-        </nav>
         <div class="product-image-top" style="background-color:white;">
             <img id="partnerImg" class="background" style="height:auto;width:100%;" src="" alt="">
         </div>
@@ -233,8 +230,6 @@
 				<script>
 					window.addEventListener('load', async () => {
 						try {
-							setReturnButtonLink();
-
 							const partner = await fetchPartnerIndo();
 							populatePageContent(partner);
 
@@ -369,10 +364,6 @@
 							throw(new Error('No Partner Info found'));
 						}
 						return(partner);
-					}
-
-					const setReturnButtonLink = () => {
-						document.querySelector('#return_link').href = document.referrer;
 					}
 				</script>
         <div class="container py-3">
