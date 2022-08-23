@@ -26,10 +26,13 @@ window.addEventListener('load', () => {
 	listResaBtnEl.addEventListener('click', formSelectorHandler)
 
 	const arriveeBtnEl = document.querySelector('#arriveeBtn');
-	arriveeBtnEl.addEventListener('click', arriveeBtnClickHandler);
-
+	arriveeBtnEl.addEventListener('click', arriveeBtnClickHandler);	
+	
 	const boatEditBtnEl = document.querySelector('#boatEditBtn');
 	boatEditBtnEl.addEventListener('click', boatEditOnClickHandler);
+
+	const departBtnEl = document.querySelector('#departBtn');
+	departBtnEl.addEventListener('click', departBtnClickHandler);
 
 	displayBoatData();
 	initJqueryElements();
@@ -88,6 +91,7 @@ const boatTypeBtnClickHandler = (ev) => {
 };
 
 const dateChangeHandler = (ev) => {
+	console.log('dateChangeHandler');
 	const arrivalDateEl = document.querySelector('#input-date-start');
 	const arrivalDate = arrivalDateEl.value;
 	const departureDateEl = document.querySelector('#input-date-end');
@@ -273,6 +277,7 @@ const initJqueryElements = () => {
 			console.log('NEW DATE', newDate)
 			to.datepicker('option', 'minDate', newDate);
 			updateNightsCounter();
+			updateTotalPrice();
 		});
 		to = $("#input-date-end")
 			.datepicker({
@@ -283,6 +288,7 @@ const initJqueryElements = () => {
 				// console.log('from', from)
 				// console.log('to', to)
 				updateNightsCounter();
+				updateTotalPrice();
 			});
 };
 
