@@ -489,6 +489,31 @@ const createSortiesHandler = async (req, res) => {
 	}
 }
 
+const deleteSortiesHandler = async (req, res) => {
+	try {
+		console.log('deleteSortiesHandler')
+		const searchObj = { ...req.get };
+
+		/**@type {Array<TYPES.T_sortie>} */
+		const deletedObj = await deleteElement(TABLES.SORTIES, searchObj);
+		console.log('Deleted sorties', deletedObj)
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: deletedObj.length,
+			sorties: deletedObj,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error,
+		}));
+	}
+};
+
 // Zones
 const getZonesHandler = async (req, res) => {
 	try {
@@ -1018,12 +1043,12 @@ exports.router = [
 	// 	handler: updateAbsencesHandler,
 	// 	method: "PUT",
 	// },
-	// {
-	// 	on: true,
-	// 	route: "/api/next/absences",
-	// 	handler: deleteAbsencesHandler,
-	// 	method: "DELETE",
-	// },
+	{
+		on: true,
+		route: "/api/next/outings",
+		handler: deleteSortiesHandler,
+		method: "DELETE",
+	},
 	// EVENTS
 	{
 		on: true,

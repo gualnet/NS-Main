@@ -270,15 +270,16 @@
 	}
 
 	const sortiesDateFormatConverter = (timestamp = 0) => {
-		const startDate = new Date(timestamp).toLocaleString('fr-FR');
-		let temp = startDate.split(' ')[0].split(['/']);
-		temp = `${temp[0]}/${temp[1]}`;
-		temp[0] = temp + ' ';
-		let startDateFormated = temp;
-		temp = startDate.split(' ')[1].split(':');
-		temp = `${temp[0]}h${temp[1]}`;
-		startDateFormated = `${startDateFormated} ${temp}`;
-		return(startDateFormated)
+		const startDate = new Date(timestamp).toLocaleString('fr-FR', { dateStyle: 'short' });
+		const dateArr = startDate.split('/');
+		const formatedDate = `${dateArr[0]}/${dateArr[1]}`;
+
+		const startHour = new Date(timestamp).toLocaleTimeString();
+		const hourArr = startHour.split(':');
+		const formatedHour = `${hourArr[0]}:${hourArr[1]}`;
+		
+		const fullFormatedDate = `${formatedDate} à ${formatedHour}`;
+		return(fullFormatedDate)
 	}
 
 	// take an absence array
@@ -289,7 +290,9 @@
 		sorties.sort((a, b) => (a.date_start < b.date_start) ? -1 : 1);
 		sorties.map((sortie, index) => {
 			const startDate = sortiesDateFormatConverter(sortie.datetime_out);
+			console.log('startDate', startDate);
 			const endDate = sortiesDateFormatConverter(sortie.datetime_in);
+			console.log('endDate', endDate);
 			absencesElements.push(`
 			<div class="detail-row">
 				<div class="detail-row__index">${index + 1}.</div>
