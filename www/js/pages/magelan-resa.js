@@ -486,7 +486,7 @@ const requestAddReservation = async (options) => {
 		reservationBtnEl.innerHTML = 'Demande en cours...';
 		const resp = await fetch(url);
 		const respJson = await resp.json();
-		if (success === false) {
+		if (respJson.success === false) {
 			throw new Error('Ooops une petite erreur est survenue');
 		}
 
@@ -494,6 +494,8 @@ const requestAddReservation = async (options) => {
 		reservationBtnEl.innerText = 'Succes';
 	} catch (error) {
 		console.error('Error', error);
+		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+		const reservationBtnEl = document.querySelector('#reservationBtn');
 		actionBtnCtnEl.classList.add('error');
 		reservationBtnEl.innerText = 'Erreur';
 		alert(error);
