@@ -149,6 +149,11 @@
                 pagination: 'false'
             });
 
+						if (localStorage["entity_id"] === 'ElzMVUL9DK') { // Cavalaire
+							document.getElementById("weather").innerHTML = '<a class="btn btn-primary" style="font-size:12px;width:100%" target="_blank" href="' + 'https://meteo-varoise.fr/cavalaire/meteo-heraclea.pdf' + '">Ouvrir le bulletin météo</a>';
+							return;
+						}
+
             fetch("/api/weather/" + localStorage["harbour_id"]).then(response => response.json()).then(_data => {
                 if (_data.data.data) {
                     document.getElementById("weather").innerHTML = '<p class="text-secondary text-justify" style="padding-top:100px;">Aucun bulletin météo publié pour ce port.</p>';
