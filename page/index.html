@@ -218,7 +218,7 @@
 						}
 					</style>
 
-					<div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="weatherOnClickHandler()">
+					<div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="weatherCardOnClickHandler()">
 						<div class="card-body rounded" style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
 							<div class="row">
 								<div class="col">
@@ -345,7 +345,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="col-4 px-2" onclick="window.location.href = ('/weather');">
+								<div id="weather" class="col-4 px-2" onclick="weatherButtonOnClickHandler()">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 25px;"
@@ -1079,6 +1079,7 @@
 		window.addEventListener('load', () => {
 			displayCameraBtn();
 			portsCorsesRedirection();
+			cavalaireRule();
 			checkOffers();
 		});
 
@@ -1105,6 +1106,14 @@
 			}
 		}
 
+		const weatherButtonOnClickHandler = () => {
+			if (localStorage["entity_id"] === 'ElzMVUL9DK') { // Cavalaire
+				window.open('https://meteo-varoise.fr/cavalaire/meteo-heraclea.pdf', { target: '_blank' });
+			} else {
+				window.location.href = ('/weather');
+			}
+		};
+
 		if (localStorage['harbour_id'] === '4e2cd2p6mt') { // rule for gruissan
 			const bureauDuPortTitleEl = document.querySelector('#bureauDuPortTitle');
 			if (bureauDuPortTitleEl) {
@@ -1112,7 +1121,7 @@
 			};
 		}
 
-		const weatherOnClickHandler = () => {
+		const weatherCardOnClickHandler = () => {
 			const weatherDisableList = [
 				'4eqv44307K', // les sablons
 				'Ex3ADuoAmY', // la napoule
