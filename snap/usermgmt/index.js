@@ -835,7 +835,7 @@ exports.plugin =
 			else if (_role == "admin") {
 				_users = await getUser();
 			}
-			const roleOptions = generateRoleOptions(_role);
+			const roleOptions = generateRoleOptions(admin.data.roleBackOffice);
 
 			var _userGen = "";
 			for (var i = 0; i < _users.length; i++) {
