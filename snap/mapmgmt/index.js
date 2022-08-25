@@ -1,5 +1,6 @@
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -394,139 +395,150 @@ async function getMapByHarbourIdHandler(_req, _res) {
 
 
 async function captorPlaceHandler(_req, _res) {
-   // console.log("api sensor called");
+	try {
+		// console.log("api sensor called");
     if (_req.post) {
-        let _data = _req.post;
-        //console.log(_data);
-        if(_data.devid || _data.devid.length > 1) {
-            let place = await getPlaceByCaptorNumber(_data.devid);
-            if(place[0]) {
-                place = place[0];
-                if (_data.payload.index1 && place.minSeuil && place.maxSeuil) {
-                    if (_data.payload.index1 > place.minSeuil && _data.payload.index1 < place.maxSeuil) {
-                        UTILS.httpUtil.dataError(_req, _res, "Error", "outside min seuil and max seuil");
-                        return;
-                    }
-                }
-                
-                
-                place.status = _data.payload.presence;
-                if(place.status == 1) {
-                    place.occupation = "occupied";
-                    let sortie = await STORE.sortiemgmt.getSortieByPlaceIdAndEntre(place.id);
-                    //console.log("sorties vides pour entre");
-                   // console.log(sortie);
-                    if(sortie[0]) {
-                        for(var i = 0; i < sortie.length; i++){
-                            if(sortie[i].entre == "empty") {
-                                sortie[i].entre = Date.now();
-                                
-                                let sorti = new Date(sortie[i].sorti);
-                                let entre = new Date(sortie[i].entre);
-                                
-                                let sortieMonth = sorti.getMonth() + 1;
-                                let sortieDay = sorti.getDay() + 1;
-                                let sortieYear = sorti.getFullYear();
-                                let entreYear = entre.getFullYear();
-                                let entreHour = entre.getHours();
-                                
-                                let saison = 0;
-                               
-                                if(sortieYear == entreYear && entreHour < 2 || entreHour >= 5) {
-                                    
-                                    if (sortieMonth >= 1 && sortieMonth <= 3 || sortieMonth == 4 && sortieDay <= 15) {
-                                        saison = 1
-                                    } else if (sortieMonth >= 10 && sortieMonth <= 12) {
-                                        saison = 2
-                                    }
-                                    if (saison != 0) {
-                                        
-                                        let sameDayPastChallenges = await STORE.sortiemgmt.getChallengeSameDay(place.id, sortieDay, sortieMonth, sortieYear);
-                                        let elapsedTimeMs = Math.abs(sortie[i].sorti - sortie[i].entre);
-                                        console.log("tesssss");
-                                        console.log(sameDayPastChallenges.length);
-                                        if(elapsedTimeMs / 60000 >= 50 && sameDayPastChallenges.length <= 1) {
-                                            
-                                            sortie[i].challenge = true
-                                            sortie[i].year = sortieYear;
-                                            sortie[i].day = sortieDay
-                                            sortie[i].month = sortieMonth;
-                                            sortie[i].saison = saison;
-                                        }
-                                    }
-                                }
-                                
-                                let updatedSortie = await STORE.sortiemgmt.updateSortie(sortie[i]);
-                                console.log(updatedSortie);
-                                break;
-                            }
-                        }
-                    }    
-                } else if(place.status == 0) {
-                    place.occupation = "empty";
-                    let sortie = await STORE.sortiemgmt.getSortieByPlaceIdAndEntre(place.id);
-                    //console.log("sorties vides");
-                   // console.log(sortie);
-                    if(!sortie[0]) {
-                        console.log("test");
-                       let boat = await STORE.boatmgmt.getBoatByPlaceId(place.id);
-                       //console.log(boat);
-                       let boatId = [];
-                        let userId = [];
-                        if(boat[0]) {
-                            for (var i = 0; i < boat.length; i++) {
-                                boatId[i] = boat[i].id;
-                                userId[i] = boat[i].user_id
-                            }
-                        }
-                        let dateSortie = Date.now();
-                        let sorti = new Date(dateSortie);
-                        let sortieMonth = sorti.getMonth() + 1;
-                            let sortieDay = sorti.getDay() + 1;
-                            let sortieYear = sorti.getFullYear();
-                            let saison = 0;
-                                
+			let _data = _req.post;
+			//console.log(_data);
+			if(_data.devid || _data.devid.length > 1) {
+					let place = await getPlaceByCaptorNumber(_data.devid);
+					if(place[0]) {
+							place = place[0];
+							if (_data.payload.index1 && place.minSeuil && place.maxSeuil) {
+									if (_data.payload.index1 > place.minSeuil && _data.payload.index1 < place.maxSeuil) {
+											UTILS.httpUtil.dataError(_req, _res, "Error", "outside min seuil and max seuil");
+											return;
+									}
+							}
+							
+							
+							place.status = _data.payload.presence;
+							if(place.status == 1) {
+									place.occupation = "occupied";
+									let sortie = await STORE.sortiemgmt.getSortieByPlaceIdAndEntre(place.id);
+									//console.log("sorties vides pour entre");
+								 // console.log(sortie);
+									if(sortie[0]) {
+											for(var i = 0; i < sortie.length; i++){
+													if(sortie[i].entre == "empty") {
+															sortie[i].entre = Date.now();
+															
+															let sorti = new Date(sortie[i].sorti);
+															let entre = new Date(sortie[i].entre);
+															
+															let sortieMonth = sorti.getMonth() + 1;
+															let sortieDay = sorti.getDay() + 1;
+															let sortieYear = sorti.getFullYear();
+															let entreYear = entre.getFullYear();
+															let entreHour = entre.getHours();
+															
+															let saison = 0;
+														 
+															if(sortieYear == entreYear && entreHour < 2 || entreHour >= 5) {
+																	
+																	if (sortieMonth >= 1 && sortieMonth <= 3 || sortieMonth == 4 && sortieDay <= 15) {
+																			saison = 1
+																	} else if (sortieMonth >= 10 && sortieMonth <= 12) {
+																			saison = 2
+																	}
+																	if (saison != 0) {
+																			
+																			let sameDayPastChallenges = await STORE.sortiemgmt.getChallengeSameDay(place.id, sortieDay, sortieMonth, sortieYear);
+																			let elapsedTimeMs = Math.abs(sortie[i].sorti - sortie[i].entre);
+																			console.log("tesssss");
+																			console.log(sameDayPastChallenges.length);
+																			if(elapsedTimeMs / 60000 >= 50 && sameDayPastChallenges.length <= 1) {
+																					
+																					sortie[i].challenge = true
+																					sortie[i].year = sortieYear;
+																					sortie[i].day = sortieDay
+																					sortie[i].month = sortieMonth;
+																					sortie[i].saison = saison;
+																			}
+																	}
+															}
+															
+															let updatedSortie = await STORE.sortiemgmt.updateSortie(sortie[i]);
+															console.log(updatedSortie);
+															break;
+													}
+											}
+									}    
+							} else if(place.status == 0) {
+									place.occupation = "empty";
+									let sortie = await STORE.sortiemgmt.getSortieByPlaceIdAndEntre(place.id);
+									//console.log("sorties vides");
+								 // console.log(sortie);
+									if(!sortie[0]) {
+											console.log("test");
+										 let boat = await STORE.boatmgmt.getBoatByPlaceId(place.id);
+										 //console.log(boat);
+										 let boatId = [];
+											let userId = [];
+											if(boat[0]) {
+													for (var i = 0; i < boat.length; i++) {
+															boatId[i] = boat[i].id;
+															userId[i] = boat[i].user_id
+													}
+											}
+											let dateSortie = Date.now();
+											let sorti = new Date(dateSortie);
+											let sortieMonth = sorti.getMonth() + 1;
+													let sortieDay = sorti.getDay() + 1;
+													let sortieYear = sorti.getFullYear();
+													let saison = 0;
+															
 
-                            if (sortieMonth >= 1 && sortieMonth <= 3 || sortieMonth == 4 && sortieDay <= 15) {
-                                        saison = 1
-                                    } else if (sortieMonth >= 10 && sortieMonth <= 12) {
-                                        saison = 2
-                                    }
-                                    
-                            let sortie = await STORE.sortiemgmt.createSortie({harbour_id : place.harbour_id, place_id : place.id, boat_ids: boatId, user_ids: userId, year: sortieYear, month : sortieMonth, day: sortieDay, saion: saison, sorti : dateSortie - 100800000, entre: "empty", challenge: false});
-                            //console.log("test sortieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-                            //console.log(sortie);
-                        
-                    }
-                } else {
-                    place.occupation = "error";
-                }
-                //console.log(sortie);
-               /* if (place.captorNumber == "002115")
-                    place.nb_sorti = [];
-                */
-                let updatedPlace = await updatePlace(place);
-                if(updatedPlace[0]) {
-                    UTILS.httpUtil.dataSuccess(_req, _res, "success", updatedPlace[0]);
-                    return;
-                } else {
-                    UTILS.httpUtil.dataError(_req, _res, "Error", "Error while updating");
-                return;
-                }
-            } else {
-                    UTILS.httpUtil.dataError(_req, _res, "Error", "Device not found : " + _data.devid);
-                    return;
-            }
-        } else {
-            UTILS.httpUtil.dataError(_req, _res, "Error", "No devid");
-            return;
-        }
-    } else {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Aucune donnée reçue");
-        return;
-    }
-    res.end();
-    return;
+													if (sortieMonth >= 1 && sortieMonth <= 3 || sortieMonth == 4 && sortieDay <= 15) {
+																			saison = 1
+																	} else if (sortieMonth >= 10 && sortieMonth <= 12) {
+																			saison = 2
+																	}
+																	
+													let sortie = await STORE.sortiemgmt.createSortie({harbour_id : place.harbour_id, place_id : place.id, boat_ids: boatId, user_ids: userId, year: sortieYear, month : sortieMonth, day: sortieDay, saion: saison, sorti : dateSortie - 100800000, entre: "empty", challenge: false});
+													//console.log("test sortieeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+													//console.log(sortie);
+											
+									}
+							} else {
+									place.occupation = "error";
+							}
+							//console.log(sortie);
+						 /* if (place.captorNumber == "002115")
+									place.nb_sorti = [];
+							*/
+							let updatedPlace = await updatePlace(place);
+							if(updatedPlace[0]) {
+									UTILS.httpUtil.dataSuccess(_req, _res, "success", updatedPlace[0]);
+									return;
+							} else {
+									UTILS.httpUtil.dataError(_req, _res, "Error", "Error while updating");
+							return;
+							}
+					} else {
+									UTILS.httpUtil.dataError(_req, _res, "Error", "Device not found : " + _data.devid);
+									return;
+					}
+			} else {
+					UTILS.httpUtil.dataError(_req, _res, "Error", "No devid");
+					return;
+			}
+	} else {
+			UTILS.httpUtil.dataError(_req, _res, "Error", "Aucune donnée reçue");
+			return;
+	}
+	res.end();
+	return;
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'mapmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
 }
 
 async function captorHandler(_req, _res) {
@@ -708,9 +720,14 @@ const getPlaceByHandler = async (req, res) => {
         const places = await getPlaceWhere(where);
         res.end(JSON.stringify({ success: true, payload: places }));
     } catch (error) {
-        console.error('[ERROR]', error);
-        res.writeHead(500);
-        res.end('ERROR');
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'mapmgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
 };
 const removePlaceByHandler = async (req, res) => {
@@ -722,9 +739,14 @@ const removePlaceByHandler = async (req, res) => {
         const places = await deletePlaceWhere(where);
         res.end(JSON.stringify({ success: true, payload: places }));
     } catch (error) {
-        console.error('[ERROR]', error);
-        res.writeHead(500);
-        res.end('ERROR');
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'mapmgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
 };
 
@@ -734,9 +756,14 @@ const getZoneByHandler = async (req, res) => {
         const places = await getZoneWhere(where);
         res.end(JSON.stringify({ success: true, payload: places }));
     } catch (error) {
-        console.error('[ERROR]', error);
-        res.writeHead(500);
-        res.end('ERROR');
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'mapmgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
 };
 const deleteZoneByHandler = async (req, res) => {
@@ -748,9 +775,14 @@ const deleteZoneByHandler = async (req, res) => {
         const places = await deleteZoneWhere(where);
         res.end(JSON.stringify({ success: true, payload: places }));
     } catch (error) {
-        console.error('[ERROR]', error);
-        res.writeHead(500);
-        res.end('ERROR');
+      console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'mapmgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
 };
 /* ------------ */
@@ -842,7 +874,8 @@ exports.plugin =
     title: "Gestion des plans d'eau",
     desc: "",
     handler: async (req, res) => {
-        var admin = await getAdminById(req.userCookie.data.id);
+			try {
+				var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
@@ -1130,6 +1163,16 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
+			} catch (error) {
+				console.error('[ERROR]', error);
+				myLogger.logError(error, { module: 'mapmgmt' })
+				const errorHttpCode = error.cause?.httpCode || 500;
+				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({
+					success: false,
+					error: error.toString(),
+				}));
+			}
     }
 }
 exports.store =
