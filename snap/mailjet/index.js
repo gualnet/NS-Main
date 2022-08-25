@@ -1,4 +1,4 @@
-//"bcfc7e92566a91abaf67278f0838225f", "e23c11e01acf44a76ffeb6cfe95bc2d1"
+const myLogger = require('../lib-js/myLogger');
 
 async function sendEmail(_entityId, _toEmail, _toName, _subject, _msg) {
 	var entity = await STORE.enititymgmt.getEntityById(_entityId);
@@ -30,6 +30,7 @@ async function sendEmail(_entityId, _toEmail, _toName, _subject, _msg) {
 			})
 			.catch((err) => {
 				console.log('[MAILJET ERROR]', err);
+				
 			})
 	}
 }
@@ -64,7 +65,8 @@ async function sendHTMLEmail(_entityId, _toEmail, _toName, _subject, _msg) {
 				console.log('[MAILJET INFO]', result.body);
 			})
 			.catch((err) => {
-				console.log('[MAILJET ERROR]', err)
+				console.error('[ERROR]', error);
+				myLogger.logError(error, { module: 'mailjetmgmt' })
 			})
 	}
 }
