@@ -3,6 +3,7 @@ const FM = require('../lib-js/formatDate');
 const erpUsersServices = require('../erpUsers/services');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -182,6 +183,7 @@ async function getAbsenceHandler(req, res) {
 		const data = await getAbsenceByUserIdAndHarbourId(req.get.user_id, req.get.harbour_id);
 		UTILS.httpUtil.dataSuccess(req, res, "success", data, "1.0");
 	} catch (error) {
+		myLogger.logError(error, { module: 'absencemgmt' })
 		UTILS.httpUtil.dataError(req, res, "Error", "Aucune absence trouvé", "100", "1.0");
 	}
 }
@@ -190,7 +192,9 @@ async function getAbsenceHandler(req, res) {
 async function createAbsenceHandler(req, res) {
 	console.log('CALL createAbsenceHandler', req.post)
 	if (!verifyPostReq(req, res)) {
-		console.error('createAbsenceHandler verification nok');
+		const err = new Error('createAbsenceHandler verification nok')
+		console.error(err);
+		myLogger.logError(err, { module: 'absencemgmt' })
 		return;
 	}
 
@@ -286,6 +290,7 @@ async function updateAbsenceHandler(req, res) {
 		}));
 	} catch (error) {
 		console.log('[ERRROR]', error);
+		myLogger.logError(error, { module: 'absencemgmt' })
 		res.writeHead(500)
 		res.end(JSON.stringify({
 			success: false,
@@ -309,26 +314,12 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 
 		// validate api token
 		const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
-		console.log('>\tERP User: ', erpUsers.name);
-		console.log('>\tHarbour ID: ', harbourId);
 		if (!erpUsers) {
-			res.writeHead(403);
-			res.end(JSON.stringify({
-				code: 403,
-				message: 'Validation Failed',
-				description: 'Invalid api token.'
-			}));
-			return;
+			throw new Error('Invalide API Token', { cause: { httpCode: 401 }});
 		}
 		// verify if ERP can access to the requested port absences
 		if (!harbourId || !erpUsers.harbourIds.includes(harbourId)) {
-			res.writeHead(403);
-			res.end(JSON.stringify({
-				code: 403,
-				message: 'Validation Failed',
-				description: 'Invalid \'harbour-id\' parameter.'
-			}));
-			return;
+			throw new Error('Invalid \'harbour-id\' parameter.', { cause: { httpCode: 401 }});
 		}
 
 		// Get the absences
@@ -402,11 +393,12 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500);
+		myLogger.logError(error, { module: 'absencemgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
-			code: 500,
-			message: 'Unexpected internal server error',
-			details: '',
+			success: false,
+			error: error.toString(),
 		}));
 	}
 }
@@ -449,7 +441,8 @@ exports.plugin =
 	title: "Gestion des absences",
 	desc: "",
 	handler: async (req, res) => {
-		//get users from FORTPRESS db <
+		try {
+			//get users from FORTPRESS db <
 		var admin = await getAdminById(req.userCookie.data.id);
 		var _role = admin.role;
 		var _type = admin.data.type;
@@ -464,7 +457,6 @@ exports.plugin =
 
 		if (req.method == "GET") {
 			if (req.get.mode && req.get.mode == "delete" && req.get.absence_id) {
-				console.log("eeeeeeeeeeeeeeeeeeeeeeeee");
 				await delAbsence(req.get.absence_id);
 			}
 			else if (req.get.absence_id) {
@@ -604,6 +596,17 @@ exports.plugin =
 			res.setHeader("Content-Type", "text/html");
 			res.end(_indexHtml);
 			return;
+		}
+			
+		} catch (error) {
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'absencemgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
 		}
 	}
 }
