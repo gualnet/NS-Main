@@ -2,6 +2,7 @@ const TYPES = require('../../types');
 const TYPES_ADMIN = require('./adminmgmt.types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -261,12 +262,16 @@ async function getFPUsersSafeHandler(req, res) {
 			delete user.pw_type;
 			delete user.password;
 		})
-		console.log('FP Users', users);
 		res.end(JSON.stringify(users));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500);
-		res.end();
+		myLogger.logError(error, { module: 'adminmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 };
 
@@ -311,8 +316,13 @@ async function updateFPUsersSafeHandler(req, res) {
 		res.end(JSON.stringify(users));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500);
-		res.end();
+		myLogger.logError(error, { module: 'absencemgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 }
 
@@ -366,7 +376,8 @@ exports.plugin =
 	title: "Gestion des admins",
 	desc: "",
 	handler: async (req, res) => {
-		//get user from FORTPRESS db <
+		try {
+			//get user from FORTPRESS db <
 		var admin;
 		var _type;
 		var _entity_id;
@@ -584,5 +595,17 @@ exports.plugin =
 			res.end(_indexHtml);
 			return;
 		}
+			
+		} catch (error) {
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'adminmgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
+		}
+		
 	}
 }
