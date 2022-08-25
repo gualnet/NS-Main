@@ -2,6 +2,7 @@ const ENUM = require('../lib-js/enums');
 const TYPES = require('../../types');
 const verifyRoleAccess = require('../lib-js/verify').verifyRoleAccess;
 const fetch = require('node-fetch');
+const myLogger = require('../lib-js/myLogger')
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -567,6 +568,7 @@ const sendGoodbarberPushNotification = async (notification) => {
 		}
 	} catch (error) {
 		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'commgmt' })
 		throw error;
 	}
 };
@@ -624,11 +626,12 @@ const getCommunicationsHandler = async (req, res) => {
 		res.end(JSON.stringify(comms));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500);
+		myLogger.logError(error, { module: 'commgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
-			code: 500,
-			message: 'Unexpected internal server error',
-			details: '',
+			success: false,
+			error: error.toString(),
 		}));
 	}
 }
@@ -639,23 +642,19 @@ const updateCommunicationsHandler = async (req, res) => {
 		const commModifications = req.body
 		const commId = commModifications.id;
 		if (!commId) { // no comm id specified
-			res.writeHead(500);
-			res.end(JSON.stringify({
-				code: 500,
-				message: 'Unexpected internal server error',
-				details: '',
-			}));
+			throw(new Error('Wrong or missing comm id', { cause: { httpCode: 400 }}));
 		}
 		commModifications.updated_at = Date.now()
 		const updatedCommunication = await updateCom(commModifications)
 		res.end(JSON.stringify(updatedCommunication));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500);
+		myLogger.logError(error, { module: 'commgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
-			code: 500,
-			message: 'Unexpected internal server error',
-			details: '',
+			success: false,
+			error: error.toString(),
 		}));
 	}
 }
@@ -712,7 +711,8 @@ exports.plugin =
     title: "Gestion des communications",
     desc: "",
     handler: async (req, res) => {
-        var admin = await getAdminById(req.userCookie.data.id);
+			try {
+				var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
@@ -947,5 +947,15 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
+			} catch (error) {
+				console.error('[ERROR]', error);
+				myLogger.logError(error, { module: 'commgmt' })
+				const errorHttpCode = error.cause?.httpCode || 500;
+				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({
+					success: false,
+					error: error.toString(),
+				}));
+			}
     }
 }
