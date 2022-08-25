@@ -1,6 +1,7 @@
 
 const TYPES = require('../../types');
 const ENUMS = require('../lib-js/enums');
+const myLogger = require('../lib-js/myLogger');
 
 exports.setup = {
 	on: true,
@@ -26,13 +27,8 @@ async function getAdminById(_id) {
 
 const serveIndexPageHandler = async (req, res) => {
 	try {
-		console.log('serveIndexPageHandler');
-		console.log('req.userCookie', req.userCookie);
-
 		const adminUserId = req.userCookie.data.id;
-		console.log('adminUserId', adminUserId);
 		const adminUser = await getAdminById(adminUserId);
-		console.log('adminUser', adminUser);
 		if (!adminUser) {
 			res.writeHead(401, 'Not Authorized', { 'Content-Type': 'application/json' });
 			res.end('Not Authorized');
@@ -41,7 +37,6 @@ const serveIndexPageHandler = async (req, res) => {
 		// get harbours according to user role
 		/**@type {Array<TYPES.T_harbour>} */
 		let userHarbours = [];
-		console.log('adminUser.role', adminUser.role);
 		if (adminUser.role === 'admin') {
 			userHarbours = await STORE.API_NEXT.getElements(ENUMS.TABLES.HARBOURS, {});
 		} else if (adminUser.role === 'user') {
@@ -72,10 +67,12 @@ const serveIndexPageHandler = async (req, res) => {
 		res.end(indexHtml);
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		myLogger.logError(error, { module: 'XXXmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error: error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -103,10 +100,12 @@ const getOfferByIdHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		myLogger.logError(error, { module: 'XXXmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error: error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -130,10 +129,12 @@ const getOffersByHarbourIdHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		myLogger.logError(error, { module: 'XXXmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error: error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -185,10 +186,12 @@ const createOfferHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		myLogger.logError(error, { module: 'XXXmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error: error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -228,10 +231,12 @@ const updateOfferHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		myLogger.logError(error, { module: 'XXXmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error: error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -250,10 +255,12 @@ const deleteOfferHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		myLogger.logError(error, { module: 'XXXmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error: error,
+			error: error.toString(),
 		}));
 	}
 }
