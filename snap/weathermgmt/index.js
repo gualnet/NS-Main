@@ -1,5 +1,6 @@
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -159,129 +160,185 @@ async function getAdminById(_id) {
 }
 
 async function getWeatherFromHarbourHandler(_req, _res) {
+	try {
     var weather = await getWeatherByHarbourId(_req.param.harbour_id)
     weather = weather.sort(dynamicSort("date")).reverse();
     if (weather[0]) {
         UTILS.httpUtil.dataSuccess(_req, _res, "success", weather[0])
         return;
     }
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'weathermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		_res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
 }
 
 async function getWeatherFromLatLonHandler(_req, _res) {
-    var promise = await UTILS.httpsUtil.httpReqPromise({
-        "host": "api.worldweatheronline.com",
-        "path": "/premium/v1/marine.ashx?key=b9dacb23fd39441c90970816191507&q=" + _req.get.latitude + "," + _req.get.longitude + "&lang=fr&format=json&tp=1&tide=yes",
-        "method": "GET"
-    });
-    //_res.setHeader("Content-Type", "application/json");
-    UTILS.httpUtil.dataSuccess(_req, _res, "success", promise);
-    return;
+	try {
+		var promise = await UTILS.httpsUtil.httpReqPromise({
+			"host": "api.worldweatheronline.com",
+			"path": "/premium/v1/marine.ashx?key=b9dacb23fd39441c90970816191507&q=" + _req.get.latitude + "," + _req.get.longitude + "&lang=fr&format=json&tp=1&tide=yes",
+			"method": "GET"
+		});
+		//_res.setHeader("Content-Type", "application/json");
+		UTILS.httpUtil.dataSuccess(_req, _res, "success", promise);
+		return;
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'weathermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		_res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
 }
 
 async function getWeatherFromWeatherLinkVOneHandler(_req, _res) {
-    if (_req.get.entity_id) {
-        let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
+	try {
+		if (_req.get.entity_id) {
+			let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
 
-        console.log(entity);
-        console.log("/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token)
-        if (entity.weather_api == "wlv1") {
-            var promise = await UTILS.httpsUtil.httpReqPromise({
-                "host": "api.weatherlink.com",
-                "path": "/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token,
-                "method": "GET"
-            });
-        }
-        //_res.setHeader("Content-Type", "application/json");
-        UTILS.httpUtil.dataSuccess(_req, _res, "success", promise);
-        return;
-    }
-    res.end();
-    return;
+			console.log(entity);
+			console.log("/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token)
+			if (entity.weather_api == "wlv1") {
+					var promise = await UTILS.httpsUtil.httpReqPromise({
+							"host": "api.weatherlink.com",
+							"path": "/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token,
+							"method": "GET"
+					});
+			}
+			//_res.setHeader("Content-Type", "application/json");
+			UTILS.httpUtil.dataSuccess(_req, _res, "success", promise);
+			return;
+	}
+	_res.end();
+	return;
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'weathermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		_res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
 }
 async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
-    if (_req.get.entity_id) {
-        let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
+	try {
+		if (_req.get.entity_id) {
+			let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
 
-        console.log(entity);
-        console.log("/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token)
-        if (entity.weather_api == "wlv1") {
-            var promise = await UTILS.httpsUtil.httpReqPromise({
-                "host": "api.weatherlink.com",
-                "path": "/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token,
-                "method": "GET"
-            });
-        }
-        //_res.setHeader("Content-Type", "application/json");
-        UTILS.httpUtil.dataSuccess(_req, _res, "success", promise);
-        return;
-    }
-    res.end();
-    return;
+			console.log(entity);
+			console.log("/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token)
+			if (entity.weather_api == "wlv1") {
+					var promise = await UTILS.httpsUtil.httpReqPromise({
+							"host": "api.weatherlink.com",
+							"path": "/v1/NoaaExt.json?user=" + entity.wlink_vone_user + "&pass=" + UTILS.Crypto.decryptText(entity.wlink_vone_pw, "AJtWbggDUidBESek3fIc") + "&apiToken=" + entity.wlink_vone_token,
+							"method": "GET"
+					});
+			}
+			//_res.setHeader("Content-Type", "application/json");
+			UTILS.httpUtil.dataSuccess(_req, _res, "success", promise);
+			return;
+		}
+		_res.end();
+		return;
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'weathermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		_res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+    
 }
 async function getWeatherFromWeatherLinkVTwoHandler(_req, _res) {
-    if (_req.get.entity_id) {
-        let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
-        // console.log(entity.wlink_vtwo_secretkey);
-        let stations;
+	try {
+		if (_req.get.entity_id) {
+			let entity = await STORE.enititymgmt.getEntityById(_req.get.entity_id);
+			// console.log(entity.wlink_vtwo_secretkey);
+			let stations;
 
-        var date = Math.floor(Date.now() / 1000);
-        let message = "api-key" + entity.wlink_vtwo_apikey + "t" + date;
-        let secretkey = entity.wlink_vtwo_secretkey;
-        let api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
-        // console.log(api_signature);
-        // console.log("api-key" + entity.wlink_vtwo_apikey + "t" + date);
-        if (entity.weather_api == "wlv2") {
-            var promise = await UTILS.httpsUtil.httpReqPromise({
-                "host": "api.weatherlink.com",
-                "path": "/v2/stations?api-key=" + entity.wlink_vtwo_apikey + "&t=" + date + "&api-signature=" + api_signature,
-                "method": "GET"
-            });
-            stations = JSON.parse(promise.data);
-            stations = stations.stations;
-        }
+			var date = Math.floor(Date.now() / 1000);
+			let message = "api-key" + entity.wlink_vtwo_apikey + "t" + date;
+			let secretkey = entity.wlink_vtwo_secretkey;
+			let api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
+			// console.log(api_signature);
+			// console.log("api-key" + entity.wlink_vtwo_apikey + "t" + date);
+			if (entity.weather_api == "wlv2") {
+					var promise = await UTILS.httpsUtil.httpReqPromise({
+							"host": "api.weatherlink.com",
+							"path": "/v2/stations?api-key=" + entity.wlink_vtwo_apikey + "&t=" + date + "&api-signature=" + api_signature,
+							"method": "GET"
+					});
+					stations = JSON.parse(promise.data);
+					stations = stations.stations;
+			}
 
-        date = Math.floor(Date.now() / 1000);
-        message = "api-key" + entity.wlink_vtwo_apikey + "t" + date;
-        api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
-        let sensorsDetails;
-        if (entity.weather_api == "wlv2") {
-            var promise = await UTILS.httpsUtil.httpReqPromise({
-                "host": "api.weatherlink.com",
-                "path": "/v2/sensors?api-key=" + entity.wlink_vtwo_apikey + "&t=" + date + "&api-signature=" + api_signature,
-                "method": "GET"
-            });
-            const sensors = JSON.parse(promise.data);
-            sensorsDetails = sensors.sensors;
-        }
+			date = Math.floor(Date.now() / 1000);
+			message = "api-key" + entity.wlink_vtwo_apikey + "t" + date;
+			api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
+			let sensorsDetails;
+			if (entity.weather_api == "wlv2") {
+					var promise = await UTILS.httpsUtil.httpReqPromise({
+							"host": "api.weatherlink.com",
+							"path": "/v2/sensors?api-key=" + entity.wlink_vtwo_apikey + "&t=" + date + "&api-signature=" + api_signature,
+							"method": "GET"
+					});
+					const sensors = JSON.parse(promise.data);
+					sensorsDetails = sensors.sensors;
+			}
 
-        let weather;
-        date = Math.floor(Date.now() / 1000);
-        message = "api-key" + entity.wlink_vtwo_apikey + "station-id" + stations[0].station_id + "t" + date;
-        api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
-        console.log(api_signature);
-        console.log("api-key" + entity.wlink_vtwo_apikey + "t" + date);
-        if (entity.weather_api == "wlv2") {
-            var promise = await UTILS.httpsUtil.httpReqPromise({
-                "host": "api.weatherlink.com",
-                "path": "/v2/current/"  + stations[0].station_id +  "?api-key=" + entity.wlink_vtwo_apikey + "&t=" + date + "&api-signature=" + api_signature,
-                "method": "GET"
-            });
-            weather = JSON.parse(promise.data);
-            // Add sensor category next to sensor type
-            weather.sensors.map(sensor => {
-                sensorsDetails.map(sensorsDetails => {
-                    if (sensorsDetails.lsid === sensor.lsid) {
-                        sensor.category = sensorsDetails.category
-                    }
-                })
-            })
-        }
-        // console.log('weather current', weather);
-        UTILS.httpUtil.dataSuccess(_req, _res, "success", weather);
-        return;
-    }
-    res.end();
-    return;
+			let weather;
+			date = Math.floor(Date.now() / 1000);
+			message = "api-key" + entity.wlink_vtwo_apikey + "station-id" + stations[0].station_id + "t" + date;
+			api_signature = crypto.createHmac('SHA256', secretkey).update(message).digest('hex')//UTILS.Crypto.createSHA256(message + secretkey);
+			console.log(api_signature);
+			console.log("api-key" + entity.wlink_vtwo_apikey + "t" + date);
+			if (entity.weather_api == "wlv2") {
+					var promise = await UTILS.httpsUtil.httpReqPromise({
+							"host": "api.weatherlink.com",
+							"path": "/v2/current/"  + stations[0].station_id +  "?api-key=" + entity.wlink_vtwo_apikey + "&t=" + date + "&api-signature=" + api_signature,
+							"method": "GET"
+					});
+					weather = JSON.parse(promise.data);
+					// Add sensor category next to sensor type
+					weather.sensors.map(sensor => {
+							sensorsDetails.map(sensorsDetails => {
+									if (sensorsDetails.lsid === sensor.lsid) {
+											sensor.category = sensorsDetails.category
+									}
+							})
+					})
+			}
+			// console.log('weather current', weather);
+			UTILS.httpUtil.dataSuccess(_req, _res, "success", weather);
+			return;
+	}
+	res.end();
+	return;
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'weathermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		_res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
 }
 
 exports.handler = async (req, res) => {
@@ -320,16 +377,15 @@ exports.plugin =
     title: "Gestion de la météo",
     desc: "",
     handler: async (req, res) => {
-        var admin = await getAdminById(req.userCookie.data.id);
+			try {
+				var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
 
 				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
-					res.writeHead(401);
-					res.end('No access rights');
-					return;
+					throw(new Error('Access Denied', { cause: {httpCode: 401} }));
 				}
 
         if (req.method == "GET") {
@@ -460,6 +516,16 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
+			} catch (error) {
+				console.error('[ERROR]', error);
+				myLogger.logError(error, { module: 'weathermgmt' })
+				const errorHttpCode = error.cause?.httpCode || 500;
+				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({
+					success: false,
+					error: error.toString(),
+				}));
+			}
     }
 }
 
