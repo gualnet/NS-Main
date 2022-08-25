@@ -797,6 +797,11 @@ exports.plugin =
 		}
 		if (req.method == "POST") {
 			if (req.post.id) {
+				if (req.post.password) {
+					// handle password change
+					req.post.password = UTILS.Crypto.createSHA512(req.post.id + req.post.password);
+				}
+
 				if (typeof (await updateUser(req.post)) != "string") {
 					UTILS.httpUtil.dataSuccess(req, res, "Mail mis à jour", "1.0");
 					return;
@@ -834,6 +839,9 @@ exports.plugin =
 			}
 			else if (_role == "admin") {
 				_users = await getUser();
+				// ! DEV
+				_users = _users.slice(0,1000); // ! DEV
+				// ! DEV
 			}
 			const roleOptions = generateRoleOptions(admin.data.roleBackOffice);
 
@@ -864,6 +872,7 @@ exports.plugin =
 					.replace(/__FIRST_NAME__/g, _users[i].first_name)
 					.replace(/__LAST_NAME__/g, _users[i].last_name)
 					.replace(/__EMAIL__/g, _users[i].email)
+					.replace(/__PASSWORD__/g, '')
 					.replace(/__PHONE__/g, _users[i].prefixed_phone)
 					.replace(/__DATETIMEORDER__/g, _users[i].created_at)
 					.replace(/__DATE__/g, formatedDate)
