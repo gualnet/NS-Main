@@ -1,6 +1,8 @@
 const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
+
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -223,9 +225,14 @@ async function getIncidentsHandler(req, res) {
         const places = await getIncidentsWhere(where);
         res.end(JSON.stringify({ success: true, payload: places }));
     } catch (error) {
-        console.error('[ERROR]', error);
-        res.writeHead(500);
-        res.end('ERROR');
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'securitemgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
 };
 
@@ -241,14 +248,14 @@ async function getIncidentTypesHandler(req, res) {
             results: ENUM.incidentsTypes,
         }));
     } catch (error) {
-        console.error('[ERROR]', error);
-        res.writeHead(500);
-        res.end(JSON.stringify({
-            status: 'error',
-            error: {
-                message: 'Unexpected internal error',
-            }
-        }))
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'securitemgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
     
 };
@@ -306,7 +313,8 @@ exports.plugin =
     title: "Gestion des incidents",
     desc: "",
     handler: async (req, res) => {
-        console.log('req.userCookie',req.userCookie);
+			try {
+				console.log('req.userCookie',req.userCookie);
 
         var admin = await getAdminById(req.userCookie.data.id);
         var _role = admin.role;
@@ -462,5 +470,15 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
+			} catch (error) {
+				console.error('[ERROR]', error);
+				myLogger.logError(error, { module: 'securitemgmt' })
+				const errorHttpCode = error.cause?.httpCode || 500;
+				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({
+					success: false,
+					error: error.toString(),
+				}));
+			}
     }
 }

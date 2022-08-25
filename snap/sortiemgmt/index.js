@@ -1,6 +1,7 @@
 const ENUM = require('../lib-js/enums');
 const TYPES = require('../../types');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -274,10 +275,12 @@ async function getSortieUserHandler(req, res) {
 		}
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHead(err.code || 500, 'Error', { 'Content-Type': 'application/json' });
+		myLogger.logError(error, { module: 'sortiemgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
-			error,
+			error: error.toString(),
 		}));
 	}
 };
@@ -348,7 +351,8 @@ exports.plugin =
     title: "Gestion des sorties",
     desc: "",
     handler: async (req, res) => {
-        var admin = await getAdminById(req.userCookie.data.id);
+			try {
+				var admin = await getAdminById(req.userCookie.data.id);
         var _role = admin.role;
         var _type = admin.data.type;
         var _entity_id = admin.data.entity_id;
@@ -500,6 +504,16 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
+			} catch (error) {
+				console.error('[ERROR]', error);
+				myLogger.logError(error, { module: 'sortiemgmt' })
+				const errorHttpCode = error.cause?.httpCode || 500;
+				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({
+					success: false,
+					error: error.toString(),
+				}));
+			}
     }
 }
 exports.store =

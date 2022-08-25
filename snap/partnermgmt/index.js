@@ -1,6 +1,7 @@
 const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -451,13 +452,14 @@ const updatePartnerHandler = async (req, res) => {
 		const result = await updatePartnerWhere(harbourUpdate, whereFields);
 		res.end(JSON.stringify({ results: result }));
 	} catch (error) {
-		console.error(error);
-		res.writeHead(500);
-		res.end({
-				code: 500,
-				message: 'Internal error.',
-				description: '',
-		});
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'partnermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 }
 
@@ -525,7 +527,8 @@ exports.plugin =
 	title: "Gestion des partenaires",
 	desc: "",
 	handler: async (req, res) => {
-		var admin = await getAdminById(req.userCookie.data.id);
+		try {
+			var admin = await getAdminById(req.userCookie.data.id);
 		var _type = admin.data.type;
 		var _role = admin.role;
 		var _entity_id = admin.data.entity_id;
@@ -735,6 +738,16 @@ exports.plugin =
 			res.setHeader("Content-Type", "text/html");
 			res.end(_indexHtml);
 			return;
+		}
+		} catch (error) {
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'partnermgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
 		}
 	}
 }

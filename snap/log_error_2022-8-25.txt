@@ -1,0 +1,23 @@
+- ERROR [2022-8-25 19:14:48] [absencemgmt]
+ => [ReferenceError: c is not defined
+    at Array.getCommunicationsHandler (/Users/Dji/Repositories/FortPress/fortpress_v1.4.17_dev/project/Nauticspot/snap/commgmt/index.js:617:3)
+    at snaperEngine.code (/snapshot/fortpress/content/engine/http-snap/snaper/snaper.app.js)
+    at singleton.Launch (/snapshot/fortpress/base/builder/app.builder.js)
+    at singleton.LoopExec (/snapshot/fortpress/base/essential/srv.essential.js)
+    at Server.e (/snapshot/fortpress/base/server/http.server.js)
+    at Server.emit (node:events:527:28)
+    at parserOnIncoming (node:_http_server:956:12)
+    at HTTPParser.parserOnHeadersComplete (node:_http_common:128:17)]
+
+- ERROR [2022-8-25 19:17:19] [absencemgmt]
+ => [Error: Wrong or missing comm id
+    at Array.updateCommunicationsHandler (/Users/Dji/Repositories/FortPress/fortpress_v1.4.17_dev/project/Nauticspot/snap/commgmt/index.js:645:10)
+    at snaperEngine.code (/snapshot/fortpress/content/engine/http-snap/snaper/snaper.app.js)
+    at singleton.Launch (/snapshot/fortpress/base/builder/app.builder.js)
+    at Object.LoopExec (/snapshot/fortpress/base/essential/srv.essential.js)
+    at /snapshot/fortpress/base/essential/app.essential.js
+    at IncomingMessage.<anonymous> (/snapshot/fortpress/content/engine/http-data/data/data.app.js)
+    at IncomingMessage.emit (node:events:539:35)
+    at endReadableNT (node:internal/streams/readable:1345:12)
+    at processTicksAndRejections (node:internal/process/task_queues:83:21)]
+

@@ -1,6 +1,7 @@
 require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -235,8 +236,6 @@ const getEntityWhere = (whereOptions) => {
 };
 
 const getEntityHandler = async (req, res) => {
-	console.log('req.get', req.get)
-	console.log('req.param', req.param)
 	try {
 		/** @type {getEntityWhereOptions} */
 		const whereOpt = {};
@@ -247,26 +246,34 @@ const getEntityHandler = async (req, res) => {
 		res.end(JSON.stringify(result));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		res.writeHeader(500);
-		res.end(JSON.stringify({
-			message: error.message,
-			description: '',
-		}));
+			myLogger.logError(error, { module: 'entitymgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
 	}
 };
 
 const createEntityHandler = async (req, res) => {
 	try {
 		const entityData = req.body;
-		if (!entityData) throw new Error({ code: 400, message: 'request body error' });
+		if (!entityData) throw new Error('request body error', { cause: { httpCode: 400 } });
 
 		// TODO - check for requested fields
 
 		const result = await createEntity(entityData);
 		res.end(JSON.stringify(result));
 	} catch (error) {
-		res.writeHeader(error.code);
-		res.end(JSON.stringify({ message: error.message }));
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'entitymgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 }
 
@@ -298,9 +305,14 @@ const updateEntityHandler = async (req, res) => {
 		const result = await updateEntityWhere(req.body, whereOpt);
 		res.end(JSON.stringify(result));
 	} catch (error) {
-		console.error('ERROR', error)
-		res.writeHeader(500);
-		res.end(JSON.stringify(error));
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'entitymgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 }
 
@@ -312,8 +324,14 @@ const deleteEntityHandler = async (req, res) => {
 		const result = await delEntity(entityId);
 		res.end(JSON.stringify("ok"));
 	} catch (error) {
-		res.writeHeader(error.code);
-		res.end(JSON.stringify({ message: error.message }));
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'entitymgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 }
 
@@ -373,7 +391,8 @@ exports.plugin =
 	title: "Gestion des groupes portuaires",
 	desc: "",
 	handler: async (req, res) => {
-		var admin;
+		try {
+			var admin;
 		var _type;
 		var _entity_id;
 		var _harbour_id;
@@ -655,6 +674,17 @@ exports.plugin =
 			res.end(_indexHtml);
 			return;
 		}
+		} catch (error) {
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'entitymgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
+		}
+		
 	}
 }
 

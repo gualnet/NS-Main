@@ -1,6 +1,7 @@
 const TYPES = require('../../types');
 var _harbourCol = "harbour";
 var _userCol = "user";
+const myLogger = require('../lib-js/myLogger');
 
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -270,13 +271,14 @@ async function getHarboursHandler(req, res) {
         const ret = await getHarboursWhere(req.get);
         res.end(JSON.stringify({ results: ret }));
     } catch (error) {
-        console.error('[ERROR]', error);
-        res.writeHead(500);
-        res.end({
-            code: 500,
-            message: 'Internal error.',
-            description: '',
-        });
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'harbourmgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
 };
 
@@ -292,9 +294,14 @@ async function updateHarboursHandler(req, res) {
         const result = await updateHarbourWhere(harbourUpdate, whereFields);
         res.end(JSON.stringify({ results: result }));
     } catch (error) {
-        console.error('ERROR', error)
-        res.writeHeader(500);
-        res.end({ message: 'Internal error.' });
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'harbourmgmt' })
+			const errorHttpCode = error.cause?.httpCode || 500;
+			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: false,
+				error: error.toString(),
+			}));
     }
 }
 /* -------------------- */
@@ -356,7 +363,8 @@ exports.plugin =
     title: "Gestion des ports",
     desc: "",
     handler: async (req, res) => {
-        var admin = await getAdminById(req.userCookie.data.id);
+			try {
+				var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
@@ -611,5 +619,15 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
+			} catch (error) {
+				console.error('[ERROR]', error);
+				myLogger.logError(error, { module: 'harbourmgmt' })
+				const errorHttpCode = error.cause?.httpCode || 500;
+				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify({
+					success: false,
+					error: error.toString(),
+				}));
+			}
     }
 }
