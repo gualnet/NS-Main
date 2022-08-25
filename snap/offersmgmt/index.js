@@ -67,7 +67,7 @@ const serveIndexPageHandler = async (req, res) => {
 		res.end(indexHtml);
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'XXXmgmt' })
+		myLogger.logError(error, { module: 'offersmgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
 		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -100,7 +100,7 @@ const getOfferByIdHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'XXXmgmt' })
+		myLogger.logError(error, { module: 'offersmgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
 		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -129,7 +129,7 @@ const getOffersByHarbourIdHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'XXXmgmt' })
+		myLogger.logError(error, { module: 'offersmgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
 		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -186,7 +186,7 @@ const createOfferHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'XXXmgmt' })
+		myLogger.logError(error, { module: 'offersmgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
 		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -231,7 +231,7 @@ const updateOfferHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'XXXmgmt' })
+		myLogger.logError(error, { module: 'offersmgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
 		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -255,7 +255,7 @@ const deleteOfferHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'XXXmgmt' })
+		myLogger.logError(error, { module: 'offersmgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
 		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
