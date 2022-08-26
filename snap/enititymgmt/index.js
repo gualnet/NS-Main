@@ -391,7 +391,6 @@ exports.plugin =
 	title: "Gestion des groupes portuaires",
 	desc: "",
 	handler: async (req, res) => {
-		try {
 			var admin;
 		var _type;
 		var _entity_id;
@@ -673,16 +672,6 @@ exports.plugin =
 			res.setHeader("Content-Type", "text/html");
 			res.end(_indexHtml);
 			return;
-		}
-		} catch (error) {
-			console.error('[ERROR]', error);
-			myLogger.logError(error, { module: 'entitymgmt' })
-			const errorHttpCode = error.cause?.httpCode || 500;
-			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify({
-				success: false,
-				error: error.toString(),
-			}));
 		}
 		
 	}

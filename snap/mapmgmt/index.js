@@ -874,7 +874,6 @@ exports.plugin =
     title: "Gestion des plans d'eau",
     desc: "",
     handler: async (req, res) => {
-			try {
 				var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
         var _role = admin.role;
@@ -1163,16 +1162,6 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
-			} catch (error) {
-				console.error('[ERROR]', error);
-				myLogger.logError(error, { module: 'mapmgmt' })
-				const errorHttpCode = error.cause?.httpCode || 500;
-				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-				res.end(JSON.stringify({
-					success: false,
-					error: error.toString(),
-				}));
-			}
     }
 }
 exports.store =

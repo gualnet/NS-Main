@@ -1,0 +1,6 @@
+- ERROR [2022-8-26 9:57:12] [emplacementmgmt]
+ => [ReferenceError: c is not defined
+    at Object.handler (/Users/Dji/Repositories/FortPress/fortpress_v1.4.17_dev/project/Nauticspot/snap/emplacementmgmt/index.js:343:5)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]
+
