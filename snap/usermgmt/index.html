@@ -49,6 +49,11 @@
                             </div>
                             <div class="card-body">
                                 <div id="userError"></div>
+																<div class="row">
+																	<div class="col-4">
+																		__HARBOUR_ID_INPUT_1__
+																</div>
+																</div>
                                 <div class="table-responsive">
                                     <table class="table card-table table-vcenter text-nowrap datatable dataTable" id="datatable_0">
                                         <thead>
@@ -124,6 +129,9 @@
     </div>
     <script>
         window.onload = function () {
+					document.querySelector('#selectHarbourUser')
+						?.addEventListener('change', userHabourSelectorChangeHandler);
+
             require(['datatables', 'jquery'], function (datatable, $) {
                 $('#datatable_0').DataTable(
                     {
@@ -137,6 +145,80 @@
                     });
             });
         }
+
+				const fetchUsers = async (harbourId) => {
+					try {
+						const url = `/api/users/?harbour_id=${harbourId}`;
+						const response = await fetch(url);
+						const resJson = await response.json();
+						return(resJson.users);
+					} catch (error) {
+						console.error(error);
+						alert('ERROR 002');
+					}
+				};
+
+				const formatDate = (timestamp) => {
+					const dateObj = new Date(timestamp)
+					const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
+					const date = splited[0];
+					const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
+					formatedDate = `${date} à ${heure}`;
+					return(formatedDate);
+				}
+				const updateUserTable = (users, harbourName) => {
+					const userRowsHtml = [];
+					const roleOptions = [];
+					roleOptions.push(`<option value="VISITEUR">Visiteur</option>`);
+					roleOptions.push(`<option value="PLAISANCIER">Plaisancier</option>`);
+					roleOptions.push(`<option value="AGENT_CAPITAINERIE">Capitainerie</option>`);
+					roleOptions.push(`<option value="AGENT_ADMINISTRATEUR">Agent Sécurité</option>`);
+					roleOptions.push(`<option value="AGENT_SUPERVISEUR">Superviseur</option>`);
+					roleOptions.push(`<option value="AGENT_SUPERVISEUR">Professionnel</option>`);
+
+					users.map(user => {
+						let formatedDate = formatDate(user.created_at);
+						userRowsHtml.push(`
+							<tr>
+								<form method="POST" enctype="multipart/form-data" id="${user.id.replace(/\./g, "_")}">
+									<td><input name="id" type="hidden" value="${user.id}">${user.id}</td>
+									<td>${harbourName}</td>
+									<td><textarea name="category">${user.category}</textarea></td>
+									<td><select id="roleMobileApp" name="roleMobileApp">${roleOptions.join('')}</select></td>
+									<td><textarea name="first_name">${user.first_name}</textarea></td>
+									<td><textarea name="last_name">${user.last_name}</textarea></td>
+									<td><textarea name="email">${user.email}</textarea></td>
+									<td><textarea name="password">${user.password}</textarea></td>
+									<td>${user.prefixed_phone}</td>
+									<td data-order="${user.created_at}">${formatedDate}</td>
+									<td><textarea name="contract_number">${user.contract_number}</textarea></td>
+									<td>
+										<a href="#" onclick="if(confirm('Delete ${user.id} ?'))document.location.href='?user_id=${user.id}&mode=delete';"> <i class="fe fe-trash"></i></a>
+										<button type="button" class="btn" onclick="sendUpdateForm('${user.id.replace(/\./g, "_")}');"> <i class="fa fa-save"></i></button>
+									</td>
+								</form>
+							</tr>
+						`);
+					});
+
+					document.querySelector('#result').innerHTML = userRowsHtml.join('');
+
+				};
+
+				const userHabourSelectorChangeHandler = async (ev) => {
+					try {
+						console.log('userHabourSelectorChangeHandler');
+						console.log('target', ev.target)
+						const harbourName = ev.target.selectedOptions[0].label;
+						const selectedHarbourID = ev.target.value;
+						const users = await fetchUsers(selectedHarbourID);
+						updateUserTable(users, harbourName);
+					} catch (error) {
+						console.error(error);
+						alert('ERROR 001');
+					}
+				};
+
         function sendCreateForm() {
             var form = document.getElementById("addcsv");
             var formData = new FormData(form);

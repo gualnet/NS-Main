@@ -696,6 +696,30 @@ const autoDeleteUserAccount = async (req, res) => {
 	}
 };
 
+const getUserSecure = async (req, res) => {
+	try {
+		const userToken = req.headers.authorization;
+		const harbourId = req.get.harbour_id
+		
+		const users = await STORE.API_NEXT.getElements(ENUM.TABLES.USERS, { harbour_id: harbourId });
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: users.length,
+			users: users,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'usermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
 exports.router =
 	[
 		{
@@ -769,6 +793,12 @@ exports.router =
 			route: "/api/users/delete-my-account",
 			handler: autoDeleteUserAccount,
 			method: "DELETE",
+		},
+		{
+			on: true,
+			route: "/api/users/",
+			handler: getUserSecure,
+			method: "GET",
 		}
 	];
 
@@ -849,16 +879,16 @@ exports.plugin =
 			var _mailHtml = fs.readFileSync(path.join(__dirname, "mail.html")).toString();
 			/**@type {Array<TYPES.T_user>} */
 			var _users = [];
+			/**@type {Array<TYPES.T_harbour>} */
+			let adminAllHarbours = [];
 			if (_role == "user") {
 				for (var i = 0; i < _harbour_id.length; i++) {
 					_users = _users.concat(await STORE.API_NEXT.getElements('user', { harbour_id: _harbour_id[i]}));
 				}
 			}
 			else if (_role == "admin") {
-				_users = await getUser();
-				// ! DEV
-				_users = _users.slice(0,1000); // ! DEV
-				// ! DEV
+				adminAllHarbours = await STORE.harbourmgmt.getHarbour();
+				_users = await STORE.API_NEXT.getElements('user', { harbour_id: adminAllHarbours[0].id});
 			}
 			const roleOptions = generateRoleOptions(admin.data.roleBackOffice);
 
@@ -938,14 +968,14 @@ exports.plugin =
 				harbour_select = '<div class="col-12">'
 					+ '<div class= "form-group" >'
 					+ '<label class="form-label">Sélection du port</label>'
-					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
-				userHarbours = await STORE.harbourmgmt.getHarbour();
-				for (var i = 0; i < userHarbours.length; i++) {
-					harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
+					+ '<select class="form-control" style="width:250px;" name="harbour_id" id="selectHarbour">';
+				for (var i = 0; i < adminAllHarbours.length; i++) {
+					harbour_select += '<option value="' + adminAllHarbours[i].id + '">' + adminAllHarbours[i].name + '</option>';
 				}
 				harbour_select += '</select></div></div>';
 			}
 			_indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
+			_indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT_1__', harbour_select.replace('selectHarbour', 'selectHarbourUser'));
 
 
 			res.setHeader("Content-Type", "text/html");
