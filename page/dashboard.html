@@ -164,11 +164,11 @@
 			formData = new FormData();
 			formData.append("mode", "getEntity");
 			fetch("/admin/plugin/enititymgmt", { method: "POST", body: formData }).then(response => response.json()).then(_data => {
-				document.getElementById("entity_img").src = _data.data.logo;
-				document.getElementById("entity_name").src = _data.data.name;
-				if (_data.data.absence_module == false)
+				document.getElementById("entity_img").src = _data.data?.logo;
+				document.getElementById("entity_name").src = _data.data?.name;
+				if (_data.data?.absence_module == false)
 					document.getElementById("nav_absencemgmt").hidden = true;
-				if (_data.data.security_module == false)
+				if (_data.data?.security_module == false)
 					document.getElementById("nav_securitemgmt").hidden = true;
 
 

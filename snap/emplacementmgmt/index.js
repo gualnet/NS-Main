@@ -1,5 +1,6 @@
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const myLogger = require('../lib-js/myLogger');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -326,7 +327,6 @@ exports.plugin =
     title: "Gestion des emplacements",
     desc: "",
     handler: async (req, res) => {
-			try {
 				console.log('EMPLACEMENT HANDLER');
         var admin = await getAdminById(req.userCookie.data.id);
         var _type = admin.data.type;
@@ -339,7 +339,6 @@ exports.plugin =
 					res.end('No access rights');
 					return;
 				}
-				c
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.zone_id) {
                 await delZone(req.get.zone_id);
@@ -492,15 +491,5 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
-			} catch (error) {
-				console.error('[ERROR]', error);
-				myLogger.logError(error, { module: 'emplacementmgmt' })
-				const errorHttpCode = error.cause?.httpCode || 500;
-				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-				res.end(JSON.stringify({
-					success: false,
-					error: error.toString(),
-				}));
-			}
     }
 }

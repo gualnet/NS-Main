@@ -376,7 +376,6 @@ exports.plugin =
 	title: "Gestion des admins",
 	desc: "",
 	handler: async (req, res) => {
-		try {
 			//get user from FORTPRESS db <
 		var admin;
 		var _type;
@@ -595,17 +594,5 @@ exports.plugin =
 			res.end(_indexHtml);
 			return;
 		}
-			
-		} catch (error) {
-			console.error('[ERROR]', error);
-			myLogger.logError(error, { module: 'adminmgmt' })
-			const errorHttpCode = error.cause?.httpCode || 500;
-			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify({
-				success: false,
-				error: error.toString(),
-			}));
-		}
-		
 	}
 }
