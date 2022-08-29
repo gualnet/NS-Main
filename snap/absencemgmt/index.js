@@ -225,7 +225,16 @@ async function createAbsenceHandler(req, res) {
 							<p style="font-size: 10pt">L'équipe Nauticspot</p>
 							`;
 			//send mail
-			await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
+			if (harbour.email.includes(';')) {
+				harbour.email
+					.split(';')
+					?.map(async (mail) => {
+						await STORE.mailjet.sendHTML(harbour.id_entity, mail, harbour.name, subject, body);
+					})
+				} else {
+				await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
+
+			}
 			UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
 			return;
 		}
