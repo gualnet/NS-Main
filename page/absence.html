@@ -75,6 +75,11 @@
       <div class="modal-card-footer">
         <div class="footer-btn" id="modal-cancel-create-btn">Annuler</div>
         <div class="footer-btn" id="modal-submit-create-btn">Valider</div>
+				<div class="spinner-ctn hide" id="submitCreateSpinnerCtn">
+						<span class="spinner-grow spinner-grow-sm text-primary" role="status" aria-hidden="true"></span>
+						<span class="sr-only">Loading...</span>
+					</div>
+				</div>
       </div>
     </div>
   </div>
@@ -102,7 +107,6 @@
       </div>
     </div>
   </div>
-
 
 </body>
 
@@ -335,6 +339,18 @@
     justify-content: center;
     width: 50%;
   }
+	.modal-card .footer-btn.hide {
+		display: none;
+	}
+	.modal-card .spinner-ctn {
+		display: flex;
+		width: 50%;
+		justify-content: center;
+		align-items: center;
+	}
+	.modal-card .spinner-ctn.hide {
+		display: none;
+	}
 
   .modal-card-footer :nth-child(1) {
     border-right: 1px solid rgba(178, 178, 178, .18);
@@ -367,12 +383,20 @@
   #alertToast {
     position: absolute;
     width: 100%;
+		border-radius: 10px;
   }
 
   .toast-body {
     display: flex;
     justify-content: center;
   }
+  .toast-body.error {
+    background-color: #ba4848db;
+  }
+
+	.hide {
+		display: none;
+	}
 </style>
 
 <script>
@@ -413,9 +437,25 @@
     return (absences);
   }
 
-  const showAlertToast = async (message) => {
+	/**
+	 * type must be one of [error] 
+	 */
+  const showAlertToast = async (options) => {
+		const { message, type } = options;
+		const allowedTypes = ['error'];
+
+		if (allowedTypes.includes(type)) {
+			document.querySelector('.toast-body').classList.add('error');
+		}
+
     document.querySelector('.toast-body').innerHTML = message;
     G_bsToast.show();
+
+		if (allowedTypes.includes(type)) {
+			setTimeout(() => {
+				document.querySelector('.toast-body').classList.remove('error');
+			}, 2800);
+		}
   };
 
   const updateAbsenceList = async () => {
@@ -520,6 +560,12 @@
       const inputEndDateEL = document.getElementById('input-date-end');
       const endDate = new Date(inputEndDateEL.value).getTime();
 
+
+			const submitBtnEl = document.querySelector('#modal-submit-create-btn');
+			const submitSpinnerEl = document.querySelector('#submitCreateSpinnerCtn');
+			submitBtnEl.classList.add('hide');
+			submitSpinnerEl.classList.remove('hide');
+
       const boatData = await getBoatInfo();
 
       const newAbsenceParams = {
@@ -535,15 +581,30 @@
         method: 'POST',
         body: JSON.stringify(newAbsenceParams),
       });
+			console.log('ret', ret)
       const decodedResponse = await ret.json();
+			if (decodedResponse.success === false) {
+				showAlertToast({
+					type: 'error',
+					message: decodedResponse.message,
+				});
+			}
+			console.log('decodedResponse', decodedResponse)
       await updateAbsenceList();
+
+			submitSpinnerEl.classList.add('hide');
+			submitBtnEl.classList.remove('hide');
+
       // close modal
       const modalEl = document.getElementById('createAbsenceModal');
       modalEl.style.visibility = 'hidden';
       modalEl.style.opacity = 0;
     } catch (error) {
       console.error(error);
-      showAlertToast(' Ooops.. \nQuelque chose n\'a pas fonctionné !')
+      showAlertToast({
+				type: 'error',
+				message: 'Ooops.. \nQuelque chose n\'a pas fonctionné !',
+			});
     }
 
   };
@@ -588,7 +649,10 @@
       modalEl.style.opacity = 0;
     } catch (error) {
       console.error('[ERROR]', error);
-      showAlertToast('Sorry something wrong happened !');
+      showAlertToast({
+				type: 'error',
+				message: 'Sorry something wrong happened !',
+			});
     }
 
 
@@ -627,8 +691,9 @@
     const now = parseInt(Date.now() / 1000);
     const deltaTime = (date - now) / 3600;
     if (deltaTime < 48) { // en dessous de 48H
-      showAlertToast(`Les absences dont le départ est à moins de 48H ne sont pas modifiables.
-      Veuillez entrer en contact avec la capitainerie.`);
+      showAlertToast({
+				message: `Les absences dont le départ est à moins de 48H ne sont pas modifiables. Veuillez entrer en contact avec la capitainerie.`,
+			});
       return;
     }
 
@@ -681,7 +746,7 @@
     G_bsToast = new bootstrap.Toast(toastEl, {
       animation: true,
       autohide: true,
-      delay: 2000,
+      delay: 2500,
     });
 
     /* INITIAL DATA FETCH */
