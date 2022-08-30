@@ -42,7 +42,10 @@
 				}
 				harbourMapEl.href = mapLink;
 			} else {
-				document.getElementById("map_pdf").hidden = true;
+				const mapPdfEl = document.getElementById("map_pdf");
+				if (mapPdfEl) {
+					mapPdfEl.hidden = true;
+				}
 			}
 		}
 	}).catch((e) => console.error(e))
