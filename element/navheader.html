@@ -21,40 +21,26 @@
 				if (!navbarHeaderEl) return;
 
 				if (location.pathname.includes('index-corse')) {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/selectharbour?account=true';
-					});
+					setWindowLocationLink('selectharbour?account=true');
 				} else if (location.pathname.includes('events')) {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/index-corse';
-					});
+					setWindowLocationLink('index-corse');
 				} else if (location.pathname.includes('event')) {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/events';
-					});
+					setWindowLocationLink('events');
+				} else if (location.pathname.includes('communications')) {
+					setWindowLocationLink('index-corse');
+				} else if (location.pathname.includes('communication')) {
+					setWindowLocationLink('communications');
 				} else if (location.pathname.includes('articles')) {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/index-corse';
-					});
+					setWindowLocationLink('index-corse');
 				} else if (location.pathname.includes('actualite')) {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/articles';
-					});
+					setWindowLocationLink('articles');
 				} else if (location.pathname.includes('partner')) {
 					navbarHeaderEl.addEventListener('click', (ev) => {
 						ev.preventDefault();
 						history.back();
 					});
 				} else {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/index-corse';
-					});
+					setWindowLocationLink('/index-corse');
 				}
 			};
 
@@ -63,32 +49,30 @@
 
 				const navbarHeaderEl = document.querySelector('#navbarHeader');
 				if (location.pathname.includes('actualite')) {
-					console.log('CALL actualite');
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/articles';
-					});
+					setWindowLocationLink('/articles')
 				} else if (location.pathname.includes('events')) {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/index';
-					});
+					setWindowLocationLink('/index')
 				} else if (location.pathname.includes('event')) {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/events';
-					});
+					setWindowLocationLink('/events')
+				} else if (location.pathname.includes('notifications')) {
+					console.log('HERE notifications')
+					setWindowLocationLink('/index')
+				} else if (location.pathname.includes('notification')) {
+					setWindowLocationLink('/notifications')
 				} else if (location.pathname.includes('partner')) {
 					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
 						history.back();
 					});
 				} else {
-					navbarHeaderEl.addEventListener('click', (ev) => {
-						ev.preventDefault();
-						window.location = '/index';
-					});
+					setWindowLocationLink('/index')
 				}
+			};
+
+			const setWindowLocationLink = (targetPage) => {
+				const navbarHeaderEl = document.querySelector('#navbarHeader');
+				navbarHeaderEl.addEventListener('click', (ev) => {
+					window.location = targetPage;
+				});
 			};
 
     </script>
