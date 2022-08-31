@@ -82,10 +82,10 @@
                 }
 
                 if (notification.pj) {
-                    document.getElementById("pj").innerHTML = '<div class="border-top border-color col pt-2"><a  href="' + notification.pj + '"><i class="bi bi-paperclip" style="font-size:20px;"></i><span class="small">' + notification.pjname + '</span></a></div>'
+                    document.getElementById("pj").innerHTML = '<div class="border-top border-color col pt-2"><a target="_blank" href="' + notification.pj + '"><i class="bi bi-paperclip" style="font-size:20px;"></i><span class="small">' + notification.pjname + '</span></a></div>'
                 }
                 if (notification.link) {
-                    document.getElementById("link").innerHTML = '<div class="border-top border-color col pb-2 pt-2"><a  href="' + notification.link + '"><i class="bi bi-forward" style="font-size:20px;"></i><span class="small">' + notification.link_name + '</span></a></div>'
+                    document.getElementById("link").innerHTML = '<div class="border-top border-color col pb-2 pt-2"><a target="_blank" href="' + notification.link + '"><i class="bi bi-forward" style="font-size:20px;"></i><span class="small">' + notification.link_name + '</span></a></div>'
 
                     document.getElementById("container").innerHTML = document.getElementById("container").innerHTML.replace(/undefined/g, " ");
                 }
