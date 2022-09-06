@@ -1487,9 +1487,13 @@
 				if (!_data.success) {
 					document.getElementById("absences").hidden = true;
 					document.getElementById("challenges").hidden = true;
+					document.getElementById("securites").hidden = true;
 				}
 			}).catch((error) => {
 				console.log(error);
+				document.getElementById("absences").hidden = true;
+				document.getElementById("challenges").hidden = true;
+				document.getElementById("securites").hidden = true;
 			});
 		}
 
