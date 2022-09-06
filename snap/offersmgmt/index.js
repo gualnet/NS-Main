@@ -39,6 +39,7 @@ const serveIndexPageHandler = async (req, res) => {
 		let userHarbours = [];
 		if (adminUser.role === 'admin') {
 			userHarbours = await STORE.API_NEXT.getElements(ENUMS.TABLES.HARBOURS, {});
+			userHarbours = userHarbours.sort((a, b) => a.name > b.name ? 1 : -1);
 		} else if (adminUser.role === 'user') {
 			const userHabourIds = adminUser.data.harbour_id;
 			const promises = [];
@@ -139,12 +140,9 @@ const getOffersByHarbourIdHandler = async (req, res) => {
 	}
 };
 
+const CLOUDINARY_PATH = '/Nauticspot-Next/offers-attchements';
 const createOfferHandler = async (req, res) => {
 	try {
-		console.log('createOfferHandler');
-		// console.log('req.body', req.body);
-		// console.log('req.FIELD', req.field)
-
 		// ! AUTH WILL COME ONE DAY
 		// console.log('req.headers', req.headers);
 		// console.log('req.userCookie', req.userCookie);
@@ -156,6 +154,8 @@ const createOfferHandler = async (req, res) => {
 			date_start: req.body?.date_start || null,
 			date_end: req.body?.date_end || null,
 			img: req.body?.img || null,
+			pjName: req.body?.pjName || null,
+			pj: req.body?.pj || null,
 			harbour_id: req.body?.harbour_id || null,
 		}
 
@@ -164,6 +164,19 @@ const createOfferHandler = async (req, res) => {
 			console.log(upload);
 			newOffer.img = upload.secure_url;
 			newOffer.cloudinary_img_public_id = upload.public_id;
+		}
+
+		if (newOffer.pj) {
+			const opt = {
+				cloudinaryPath: CLOUDINARY_PATH,
+				isFileNameUsed: true,
+			};
+			if (!newOffer.pjName) newOffer.pjName = req.field["pj"].filename;
+			var upload = await STORE.cloudinary.uploadFile(newOffer.pj, newOffer.pjName, "slug", opt);;
+			newOffer.pj = upload.secure_url;
+			newOffer.cloudinary_pj_public_id = upload.public_id;
+		} else {
+			newOffer.pjName = null;
 		}
 
 		if (newOffer.description === '<p><br></p>') {
@@ -177,7 +190,7 @@ const createOfferHandler = async (req, res) => {
 			newOffer.content = newOffer.content?.replaceAll('<p>', '').replaceAll('</p>', '\n');
 		}
 
-		let offer = await STORE.API_NEXT.createElement(ENUMS.TABLES.OFFERS, newOffer);
+		const offer = await STORE.API_NEXT.createElement(ENUMS.TABLES.OFFERS, newOffer);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -198,14 +211,7 @@ const createOfferHandler = async (req, res) => {
 
 const updateOfferHandler = async (req, res) => {
 	try {
-		console.log('updateOfferHandler');
-
-		// console.log('\n========req.field=========\n', req.field);
-		// console.log('\n========req.param=========\n', req.param);
-		// console.log('\n========req.body=========\n', req.body);
 		const { offerId } = req.param
-		// console.log('offerId', offerId);
-
 		const offer = {
 			title: req.body.title || null,
 			description: req.body.description || null,
@@ -215,14 +221,28 @@ const updateOfferHandler = async (req, res) => {
 			// img: req.body.img || null,
 			updated_at: new Date().toLocaleString(),
 		}
+
+		const opt = {
+			cloudinaryPath: CLOUDINARY_PATH,
+			isFileNameUsed: true,
+		};
+
 		if (req.body.img && !req.body.img.includes('https://res.cloudinary.com')) {
-			const upload = await STORE.cloudinary.uploadFile(req.body.img, req.field["img"].filename);
-			console.log(upload);
+			const upload = await STORE.cloudinary.uploadFile(req.body.img, req.field["img"].filename, opt);
 			offer.img = upload.secure_url;
 			offer.cloudinary_img_public_id = upload.public_id;
 		}
+
+		if (req.body.pjName) {
+			offer.pjName = req.body.pjName;
+		}
+		if (req.body.pj && !req.body.pj.includes('https://res.cloudinary.com')) {
+			const upload = await STORE.cloudinary.uploadFile(req.body.pj, offer.pjName, opt);
+			offer.pj = upload.secure_url;
+			offer.cloudinary_pj_public_id = upload.public_id;
+		}
+
 		const updatedObj = await STORE.API_NEXT.updateElement(ENUMS.TABLES.OFFERS, { id: offerId }, offer);
-		console.log('updatedObj', updatedObj);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -243,11 +263,23 @@ const updateOfferHandler = async (req, res) => {
 
 const deleteOfferHandler = async (req, res) => {
 	try {
-		console.log('req.param', req.param);
 		const { offerId } = req.param;
 
-		let deletedObj = await STORE.API_NEXT.deleteElement(ENUMS.TABLES.OFFERS, { id: offerId });
+		const deletedObj = await STORE.API_NEXT.deleteElement(ENUMS.TABLES.OFFERS, { id: offerId });
 
+		const promises = [];
+		if (deletedObj[0].cloudinary_img_public_id) {
+			const filePublicId = deletedObj[0].cloudinary_img_public_id;
+			promises.push(await STORE.cloudinary.deleteFile(filePublicId));
+		}
+		if (deletedObj[0].cloudinary_pj_public_id) {
+			const filePublicId = deletedObj[0].cloudinary_pj_public_id;
+			promises.push(await STORE.cloudinary.deleteFile(filePublicId));
+		}
+		const results = await Promise.all(promises).catch(error => {
+			// catch any arror from the deletion process to avoid interupting the main process
+			myLogger.logError(error, { module: 'offersmgmt' });
+		});
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
