@@ -71,6 +71,18 @@
 												<input id="img" type="file" class="form-control" accept="image/png, image/jpg" name="img">
 											</div>
 										</div>
+										<div class="col-lg-12">
+											<div class="form-group">
+												<label class="form-label">Nom de la pièce Jointe</label>
+												<input type="text" class="form-control" name="pjName">
+											</div>
+										</div>
+										<div class="col-lg-12">
+											<div class="form-group">
+												<label class="form-label">Pièce Jointe</label>
+												<input class="form-control" type="file" name="pj">
+											</div>
+										</div>
 										<div class="col-lg-12 mb-6">
 											<div class="form-group">
 												<label class="form-label">Description(255 caractères)</label>
@@ -105,6 +117,9 @@
 												<th>Date de fin</th>
 												<th>Description</th>
 												<th>Contenu</th>
+												<th>Nom de la pièce jointe</th>
+												<th>Pièce jointe</th>
+												<th>Remplacer pièce jointe</th>
 												<th>Image</th>
 												<th>Remplacer image</th>
 												<th>Date de création</th>
@@ -243,11 +258,14 @@
 						<td><input id="row_date_start_${offer.id}" name="date_start" type="date" value="${offer.date_start}" /></td>
 						<td><input id="row_date_end_${offer.id}" name="date_end " type="date" value="${offer.date_end}" /></td>
 						<td>
-								<div class="row-description" id="row_desc_${offer.id}" style="width:400px;height:100px;">${offer.description}</div>
+							<div class="row-description" id="row_desc_${offer.id}" style="width:400px;height:100px;">${offer.description}</div>
 						</td>
 						<td>
-								<div class="row-description" id="row_content_${offer.id}" style="width:400px;height:100px;">${offer.content}</div>
+							<div class="row-description" id="row_content_${offer.id}" style="width:400px;height:100px;">${offer.content}</div>
 						</td>
+						<td><input name="pjname" value="${offer.pjName || ''}"></td>
+						<td><a target="_blank" href="${offer.pj}">${offer.pj}</a></td>
+						<td><input type="file" class="form-control" name="pj"></td>
 						<td><a target="_blank" href="${offer.img}">${offer.img}</a></td>
 						<td><input id="row_img_${offer.id}" type="file" accept="image/png, image/jpg" class="form-control" accept="image/png, image/jpg" name="img"></td>
 						<td>${offer.updated_at || offer.created_at}</td>
