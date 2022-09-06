@@ -12,6 +12,7 @@
 				document.getElementById("harbour_name").innerHTML = localStorage["harbourname"];
 				corseRules();
 				otherHarbourRules();
+				multiHarbourEntities();
 			});
 
 			const corseRules = () => {
@@ -73,6 +74,17 @@
 				navbarHeaderEl.addEventListener('click', (ev) => {
 					window.location = targetPage;
 				});
+			};
+
+			const multiHarbourEntities = () => {
+				const currentEntityId = localStorage['entity_id'];
+				const allowedEntities = ['VgZpWU_BEY'];
+
+				if (!allowedEntities.includes(currentEntityId)) return;
+
+				if (location.pathname.includes('index')) {
+					setWindowLocationLink('selectharbour?account=false');
+				}
 			};
 
     </script>
