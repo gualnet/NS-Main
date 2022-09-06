@@ -39,6 +39,7 @@ const serveIndexPageHandler = async (req, res) => {
 		let userHarbours = [];
 		if (adminUser.role === 'admin') {
 			userHarbours = await STORE.API_NEXT.getElements(ENUMS.TABLES.HARBOURS, {});
+			userHarbours = userHarbours.sort((a, b) => a.name > b.name ? 1 : -1);
 		} else if (adminUser.role === 'user') {
 			const userHabourIds = adminUser.data.harbour_id;
 			const promises = [];
