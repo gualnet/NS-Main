@@ -370,6 +370,7 @@ async function getUserInfos(_req, _res) {
 }
 
 async function loginHandler(req, res) {
+	console.log('===== loginHandler =====');
 	var user = await findByColl({ "email": req.post.email });
 
 	if (user[0]) {
@@ -407,6 +408,7 @@ async function userSessionHandler(_req, _res) {
 }
 
 async function updateUserHandler(_req, _res) {
+	console.log('===== updateUserHandler =====');
 	console.log(_req.post);
 	if (_req.post.prefix) {
 		_req.post.prefix = completePhonePrefix(_req.post.prefix);
@@ -784,8 +786,10 @@ exports.plugin =
 	title: "Gestion des utilisateurs",
 	desc: "",
 	handler: async (req, res) => {
-		try {
-			var admin = await getAdminById(req.userCookie.data.id);
+		console.log('==== usermgmt handler ====')
+		console.log('req.get', req.get)
+		console.log('req.post', req.post)
+		var admin = await getAdminById(req.userCookie.data.id);
 		var _type = admin.data.type;
 		var _role = admin.role;
 		var _entity_id = admin.data.entity_id;
@@ -823,12 +827,12 @@ exports.plugin =
 					UTILS.httpUtil.dataSuccess(req, res, "Mail mis à jour", "1.0");
 					return;
 				}
-			} else if (req.post.type = 'mail') {
+			} else if (req.post.type === 'mail') {
 				if (_type == 'harbour_manager') {
 					req.post.harbour_id = _harbour_id;
 				}
 
-				var mailsArray = req.post.csvmails.replace(/\n/g, '').split('\r');
+				var mailsArray = req.post.csvmails?.replace(/\n/g, '')?.split('\r');
 				console.log(mailsArray);
 				var mailsJson = {};
 				for (var i = 1; i < mailsArray.length; i++) {
@@ -951,16 +955,6 @@ exports.plugin =
 			res.setHeader("Content-Type", "text/html");
 			res.end(_indexHtml);
 			return;
-		}
-		} catch (error) {
-			console.error('[ERROR]', error);
-			myLogger.logError(error, { module: 'usermgmt' })
-			const errorHttpCode = error.cause?.httpCode || 500;
-			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify({
-				success: false,
-				error: error.toString(),
-			}));
 		}
 	}
 }
