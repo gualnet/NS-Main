@@ -1108,6 +1108,8 @@
 		const weatherButtonOnClickHandler = () => {
 			if (localStorage["entity_id"] === 'ElzMVUL9DK') { // Cavalaire
 				window.open('https://meteo-varoise.fr/cavalaire/meteo-heraclea.pdf', { target: '_blank' });
+			} else if (localStorage["entity_id"] === 'HlBlYBI3nUj') { // Beaulieu
+				window.open('https://marine.meteoconsult.fr/meteo-marine/bulletin-detaille/port-26/previsions-meteo-beaulieu-sur-mer-aujourdhui', { target: '_blank' });
 			} else {
 				window.location.href = ('/weather');
 			}
