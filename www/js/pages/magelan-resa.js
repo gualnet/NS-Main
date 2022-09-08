@@ -26,13 +26,16 @@ window.addEventListener('load', () => {
 	listResaBtnEl.addEventListener('click', formSelectorHandler)
 
 	const arriveeBtnEl = document.querySelector('#arriveeBtn');
-	arriveeBtnEl.addEventListener('click', arriveeBtnClickHandler);	
-	
+	arriveeBtnEl.addEventListener('click', arriveeBtnClickHandler);
+
 	const boatEditBtnEl = document.querySelector('#boatEditBtn');
 	boatEditBtnEl.addEventListener('click', boatEditOnClickHandler);
 
 	const departBtnEl = document.querySelector('#departBtn');
 	departBtnEl.addEventListener('click', departBtnClickHandler);
+
+	const priceInfoBtnEl = document.querySelector('#priceInfoBtnLabel');
+	priceInfoBtnEl.addEventListener('click', priceInfoBtnLabelOnCLickHandler);
 
 	displayBoatData();
 	initJqueryElements();
@@ -61,7 +64,7 @@ const reservationClickHandler = async (ev) => {
 	resaOptions.login = localStorage['magelanLogin'];
 	resaOptions.token = localStorage['magelanToken'];
 	resaOptions.boatId = await getSelectedBoatId();
-	
+
 	requestAddReservation(resaOptions)
 };
 
@@ -140,11 +143,20 @@ const boatCloseModalBtnOnClickHandler = (ev) => {
 const boatEditRowOnClickHandler = async (index) => {
 	G_selectedBoat = index;
 	const selectedBoat = G_boatList[G_selectedBoat];
-	
+
 	document.querySelector('#boatEditModal').style.display = 'none';
 	setFormBoatLongueur(selectedBoat.bateau_longueur)
 	setFormBoatLargeur(selectedBoat.bateau_largeur)
 	await updateTotalPrice();
+};
+
+const priceInfoBtnLabelOnCLickHandler = (ev) => {
+	const priceInfoBtnLabelEl = ev.target;
+	const priceInfoMsgEl = document.querySelector('#priceInfoMsg');
+	priceInfoMsgEl.classList.remove('hide');
+	setTimeout(() => {
+		priceInfoMsgEl.classList.add('hide');
+	}, 4000);
 };
 
 // ********************
@@ -162,10 +174,10 @@ const getFormHarbourId = () => {
 	if (selectedOption.value === '') {
 		console.error('No Harbour Selected')
 		harbourSelect.classList.add('error');
-		throw(new Error('Veuillez choisir un port'))
+		throw (new Error('Veuillez choisir un port'))
 	}
 	const harbourId = selectedOption.value;
-	return(harbourId);
+	return (harbourId);
 };
 
 const getFormArrivalDate = () => {
@@ -175,13 +187,13 @@ const getFormArrivalDate = () => {
 	if (arrivalDate === '') {
 		console.error('No Arrival Date Selected')
 		arrivalDateEl.classList.add('error');
-		throw(new Error('Veuillez choisir une date d\'arrivée'));
+		throw (new Error('Veuillez choisir une date d\'arrivée'));
 	}
 	const DD = arrivalDate.split('/')[0];
 	const MM = arrivalDate.split('/')[1];
 	const YY = arrivalDate.split('/')[2];
 	const arrivalDateFromated = `${YY}${MM}${DD}`;
-	return(arrivalDateFromated)
+	return (arrivalDateFromated)
 };
 
 const getFormDepartureDate = () => {
@@ -192,13 +204,13 @@ const getFormDepartureDate = () => {
 	if (departureDate === '') {
 		console.error('No Departure Date Selected')
 		departureDateEl.classList.add('error');
-		throw(new Error('Veuillez choisir une date de départ'));
+		throw (new Error('Veuillez choisir une date de départ'));
 	}
 	const DD = departureDate.split('/')[0];
 	const MM = departureDate.split('/')[1];
 	const YY = departureDate.split('/')[2];
 	const departureDateFromated = `${YY}${MM}${DD}`;
-	return(departureDateFromated)
+	return (departureDateFromated)
 };
 
 const getFormBoatLongueur = () => {
@@ -207,9 +219,9 @@ const getFormBoatLongueur = () => {
 	if (!longueur || longueur === '') {
 		console.error('Empty longueur value')
 		harbourSelect.classList.add('error');
-		throw(new Error('Veuillez specifier la longueur du bateau'));
+		throw (new Error('Veuillez specifier la longueur du bateau'));
 	}
-	return(longueur)
+	return (longueur)
 };
 const setFormBoatLongueur = (value) => {
 	if (!value || value === '') {
@@ -225,9 +237,9 @@ const getFormBoatLargeur = () => {
 	if (!largeur || largeur === '') {
 		console.error('Empty largeur value')
 		harbourSelect.classList.add('error');
-		throw(new Error('Veuillez specifier la largeur du bateau'));
+		throw (new Error('Veuillez specifier la largeur du bateau'));
 	}
-	return(largeur)
+	return (largeur)
 };
 const setFormBoatLargeur = (value) => {
 	if (!value || value === '') {
@@ -241,19 +253,19 @@ const getFormBoatType = () => {
 	const VoilierEl = document.querySelector('#boatTypeVoilierBtn');
 	if (VoilierEl.classList.contains('active')) {
 		const type = VoilierEl.innerText;
-		return(type);
+		return (type);
 	}
 	const MonocoqueEl = document.querySelector('#boatTypeMonocoqueBtn');
 	if (MonocoqueEl.classList.contains('active')) {
 		const type = MonocoqueEl.innerText;
-		return(type);
+		return (type);
 	}
 };
 
 const getFormComments = () => {
 	const commentsAreaEl = document.querySelector('#commentsArea');
 	const comments = commentsAreaEl.value;
-	return(comments);
+	return (comments);
 };
 
 // ********
@@ -279,17 +291,17 @@ const initJqueryElements = () => {
 			updateNightsCounter();
 			updateTotalPrice();
 		});
-		to = $("#input-date-end")
-			.datepicker({
-				defaultDate: '+1D',
-				dateFormat: 'dd/mm/yy',
-			})
-			.on('change', () => {
-				// console.log('from', from)
-				// console.log('to', to)
-				updateNightsCounter();
-				updateTotalPrice();
-			});
+	to = $("#input-date-end")
+		.datepicker({
+			defaultDate: '+1D',
+			dateFormat: 'dd/mm/yy',
+		})
+		.on('change', () => {
+			// console.log('from', from)
+			// console.log('to', to)
+			updateNightsCounter();
+			updateTotalPrice();
+		});
 };
 
 /**
@@ -315,7 +327,7 @@ const updateNightsCounter = () => {
 	DD = dateEnd.slice(6, 8);
 	const end = new Date(`${MM}/${DD}/${YY}`);
 	const delta = end - start;
-	const days = delta / (60*60*24*1000);
+	const days = delta / (60 * 60 * 24 * 1000);
 	const nightsCountEl = document.querySelector('#input-night-count');
 	nightsCountEl.value = days;
 };
@@ -369,17 +381,17 @@ const getUserReservationList = async () => {
 		const htmlRowOld = [];
 		Object.values(reservations).map(reservation => {
 			const harbourName = reservation.resa_port_ville;
-				const yyStart = reservation.resa_date_debut.slice(2, 4);
-				const mmStart = reservation.resa_date_debut.slice(4, 6);
-				const ddStart = reservation.resa_date_debut.slice(6, 8);
-				const yyEnd = reservation.resa_date_fin.slice(2, 4);
-				const mmEnd = reservation.resa_date_fin.slice(4, 6);
-				const ddEnd = reservation.resa_date_fin.slice(6, 8);
-	
-				const startDate = `${ddStart}/${mmStart}/${yyStart}`;
-				const endDate = `${ddEnd}/${mmEnd}/${yyEnd}`;
-				const status = reservation.resa_status;
-				const statusColor = reservation.resa_status_couleur;
+			const yyStart = reservation.resa_date_debut.slice(2, 4);
+			const mmStart = reservation.resa_date_debut.slice(4, 6);
+			const ddStart = reservation.resa_date_debut.slice(6, 8);
+			const yyEnd = reservation.resa_date_fin.slice(2, 4);
+			const mmEnd = reservation.resa_date_fin.slice(4, 6);
+			const ddEnd = reservation.resa_date_fin.slice(6, 8);
+
+			const startDate = `${ddStart}/${mmStart}/${yyStart}`;
+			const endDate = `${ddEnd}/${mmEnd}/${yyEnd}`;
+			const status = reservation.resa_status;
+			const statusColor = reservation.resa_status_couleur;
 			if (reservation.resa_date_fin > today) {
 				htmlRow.push(`
 					<div class="resa-card">
@@ -410,7 +422,7 @@ const getUserReservationList = async () => {
 			}
 		})
 
-		
+
 		const resaNewSectionTitleCtnEl = document.querySelector('#resaNewSectionTitleCtn');
 		const resaOldSectionTitleCtnEl = document.querySelector('#resaOldSectionTitleCtn');
 		const resaOldListCtnEl = document.querySelector('#resaOldListCtn');
@@ -467,7 +479,7 @@ const fetchUserBoatList = async () => {
 
 		const boats = respJson.data;
 		const boatsArr = Object.values(boats);
-		return(boatsArr);
+		return (boatsArr);
 	} catch (error) {
 		console.error('Error', error);
 		alert(error);
@@ -479,7 +491,7 @@ const requestAddReservation = async (options) => {
 		const startDate = options.startDate.replaceAll('-', '');
 		const endDate = options.endDate.replaceAll('-', '');
 		const url = `/api/eresa/add-reservation/?boatId=${options.boatId}&portId=${options.harbourId}&startDate=${startDate}&endDate=${endDate}&comments="${options.comments}"&login=${options.login}&token=${options.token}`;
-		console.log('===>url',url)
+		console.log('===>url', url)
 
 		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
 		const reservationBtnEl = document.querySelector('#reservationBtn');
@@ -528,5 +540,5 @@ const getSelectedBoatId = async () => {
 		selectedBoat = G_boatList[G_selectedBoat];
 	}
 	const selectedBoatId = selectedBoat.bateau_id;
-	return(selectedBoatId);
+	return (selectedBoatId);
 };

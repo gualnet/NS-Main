@@ -278,6 +278,35 @@ body {
 	display: none;
 }
 
+.stay-details-ctn .popover-label {
+	background-color: rgb(194, 194, 194);
+	height: 1.5em;
+	width: 1.5em;
+	border-radius: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	margin-right: 1em;
+}
+.stay-details-ctn .popover-message {
+	box-sizing: border-box;
+	position: absolute;
+	top: 5rem;
+	left: 20px;
+	width: calc(100% - 40px);
+	display: block;
+	border: 1px solid rgb(228, 228, 228);
+	background-color: rgb(240, 240, 240);
+	padding: 1rem 2rem;
+	border-radius: 1em;
+	text-align: justify;
+}
+.stay-details-ctn .popover-message.hide {
+	display: none;
+}
+
+
 
 .text-area-ctn {
 	margin-bottom: 1em;
