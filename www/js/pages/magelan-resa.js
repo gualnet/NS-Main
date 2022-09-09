@@ -2,8 +2,6 @@ let G_boatList = []; // keep the fetched boat list
 let G_selectedBoat; // keep the selected boat object id within G_boatList like G_boatList[G_selectedBoat] = boat object
 
 window.addEventListener('load', () => {
-	console.log('EVENT LOAD');
-
 	const reservationBtnEl = document.querySelector('#reservationBtn');
 	reservationBtnEl.addEventListener('click', reservationClickHandler);
 
@@ -15,10 +13,10 @@ window.addEventListener('load', () => {
 	const MonocoqueEl = document.querySelector('#boatTypeMonocoqueBtn');
 	MonocoqueEl.addEventListener('click', boatTypeBtnClickHandler);
 
-	const arrivalDateEl = document.querySelector('#input-date-start');
-	arrivalDateEl.addEventListener('change', dateChangeHandler);
-	const departureDateEl = document.querySelector('#input-date-end');
-	departureDateEl.addEventListener('change', dateChangeHandler);
+	// const arrivalDateEl = document.querySelector('#input-date-start');
+	// arrivalDateEl.addEventListener('change', dateChangeHandler);
+	// const departureDateEl = document.querySelector('#input-date-end');
+	// departureDateEl.addEventListener('change', dateChangeHandler);
 
 	const newResaBtnEl = document.querySelector('#newResaBtn');
 	newResaBtnEl.addEventListener('click', formSelectorHandler)
@@ -36,9 +34,13 @@ window.addEventListener('load', () => {
 
 	const priceInfoBtnEl = document.querySelector('#priceInfoBtnLabel');
 	priceInfoBtnEl.addEventListener('click', priceInfoBtnLabelOnCLickHandler);
+	
+	const cgvCheckboxEl = document.querySelector('#cgvCheckbox');
+	cgvCheckboxEl.addEventListener('click', cgvCheckboxOnChangeHandler);
 
 	displayBoatData();
 	initJqueryElements();
+	updateResaBtnStatus() // ! DEV
 });
 
 
@@ -65,13 +67,14 @@ const reservationClickHandler = async (ev) => {
 	resaOptions.token = localStorage['magelanToken'];
 	resaOptions.boatId = await getSelectedBoatId();
 
-	requestAddReservation(resaOptions)
+	requestAddReservation(resaOptions);
 };
 
 const harbourSelectChangeHandler = () => {
 	const harbourSelect = document.querySelector('#harbourSelect');
 	harbourSelect.classList.remove('error');
 	updateTotalPrice();
+	updateResaBtnStatus();
 };
 
 /**
@@ -90,20 +93,22 @@ const boatTypeBtnClickHandler = (ev) => {
 	}
 	const type = target.innerText;
 	updateTotalPrice();
+	updateResaBtnStatus();
 	return;
 };
 
-const dateChangeHandler = (ev) => {
-	console.log('dateChangeHandler');
-	const arrivalDateEl = document.querySelector('#input-date-start');
-	const arrivalDate = arrivalDateEl.value;
-	const departureDateEl = document.querySelector('#input-date-end');
-	const departureDate = departureDateEl.value;
+// const dateChangeHandler = async (ev) => {
+// 	console.log('============================dateChangeHandler');
+// 	const arrivalDateEl = document.querySelector('#input-date-start');
+// 	const arrivalDate = arrivalDateEl.value;
+// 	const departureDateEl = document.querySelector('#input-date-end');
+// 	const departureDate = departureDateEl.value;
 
 
-	updateNightsCounter();
-	updateTotalPrice();
-};
+// 	updateNightsCounter();
+// 	await updateTotalPrice();
+// 	updateResaBtnStatus();
+// };
 
 const formSelectorHandler = (ev) => {
 	const formContentNewEl = document.querySelector('#formNewResa');
@@ -148,6 +153,7 @@ const boatEditRowOnClickHandler = async (index) => {
 	setFormBoatLongueur(selectedBoat.bateau_longueur)
 	setFormBoatLargeur(selectedBoat.bateau_largeur)
 	await updateTotalPrice();
+	updateResaBtnStatus();
 };
 
 const priceInfoBtnLabelOnCLickHandler = (ev) => {
@@ -158,6 +164,14 @@ const priceInfoBtnLabelOnCLickHandler = (ev) => {
 		priceInfoMsgEl.classList.add('hide');
 	}, 4000);
 };
+
+const cgvCheckboxOnChangeHandler = (ev) => {
+	console.log('=======cgvCheckboxOnChangeHandler=======');
+	// /**@type {HTMLInputElement} */
+	// const target = ev.target
+	// console.log('value', target.checked);
+	updateResaBtnStatus();
+}
 
 // ********************
 // FORM GETTERS SETTERS
@@ -268,6 +282,16 @@ const getFormComments = () => {
 	return (comments);
 };
 
+const getCgvConsentStatus = () => {
+	console.log('=========getCgvConsentStatus==========');
+	const cgvCheckboxEl = document.querySelector('#cgvCheckbox');
+	console.log('cgvCheckboxEl', cgvCheckboxEl);
+	const isChecked = cgvCheckboxEl.checked;
+	console.log('isChecked', isChecked);
+	if (!isChecked) throw new Error('CGV not accepted');
+	return(isChecked);
+};
+
 // ********
 // SERVICES
 // ********
@@ -290,6 +314,7 @@ const initJqueryElements = () => {
 			to.datepicker('option', 'minDate', newDate);
 			updateNightsCounter();
 			updateTotalPrice();
+			updateResaBtnStatus();
 		});
 	to = $("#input-date-end")
 		.datepicker({
@@ -301,6 +326,7 @@ const initJqueryElements = () => {
 			// console.log('to', to)
 			updateNightsCounter();
 			updateTotalPrice();
+			updateResaBtnStatus();
 		});
 };
 
@@ -356,14 +382,46 @@ const updateTotalPrice = async () => {
 		document.querySelector('#priceSpinnerCtn').classList.add('hide');
 		document.querySelector('#input-price-count').classList.remove('hide');
 
-		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
-		actionBtnCtnEl.classList.remove('disabled');
+		// const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+		// actionBtnCtnEl.classList.remove('disabled');
 		updateNightsCounter();
 	} catch (error) {
 		console.error('ERROR', error);
 		// alert(error);
 	}
 };
+
+const updateResaBtnStatus = () => {
+	console.log('=====updateResaBtnStatus=====')
+	try {
+		const harbourId = getFormHarbourId();
+		console.log('harbourId', harbourId);
+		const startDate = getFormArrivalDate();
+		console.log('startDate', startDate);
+		const endDate = getFormDepartureDate();
+		console.log('endDate', endDate);
+		const longueur = getFormBoatLongueur();
+		console.log('longueur', longueur);
+		const largeur = getFormBoatLargeur();
+		console.log('largeur', largeur);
+		const boatType = getFormBoatType();
+		console.log('boatType', boatType);
+		const comments = getFormComments();
+		console.log('comments', comments);
+		const isCgvChecked = getCgvConsentStatus();
+		console.log('isCgvChecked', isCgvChecked);
+
+
+		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+		actionBtnCtnEl.classList.remove('disabled');
+	} catch (error) {
+		console.warn(error);
+	}
+	
+
+
+	
+}
 
 const getUserReservationList = async () => {
 	try {

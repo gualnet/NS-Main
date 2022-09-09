@@ -111,6 +111,10 @@
 					</div>
 					<textarea id="commentsArea" name="comment" cols="40" rows="5" placeholder="Laissez un message à l’attention de la capitainerie."></textarea>
 				</div>
+				<div>
+					<input class="form-check-input" id="cgvCheckbox" type="checkbox">
+					<label>J'accepte les <a target="_blank" href="https://www.resaportcorse.com/media/cgv_FR.pdf">conditions générales de vente</a></label>
+				</div>
 				<div class="action-button-ctn disabled">
 					<div class="main-button" id="reservationBtn">
 						Réserver avec Magelan eResa
@@ -154,9 +158,9 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">Choisissez votre bateau</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bemCloseBtn" onclick="boatCloseModalBtnOnClickHandler()">
-							<span aria-hidden="true">&times;</span>
-						</button>
+						<div id="bemCloseBtn" class="close" data-dismiss="modal" aria-label="Close" onclick="boatCloseModalBtnOnClickHandler()">
+							<button type="button" class="btn-close" aria-label="Close"></button>
+						</div>
 					</div>
 					<div class="modal-body" id="bemBodyCtn">
 						<!-- boat rows -->
