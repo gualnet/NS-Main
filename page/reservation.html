@@ -204,7 +204,7 @@
         let ifr = document.getElementById("navily-resaweb-0").childNodes[0];
         let content = ifr.contentWindow.document;
         var formData = new FormData();
-        formData.append("token", localStorage["token"])
+        formData.append("userId", localStorage["user"]);
         fetch("/api/getuser", { method: "post", body: formData }).then(response => response.json()).then(_data => {
             console.log(_data);
             if (_data.success) {
