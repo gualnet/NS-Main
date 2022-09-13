@@ -355,18 +355,44 @@ async function addUserHandler(req, res) {
 }
 
 async function getUserInfos(_req, _res) {
-	if (_req.post.token) {
-		var user = await findByColl({ "token": _req.post.token })
-		if (user[0]) {
-			delete user[0].password;
-			delete user[0].resetPwdToken;
-			UTILS.httpUtil.dataSuccess(_req, _res, "User", user[0], "1.0");
-			return;
-		} else {
-			UTILS.httpUtil.dataError(_req, _res, "User not found", null, "1.0");
-			return;
+	try {
+		if (_req.post.userId) {
+			/**@type {Array<TYPES.T_user>} */
+			const user = await STORE.API_NEXT.getElements(ENUM.TABLES.USERS, { id: _req.post.userId });
+			console.log('user', user);
+			if (user[0]) {
+				delete user[0].password;
+				delete user[0].resetPwdToken;
+				UTILS.httpUtil.dataSuccess(_req, _res, "User", user[0], "1.0");
+				return;
+			} else {
+				throw new Error('No user found');
+			}
 		}
+
+		if (_req.post.token) { // do not use since database synch is 💩
+			var user = await findByColl({ "token": _req.post.token })
+			if (user[0]) {
+				delete user[0].password;
+				delete user[0].resetPwdToken;
+				UTILS.httpUtil.dataSuccess(_req, _res, "User", user[0], "1.0");
+				return;
+			} else {
+				UTILS.httpUtil.dataError(_req, _res, "User not found", null, "1.0");
+				return;
+			}
+		}
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'usermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		_res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
+	
 }
 
 async function loginHandler(req, res) {
