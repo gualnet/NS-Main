@@ -1,7 +1,7 @@
+const myLogger = require('../lib-js/myLogger');
 const TYPES = require('../../types');
 var _harbourCol = "harbour";
 var _userCol = "user";
-const myLogger = require('../lib-js/myLogger');
 
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
