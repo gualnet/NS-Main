@@ -610,6 +610,7 @@ exports.plugin =
                     .replace(/__PJ_NAME__/g, _harbours[i].pj_name)
                     .replace(/__EMAIL_CONCIERGE__/g, _harbours[i].email_concierge)
                     .replace(/__EMAIL_INCIDENT__/g, _harbours[i].email_incident)
+                    .replace(/__EMAIL_ABSENCE__/g, _harbours[i].email_absence)
                     .replace(/__NAVILY_ID__/g, _harbours[i].navily_id)
                     .replace(/__DATE_CREATION__/g, formatedDate)
             }
