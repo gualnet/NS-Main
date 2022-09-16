@@ -90,6 +90,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} email
  * @property {string} email_concierge
  * @property {string} email_incident
+ * @property {string} email_absence - list of email address separated by ";"
  * @property {string} erp_link
  * @property {string} fuel
  * @property {string} google_map_link

@@ -206,6 +206,7 @@ async function createAbsenceHandler(req, res) {
 	newAbsence.created_at = Date.now();
 	newAbsence.updated_at = newAbsence.created_at;
 
+	/**@type {TYPES.T_harbour} */
 	var harbour = await STORE.harbourmgmt.getHarbourById(req.post.harbour_id);
 
 	if (harbour) {
@@ -218,22 +219,22 @@ async function createAbsenceHandler(req, res) {
 			//prepare mail
 			var subject = "Declaration d'absence";
 			var body = `
-							<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
-							<h1>Bonjour</h1>
-							<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} place n°${place.number} a déclaré une absence du ${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}.</p>
-							<p style="font-size: 10pt">À bientôt,</p>
-							<p style="font-size: 10pt">L'équipe Nauticspot</p>
-							`;
+				<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
+				<h1>Bonjour</h1>
+				<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} place n°${place.number} a déclaré une absence du ${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}.</p>
+				<p style="font-size: 10pt">À bientôt,</p>
+				<p style="font-size: 10pt">L'équipe Nauticspot</p>
+			`;
 			//send mail
-			if (harbour.email.includes(';')) {
-				harbour.email
+			const emailAddress = harbour.email_absence || harbour.email;
+			if (emailAddress.includes(';')) {
+				emailAddress
 					.split(';')
 					?.map(async (mail) => {
 						await STORE.mailjet.sendHTML(harbour.id_entity, mail, harbour.name, subject, body);
 					})
-				} else {
-				await STORE.mailjet.sendHTML(harbour.id_entity, harbour.email, harbour.name, subject, body);
-
+			} else {
+				await STORE.mailjet.sendHTML(harbour.id_entity, emailAddress, harbour.name, subject, body);
 			}
 			UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
 			return;
