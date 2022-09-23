@@ -1156,6 +1156,41 @@
 			}
 		}
 
+		const fetchEntityData = async () => {
+			const url = `/api/entity/get/${localStorage["entity_id"]}`;
+			const resp = await fetch(url, { method: 'GET' });
+			const respJson = await resp.json();
+			const entity = respJson.data;
+			return(entity);
+		};
+		const fetchHarbourData = async () => {
+			const url = `/api/getharbour/${localStorage["harbour_id"]}`;
+			const resp = await fetch(url, { method: 'GET' });
+			const respJson = await resp.json();
+			const harbour = respJson.data;
+			return(harbour);
+		}
+		const fetchBoatData = async () => {
+			const url = `/api/get/userboats?user_id=${localStorage["user"]}&harbour_id=${localStorage["harbour_id"]}`;
+			const resp = await fetch(url, { method: 'GET' });
+			const respJson = await resp.json();
+			const boat = respJson.data[0];
+			return(boat);
+		};
+		const fetchUserData = async () => {
+			const url = `/api/getuser`;
+			const resp = await fetch(url, {
+				method: 'POST',
+				body: JSON.stringify({
+					// token: localStorage['token'],
+					userId: localStorage['user'],
+				}),
+			});
+			const respJson = await resp.json();
+			const user = respJson.data;
+			return(user);
+		};
+
 		fetch("/api/entity/get/" + localStorage["entity_id"], { method: "get" }).then(response => response.json()).then(_data => {
 			let weather_api = "wwo";
 			let entity = _data.data;
