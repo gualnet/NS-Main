@@ -57,6 +57,7 @@
 						<input id="passwordCheckInput" name="password_confirm" type="password" class="form-control floating-input" required>
 						<label class="floating-label" style="color: #446E7B">Confirmer mot de passe</label>
 					</div>
+					<!-- NOT DISPLAYED -->
 					<div class="form-group floating-form-group" style="display: none;">
 						<label class="text-muted" for="category-select" style="color: #446E7B">Quelle est votre catégorie:</label>
 						<select name="category" class="form-control" id="category-select" style="color: #446E7B">
@@ -65,7 +66,7 @@
 							<!--<option value="visitor">Visiteur</option>-->
 						</select>
 					</div>
-
+					<!-- NOT DISPLAYED -->
 					<div class="form-group floating-form-group" style="display: none;">
 						<label class="text-muted" for="harbour_id" style="color: #446E7B" style="color: #446E7B">Votre port de
 							plaisance:</label>
@@ -227,7 +228,6 @@
 
 			constructCguLink();
 			getPonton();
-			getPlaces();
 		});
 
 		document.querySelector('#ponton-select')
@@ -366,13 +366,12 @@
 				.then(_data => {
 					const pontons = _data?.data?.sort(dynamicSort("name"));
 					if (!pontons) {
-							document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
+							document.getElementById('place-select').innerHTML = '<option value="Not Attributed">Aucun</option>';
 							return;
 						}
-					document.getElementById('ponton-select').innerHTML = "";
+						document.getElementById('ponton-select').innerHTML = '<option value="Not Attributed">Aucun</option>';
+						document.getElementById('place-select').innerHTML = '<option value="Not Attributed">Aucun</option>';
 					for (var i = 0; i < pontons.length; i++) {
-						if (i == 0)
-							getPlaces(pontons[i].id);
 						if (pontons[i].name != "")
 							document.getElementById('ponton-select').innerHTML += '<option value="' + pontons[i].id + '" >' + pontons[i].name + '</option>';
 					}
@@ -388,7 +387,7 @@
 					if (_data.data) {
 						var places = _data?.data?.sort(dynamicSort("number"));
 						if (!places) {
-							document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
+							document.getElementById('place-select').innerHTML = '<option value="Not Attributed">Aucun</option>';
 							return;
 						}
 						document.getElementById('place-select').innerHTML = "";
@@ -396,7 +395,7 @@
 							document.getElementById('place-select').innerHTML += '<option value="' + places[i].id + '" >' + places[i].number + '</option>';
 						}
 					} else {
-						document.getElementById('place-select').innerHTML = '<option value="aucun">aucun</option>';
+						document.getElementById('place-select').innerHTML = '<option value="Not Attributed">Aucun</option>';
 					}
 				}).catch((e) => console.error(e));
 		}
