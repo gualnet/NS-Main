@@ -847,10 +847,17 @@
 
 				const mapPdfEl = document.getElementById("map_pdf");
 				if (mapPdfEl) {
-					const userAgent = window.navigator.userAgent;
-					let mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
-					if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
+					let mapLink;
+					if (harbour.google_map_link) {
+						mapLink = harbour.google_map_link; // embed external google map
+					} else if (harbour.address) {
+						const userAgent = window.navigator.userAgent;
+						mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
+						if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
 							mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
+						}
+					} else {
+						mapPdfEl.hidden = true;
 					}
 					mapPdfEl.addEventListener('click', () => window.location.href = mapLink);
 				}
