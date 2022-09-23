@@ -1076,8 +1076,12 @@
 	</div>
 
 	<script>
-		window.addEventListener('load', () => {
+		window.addEventListener('load', async () => {
+			const entity = await fetchEntityData();
+			const user = await fetchUserData();
+			const boat = await fetchBoatData();
 			displayCameraBtn();
+			displaySecurityBtn(entity, user, boat);
 			portsCorsesRedirection();
 			checkOffers();
 		});
@@ -1156,6 +1160,25 @@
 			}
 		}
 
+		const displaySecurityBtn = async (entity, user, boat) => {
+			console.log('=======displaySecurityBtn===========')
+			let isHidden = false;
+			if (!entity || entity.security_module === false) {
+				isHidden = true;
+			}
+			if (!boat) {
+				isHidden = true;
+			}
+			if (!user) {
+				isHidden = true;
+			}
+			// In any case if it's an agent, show the button
+			if (!['Visiteur', 'Plaisancier'].includes(user?.roleMobileApp)) {
+				isHidden = false;
+			}
+			document.getElementById("securites").hidden = isHidden;
+		};
+
 		const fetchEntityData = async () => {
 			const url = `/api/entity/get/${localStorage["entity_id"]}`;
 			const resp = await fetch(url, { method: 'GET' });
@@ -1198,11 +1221,6 @@
 				if (!entity.absence_module) {
 					console.log("dev asb")
 					document.getElementById("absences").hidden = true;
-				}
-
-				if (!entity.security_module) {
-					console.log("dev sec")
-					document.getElementById("securites").hidden = true;
 				}
 
 				if (!entity.marees_module) {
@@ -1487,24 +1505,18 @@
 							}
 						}).catch((e) => console.error(e));
 					} else {
-
 						document.getElementById("temperature").innerHTML = ('<i class="bi bi-thermometer-half"></i> ' + weather[0].hourly[hour].tempC + "°C");
 						document.getElementById("humidity").innerHTML = ('<i class="bi bi-umbrella"></i> ' + weather[0].hourly[hour].precipMM);
 						document.getElementById("pressure").innerHTML = (weather[0].hourly[hour].pressure);
 						document.getElementById("compassRingventjaune").style.transform = "rotate(" + weather[0].hourly[hour].winddirDegree + "deg)";//insertAdjacentHTML('beforeend', weather[0].hourly[hour].winddirDegree);
 						//document.getElementById("wind_direction").insertAdjacentHTML('beforeend', );
 						document.getElementById("wind_speed").innerHTML = (Math.trunc(weather[0].hourly[hour].windspeedKmph / 1.852) + " ");
-
-
 					}
-
-
 					//document.getElementById("wind_speed").insertAdjacentHTML('beforeend', '<div class="float-right">' + weather[0].hourly[hour].windspeedKmph + "Km/h</div>");
 				}).catch((error) => {
 					console.log("météo erreur");
 					console.log(error);
 				});
-
 			}).catch((error) => {
 				console.log("météo erreur");
 				console.log(error);
@@ -1515,22 +1527,21 @@
 
 		if (!localStorage["user"]) {
 			document.getElementById("absences").hidden = true;
-			document.getElementById("securites").hidden = true;
+			// document.getElementById("securites").hidden = true;
 			document.getElementById("challenges").hidden = true;
 		} else {
 			fetch("/api/get/userboats?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
 				if (!_data.success) {
 					document.getElementById("absences").hidden = true;
 					document.getElementById("challenges").hidden = true;
-					document.getElementById("securites").hidden = true;
 				}
 			}).catch((error) => {
 				console.log(error);
 				document.getElementById("absences").hidden = true;
 				document.getElementById("challenges").hidden = true;
-				document.getElementById("securites").hidden = true;
 			});
 		}
+
 
 		fetch("/api/partner/active/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 			// console.log('_data',_data);
