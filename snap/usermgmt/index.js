@@ -382,6 +382,7 @@ async function getUserInfos(_req, _res) {
 				return;
 			}
 		}
+		UTILS.httpUtil.dataError(_req, _res, "User not found", null, "1.0");
 	} catch (error) {
 		console.error('[ERROR]', error);
 		myLogger.logError(error, { module: 'usermgmt' })
