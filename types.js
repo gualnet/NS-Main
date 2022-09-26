@@ -335,3 +335,51 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} cloudinary_pj_public_id
  * @property {string} harbour_id
  */
+
+/**
+ * @typedef T_SCHEMA_ODM_MODEL
+ * @property {object} link: [FDB],
+ * @property {string} collection: 'qrcode',
+ * @property {object} field: {},
+ * @property {boolean} byId: true,
+ * @property {string} model: 'qrcode',
+ * @property {() => Promise<Array>} find: [AsyncFunction (anonymous)],
+ * @property {() => Promise<Array>} findById: [AsyncFunction (anonymous)],
+ * @property {() => Promise<Array>} getMethod: [AsyncFunction (anonymous)],
+ * @property {() => Promise<Array>} delete: [Function (anonymous)],
+ * @property {() => Promise<Array>} deleteById: [Function (anonymous)],
+ * @property {() => Promise<Array>} deleteMethod: [AsyncFunction (anonymous)],
+ * @property {() => Promise<Array>} insert: [Function (anonymous)],
+ * @property {() => Promise<Array>} create: [Function (anonymous)],
+ * @property {() => Promise<Array>} update: [Function (anonymous)],
+ * @property {() => Promise<Array>} updateById: [Function (anonymous)],
+ * @property {() => Promise<Array>} putMethod: [AsyncFunction (anonymous)],
+ * @property {() => Promise<Array>} save: [Function (anonymous)],
+ * @property {() => Promise<Array>} postMethod: [AsyncFunction (anonymous)],
+ * @property {() => Promise<Array>} distinct: [Function (anonymous)],
+ * @property {() => Promise<Array>} count: [AsyncFunction (anonymous)],
+ * @property {() => Promise<Array>} exists: [AsyncFunction (anonymous)]
+ */
+/**
+ * @typedef T_SCHEMA
+ * @property {object} NAUTICSPOT
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.partner
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.entity
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.harbour
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.camera
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.communication
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.events
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.place
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.user
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.coms
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.bouee
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.map
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.zone
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.weather
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.boat
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.securite
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.sortie
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.absences
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.news
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.qrcode
+ */
