@@ -2,6 +2,7 @@ const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
+const {errorHandler} = require('../lib-js/errorHandler');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -15,7 +16,6 @@ const AUTHORIZED_ROLES = [
 var _userCol = "user";
 var _mailCol = "mail";
 var _userFpCol = "user";
-
 
 function validateEmail(email) {
 	const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -169,7 +169,6 @@ async function verifyIfExistInUsers(_email, _phone) {
 async function findByColl(_request) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_userCol, _request, null, function (_err, _data) {
-			console.log(_data);
 			if (_data)
 				resolve(_data);
 			else
@@ -355,49 +354,36 @@ async function addUserHandler(req, res) {
 }
 
 async function getUserInfos(_req, _res) {
+	/**@type {TYPES.T_SCHEMA} */
+	const FP_SCHEMA = SCHEMA;
 	try {
-		if (_req.post.userId) {
-			/**@type {Array<TYPES.T_user>} */
-			const user = await STORE.API_NEXT.getElements(ENUM.TABLES.USERS, { id: _req.post.userId });
-			console.log('user', user);
-			if (user[0]) {
-				delete user[0].password;
-				delete user[0].resetPwdToken;
-				UTILS.httpUtil.dataSuccess(_req, _res, "User", user[0], "1.0");
-				return;
-			} else {
-				throw new Error('No user found');
-			}
-		}
+		const { userId, token } = _req.post;
 
-		if (_req.post.token) { // do not use since database synch is 💩
-			var user = await findByColl({ "token": _req.post.token })
-			if (user[0]) {
-				delete user[0].password;
-				delete user[0].resetPwdToken;
-				UTILS.httpUtil.dataSuccess(_req, _res, "User", user[0], "1.0");
-				return;
+		if (userId || token) {
+			const query = {};
+			if (userId) {
+				query.id = userId;
+			} else if (token) {
+				query.token = token;
 			} else {
-				UTILS.httpUtil.dataError(_req, _res, "User not found", null, "1.0");
+				throw new Error('Wrong parameter, please provide a \'user id\' or a \'user token\'.');
+			}
+			const users = await findByColl(query)
+			if (users[0]) {
+				delete users[0].password;
+				delete users[0].resetPwdToken;
+				UTILS.httpUtil.dataSuccess(_req, _res, "User", users[0], "1.0");
 				return;
 			}
 		}
 		UTILS.httpUtil.dataError(_req, _res, "User not found", null, "1.0");
+		return;
 	} catch (error) {
-		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'usermgmt' })
-		const errorHttpCode = error.cause?.httpCode || 500;
-		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-		_res.end(JSON.stringify({
-			success: false,
-			error: error.toString(),
-		}));
+		errorHandler(_res, error);
 	}
-	
 }
 
 async function loginHandler(req, res) {
-	console.log('===== loginHandler =====');
 	var user = await findByColl({ "email": req.post.email });
 
 	if (user[0]) {
@@ -435,7 +421,6 @@ async function userSessionHandler(_req, _res) {
 }
 
 async function updateUserHandler(_req, _res) {
-	console.log('===== updateUserHandler =====');
 	console.log(_req.post);
 	if (_req.post.prefix) {
 		_req.post.prefix = completePhonePrefix(_req.post.prefix);

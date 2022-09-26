@@ -317,7 +317,7 @@
 
 		const getUserInfos = async () => {
 			const url = `/api/getuser`;
-			const fetchBody = JSON.stringify({ userId: localStorage['user'] });
+			const fetchBody = JSON.stringify({ token: localStorage['token'] });
 			const fetchOptions = {
 				method: 'POST',
 				body: fetchBody,
