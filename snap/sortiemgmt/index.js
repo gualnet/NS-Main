@@ -229,31 +229,19 @@ const fetchOutigsDataFromIAS = async () => {
 		'X-Auth-Token': IAS_USER_TOKEN,
 	};
 
-	const response = await axios.get(url, {
-		headers,
-	});
-
-	console.log('response', response);
+	const response = await axios.get(url, { headers });
 	return(response.data)
 }
 
 const getIasOutigs = async (req, res) => {
 	try {
-		// const userAuthToken = req.headers['x-auth-token'];
-		// /**@type {TYPES.T_SCHEMA} */
-		// const fpSchema = SCHEMA;
-		// console.log('fpSchema', Object.entries(fpSchema));
-		// fpSchema.fortpress.user.find({ token: "" });
-		// console.log('STORE.db.linkdbfp',STORE.db.linkdbfp.Find);
-		// const adminUser = STORE.db.linkdbfp.Find({ token: userAuthToken });
-		// console.log('adminUser',adminUser);
-
+		// TODO add auth function to allow only admin user
 		const results = await fetchOutigsDataFromIAS();
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			count: results.length,
-			results,
+			sorties: results,
 		}));
 	} catch (error) {
 		errorHandler(res, error);
@@ -412,12 +400,6 @@ function dateDiffToString(a, b){
 }
 
 
-// PAGE CONSTRUCT
-
-
-
-// PAGE CONSTRUCT END
-
 exports.plugin =
 {
     title: "Gestion des sorties",
@@ -482,62 +464,62 @@ exports.plugin =
 
 
             var _sortieGen = "";
-            for (var i = 0; i < _Sorties.length; i++) {
-                var place = await STORE.mapmgmt.getPlaceById(_Sorties[i].place_id);
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Sorties[i].harbour_id);
-                var boat = await STORE.boatmgmt.getBoatByPlaceId(_Sorties[i].place_id);
-                var currentUser;
-                if(boat[0]) {
-                    var currentUser = await STORE.usermgmt.getUserById(boat[0].user_id);
+            // for (var i = 0; i < _Sorties.length; i++) {
+            //     var place = await STORE.mapmgmt.getPlaceById(_Sorties[i].place_id);
+            //     var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Sorties[i].harbour_id);
+            //     var boat = await STORE.boatmgmt.getBoatByPlaceId(_Sorties[i].place_id);
+            //     var currentUser;
+            //     if(boat[0]) {
+            //         var currentUser = await STORE.usermgmt.getUserById(boat[0].user_id);
                     
-                    if(currentUser)
-                        currentUser = currentUser.id + "\\" + currentUser.first_name + " " + currentUser.last_name;
-                    else
-                        currentUser = "aucun";
+            //         if(currentUser)
+            //             currentUser = currentUser.id + "\\" + currentUser.first_name + " " + currentUser.last_name;
+            //         else
+            //             currentUser = "aucun";
                         
-                    boat = boat[0].id + "\\" + boat[0].name;
-                } else {
-                    currentUser = "aucun";
-                    boat = "aucun bateau attaché à cette place";
-                }
-                var dateSortie = new Date(_Sorties[i].sorti);
-                var dateSortieFormated = [("0" + (dateSortie.getDate())).slice(-2), ("0" + (dateSortie.getMonth() + 1)).slice(-2), dateSortie.getFullYear()].join('-') + ' ' + [("0" + (dateSortie.getHours())).slice(-2), ("0" + (dateSortie.getMinutes())).slice(-2), ("0" + (dateSortie.getSeconds())).slice(-2)].join(':');
+            //         boat = boat[0].id + "\\" + boat[0].name;
+            //     } else {
+            //         currentUser = "aucun";
+            //         boat = "aucun bateau attaché à cette place";
+            //     }
+            //     var dateSortie = new Date(_Sorties[i].sorti);
+            //     var dateSortieFormated = [("0" + (dateSortie.getDate())).slice(-2), ("0" + (dateSortie.getMonth() + 1)).slice(-2), dateSortie.getFullYear()].join('-') + ' ' + [("0" + (dateSortie.getHours())).slice(-2), ("0" + (dateSortie.getMinutes())).slice(-2), ("0" + (dateSortie.getSeconds())).slice(-2)].join(':');
 
                 
-                var dateEntre;
-                var dateEntreFormated;
-                let duree;
-                if(_Sorties[i].entre != "empty" && _Sorties[i].entre != null) {
-                    dateEntre = new Date(_Sorties[i].entre);
-                    dateEntreFormated = [("0" + (dateEntre.getDate())).slice(-2), ("0" + (dateEntre.getMonth() + 1)).slice(-2), dateEntre.getFullYear()].join('-') + ' ' + [("0" + (dateEntre.getHours())).slice(-2), ("0" + (dateEntre.getMinutes())).slice(-2), ("0" + (dateEntre.getSeconds())).slice(-2)].join(':');
-                    duree = dateDiffToString(dateSortie, dateEntre)
-                } else {
-                    dateEntreFormated = "aucun"
-                    duree = dateDiffToString(dateSortie, new Date(Date.now()));
-                }
+            //     var dateEntre;
+            //     var dateEntreFormated;
+            //     let duree;
+            //     if(_Sorties[i].entre != "empty" && _Sorties[i].entre != null) {
+            //         dateEntre = new Date(_Sorties[i].entre);
+            //         dateEntreFormated = [("0" + (dateEntre.getDate())).slice(-2), ("0" + (dateEntre.getMonth() + 1)).slice(-2), dateEntre.getFullYear()].join('-') + ' ' + [("0" + (dateEntre.getHours())).slice(-2), ("0" + (dateEntre.getMinutes())).slice(-2), ("0" + (dateEntre.getSeconds())).slice(-2)].join(':');
+            //         duree = dateDiffToString(dateSortie, dateEntre)
+            //     } else {
+            //         dateEntreFormated = "aucun"
+            //         duree = dateDiffToString(dateSortie, new Date(Date.now()));
+            //     }
 
-                let challenge = "";
-                if (_Sorties[i].challenge) {
-                    challenge = "oui";
-                } else {
-                    challenge = "non";
-                }
+            //     let challenge = "";
+            //     if (_Sorties[i].challenge) {
+            //         challenge = "oui";
+            //     } else {
+            //         challenge = "non";
+            //     }
 
 
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Sorties[i].harbour_id);
+            //     var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Sorties[i].harbour_id);
 
-                _sortieGen += _sortieHtml.replace(/__ID__/g, _Sorties[i].id)
-                    .replace(/__FORMID__/g, _Sorties[i].id.replace(/\./g, "_"))
-                    .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-                    .replace(/__NUMERO_PLACE__/g, place.number)
-                    .replace(/__USER__/g, currentUser)
-                    .replace(/__BOAT__/g, boat)
-                    .replace(/__SORTIE__/g, dateSortieFormated)
-                    .replace(/__ENTRE__/g, dateEntreFormated)
-                    .replace(/__DUREE__/g, duree)
-                    .replace(/__CHALLENGE__/g, challenge)
-                    .replace(/__DATETIMEORDER__/g, _Sorties[i].sortie)
-            }
+            //     _sortieGen += _sortieHtml.replace(/__ID__/g, _Sorties[i].id)
+            //         .replace(/__FORMID__/g, _Sorties[i].id.replace(/\./g, "_"))
+            //         .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
+            //         .replace(/__NUMERO_PLACE__/g, place.number)
+            //         .replace(/__USER__/g, currentUser)
+            //         .replace(/__BOAT__/g, boat)
+            //         .replace(/__SORTIE__/g, dateSortieFormated)
+            //         .replace(/__ENTRE__/g, dateEntreFormated)
+            //         .replace(/__DUREE__/g, duree)
+            //         .replace(/__CHALLENGE__/g, challenge)
+            //         .replace(/__DATETIMEORDER__/g, _Sorties[i].sortie)
+            // }
             _indexHtml = _indexHtml.replace("__EVENTS__", _sortieGen).replace(/undefined/g, '');
 
             var userHarbours = [];
