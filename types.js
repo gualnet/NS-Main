@@ -289,6 +289,37 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} id
  * @property {string} is_notification_sent
  * @property {string} place_id
+ */
+/**
+ * @typedef T_ias_outing_owner
+ * @property {number} id
+ * @property {string} firstName
+ * @property {string} lastName
+ */
+/**
+ * @typedef T_ias_outing
+ * @property {string} position
+ * @property {number} countOutings
+ * @property {number} countOutingsHighSeason
+ * @property {number} countOutingsLowSeason
+ * @property {number} countOutingsOffSeason
+ * @property {object} place
+ * @property {number} place.id
+ * @property {string} place.code
+ * @property {object} boat
+ * @property {number} boat.id
+ * @property {string} boat.name
+ * @property {string} boat.boatType
+ * @property {number} boat.draught
+ * @property {number} boat.length
+ * @property {number} boat.width
+ * @property {string} boat.immatriculation
+ * @property {string} boat.synoxDeviceId
+ * @property {Array<T_ias_outing_owner>} boat.owners
+ * @property {object} harbour
+ * @property {number} harbour.id
+ * @property {number} countCavalaireChallenge
+ */
 
 /**
  * @typedef T_weather
@@ -382,4 +413,6 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.absences
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.news
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.qrcode
+ * @property {object} fortpress
+ * @property {T_SCHEMA_ODM_MODEL} fortpress.user
  */
