@@ -2,6 +2,8 @@ const ENUM = require('../lib-js/enums');
 const TYPES = require('../../types');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
+const { errorHandler } = require('../lib-js/errorHandler');
+const axios = require('axios');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -202,6 +204,64 @@ exports.handler = async (req, res) => {
     return;
 }
 
+// -----------------------
+/**
+ * 
+ * @returns {Promise<Array<TYPES.T_ias_outing>>}
+ */
+const fetchOutigsDataFromIAS = async () => {
+	const IAS_USER_TOKEN = OPTION.IAS_REQUEST_TOKEN;
+	if (!IAS_USER_TOKEN) {
+		throw new Error('No IAS USER TOKEN provided', {
+			cause: {
+				httpCode: 401,
+				publicMsg: 'Unauthorized',
+			}
+		});
+	}
+	console.log('IAS_USER_TOKEN', IAS_USER_TOKEN);
+
+	const portId = '1';
+	const year = '2022';
+	const searchBy = 'boat';
+	const url = `https://api.nauticspot.io/fr/harbours/${portId}/activity-log-summaries?year=${year}&by=${searchBy}&`;
+	const headers = {
+		'X-Auth-Token': IAS_USER_TOKEN,
+	};
+
+	const response = await axios.get(url, {
+		headers,
+	});
+
+	console.log('response', response);
+	return(response.data)
+}
+
+const getIasOutigs = async (req, res) => {
+	try {
+		// const userAuthToken = req.headers['x-auth-token'];
+		// /**@type {TYPES.T_SCHEMA} */
+		// const fpSchema = SCHEMA;
+		// console.log('fpSchema', Object.entries(fpSchema));
+		// fpSchema.fortpress.user.find({ token: "" });
+		// console.log('STORE.db.linkdbfp',STORE.db.linkdbfp.Find);
+		// const adminUser = STORE.db.linkdbfp.Find({ token: userAuthToken });
+		// console.log('adminUser',adminUser);
+
+		const results = await fetchOutigsDataFromIAS();
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			count: results.length,
+			results,
+		}));
+	} catch (error) {
+		errorHandler(res, error);
+	}
+};
+
+// -----------------------
+
 async function getSortieHandler(req, res) {
     var _data = await getSortieById(req.get.id);
     if (typeof (_data) != "string") {
@@ -324,8 +384,13 @@ exports.router =
             handler: navilyHandler,
             method: "GET"
         },
+				{
+					route: "/api/ias/sorties",
+					handler: getIasOutigs,
+					method: "GET"
+				},
     ];
-    
+
 function dateDiffToString(a, b){
 
     // make checks to make sure a and b are not null
@@ -345,6 +410,13 @@ function dateDiffToString(a, b){
     return days + " jours et " + hh+":"+mm+":"+ss;
 
 }
+
+
+// PAGE CONSTRUCT
+
+
+
+// PAGE CONSTRUCT END
 
 exports.plugin =
 {
