@@ -16,12 +16,8 @@
 	<meta name="MobileOptimized" content="320">
 	<link rel="icon" href="/fortpress_admin_assets/favicon.ico" type="image/x-icon" />
 	<link rel="shortcut icon" type="image/x-icon" href="/fortpress_admin_assets/favicon.ico" />
-	<!-- <link href="/assets/quill/quill.snow.css" rel="stylesheet"> -->
-	<!-- <script src="/assets/quill/quill.js"></script> Create the editor container -->
-
 	<title>Vendors management</title>
-	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
-	<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext"> -->
+	
 	<script src="/fortpress_admin_assets/assets/js/require.min.js"></script>
 	<script>
 		requirejs.config({
@@ -31,13 +27,8 @@
 	<!-- Dashboard Core -->
 	<link href="/fortpress_admin_assets/assets/css/dashboard.css" rel="stylesheet" />
 	<script src="/fortpress_admin_assets/assets/js/dashboard.js"></script>
-	<!-- c3.js Charts Plugin -->
-	<!-- <link href="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.css" rel="stylesheet" /> -->
-	<!-- <script src="/fortpress_admin_assets/assets/plugins/charts-c3/plugin.js"></script> -->
-	<!-- Input Mask Plugin -->
-	<!-- <script src="/fortpress_admin_assets/assets/plugins/input-mask/plugin.js"></script> -->
-	<!-- Datatables Plugin -->
-	<!-- <script src="/fortpress_admin_assets/assets/plugins/datatables/plugin.js"></script> -->
+	<link href="/css/sortiemgmt.css" rel="stylesheet">
+	<script src="/js/sortiemgmt.js"></script>
 </head>
 
 <body class="">
@@ -55,6 +46,9 @@
 								<!-- <div class="row">
 									__HARBOUR_ID_INPUT__
 								</div> -->
+								<div class="input-group rounded">
+									<input id="searchInput" type="search" class="form-control" placeholder="Votre recherche" aria-label="Search"/>
+								</div>
 								<div class="table-responsive">
 									<table class="table card-table table-vcenter text-nowrap datatable dataTable">
 										<thead>
@@ -62,7 +56,6 @@
 												<th>Bateau</th>
 												<th>Place</th>
 												<th>Plaisancier</th>
-												<th>Position</th>
 												<th>Nombre d'absences</th>
 												<th>Nombre de sorties</th>
 												<th>Challenge</th>
@@ -96,201 +89,6 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		/**
-		 * @typedef T_sortie_owner
-		 * @property {number} id
-		 * @property {string} firstName
-		 * @property {string} lastName
-		 */
-		/**
-		 * @typedef T_sortie
-		 * @property {string} position
-		 * @property {number} countOutings
-		 * @property {number} countOutingsHighSeason
-		 * @property {number} countOutingsLowSeason
-		 * @property {number} countOutingsOffSeason
-		 * @property {object} place
-		 * @property {number} place.id
-		 * @property {string} place.code
-		 * @property {object} boat
-		 * @property {number} boat.id
-		 * @property {string} boat.name
-		 * @property {string} boat.boatType
-		 * @property {number} boat.draught
-		 * @property {number} boat.length
-		 * @property {number} boat.width
-		 * @property {string} boat.immatriculation
-		 * @property {string} boat.synoxDeviceId
-		 * @property {Array<T_sortie_owner>} boat.owners
-		 * @property {object} harbour
-		 * @property {number} harbour.id
-		 * @property {number} countCavalaireChallenge
-		 */
-		/**@type {Array<T_sortie>} */
-		let G_sorties;
-		/**
-		 * @typedef G_buttons
-		 * @property {object} pagination
-		 * @property {HTMLLinkElement} pagination.prev
-		 * @property {HTMLLinkElement} pagination.A
-		 * @property {HTMLLinkElement} pagination.B
-		 * @property {HTMLLinkElement} pagination.C
-		 * @property {HTMLLinkElement} pagination.next
-		 */
-		/**@type {G_buttons} */
-		let G_buttons = {
-			pagination: {
-				prev: null,
-				A: null,
-				B: null,
-				C: null,
-				next: null,
-			}
-		}
-		let G_currentPagination, G_maxPagination, G_rowsByPage;
-
-		window.addEventListener('load', async () => {
-			G_sorties = await fetchSorties();
-			paginationInitialise();
-			sortSortiesBy('userName');
-			displayRows();
-
-		});
-
-		const paginationInitialise = () => {
-			G_buttons.pagination.prev = document.querySelector('#paginationBtnPrev');
-			G_buttons.pagination.A = document.querySelector('#paginationBtnA');
-			G_buttons.pagination.B = document.querySelector('#paginationBtnB');
-			G_buttons.pagination.C = document.querySelector('#paginationBtnC');
-			G_buttons.pagination.next = document.querySelector('#paginationBtnNext');
-
-			G_buttons.pagination.prev.addEventListener('click', paginationPrevClickHandler);
-			G_buttons.pagination.next.addEventListener('click', paginationNextClickHandler);
-
-			G_buttons.pagination.A.parentElement.classList.add('active');
-			G_currentPagination = 1;
-			G_rowsByPage = 10;
-			G_maxPagination = Math.trunc(G_sorties.length / G_rowsByPage) + 1;
-		};
-
-		const paginationPrevClickHandler = () => {
-			console.log('====paginationPrevClickHandler====');
-			if (G_currentPagination === 1) return;
-			G_currentPagination -= 1;
-			updatePaginationButtons();
-			displayRows();
-		};
-
-		const paginationNextClickHandler = () => {
-			console.log('====paginationNextClickHandler====');
-			if (G_currentPagination === G_maxPagination) return;
-			G_currentPagination += 1;
-			updatePaginationButtons();
-			displayRows();
-		};
-
-		const updatePaginationButtons = () => {
-			if (G_currentPagination === 1) {
-				G_buttons.pagination.A.innerText = G_currentPagination;
-				G_buttons.pagination.B.innerText = G_currentPagination + 1;
-				G_buttons.pagination.C.innerText = G_currentPagination + 2;
-				G_buttons.pagination.A.parentElement.classList.add('active');
-				G_buttons.pagination.B.parentElement.classList.remove('active');
-				G_buttons.pagination.C.parentElement.classList.remove('active');
-			} else if (G_currentPagination > 1 && G_currentPagination < G_maxPagination) {
-				G_buttons.pagination.A.innerText = G_currentPagination - 1;
-				G_buttons.pagination.B.innerText = G_currentPagination;
-				G_buttons.pagination.C.innerText = G_currentPagination + 1;
-				G_buttons.pagination.A.parentElement.classList.remove('active');
-				G_buttons.pagination.B.parentElement.classList.add('active');
-				G_buttons.pagination.C.parentElement.classList.remove('active');
-			} else if (G_currentPagination === G_maxPagination) {
-				G_buttons.pagination.A.innerText = G_currentPagination - 2;
-				G_buttons.pagination.B.innerText = G_currentPagination - 1;
-				G_buttons.pagination.C.innerText = G_currentPagination;
-				G_buttons.pagination.A.parentElement.classList.remove('active');
-				G_buttons.pagination.B.parentElement.classList.remove('active');
-				G_buttons.pagination.C.parentElement.classList.add('active');
-			}
-		}
-
-		const fetchSorties = async () => {
-			try {
-				const url = '/api/ias/sorties';
-				const response = await fetch(url, { method: 'GET' });
-				const { sorties } = await response.json();
-				return(sorties);
-			} catch (error) {
-				console.error('[ERROR]', error);
-			}
-		};
-
-		/**
-		 * @param {string} sortField
-		 * @param {bool} isReversed
-		 */
-		const sortSortiesBy = (sortField, isReversed = false) => {
-			const allowedSortFields = ['boatName', 'boatPlace', 'userName'];
-			if (!allowedSortFields.includes(sortField)) {
-				alert(`Sort Field ${sortField} not authorized.`); //! DEV
-				console.warn(`Sort Field ${sortField} not authorized.`);
-				return;
-			}
-
-			const sorties = G_sorties;
-			if (sortField === 'boatName') {
-				sorties.sort((itemA, itemB) => (itemA.boat.name < itemB.boat.name) ? -1 : 1);
-			} else if (sortField === 'boatPlace') {
-				sorties.sort((itemA, itemB) => (itemA.place.code < itemB.place.code) ? -1 : 1);
-			} else if (sortField === 'userName') {
-				sorties.sort((itemA, itemB) => (itemA.boat.owners[0]?.lastName < itemB.boat.owners[0]?.lastName) ? -1 : 1);
-			}
-
-			if (isReversed) {
-				sorties.reverse();
-			}
-		}
-
-		const createRow = (sortie) => {
-			let ownerNames = [];
-			sortie.boat.owners.map(owner => {
-				ownerNames.push(`${owner.lastName} ${owner.firstName}`);
-			});
-			const row = `
-				<tr>
-					<form method="POST" enctype="multipart/form-data" id="__FORMID__">
-						<td>${sortie.boat?.name ?? 'INCONNU'}</td>
-						<td>${sortie.place?.code ?? 'INCONNU'}</td>
-						<td>${ownerNames?.join('<br>') || 'INCONNU'}</td>
-						<td>${sortie.position ?? 'INCONNU'}</td>
-						<td>${sortie.countOutings ?? 'INCONNU'}</td>
-						<td>${sortie.countCavalaireChallenge ?? 'INCONNU'}</td>
-						<td>${sortie.countOutings ?? 'INCONNU'}</td>
-						<td></td>
-					</form>
-				</tr>
-			`;
-			return(row);
-		};
-
-		const displayRows = () => {
-			console.log('====displayRows====')
-			const sorties = G_sorties;
-			const pagination = G_currentPagination;
-			const maxRows = G_rowsByPage || 10;
-
-			const htmlRows = [];
-			for (let i = 1; i <= maxRows; i++) {
-				const index = (i * pagination) - 1;
-				const row = createRow(sorties[index]);
-				htmlRows.push(row);
-			}
-			const sortieRowsCtnEl = document.querySelector('#sortieRowsCtn');
-			sortieRowsCtnEl.innerHTML = '';
-			sortieRowsCtnEl.innerHTML = htmlRows.join('');
-		}
-	</script>
 </body>
 
 </html>
