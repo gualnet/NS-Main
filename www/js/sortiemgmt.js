@@ -62,11 +62,15 @@ window.addEventListener('load', async () => {
 	G_AllSorties = await fetchSorties();
 	G_sorties = G_AllSorties;
 	document.querySelector('#searchInput').addEventListener('input', searchOnChangeHandler);
+	document.querySelector('#tableTitle1').addEventListener('click', sortHandler);
+	document.querySelector('#tableTitle2').addEventListener('click', sortHandler);
+	document.querySelector('#tableTitle3').addEventListener('click', sortHandler);
+	document.querySelector('#tableTitle5').addEventListener('click', sortHandler);
+	document.querySelector('#tableTitle6').addEventListener('click', sortHandler);
 	paginationInitialise();
 	sortSortiesBy('userName');
 	displayRows();
 });
-
 
 const paginationInitialise = () => {
 	G_buttons.pagination.prev = document.querySelector('#paginationBtnPrev');
@@ -151,12 +155,59 @@ const fetchSorties = async () => {
 	}
 };
 
+// TODO: add sort handlers
+
+const updateSortIcon = () => {
+	console.log('====updateSortIcon====');
+
+
+
+
+};
+
+let G_sortedBy;
+let G_sortIsReversed = false;
+const sortHandler = (ev) => {
+	console.log('====sortHandler====');
+	const target = ev.target;
+	console.log('target', target);
+	const orderBy = target.innerText;
+	console.log('orderBy', orderBy);
+
+	// If its the second time the user click on the same sort button,
+	// we need to reverse the list
+	if (G_sortedBy === orderBy) {
+		G_sortIsReversed = !G_sortIsReversed;
+	} else {
+		G_sortIsReversed = false;
+	}
+	console.log('G_sortIsReversed', G_sortIsReversed);
+
+	if (orderBy === 'BATEAU') {
+		sortSortiesBy('boatName', G_sortIsReversed);
+		G_sortedBy = 'BATEAU';
+	} else if (orderBy === 'PLACE') {
+		sortSortiesBy('boatPlace', G_sortIsReversed);
+		G_sortedBy = 'PLACE';
+	} else if (orderBy === 'PLAISANCIER') {
+		sortSortiesBy('userName', G_sortIsReversed);
+		G_sortedBy = 'PLAISANCIER';
+	} else if (orderBy === 'NOMBRE DE SORTIES') {
+		sortSortiesBy('sortieCount', G_sortIsReversed);
+		G_sortedBy = 'NOMBRE DE SORTIES';
+	} else if (orderBy === 'CHALLENGE') {
+		sortSortiesBy('challengeCount', G_sortIsReversed);
+		G_sortedBy = 'CHALLENGE';
+	}
+	displayRows();
+};
+
 /**
  * @param {string} sortField
  * @param {bool} isReversed
  */
 const sortSortiesBy = (sortField, isReversed = false) => {
-	const allowedSortFields = ['boatName', 'boatPlace', 'userName'];
+	const allowedSortFields = ['boatName', 'boatPlace', 'userName', 'sortieCount', 'challengeCount'];
 	if (!allowedSortFields.includes(sortField)) {
 		alert(`Sort Field ${sortField} not authorized.`); //! DEV
 		console.warn(`Sort Field ${sortField} not authorized.`);
@@ -167,14 +218,24 @@ const sortSortiesBy = (sortField, isReversed = false) => {
 	if (sortField === 'boatName') {
 		sorties.sort((itemA, itemB) => (itemA.boat.name < itemB.boat.name) ? -1 : 1);
 	} else if (sortField === 'boatPlace') {
-		sorties.sort((itemA, itemB) => (itemA.place.code < itemB.place.code) ? -1 : 1);
+		sorties.sort((itemA, itemB) => (itemA.place?.code < itemB.place?.code) ? -1 : 1);
 	} else if (sortField === 'userName') {
 		sorties.sort((itemA, itemB) => (itemA.boat.owners[0]?.lastName < itemB.boat.owners[0]?.lastName) ? -1 : 1);
+	} else if (sortField === 'sortieCount') {
+		sorties.sort((itemA, itemB) => (itemA.countOutings < itemB.countOutings) ? -1 : 1);
+	} else if (sortField === 'challengeCount') {
+		sorties.sort((itemA, itemB) => (itemA.countCavalaireChallenge < itemB.countCavalaireChallenge) ? -1 : 1);
 	}
 
 	if (isReversed) {
 		sorties.reverse();
 	}
+}
+
+const openSortieModal = (param) => {
+	console.log('====openSortieModal====', param);
+
+	
 }
 
 /**
@@ -188,12 +249,11 @@ const createRow = (sortie) => {
 		ownerNames.push(`${owner.lastName} ${owner.firstName}`);
 	});
 	const row = `
-				<tr>
+				<tr class="sortie-row" id="" onclick="openSortieModal('${sortie.boat.id}/${sortie.place.id}')">
 					<form method="POST" enctype="multipart/form-data" id="__FORMID__">
 						<td>${sortie.boat?.name ?? 'INCONNU'}</td>
 						<td>${sortie.place?.code ?? 'INCONNU'}</td>
 						<td>${ownerNames?.join('<br>') || 'INCONNU'}</td>
-						<td>${sortie ?? 'INCONNU'}</td>
 						<td>${sortie.countOutings ?? 'INCONNU'}</td>
 						<td>${sortie.countCavalaireChallenge ?? 'INCONNU'}</td>
 						<td></td>
@@ -226,7 +286,6 @@ const displayRows = () => {
 }
 
 const searchOnChangeHandler = (ev) => {
-	console.clear()
 	console.log('====searchOnChangeHandler====');
 	const searchValue = ev.target.value.toLowerCase();
 	if (searchValue.length === 0) {
@@ -234,7 +293,7 @@ const searchOnChangeHandler = (ev) => {
 		displayRows();
 		return;
 	}
-	const results = G_sorties.filter(sortie => {
+	const results = G_AllSorties.filter(sortie => {
 		/**@type {Array<string>} */
 		const ownerList = [];
 		sortie.boat?.owners.map(owner => ownerList.push(`${owner.firstName.toLowerCase()} ${owner.lastName.toLowerCase()}`))

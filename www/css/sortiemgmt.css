@@ -1,12 +1,18 @@
-/* COUCOU */
 tr {
 	height: 70px;
 	min-height: 70px;
 }
+tr.sortie-row:hover {
+	transition: all .5s;
+	background-color: rgba(32, 35, 196, 0.02);
+	cursor: pointer;
+}
+
 tr td {
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 /* bateau */
 tr td:nth-of-type(1) {
 	width: 20%;
@@ -16,33 +22,44 @@ tr td:nth-of-type(1) {
 }
 /* place */
 tr td:nth-of-type(2) {
-	width: 12%;
+	width: 16%;
 }
 
 /* plaisancier */
 tr td:nth-of-type(3) {
-	/* background-color: rgba(255, 0, 0, 0.1); */
 	width: 30%;
 	white-space: break-spaces;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-/* absences */
-tr td:nth-of-type(4) {
-	background-color: rgba(0, 217, 255, 0.1);
-	text-align: center;
-	width: 12%;
-}
 /* sorties */
-tr td:nth-of-type(5) {
-	background-color: rgba(26, 255, 0, 0.1);
+tr td:nth-of-type(4) {
 	text-align: center;
-	width: 12%;
+	width: 17%;
 }
 /* challenge */
-tr td:nth-of-type(6) {
-	background-color: rgba(255, 251, 0, 0.1);
+tr td:nth-of-type(5) {
 	text-align: center;
-	width: 14%;
+	width: 17%;
+}
+
+/* MODAL */
+.modal {
+	border: 5px solid red;
+	display: flex;
+	background-color: rgba(0, 0, 0, 0.4);
+	justify-content: center;
+	align-items: center;
+}
+
+.modal .modal-dialog {
+	background-color: white;
+	height: 90%;
+	width: 40%;
+	min-width: 500px;
+}
+
+.modal .card .header {
+
 }
