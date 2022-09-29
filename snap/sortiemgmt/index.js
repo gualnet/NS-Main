@@ -315,7 +315,6 @@ async function getChallengeHandler(req, res) {
     var _data = await getChallenge();
         UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
         return;
-
 }
 
 async function getSortieUserHandler(req, res) {
@@ -476,9 +475,6 @@ exports.plugin =
                 if (verifyPostReq(req, res)) {
                     var currentSortie = await getSortieById(req.post.id);
                     var _FD = req.post;
-
-
-
                     var sortie = await updateSortie(_FD);
                     //console.log(sortie);
                     if (sortie[0].id) {

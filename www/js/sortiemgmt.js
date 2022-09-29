@@ -96,7 +96,6 @@ const paginationUpdateOnSearch = () => {
 }
 
 const paginationPrevClickHandler = () => {
-	console.log('====paginationPrevClickHandler====');
 	if (G_currentPagination === 1) return;
 	G_currentPagination -= 1;
 	updatePaginationButtons();
@@ -104,7 +103,6 @@ const paginationPrevClickHandler = () => {
 };
 
 const paginationNextClickHandler = () => {
-	console.log('====paginationNextClickHandler====');
 	if (G_currentPagination === G_maxPagination) return;
 	G_currentPagination += 1;
 	updatePaginationButtons();
@@ -157,20 +155,13 @@ const fetchSorties = async () => {
 
 const updateSortIcon = () => {
 	console.log('====updateSortIcon====');
-
-
-
-
 };
 
 let G_sortedBy;
 let G_sortIsReversed = false;
 const sortHandler = (ev) => {
-	console.log('====sortHandler====');
 	const target = ev.target;
-	console.log('target', target);
 	const orderBy = target.innerText;
-	console.log('orderBy', orderBy);
 
 	// If its the second time the user click on the same sort button,
 	// we need to reverse the list
@@ -179,7 +170,6 @@ const sortHandler = (ev) => {
 	} else {
 		G_sortIsReversed = false;
 	}
-	console.log('G_sortIsReversed', G_sortIsReversed);
 
 	if (orderBy === 'BATEAU') {
 		sortSortiesBy('boatName', G_sortIsReversed);
@@ -248,7 +238,6 @@ const createRow = (sortie) => {
 						<td>${ownerNames?.join('<br>') || 'INCONNU'}</td>
 						<td>${sortie.countOutings ?? 'INCONNU'}</td>
 						<td>${sortie.countCavalaireChallenge ?? 'INCONNU'}</td>
-						<td></td>
 					</form>
 				</tr>
 			`;
@@ -260,7 +249,6 @@ const createRow = (sortie) => {
  * @param {Array<T_sortie>} sorties 
  */
 const displayRows = () => {
-	console.log('====displayRows====')
 	const sorties = G_sorties;
 	const pagination = G_currentPagination;
 	const maxRows = G_maxRowsByPage || 10;
@@ -278,7 +266,6 @@ const displayRows = () => {
 }
 
 const searchOnChangeHandler = (ev) => {
-	console.log('====searchOnChangeHandler====');
 	const searchValue = ev.target.value.toLowerCase();
 	if (searchValue.length === 0) {
 		G_sorties = G_AllSorties;
@@ -304,7 +291,6 @@ const searchOnChangeHandler = (ev) => {
 };
 
 const fetchBoatOutings = async (boatId) => {
-	console.log('====fetchBoatOutings====')
 	const url = `/api/ias/challenges/?boatid=${boatId}`;
 	const response = await fetch(url, { method: 'GET' });
 	const { sorties } = await response.json();
@@ -312,8 +298,6 @@ const fetchBoatOutings = async (boatId) => {
 };
 
 const openSortieModal = async (param) => {
-	console.log('====openSortieModal====', param);
-
 	/**@type {HTMLDivElement} */
 	const modalEl = document.querySelector('#sortieModal');
 	modalEl.addEventListener('click', closeSortieModal);
@@ -341,7 +325,6 @@ const openSortieModal = async (param) => {
 };
 
 const closeSortieModal = (ev) => {
-	console.log('====closeSortieModal====');
 	const target = ev.target
 	if (target.id !== 'sortieModal' && target.id !== 'modalCloseBtn') return;
 
@@ -367,8 +350,6 @@ const createModalSortieListRow = (sortieIn, sortieOut) => {
 }
 
 const displayModalSortieList = (sortiesDetails = []) => {
-	console.log('====displayModalSortieList====');
-
 	let rows = [];
 	for (let i = 0; i < sortiesDetails.length; i += 2) {
 		rows.push(createModalSortieListRow(sortiesDetails[i], sortiesDetails[i + 1]));
