@@ -230,8 +230,9 @@ const createRow = (sortie) => {
 	sortie.boat.owners.map(owner => {
 		ownerNames.push(`${owner.lastName} ${owner.firstName}`);
 	});
+	const escapedBoatName = sortie.boat?.name?.replaceAll('\'', '\\\'')
 	const row = `
-				<tr class="sortie-row" id="" onclick="openSortieModal('${sortie.boat?.id}/${sortie.boat?.name}')">
+				<tr class="sortie-row" id="" onclick="openSortieModal('${sortie.boat?.id}/${escapedBoatName}')">
 					<form method="POST" enctype="multipart/form-data" id="__FORMID__">
 						<td>${sortie.boat?.name ?? 'INCONNU'}</td>
 						<td>${sortie.place?.code ?? 'INCONNU'}</td>
@@ -284,7 +285,6 @@ const searchOnChangeHandler = (ev) => {
 			}
 		}
 	});
-	results.map((result, i) => console.log(i, ' => ', result.boat.name))
 	G_sorties = results;
 	displayRows();
 	paginationUpdateOnSearch();
@@ -356,13 +356,6 @@ const displayModalSortieList = (sortiesDetails = []) => {
 	}
 
 	const listSortiesEl = document.querySelector('#listSortiesCtn');
-	console.log('listSortiesEl', listSortiesEl)
-	listSortiesEl.innerHTML = `
-		<li class="list-group-item">
-			<div class="">Date de sortie</div>
-			<div class="">Date de retour</div>
-		</li>
-		${rows.join('')}
-	`;
+	listSortiesEl.innerHTML = rows.join('');
 	return;
 };
