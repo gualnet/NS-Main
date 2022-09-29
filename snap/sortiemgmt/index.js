@@ -2,6 +2,8 @@ const ENUM = require('../lib-js/enums');
 const TYPES = require('../../types');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
+const { errorHandler } = require('../lib-js/errorHandler');
+const axios = require('axios');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -202,6 +204,90 @@ exports.handler = async (req, res) => {
     return;
 }
 
+// -----------------------
+/**
+ * 
+ * @returns {Promise<Array<TYPES.T_ias_outing>>}
+ */
+const fetchOutigsDataFromIAS = async () => {
+	const IAS_USER_TOKEN = OPTION.IAS_REQUEST_TOKEN;
+	if (!IAS_USER_TOKEN) {
+		throw new Error('No IAS USER TOKEN provided', {
+			cause: {
+				httpCode: 401,
+				publicMsg: 'Unauthorized',
+			}
+		});
+	}
+	console.log('IAS_USER_TOKEN', IAS_USER_TOKEN);
+
+	const portId = '1';
+	const year = '2022';
+	const searchBy = 'boat';
+	const url = `https://api.nauticspot.io/fr/harbours/${portId}/activity-log-summaries?year=${year}&by=${searchBy}&`;
+	const headers = {
+		'X-Auth-Token': IAS_USER_TOKEN,
+	};
+
+	const response = await axios.get(url, { headers });
+	return(response.data)
+}
+
+const fetchOutingsDetailsByBoatFromIAS = async (iasBoatId) => {
+	const IAS_USER_TOKEN = OPTION.IAS_REQUEST_TOKEN;
+	if (!IAS_USER_TOKEN) {
+		throw new Error('No IAS USER TOKEN provided', {
+			cause: {
+				httpCode: 401,
+				publicMsg: 'Unauthorized',
+			}
+		});
+	}
+
+	const portId = '1';
+	const year = '2022';
+	const url = `https://api.nauticspot.io/fr/harbours/${portId}/boats/${iasBoatId}/cavalaire-challenge-logs?year=${year}`;
+	const headers = {
+		'X-Auth-Token': IAS_USER_TOKEN,
+	};
+
+	const response = await axios.get(url, { headers });
+	return(response.data)
+}
+
+const getIasOutigs = async (req, res) => {
+	try {
+		// TODO add auth function to allow only admin user
+		const results = await fetchOutigsDataFromIAS();
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			count: results.length,
+			sorties: results,
+		}));
+	} catch (error) {
+		errorHandler(res, error);
+	}
+};
+
+const getIasChallengesByBoat = async (req, res) => {
+	console.log('====getIasChallengesByBoat====');
+	try {
+		const boatId = req.get.boatid;
+		const results = await fetchOutingsDetailsByBoatFromIAS(boatId);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			count: results.length,
+			sorties: results,
+		}));
+	} catch (error) {
+		errorHandler(res, error);
+	}
+}
+
+// -----------------------
+
 async function getSortieHandler(req, res) {
     var _data = await getSortieById(req.get.id);
     if (typeof (_data) != "string") {
@@ -229,7 +315,6 @@ async function getChallengeHandler(req, res) {
     var _data = await getChallenge();
         UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
         return;
-
 }
 
 async function getSortieUserHandler(req, res) {
@@ -297,6 +382,8 @@ async function navilyHandler(req, res) {
 
 }
 
+
+
 exports.router =
     [
         {
@@ -324,8 +411,18 @@ exports.router =
             handler: navilyHandler,
             method: "GET"
         },
+				{
+					route: "/api/ias/sorties",
+					handler: getIasOutigs,
+					method: "GET"
+				},
+				{
+					route: "/api/ias/challenges/",
+					handler: getIasChallengesByBoat,
+					method: "GET"
+				},
     ];
-    
+
 function dateDiffToString(a, b){
 
     // make checks to make sure a and b are not null
@@ -346,6 +443,7 @@ function dateDiffToString(a, b){
 
 }
 
+
 exports.plugin =
 {
     title: "Gestion des sorties",
@@ -359,7 +457,13 @@ exports.plugin =
 
 				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
 					res.writeHead(401);
-					res.end('No access rights');
+					res.end('Accès non autorisé');
+					return;
+				}
+				const CAVALAIRE_ENTITY_ID = 'ElzMVUL9DK'
+				if (admin?.data?.roleBackOffice !== ROLES.SUPER_ADMIN && _entity_id !== CAVALAIRE_ENTITY_ID) {
+					res.writeHead(401);
+					res.end('Accès non autorisé');
 					return;
 				}
 
@@ -377,9 +481,6 @@ exports.plugin =
                 if (verifyPostReq(req, res)) {
                     var currentSortie = await getSortieById(req.post.id);
                     var _FD = req.post;
-
-
-
                     var sortie = await updateSortie(_FD);
                     //console.log(sortie);
                     if (sortie[0].id) {
@@ -396,112 +497,11 @@ exports.plugin =
 
         }
         else {
-            var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
-            var _sortieHtml = fs.readFileSync(path.join(__dirname, "sortie.html")).toString();
-
-            var _Sorties = [];
-            if (_role == "user") {
-                for (var i = 0; i < _harbour_id.length; i++) {
-                    _Sorties = _Sorties.concat(await getSortieByHarbourId(_harbour_id[i]));
-                }
-            }
-            else if (_role == "admin")
-                _Sorties = await getSortie();
-
-
-            var _sortieGen = "";
-            for (var i = 0; i < _Sorties.length; i++) {
-                var place = await STORE.mapmgmt.getPlaceById(_Sorties[i].place_id);
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Sorties[i].harbour_id);
-                var boat = await STORE.boatmgmt.getBoatByPlaceId(_Sorties[i].place_id);
-                var currentUser;
-                if(boat[0]) {
-                    var currentUser = await STORE.usermgmt.getUserById(boat[0].user_id);
-                    
-                    if(currentUser)
-                        currentUser = currentUser.id + "\\" + currentUser.first_name + " " + currentUser.last_name;
-                    else
-                        currentUser = "aucun";
-                        
-                    boat = boat[0].id + "\\" + boat[0].name;
-                } else {
-                    currentUser = "aucun";
-                    boat = "aucun bateau attaché à cette place";
-                }
-                var dateSortie = new Date(_Sorties[i].sorti);
-                var dateSortieFormated = [("0" + (dateSortie.getDate())).slice(-2), ("0" + (dateSortie.getMonth() + 1)).slice(-2), dateSortie.getFullYear()].join('-') + ' ' + [("0" + (dateSortie.getHours())).slice(-2), ("0" + (dateSortie.getMinutes())).slice(-2), ("0" + (dateSortie.getSeconds())).slice(-2)].join(':');
-
-                
-                var dateEntre;
-                var dateEntreFormated;
-                let duree;
-                if(_Sorties[i].entre != "empty" && _Sorties[i].entre != null) {
-                    dateEntre = new Date(_Sorties[i].entre);
-                    dateEntreFormated = [("0" + (dateEntre.getDate())).slice(-2), ("0" + (dateEntre.getMonth() + 1)).slice(-2), dateEntre.getFullYear()].join('-') + ' ' + [("0" + (dateEntre.getHours())).slice(-2), ("0" + (dateEntre.getMinutes())).slice(-2), ("0" + (dateEntre.getSeconds())).slice(-2)].join(':');
-                    duree = dateDiffToString(dateSortie, dateEntre)
-                } else {
-                    dateEntreFormated = "aucun"
-                    duree = dateDiffToString(dateSortie, new Date(Date.now()));
-                }
-
-                let challenge = "";
-                if (_Sorties[i].challenge) {
-                    challenge = "oui";
-                } else {
-                    challenge = "non";
-                }
-
-
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Sorties[i].harbour_id);
-
-                _sortieGen += _sortieHtml.replace(/__ID__/g, _Sorties[i].id)
-                    .replace(/__FORMID__/g, _Sorties[i].id.replace(/\./g, "_"))
-                    .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-                    .replace(/__NUMERO_PLACE__/g, place.number)
-                    .replace(/__USER__/g, currentUser)
-                    .replace(/__BOAT__/g, boat)
-                    .replace(/__SORTIE__/g, dateSortieFormated)
-                    .replace(/__ENTRE__/g, dateEntreFormated)
-                    .replace(/__DUREE__/g, duree)
-                    .replace(/__CHALLENGE__/g, challenge)
-                    .replace(/__DATETIMEORDER__/g, _Sorties[i].sortie)
-            }
-            _indexHtml = _indexHtml.replace("__EVENTS__", _sortieGen).replace(/undefined/g, '');
-
-            var userHarbours = [];
-            var harbour_select;
-            if (_role == "user") {
-                harbour_select = '<div class="col-12">'
-                    + '<div class= "form-group" >'
-                    + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
-
-                const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
-                const userHarbours = await Promise.all(getHarbourPromises);
-                userHarbours.map(userHarbour => {
-                    harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
-                });
-
-                harbour_select += '</select></div></div>';
-            } else if (_role == "admin") {
-                harbour_select = '<div class="col-12">'
-                    + '<div class= "form-group" >'
-                    + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
-                userHarbours = await STORE.harbourmgmt.getHarbour();
-                userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
-
-                for (var i = 0; i < userHarbours.length; i++) {
-                    harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
-                }
-                harbour_select += '</select></div></div>';
-            }
-            _indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
-
-
-            res.setHeader("Content-Type", "text/html");
-            res.end(_indexHtml);
-            return;
+					/**@type {string} */
+					const indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
+					res.setHeader("Content-Type", "text/html");
+					res.end(indexHtml);
+					return;
         }
     }
 }
