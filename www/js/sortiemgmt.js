@@ -241,7 +241,7 @@ const createRow = (sortie) => {
 		ownerNames.push(`${owner.lastName} ${owner.firstName}`);
 	});
 	const row = `
-				<tr class="sortie-row" id="" onclick="openSortieModal('${sortie.boat.id}/${sortie.place.id}')">
+				<tr class="sortie-row" id="" onclick="openSortieModal('${sortie.boat?.id}/${sortie.boat?.name}')">
 					<form method="POST" enctype="multipart/form-data" id="__FORMID__">
 						<td>${sortie.boat?.name ?? 'INCONNU'}</td>
 						<td>${sortie.place?.code ?? 'INCONNU'}</td>
@@ -316,16 +316,27 @@ const openSortieModal = async (param) => {
 
 	/**@type {HTMLDivElement} */
 	const modalEl = document.querySelector('#sortieModal');
+	modalEl.addEventListener('click', closeSortieModal);
+
 	/**@type {HTMLButtonElement} */
 	const modalCloseBtnEl = document.querySelector('#modalCloseBtn');
-
-	modalEl.addEventListener('click', closeSortieModal);
 	modalCloseBtnEl.addEventListener('click', closeSortieModal);
-	modalEl.classList.remove('hide');
 
-	// const sorties = G_AllSorties
+	const listSortiesEl = document.querySelector('#listSortiesCtn');
+	listSortiesEl.innerHTML = '';
+	
+	const modalTitleEl = document.querySelector('#modalTitle');
+	const boatName = param.split('/')[1];
+	modalTitleEl.innerHTML = boatName;
+	
+	modalEl.classList.remove('hide');
+	
 	const boatId = param.split('/')[0];
 	const boatOutings = await fetchBoatOutings(boatId);
+	
+	const modalBodyTitleEl = document.querySelector('#modalBodyTitle');
+	modalBodyTitleEl.innerHTML = `Challenge (${boatOutings?.length / 2 || 0})`;
+
 	displayModalSortieList(boatOutings);
 };
 
