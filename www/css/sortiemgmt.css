@@ -63,19 +63,20 @@ tr td:nth-of-type(5) {
 	padding: 10px;
 }
 
-#sortieModal .modal-body {}
-
 #sortieModal .modal-body .body-title {
 	margin-bottom: 10px;
+}
+#sortieModal .modal-content ul {
+	max-height: 70vh;
+	overflow-y: scroll;
 }
 #sortieModal .modal-body .list-group-item {
 	display: flex;
 	justify-content: space-around;
 }
-#sortieModal .modal-body .list-group-item:first-of-type {
+#sortieModal .modal-body #listGroupHeader {
 	background-color: rgb(245, 245, 245);
-}
-#sortieModal .modal-body .list-group-item:first-of-type div {
+	width: 98.6%;
 	padding-left: 5%;
 }
 #sortieModal .modal-body .list-group-item div {
