@@ -55,7 +55,7 @@ let G_buttons = {
 		C: null,
 		next: null,
 	}
-}
+};
 let G_currentPagination, G_maxPagination, G_maxRowsByPage;
 
 window.addEventListener('load', async () => {
@@ -155,8 +155,6 @@ const fetchSorties = async () => {
 	}
 };
 
-// TODO: add sort handlers
-
 const updateSortIcon = () => {
 	console.log('====updateSortIcon====');
 
@@ -232,12 +230,6 @@ const sortSortiesBy = (sortField, isReversed = false) => {
 	}
 }
 
-const openSortieModal = (param) => {
-	console.log('====openSortieModal====', param);
-
-	
-}
-
 /**
  * 
  * @param {T_sortie} sortie 
@@ -309,4 +301,76 @@ const searchOnChangeHandler = (ev) => {
 	G_sorties = results;
 	displayRows();
 	paginationUpdateOnSearch();
+};
+
+const fetchBoatOutings = async (boatId) => {
+	console.log('====fetchBoatOutings====')
+	const url = `/api/ias/challenges/?boatid=${boatId}`;
+	const response = await fetch(url, { method: 'GET' });
+	const { sorties } = await response.json();
+	return(sorties);
+};
+
+const openSortieModal = async (param) => {
+	console.log('====openSortieModal====', param);
+
+	/**@type {HTMLDivElement} */
+	const modalEl = document.querySelector('#sortieModal');
+	/**@type {HTMLButtonElement} */
+	const modalCloseBtnEl = document.querySelector('#modalCloseBtn');
+
+	modalEl.addEventListener('click', closeSortieModal);
+	modalCloseBtnEl.addEventListener('click', closeSortieModal);
+	modalEl.classList.remove('hide');
+
+	// const sorties = G_AllSorties
+	const boatId = param.split('/')[0];
+	const boatOutings = await fetchBoatOutings(boatId);
+	displayModalSortieList(boatOutings);
+};
+
+const closeSortieModal = (ev) => {
+	console.log('====closeSortieModal====');
+	const target = ev.target
+	if (target.id !== 'sortieModal' && target.id !== 'modalCloseBtn') return;
+
+	const modalEl = document.querySelector('#sortieModal');
+	const modalCloseBtnEl = document.querySelector('#modalCloseBtn');
+
+	modalEl.classList.add('hide');
+	modalEl.removeEventListener('click', closeSortieModal);
+	modalCloseBtnEl.removeEventListener('click', closeSortieModal);
+};
+
+const createModalSortieListRow = (sortieIn, sortieOut) => {
+	let formatDateOut = new Date(sortieOut.datetime).toLocaleString();
+	formatDateOut = formatDateOut.slice(0, -3);
+	let formatDateIn = new Date(sortieIn.datetime).toLocaleString();
+	formatDateIn = formatDateIn.slice(0, -3);
+	const row = `
+		<li class="list-group-item">
+			<div>${formatDateOut}</div><div>${formatDateIn}</div>
+		</li>
+	`;
+	return(row);
+}
+
+const displayModalSortieList = (sortiesDetails = []) => {
+	console.log('====displayModalSortieList====');
+
+	let rows = [];
+	for (let i = 0; i < sortiesDetails.length; i += 2) {
+		rows.push(createModalSortieListRow(sortiesDetails[i], sortiesDetails[i + 1]));
+	}
+
+	const listSortiesEl = document.querySelector('#listSortiesCtn');
+	console.log('listSortiesEl', listSortiesEl)
+	listSortiesEl.innerHTML = `
+		<li class="list-group-item">
+			<div class="">Date de sortie</div>
+			<div class="">Date de retour</div>
+		</li>
+		${rows.join('')}
+	`;
+	return;
 };

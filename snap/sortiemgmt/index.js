@@ -233,6 +233,28 @@ const fetchOutigsDataFromIAS = async () => {
 	return(response.data)
 }
 
+const fetchOutingsDetailsByBoatFromIAS = async (iasBoatId) => {
+	const IAS_USER_TOKEN = OPTION.IAS_REQUEST_TOKEN;
+	if (!IAS_USER_TOKEN) {
+		throw new Error('No IAS USER TOKEN provided', {
+			cause: {
+				httpCode: 401,
+				publicMsg: 'Unauthorized',
+			}
+		});
+	}
+
+	const portId = '1';
+	const year = '2022';
+	const url = `https://api.nauticspot.io/fr/harbours/${portId}/boats/${iasBoatId}/cavalaire-challenge-logs?year=${year}`;
+	const headers = {
+		'X-Auth-Token': IAS_USER_TOKEN,
+	};
+
+	const response = await axios.get(url, { headers });
+	return(response.data)
+}
+
 const getIasOutigs = async (req, res) => {
 	try {
 		// TODO add auth function to allow only admin user
@@ -247,6 +269,22 @@ const getIasOutigs = async (req, res) => {
 		errorHandler(res, error);
 	}
 };
+
+const getIasChallengesByBoat = async (req, res) => {
+	console.log('====getIasChallengesByBoat====');
+	try {
+		const boatId = req.get.boatid;
+		const results = await fetchOutingsDetailsByBoatFromIAS(boatId);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			count: results.length,
+			sorties: results,
+		}));
+	} catch (error) {
+		errorHandler(res, error);
+	}
+}
 
 // -----------------------
 
@@ -345,6 +383,8 @@ async function navilyHandler(req, res) {
 
 }
 
+
+
 exports.router =
     [
         {
@@ -375,6 +415,11 @@ exports.router =
 				{
 					route: "/api/ias/sorties",
 					handler: getIasOutigs,
+					method: "GET"
+				},
+				{
+					route: "/api/ias/challenges/",
+					handler: getIasChallengesByBoat,
 					method: "GET"
 				},
     ];

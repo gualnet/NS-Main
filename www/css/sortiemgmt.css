@@ -45,21 +45,39 @@ tr td:nth-of-type(5) {
 }
 
 /* MODAL */
-.modal {
-	border: 5px solid red;
+#sortieModal {
 	display: flex;
 	background-color: rgba(0, 0, 0, 0.4);
 	justify-content: center;
 	align-items: center;
 }
-
-.modal .modal-dialog {
-	background-color: white;
-	height: 90%;
-	width: 40%;
-	min-width: 500px;
+#sortieModal.hide {
+	display: none;
 }
 
-.modal .card .header {
+#sortieModal .modal-dialog {
+	border-radius: 4px;
+	background-color: white;
+	width: 40%;
+	min-width: 500px;
+	padding: 10px;
+}
 
+#sortieModal .modal-body {}
+
+#sortieModal .modal-body .body-title {
+	margin-bottom: 10px;
+}
+#sortieModal .modal-body .list-group-item {
+	display: flex;
+	justify-content: space-around;
+}
+#sortieModal .modal-body .list-group-item:first-of-type {
+	background-color: rgb(245, 245, 245);
+}
+#sortieModal .modal-body .list-group-item:first-of-type div {
+	padding-left: 5%;
+}
+#sortieModal .modal-body .list-group-item div {
+	width: 50%;
 }
