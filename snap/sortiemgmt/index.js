@@ -457,7 +457,13 @@ exports.plugin =
 
 				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
 					res.writeHead(401);
-					res.end('No access rights');
+					res.end('Accès non autorisé');
+					return;
+				}
+				const CAVALAIRE_ENTITY_ID = 'ElzMVUL9DK'
+				if (admin?.data?.roleBackOffice !== ROLES.SUPER_ADMIN && _entity_id !== CAVALAIRE_ENTITY_ID) {
+					res.writeHead(401);
+					res.end('Accès non autorisé');
 					return;
 				}
 
