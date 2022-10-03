@@ -117,8 +117,9 @@
 
 			const imgSize = imgElRect;
 
-			const top = (imgSize.height / 100) * 10.4;
-			vortex.style.top = `${top}%`;
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 46);
+			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
 			
@@ -137,15 +138,19 @@
 			const imgSize = imgEl.getBoundingClientRect();
 			const vortex = document.querySelector('#vortex-ajaccio');
 
-			const top = (imgSize.height / 100) * 13;
-			vortex.style.top = `${top}%`;
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 63;
+			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
-			const left = base * 12;
+
+			let left = imgSize.left;
+			left += ((imgSize.height / 100) * 9.5);
 			vortex.style.left = `${left}px`;
-			const width = base * 32;
+
+			const width = base * 31;
 			vortex.style.width = `${width}px`;
-			const height = base * 16;
+			const height = base * 17;
 			vortex.style.height = `${height}px`;
 		};
 
@@ -154,14 +159,17 @@
 			const imgSize = imgEl.getBoundingClientRect();
 			const vortex = document.querySelector('#vortex-propriano');
 
-			const top = (imgSize.height / 100) * 15.6;
-			vortex.style.top = `${top}%`;
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 81;
+			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
 			const left = base * 20;
 			vortex.style.left = `${left}px`;
+
 			const width = base * 32;
 			vortex.style.width = `${width}px`;
+
 			const height = base * 10;
 			vortex.style.height = `${height}px`;
 		};
@@ -171,14 +179,18 @@
 			const imgSize = imgEl.getBoundingClientRect();
 			const vortex = document.querySelector('#vortex-bonifacio');
 
-			const top = (imgSize.height / 100) * 16.6;
-			vortex.style.top = `${top}%`;
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 88;
+			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
+			
 			const left = base * 54;
 			vortex.style.left = `${left}px`;
+
 			const width = base * 22;
 			vortex.style.width = `${width}px`;
+
 			const height = base * 15;
 			vortex.style.height = `${height}px`;
 		};
@@ -188,14 +200,18 @@
 			const imgSize = imgEl.getBoundingClientRect();
 			const vortex = document.querySelector('#vortex-porto-vecchio');
 
-			const top = (imgSize.height / 100) * 14;
-			vortex.style.top = `${top}%`;
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 71;
+			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
+			
 			const left = base * 72;
 			vortex.style.left = `${left}px`;
+			
 			const width = base * 30;
 			vortex.style.width = `${width}px`;
+			
 			const height = base * 15;
 			vortex.style.height = `${height}px`;
 		};
