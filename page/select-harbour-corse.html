@@ -7,12 +7,12 @@
 	<!-- screen loader -->
 	{{element->loader.html}}
 	<!-- Fixed navbar -->
-	<header class="header">
+	<header class="">
 		<div class="row">
 			<div class="col-auto px-0">
 				<h5>
 					Sélectionnez un port
-					<h5>
+				<h5>
 			</div>
 			<div class="text-left col">
 				<p class="text-secondary pd-4">
@@ -26,17 +26,11 @@
 		<div id="topCtn">
 			<div id="backgroundCtn">
 				<img id="imgBckg" src="/library/map-ports-corse.png" alt="">
-					<!-- HeIrt89Ccc -->
 					<div class="vortex" id="vortex-cargese" onclick="harbourClickHandler('HeIrt89Ccc')"></div>
-					<!-- rxHL7ucAo9	-->
 					<div class="vortex" id="vortex-macinaggio" onclick="harbourClickHandler('rxHL7ucAo9')"></div>
-					<!-- SlUyrmPHE9 -->
 					<div class="vortex" id="vortex-ajaccio" onclick="harbourClickHandler('SlUyrmPHE9')"></div>
-					<!-- rl4ZBaUpjc -->
 					<div class="vortex" id="vortex-propriano" onclick="harbourClickHandler('rl4ZBaUpjc')"></div>
-					<!-- BxqaMWYBqc -->
 					<div class="vortex" id="vortex-bonifacio" onclick="harbourClickHandler('BxqaMWYBqc')"></div>
-					<!-- HgfhlHtaq9 -->
 					<div class="vortex" id="vortex-porto-vecchio" onclick="harbourClickHandler('HgfhlHtaq9')"></div>
 			</div>
 		</div>
@@ -235,8 +229,10 @@
 		}
 
 		header {
-			background-color: rgba(245, 245, 220, 0.382);
 			height: 3rem;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 
 		main {
@@ -248,7 +244,7 @@
 		}
 
 		#topCtn {
-			border: 1px solid black;
+			/* border: 1px solid black; */
 			display: flex;
 			height: 90%;
 			width: 100%;
@@ -269,8 +265,7 @@
 
 		.vortex {
 			position: absolute;
-			/* position: relative; */
-			border: 1px solid green;
+			border: 1px solid rgba(0, 128, 0, 0.274);
 			height: 10px;
 			width: 10px;
 		}
