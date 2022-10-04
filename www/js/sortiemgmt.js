@@ -291,7 +291,7 @@ const searchOnChangeHandler = (ev) => {
 };
 
 const fetchBoatOutings = async (boatId) => {
-	const url = `/api/ias/challenges/?boatid=${boatId}`;
+	const url = `/api/ias/challenges/boat/?iasboatid=${boatId}`;
 	const response = await fetch(url, { method: 'GET' });
 	const { sorties } = await response.json();
 	return(sorties);
@@ -308,16 +308,16 @@ const openSortieModal = async (param) => {
 
 	const listSortiesEl = document.querySelector('#listSortiesCtn');
 	listSortiesEl.innerHTML = '';
-	
+
 	const modalTitleEl = document.querySelector('#modalTitle');
 	const boatName = param.split('/')[1];
 	modalTitleEl.innerHTML = boatName;
-	
+
 	modalEl.classList.remove('hide');
-	
+
 	const boatId = param.split('/')[0];
 	const boatOutings = await fetchBoatOutings(boatId);
-	
+
 	const modalBodyTitleEl = document.querySelector('#modalBodyTitle');
 	modalBodyTitleEl.innerHTML = `Challenge (${boatOutings?.length / 2 || 0})`;
 
