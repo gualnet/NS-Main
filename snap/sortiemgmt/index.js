@@ -270,11 +270,22 @@ const getIasOutigs = async (req, res) => {
 	}
 };
 
-const getIasChallengesByBoat = async (req, res) => {
-	console.log('====getIasChallengesByBoat====');
+const getIasChallengesByBoatId = async (req, res) => {
 	try {
-		const boatId = req.get.boatid;
-		const results = await fetchOutingsDetailsByBoatFromIAS(boatId);
+		let iasBoatId = req.get.iasboatid;
+		const fpBoatId = req.get.fpboatid;
+		if (!iasBoatId && fpBoatId) {
+			/**@type {TYPES.T_boat} */
+			const [boat] = await SOTRE.API_NEXT.getElements(ENUM.TABLES.BOATS, { id: fpboatid });
+			if (!boat) throw new Error(`Boat id [${fpboatid}]`, { cause: {
+				publicMsg: 'Error bateau introuvable',
+			}})
+			if (!boat.ias_id) throw new Error(`Boat id [${fpboatid}] doesn't have a valide ias id [${boat.ias_id}]`, { cause: {
+				publicMsg: 'Error bateau introuvable',
+			}})
+			iasBoatId = boat.ias_id;
+		}
+		const results = await fetchOutingsDetailsByBoatFromIAS(iasBoatId);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -284,7 +295,29 @@ const getIasChallengesByBoat = async (req, res) => {
 	} catch (error) {
 		errorHandler(res, error);
 	}
-}
+};
+
+const getIasChallengesByUserId = async (req, res) => {
+	try {
+		const userId = req.get.userid;
+		/**@type {TYPES.T_user[]} */
+		const [user] = await STORE.API_NEXT.getElements(ENUM.TABLES.USERS, { id: userId });
+		if (!user || !user.boat_id) throw new Error('User or user\'s boat id not found');
+		/**@type {TYPES.T_boat[]} */
+		const [boat] = await STORE.API_NEXT.getElements(ENUM.TABLES.BOATS, { id: user.boat_id });
+		if (!boat || !boat.ias_id) throw new Error('Boat or ias boat id not found');
+		const iasBoatId = boat.ias_id;
+		const results = await fetchOutingsDetailsByBoatFromIAS(iasBoatId);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			count: results.length,
+			sorties: results,
+		}));
+	} catch (error) {
+		errorHandler(res, error);
+	}
+};
 
 // -----------------------
 
@@ -382,8 +415,6 @@ async function navilyHandler(req, res) {
 
 }
 
-
-
 exports.router =
     [
         {
@@ -417,8 +448,13 @@ exports.router =
 					method: "GET"
 				},
 				{
-					route: "/api/ias/challenges/",
-					handler: getIasChallengesByBoat,
+					route: "/api/ias/challenges/boat",
+					handler: getIasChallengesByBoatId,
+					method: "GET"
+				},
+				{
+					route: "/api/ias/challenges/user",
+					handler: getIasChallengesByUserId,
 					method: "GET"
 				},
     ];

@@ -226,7 +226,7 @@
 	}
 	.detail-row__index {
 		font-weight: 700;
-    width: 25%;
+    width: 15%;
     display: flex;
     justify-content: flex-end;
 	}
@@ -251,23 +251,23 @@
 
 <script>
 	window.addEventListener('load', async () => {
-		const sorties = await fetchSorties() || [];
+		const sorties = await fetchChallengesByUser() || [];
 		displaySorties(sorties);
 		updateProgressBar(sorties);
 	});
 
-	// fetch users absences
-	const fetchSorties = async () => {
+	const fetchChallengesByUser = async () => {
 		try {
-			const resp = await fetch(`/api/sortie/${localStorage['token']}`);
-			const respJson = await resp.json()
-			const sorties = respJson.sorties;
+			const userId = localStorage['user'];
+			let url = `/api/ias/challenges/user/?userid=${userId}`;
+			const resp = await fetch(url, { method: 'GET' });
+			const { sorties } = await resp.json()
 			return(sorties);
 		} catch (error) {
 			console.log(error);
 			alert('error');
 		}
-	}
+	};
 
 	const sortiesDateFormatConverter = (timestamp = 0) => {
 		const startDate = new Date(timestamp).toLocaleString('fr-FR', { dateStyle: 'short' });
@@ -287,19 +287,21 @@
 	// put the rows in the page
 	const displaySorties = (sorties = []) => {
 		const absencesElements = [];
-		sorties.sort((a, b) => (a.date_start < b.date_start) ? -1 : 1);
-		sorties.map((sortie, index) => {
-			const startDate = sortiesDateFormatConverter(sortie.datetime_out);
-			console.log('startDate', startDate);
-			const endDate = sortiesDateFormatConverter(sortie.datetime_in);
-			console.log('endDate', endDate);
+		let rowCounter = 0;
+		for (let i = 0; i < sorties.length; i += 2) {
+			rowCounter++;
+			const sortieIn = sorties[i];
+			const sortieOut = sorties[i + 1];
+
+			const endDate = sortiesDateFormatConverter(sortieIn.datetime);
+			const startDate = sortiesDateFormatConverter(sortieOut.datetime);
 			absencesElements.push(`
-			<div class="detail-row">
-				<div class="detail-row__index">${index + 1}.</div>
-				<div class="detail-row__date">${startDate} - ${endDate}</div>
+				<div class="detail-row">
+					<div class="detail-row__index">${rowCounter}.</div>
+					<div class="detail-row__date">${startDate} - ${endDate}	</div>
 				</div>
 			`);
-		});
+		}
 		const rowsCtn = document.querySelector('.detail-rows-ctn');
 		rowsCtn.innerHTML = absencesElements.join('');
 	}
@@ -308,7 +310,7 @@
 	const updateProgressBar = (sorties = []) => {
 		const MAX = 15;
 		const RATIO = 100 / 15;
-		const count = sorties.length;
+		const count = sorties.length / 2;
 
 		const scoreNumberEl = document.querySelector('#score-number');
 		scoreNumberEl.innerHTML = count;
@@ -317,7 +319,6 @@
 		const progressEl = document.querySelector('.progression-bar__progress');
 		progressEl.style.width = `${progress}%`;
 	}
-	
 </script>
 
 </html>
