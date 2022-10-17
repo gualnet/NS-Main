@@ -105,7 +105,7 @@
 	}
 	.title-ctn {
 		display: flex;
-		font-size: 28pt;
+		font-size: 38px;
 		font-weight: 500;
 		align-items: center;
 	}
@@ -124,7 +124,7 @@
 		height: calc(100% - 60px);
 	}
 	.top-ctn__hero h1 {
-		font-size: 40pt;
+		font-size: 50px;
 	}
 	.top-ctn__helpers {
 		padding: 0 20px;
@@ -139,11 +139,11 @@
 		padding: 0 20px;
 	}
 	.top-ctn__helpers .button:first-of-type {
-		font-size: 28pt;
+		font-size: 38px;
 		font-weight: bolder;
 	}
 	.top-ctn__helpers .button:nth-of-type(2) {
-		font-size: 24pt;
+		font-size: 34px;
 		font-weight: 100;
 	}
 
@@ -164,29 +164,29 @@
 		display: flex;
 		flex-direction: column;
     justify-content: flex-end;
-    line-height: 100pt;
-		font-size: 100pt;
+    line-height: 100px;
+		font-size: 100px;
 		font-weight: bold;
 	}
 	.middle-ctn .score-ctn div:nth-of-type(2) {
 		display: flex;
-		font-size: 60pt;
+		font-size: 60px;
 		margin: 0 20px;
     align-items: flex-end;
-    line-height: 60pt;
+    line-height: 60px;
 	}
 	.middle-ctn .score-ctn div:nth-of-type(3) {
 		display: flex;
-		font-size: 60pt;
+		font-size: 70px;
     align-items: flex-end;
-    line-height: 60pt;
+    line-height: 70px;
 	}
 	.middle-ctn .score-ctn div:nth-of-type(4) {
 		margin-left: 20px;
-		display: flex;
-		font-size: 30pt;
+    display: flex;
+    font-size: 40px;
     align-items: flex-end;
-    line-height: 40pt;
+    line-height: 50px;
 	}
 	.middle-ctn .progression-bar-ctn {
 		background-color: #acb1b6;
@@ -211,7 +211,7 @@
 	}
 	.bottom-ctn .detail-rows-ctn {
 		padding: 20px 40px;
-		font-size: 28pt;
+		font-size: 38px;
 		overflow-y: scroll;
 	}
 	.bottom-ctn .detail-row {
@@ -231,7 +231,7 @@
     justify-content: flex-end;
 	}
 	.detail-row__date {
-		font-size: 30pt;
+		font-size: 40px;
     font-weight: 500;
     display: flex;
     flex-grow: 1;
@@ -270,16 +270,15 @@
 	};
 
 	const sortiesDateFormatConverter = (timestamp = 0) => {
-		const startDate = new Date(timestamp).toLocaleString('fr-FR', { dateStyle: 'short' });
-		const dateArr = startDate.split('/');
-		const formatedDate = `${dateArr[0]}/${dateArr[1]}`;
-
-		const startHour = new Date(timestamp).toLocaleTimeString();
-		const hourArr = startHour.split(':');
-		const formatedHour = `${hourArr[0]}:${hourArr[1]}`;
-		
+		const datetime = "2022-02-27 12:05"
+		const startDate = timestamp.split(' ')[0];
+		const DD = startDate.split('-')[2];
+		const MM = startDate.split('-')[1];
+		const formatedDate = `${DD}/${MM}`;
+		const startHour = timestamp.split(' ')[1];
+		const formatedHour = `${startHour}`;
 		const fullFormatedDate = `${formatedDate} à ${formatedHour}`;
-		return(fullFormatedDate)
+		return(fullFormatedDate);
 	}
 
 	// take an absence array
