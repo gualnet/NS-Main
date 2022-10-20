@@ -1064,7 +1064,7 @@ exports.plugin =
                     }
                 }
                 else {
-                    if (!zones[0] && !places[0] && !places[0]) {
+                    if (!zones[0] && !places[0] && !bouees[0]) {
                         var delmap = await delMap(currentMap[0].id);
                         console.log("map suppriemr? " + delmap)
                         UTILS.httpUtil.dataError(req, res, "Error", "Aucun élément dans le plan, supression effectué du plan d'eau.", "1.0");
