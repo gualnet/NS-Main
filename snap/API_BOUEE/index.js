@@ -29,7 +29,7 @@ exports.handler = async (req, res) => {
 const fetchPresencesTest = async (devid) => {
 	const limit = 1;
 	const limitStr = (limit > 0) ? `LIMIT ${limit}` : '';
-	const lastPeriodAmount = 24;
+	const lastPeriodAmount = 48;
 	const lastPeriodUnit = 'h'; // h for hours / m for minutes /..
 	const devidStr = (devid === '') ? '' : `devid='${devid}' AND`;
 	// // DATA SOURCE 1
@@ -145,6 +145,129 @@ const getBoueePresence = async (req, res) => {
 	}
 };
 
+let portsInfo = {
+	"rgmlITNzoi": { // Marigot
+		"prefix": "b000",
+		"captors": ["b000160", "b000161", "b000162", "b000163", "b000164", "b000165", "b000166", "b000167", "b000168", "b000169", "b000170", "b000171", "b000172", "b000173", "b000174", "b000175", "b000176", "b000177", "b000178", "b000179", "b000180", "b000181", "b000182", "b000183", "b000184", "b000185", "b000186", "b000187", "b000188", "b000189", "b000190", "b000191", "b000192", "b000193", "b000194", "b000195", "b000196", "b000197", "b000198", "b000199", "b000200", "b000201", "b000202", "b000203", "b000204", "b000205", "b000206", "b000207", "b000208", "b000209", "b000210", "b000211", "b000212", "b000213", "b000214", "b000215", "b000216", "b000217", "b000218", "b000219", "b000220", "b000221", "b000222", "b000223", "b000224", "b000225", "b000226", "b000227", "b000228", "b000229", "b000230", "b000231", "b000232", "b000233", "b000234", "b000235", "b000236", "b000237", "b000238", "b000239", "b000240", "b000241", "b000242", "b000243", "b000244", "b000245", "b000246", "b000247", "b000248", "b000249", "b000250", "b000251", "b000252", "b000253", "b000254", "b000255", "b000256", "b000257", "b000258", "b000259"]
+	}
+}
+
+const getByPort = async (req, res) => {
+	try {
+		const portId = req.param.port_id;
+		const portInfo = portsInfo[portId];
+
+		if (!portInfo) {
+			throw new Error('Invalid port id', { cause: { httpCode: 401 }});
+		}
+		/**@type {string[]}*/
+		const { captors } = portsInfo[portId];
+		const promises = [];
+		const timeOffset = "140h";
+		const dbName = 'presence_jadespot_ts_new';
+		const baseUrl = `http://buoys.nauticspot.io:8086/query?pretty=false/&db=${dbName}`;
+		captors.map(devid => {
+			const queryUrl = `${baseUrl}&q=SELECT * FROM presence WHERE devid='${devid}' and time >= now() - ${timeOffset}`;
+
+			promises.push(fetchDataSource(queryUrl, devid));
+		});
+		const results = await Promise.all(promises);
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			results,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'api_bouee' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+}
+
+const addPort = async (req, res) => {
+	const portId = req.body.id;
+	const prefix = req.body.prefix;
+	const from = req.body.from;
+	const to = req.body.to;
+
+	portsInfo[portId] = {
+		prefix,
+		from,
+		to,
+	}
+	res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+	res.end(JSON.stringify({
+		success: true,
+		results: portsInfo,
+	}));
+}
+
+const addCaptors = async (req, res) => {
+	try {
+		const captors = req.body.captors;
+		const portId = req.body.port_id;
+
+		if (!portsInfo[portId]) {
+			throw new Error('Invalid port id', { cause: { httpCode: 401 }});
+		}
+		for (let c in captors) {
+			if (portsInfo[portId].captors.includes(captors[c])) {
+				continue;
+			}
+			portsInfo[portId].captors.push(captors[c]);
+		}
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			results: portsInfo[portId],
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'api_bouee' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+}
+
+const deleteCaptors = async (req, res) => {
+	try {
+		const captors = req.body.captors;
+		const portId = req.body.port_id;
+
+		if (!portsInfo[portId]) {
+			throw new Error('Port not found', { cause: { httpCode: 400 }});
+		}
+		for (let c in captors) {
+			if (!portsInfo[portId].captors.includes(captors[c])) {
+				continue;
+			}
+			portsInfo[portId].captors.splice(portsInfo[portId].captors.indexOf(captors[c]), 1);
+		}
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			results: portsInfo[portId],
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'api_bouee' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+}
 
 exports.router = [
 	{
@@ -152,5 +275,29 @@ exports.router = [
 		route: '/api-erp/bouee/presence',
 		handler: getBoueePresence,
 		methode: 'GET'
-	}
+	},
+	{
+		on: true,
+		route: '/api-erp/bouee/ports/captors',
+		handler: addCaptors,
+		methode: "POST"
+	},
+	{
+		on: true,
+		route: '/api-erp/bouee/ports/captors',
+		handler: deleteCaptors,
+		methode: "DELETE"
+	},
+	{
+		on: true,
+		route: '/api-erp/bouee/ports/:port_id',
+		handler: getByPort,
+		methode: 'GET'
+	},
+	{
+		on: true,
+		route: '/api-erp/bouee/ports',
+		handler: addPort,
+		methode: "POST"
+	},
 ];
