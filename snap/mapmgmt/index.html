@@ -175,7 +175,11 @@
 
 
         getPlan();
-        document.getElementById("harbour_id").addEventListener('change', function (e) { getPlan() });
+        document.getElementById("harbour_id").addEventListener('change',
+				function (e) {
+					getPlan();
+					refreshBuoysStatus();
+				});
 
 
         var dynamicSort = function (property) {
@@ -194,6 +198,7 @@
         }
 
         function getPlan() {
+					console.log('====getPlan====');
             fetch("/admin/plugin/mapmgmt?harbour_id=" + document.getElementById("harbour_id").value, { method: "GET" }).then(response => response.json()).then(_data => {
                 places = {};
                 zones = {};
@@ -1697,27 +1702,58 @@
 
         }
 
+				const refreshBuoysStatus = async () => {
+					const harbourId = document.getElementById("harbour_id")?.value || null;
+					if (!harbourId) {
+						alert('Une erreur est survenue.')
+						console.error('Harbour ID not found');
+						return;
+					}
+					// Fetch emplacements data
+					const emplacementsResp = await fetch(`/api/emplacements?harbour_id=${harbourId}`, { method: 'GET' });
+					if (!emplacementsResp.ok) {
+						alert('Une erreur est survenue.')
+						console.error('Fetch emplacements data failed');
+						return;
+					}
+					const emplacementsJson = await emplacementsResp.json();
+					const boueesData = emplacementsJson.data[0];
+
+					// Fetch buoys presence data
+					const presenceResp = await fetch(`/api-erp/bouee/ports/${harbourId}`, { method: 'GET' });
+					if (!presenceResp.ok) {
+						alert('Une erreur est survenue.')
+						console.error('Fetch presence data failed');
+						return;
+					}
+					const presenceJson = await presenceResp.json();
+					const presenceData = presenceJson.results;
+
+					// Update colors displayed according to 
+					boueesData.map(bouee => {
+						const captorNumber = bouee.captorNumber;
+						bouee.status = presenceData[captorNumber]?.presence_TS || 0;
+						const boueeEl = document.getElementById(bouee.id);
+						if (boueeEl) {
+							const currentBouee = SVG(boueeEl.childNodes[0]);
+							if (currentBouee) {
+								if (bouee.status === 1) {
+									currentBouee.fill("#2c75ff");
+								} else if (bouee.status === 0) {
+									currentBouee.fill('#57d53b');
+								} else {
+									currentBouee.fill("#FFFFFF");
+								}
+							}
+						}
+					});
+
+
+				};
 
         function refreshData() {
             fetch("/api/emplacements?harbour_id=" + document.getElementById("harbour_id").value, { method: "GET" }).then(response => response.json()).then(_data => {
                 if (_data.success) {
-                    console.log(_data);
-                    var bouees = _data.data[0];
-                    for (var i = 0; i < bouees.length; i++) {
-                        if (document.getElementById(bouees[i].id) != null) {
-                            if (bouees[i].status) {
-                                let currentBouee = SVG(document.getElementById(bouees[i].id).childNodes[0]);
-
-                                if (document.getElementById(bouees[i].id).childNodes[0]) {
-                                    if (bouees[i].status == 1) //occupied
-                                        currentBouee.fill('#5EC1C5');
-                                    else if (bouees[i].status == 0) // empty
-                                        currenBouee.fill("#F39D26");
-                                }
-
-                            }
-                        }
-                    }
                     var places = _data.data[1];
                     for (var i = 0; i < places.length; i++) {
                         if (document.getElementById(places[i].id) != null) {
@@ -1749,9 +1785,12 @@
             }).catch((e) => { console.error(e) });
         }
         refreshData();
-        const interval = setInterval(function () {
+				const interval = setInterval(function () {
             refreshData();
         }, 5000);
+        const interval2 = setInterval(function () {
+            refreshBuoysStatus();
+        }, 1000*60*1);
 
     </script>
 </body>
