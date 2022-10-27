@@ -609,7 +609,6 @@ async function getEmplacementsByHarbourIdHandler(_req, _res) {
         var zones = await getZoneByHarbourId(_req.get.harbour_id);
         var places = await getPlaceByHarbourId(_req.get.harbour_id);
         var bouees = await getBoueeByHarbourId(_req.get.harbour_id);
-        console.log("test")
             data[0] = bouees;
             data[1] = places;
 
@@ -620,7 +619,6 @@ async function getEmplacementsByHarbourIdHandler(_req, _res) {
             UTILS.httpUtil.dataError(_req, _res, "Error", "Emplacements introuvables", "404", "1.0");
             return false;
         }
-          
     }
     res.end();
     return;

@@ -6,11 +6,29 @@ const myLogger = require('../lib-js/myLogger');
 const erpUsersServices = require('../erpUsers/services');
 
 const CAPTEUR_NUMBER = {
-	'b000140': 41,'b000151': 42, 'b000141': 44,'b000139': 45,
-	'b000134': 46,'b000149': 47, 'b000135': 65, 'b000148': 68,
-	'b000138': 69, 'b000142': 73, 'b000132': 75, 'b000133': 76,
-	'b000144': 77, 'b000137': 78, 'b000136': 79,
+	
 };
+
+let portsInfo = {
+	"ElzMVUL9DK": { // Cavalaire - Heraclea
+		'b000140': 41,'b000151': 42, 'b000141': 44,'b000139': 45,
+		'b000134': 46,'b000149': 47, 'b000135': 65, 'b000148': 68,
+		'b000138': 69, 'b000142': 73, 'b000132': 75, 'b000133': 76,
+		'b000144': 77, 'b000137': 78, 'b000136': 79,
+	},
+	"rgmlITNzoi": { // Marigot
+		"b000160": 01, "b000161": 02, "b000162": 03, "b000163": 04, "b000235": 05, "b000165": 06, "b000166": 07, "b000167": 08, "b000168": 09, "b000169": 10,
+		"b000170": 11, "b000171": 12, "b000172": 13, "b000173": 14, "b000174": 15, "b000175": 16, "b000176": 17, "b000177": 18, "b000178": 19, "b000179": 20,
+		"b000180": 21, "b000181": 22, "b000182": 23, "b000183": 24, "b000184": 25, "b000185": 26, "b000186": 27, "b000187": 28, "b000188": 29, "b000189": 30,
+		"b000190": 31, "b000191": 32, "b000192": 33, "b000193": 34, "b000194": 35, "b000195": 36, "b000196": 37, "b000197": 38, "b000198": 39, "b000199": 40,
+		"b000200": 41, "b000201": 42, "b000202": 43, "b000203": 44, "b000204": 45, "b000205": 46, "b000206": 47, "b000207": 48, "b000208": 49, "b000209": 50,
+		"b000210": 51, "b000211": 52, "b000212": 53, "b000213": 54, "b000214": 55, "b000215": 56, "b000216": 57, "b000217": 58, "b000218": 59, "b000219": 60,
+		"b000220": 61, "b000221": 62, "b000222": 63, "b000223": 64, "b000224": 65, "b000225": 66, "b000226": 67, "b000227": 68, "b000228": 69, "b000229": 70,
+		"b000230": 71, "b000231": 72, "b000232": 73, "b000233": 74, "b000234": 75,
+		// SPARE
+		// "b000164", "b000236", "b000237", "b000238", "b000239", "b000240", "b000241", "b000242", "b000243", "b000244", "b000245", "b000246", "b000247", "b000248", "b000249", "b000250", "b000251", "b000252", "b000253", "b000254", "b000255", "b000256", "b000257", "b000258", "b000259"
+	},
+}
 
 
 exports.setup = {
@@ -63,7 +81,7 @@ const fetchDataSource = async (url, devid) => {
 		url: url,
 		headers: { 'Authorization': 'Token admin:vanille' }
 	});
-	const objectSource = normailseDataSource(devid, resp.data.results);
+	const objectSource = normalizeDataSource(devid, resp.data.results);
 	return(objectSource);
 };
 
@@ -73,7 +91,7 @@ const presenceDecisionTable = (obj1, obj2) => {
 	return(presence);
 }
 
-const normailseDataSource = (devid, rawResults) => {
+const normalizeDataSource = (devid, rawResults) => {
 	const serie = rawResults[0]?.series?.[0];
 	if (!serie) {
 		throw new Error('Internal server error', { cause: { httpCode: 500 }});
@@ -90,6 +108,22 @@ const normailseDataSource = (devid, rawResults) => {
 			}
 		})
 	})
+	return(obj);
+};
+
+// Take an influxdb query result object and transform it to an object containing captors data
+// where object keys are bouoy devid (captor number0-=)
+const influxResultsToObject = (influxRaw) => {
+	const series = influxRaw[0].series[0];
+	const obj = {};
+	series.values.map(valuesArr => {
+		obj[valuesArr[2]] = {
+			time: valuesArr[0],
+			buoy_num: valuesArr[1],
+			devid: valuesArr[2],
+			presence_TS: valuesArr[6],
+		}
+	});
 	return(obj);
 };
 
@@ -145,12 +179,7 @@ const getBoueePresence = async (req, res) => {
 	}
 };
 
-let portsInfo = {
-	"rgmlITNzoi": { // Marigot
-		"prefix": "b000",
-		"captors": ["b000160", "b000161", "b000162", "b000163", "b000164", "b000165", "b000166", "b000167", "b000168", "b000169", "b000170", "b000171", "b000172", "b000173", "b000174", "b000175", "b000176", "b000177", "b000178", "b000179", "b000180", "b000181", "b000182", "b000183", "b000184", "b000185", "b000186", "b000187", "b000188", "b000189", "b000190", "b000191", "b000192", "b000193", "b000194", "b000195", "b000196", "b000197", "b000198", "b000199", "b000200", "b000201", "b000202", "b000203", "b000204", "b000205", "b000206", "b000207", "b000208", "b000209", "b000210", "b000211", "b000212", "b000213", "b000214", "b000215", "b000216", "b000217", "b000218", "b000219", "b000220", "b000221", "b000222", "b000223", "b000224", "b000225", "b000226", "b000227", "b000228", "b000229", "b000230", "b000231", "b000232", "b000233", "b000234", "b000235", "b000236", "b000237", "b000238", "b000239", "b000240", "b000241", "b000242", "b000243", "b000244", "b000245", "b000246", "b000247", "b000248", "b000249", "b000250", "b000251", "b000252", "b000253", "b000254", "b000255", "b000256", "b000257", "b000258", "b000259"]
-	}
-}
+
 
 const getByPort = async (req, res) => {
 	try {
@@ -160,22 +189,21 @@ const getByPort = async (req, res) => {
 		if (!portInfo) {
 			throw new Error('Invalid port id', { cause: { httpCode: 401 }});
 		}
-		/**@type {string[]}*/
-		const { captors } = portsInfo[portId];
-		const promises = [];
-		const timeOffset = "140h";
+		const timeOffset = "7m";
 		const dbName = 'presence_jadespot_ts_new';
 		const baseUrl = `http://buoys.nauticspot.io:8086/query?pretty=false/&db=${dbName}`;
-		captors.map(devid => {
-			const queryUrl = `${baseUrl}&q=SELECT * FROM presence WHERE devid='${devid}' and time >= now() - ${timeOffset}`;
-
-			promises.push(fetchDataSource(queryUrl, devid));
+		const queryUrl = `${baseUrl}&q=SELECT * FROM presence WHERE time >= now() - ${timeOffset}`;
+		const resp = await axios({
+			url: queryUrl,
+			method: 'GET',
+			headers: { 'Authorization': 'Token admin:vanille' }
 		});
-		const results = await Promise.all(promises);
+		const results = resp.data.results;
+		const buoysObj = influxResultsToObject(results);
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			results,
+			results: buoysObj,
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
