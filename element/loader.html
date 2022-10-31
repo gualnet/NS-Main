@@ -21,36 +21,35 @@
 
 
 <script>
-    var urlParam = new URLSearchParams(window.location.search);
-    if (localStorage['entity_logo']) {
-        document.getElementById('loader_entity_logo').src = localStorage['entity_logo'];
-    }
-    if (localStorage['entity_id']) {
-        fetch("/api/entity/get/" + localStorage['entity_id']).then(response => response.json()).then(_data => {
-            if (_data.success) {
-                var entity = _data.data;
-                document.getElementById('loader_entity_logo').src = entity.logo;
-                localStorage['entity_logo'] = entity.logo;
-                localStorage['absence_module'] = entity.absence_module;
-                localStorage['security_module'] = entity.security_module;
-                //document.getElementById('loader_entity_name').innerHTML = entity.name;
-            }
-        }).catch((error) => {
-            console.log(error);
-        });
-    } else if (urlParam.get('entity')) {
-        fetch("/api/entity/get/" + urlParam.get('entity')).then(response => response.json()).then(_data => {
-            if (_data.success) {
-                var entity = _data.data;
-                document.getElementById('loader_entity_logo').src = entity.logo;
-                localStorage['entity_logo'] = entity.logo;
-                localStorage['absence_module'] = entity.absence_module;
-                localStorage['security_module'] = entity.security_module;
+	window.addEventListener('load', async () => {
+		var urlParam = new URLSearchParams(window.location.search);
+		if (localStorage['entity_logo']) {
+			document.getElementById('loader_entity_logo').src = localStorage['entity_logo'];
+		}
+		const entityId = localStorage['entity_id'] || urlParam.get('entity');
+		if (entityId) {
+			try {
+				const entity = await Loader_fetchEntityData(entityId);
+				setTimeout(function () {
+					$('.loader-display').fadeOut('slow');
+				}, 500);
+				console.log('entity', entity);
 
-                // document.getElementById('loader_entity_name').innerHTML = entity.name;
-            }
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
+				document.getElementById('loader_entity_logo').src = entity.logo;
+				localStorage['entity_logo'] = entity.logo;
+				localStorage['absence_module'] = entity.absence_module;
+				localStorage['security_module'] = entity.security_module;
+			} catch (error) {
+				console.log('[ERROR]', error);
+			}
+		}
+	});
+
+	const Loader_fetchEntityData = async (entityId) => {
+		const response = await fetch(`/api/entity/get/${entityId}`);
+		const responseJson = await response.json();
+		const entityData = responseJson.data;
+		return (entityData);
+	};
+
 </script>
