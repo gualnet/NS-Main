@@ -1090,7 +1090,6 @@
 			try {
 				const resp = await fetch(`/api/offers/harbour/${localStorage['harbour_id']}`, { method: 'GET' });
 				const respJson = await resp.json();
-				console.log('respJson',respJson)
 				const offersCount = respJson.count;
 				if (offersCount > 0) {
 					const offersBtnEl = document.querySelector('#offers_btn');
@@ -1098,7 +1097,6 @@
 				}
 			} catch (error) {
 				console.error('ERROR', error);
-				// alert('Error: index-001');
 			}
 		};
 
@@ -1197,6 +1195,10 @@
 			const url = `/api/get/userboats?user_id=${localStorage["user"]}&harbour_id=${localStorage["harbour_id"]}`;
 			const resp = await fetch(url, { method: 'GET' });
 			const respJson = await resp.json();
+			if (respJson.status === 'Error') {
+				console.warn('Pas de bateau trouvé !');
+				return(null);
+			}
 			const boat = respJson.data[0];
 			return(boat);
 		};
