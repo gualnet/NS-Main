@@ -60,6 +60,10 @@
 					setWindowLocationLink('/index')
 				} else if (location.pathname.includes('notification')) {
 					setWindowLocationLink('/notifications')
+				} else if (location.pathname.includes('offers')) {
+					setWindowLocationLink('/index')
+				} else if (location.pathname.includes('offer')) {
+					setWindowLocationLink('/offers')
 				} else if (location.pathname.includes('partner')) {
 					navbarHeaderEl.addEventListener('click', (ev) => {
 						history.back();
