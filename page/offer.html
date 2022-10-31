@@ -9,10 +9,6 @@
 	<main class="flex-shrink-0">
 		<!-- Fixed navbar -->
 		{{element->navheader.html}}
-		<nav class="navbar navbar-light fixed-top" style="margin-top:35px;">
-			<a id="return_link" class="navbar-brand" href="/offers"><i style="font-size:30px;"
-					class="bi bi-arrow-left-circle-fill"></i></a>
-		</nav>
 		<!-- page content start -->
 		<div class="product-image-top" style="background-color:white;">
 			<img id="img" style="width:100%;height:auto" src="img/image-3.png" alt="">
@@ -25,6 +21,7 @@
 							<h5 id="title"></h5>
 						</div>
 					</div>
+					<div class="row" id="pj"></div>
 					<div class="row pt-2">
 						<div class="col">
 							<p class="text-muted small" id="description"></p>
@@ -67,11 +64,8 @@
 					throw new Error('No param id found in url');
 				}
 				const resp = await fetch(`/api/offers/${offerId}`);
-				console.log('resp',resp);
 				const respJson = await resp.json();
-				console.log('respJson',respJson);
 				const offer = respJson.offer;
-				console.log('offer',offer);
 				return(offer[0]);
 			} catch (error) {
 				console.error(error);
@@ -94,6 +88,17 @@
 				const startDate = offer.date_start.split('-').reverse().join('/');
 				const endDate = offer.date_end.split('-').reverse().join('/');
 				dureeEl.innerHTML = `Du ${startDate} au ${endDate}`;
+			}
+			const pjEl = document.querySelector('#pj');
+			if (pjEl && offer.pj) {
+				pjEl.innerHTML = `
+					<div class="border-top border-color col pt-2">
+						<a target="_blank" href="${offer.pj}">
+							<i class="bi bi-paperclip" style="font-size:20px;"></i>
+							<span class="small">${offer.pjName}</span>
+						</a>
+					</div>
+				`;
 			}
 		};
 
