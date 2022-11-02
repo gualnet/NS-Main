@@ -628,19 +628,19 @@
 
 				switch (places[_elId].occupation) {
 					case "empty":
-						SVG(document.getElementById(_elId).childNodes[0]).fill('#F39D26');
+						SVG(document.getElementById(_elId).childNodes[0]).fill('#F39D26'); // orange
 						break;
 					case "occupied":
-						SVG(document.getElementById(_elId).childNodes[0]).fill('#5EC1C5');
+						SVG(document.getElementById(_elId).childNodes[0]).fill('#5EC1C5'); // bleu ciel
 						break;
 					case "emptyEscaleDisponible":
-						SVG(document.getElementById(_elId).childNodes[0]).fill('#33B460');
+						SVG(document.getElementById(_elId).childNodes[0]).fill('#33B460'); // vert
 						break;
 					case "occupiedEscale":
-						SVG(document.getElementById(_elId).childNodes[0]).fill('#243E7E');
+						SVG(document.getElementById(_elId).childNodes[0]).fill('#243E7E'); // bleu foncé
 						break;
 					case "error":
-						SVG(document.getElementById(_elId).childNodes[0]).fill('#EE433C');
+						SVG(document.getElementById(_elId).childNodes[0]).fill('#EE433C'); // rouge
 						break;
 				}
 
@@ -1540,7 +1540,6 @@
 						} else if (bouee.status === 0) {
 							currentBouee.fill("#57d53b");
 						} else {
-							currentBouee.fill('#FF0000');
 							getLastKnownStatus(bouee, currentBouee);
 						}
 					}
@@ -1560,19 +1559,19 @@
 								switch (places[i].occupation) {
 									case "empty":
 										console.log("empty");
-										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#F39D26');
+										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#F39D26'); // orange
 										break;
 									case "occupied":
-										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#5EC1C5');
+										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#5EC1C5'); // bleu ciel
 										break;
 									case "emptyEscaleDisponible":
-										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#33B460');
+										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#33B460'); // vert
 										break;
 									case "occupiedEscale":
-										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#243E7E');
+										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#243E7E'); // bleu foncé
 										break;
 									case "error":
-										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#EE433C');
+										SVG(document.getElementById(places[i].id).childNodes[0]).fill('#EE433C'); // rouge
 										break;
 								}
 							}
