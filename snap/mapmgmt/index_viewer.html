@@ -1497,17 +1497,16 @@
 		};
 
 		const refreshBuoysStatus = async () => {
-			console.log('====refreshBuoysStatus====')
 			const harbourId = document.getElementById("harbour_id")?.value || null;
 			if (!harbourId) {
-				alert('Une erreur est survenue.')
+				// alert('Une erreur est survenue.')
 				console.error('Harbour ID not found');
 				return;
 			}
 			// Fetch emplacements data
 			const emplacementsResp = await fetch(`/api/emplacements?harbour_id=${harbourId}`, { method: 'GET' });
 			if (!emplacementsResp.ok) {
-				alert('Une erreur est survenue.')
+				// alert('Une erreur est survenue.')
 				console.error('Fetch emplacements data failed');
 				return;
 			}
@@ -1517,7 +1516,7 @@
 			// Fetch buoys presence data
 			const presenceResp = await fetch(`/api-erp/bouee/ports/${harbourId}`, { method: 'GET' });
 			if (!presenceResp.ok) {
-				alert('Une erreur est survenue.')
+				// alert('Une erreur est survenue.')
 				console.error('Fetch presence data failed');
 				return;
 			}
