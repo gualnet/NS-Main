@@ -43,53 +43,73 @@ exports.handler = async (req, res) => {
 	res.end('Hello Snap!');
 }
 
+const verifyAccess = async (apiAuthToken, harbourId, devid) => {
+	// validate api token
+	const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
+	if (!erpUsers) {
+		throw new Error('Invalide API Token', { cause: { httpCode: 401 }});
+	}
+	// verify if ERP can access to the requested port absences
+	if (!harbourId || !erpUsers.harbourIds.includes(harbourId)) {
+		throw new Error('Invalid \'harbour-id\' parameter.', { cause: { httpCode: 401 }});
+	}
+	if (harbourId !== '4e.mx_85wK') { // Allowed only for cavalaire
+		throw new Error('Access Denied', { cause: { httpCode: 403 }});
+	}
+	if (CAPTEUR_NUMBER[devid] === undefined) {
+		throw new Error('Invalid \'devid\' parameter.', { cause: { httpCode: 401 }});
+	}
+};
 
-const fetchPresencesTest = async (devid) => {
-	const limit = 1;
+
+
+/**
+ * 
+ * @param {*} options // limit / timeFrame
+ * @returns 
+ */
+const fetchPresenceFromBuoysServer = async (devid, options) => {
+	const limit = options.limit;
 	const limitStr = (limit > 0) ? `LIMIT ${limit}` : '';
-	const lastPeriodAmount = 48;
-	const lastPeriodUnit = 'h'; // h for hours / m for minutes /..
+	const timeFrame = options.timeFrame || '48h'; // h for hours / m for minutes /..
 	const devidStr = (devid === '') ? '' : `devid='${devid}' AND`;
 	// // DATA SOURCE 1
 	const influxOpt1 = {
 		dbName: 'presence_jadespot_ts_new',
-		query: `SELECT * FROM presence WHERE ${devidStr} time >= now() - ${lastPeriodAmount}${lastPeriodUnit} ${limitStr}`,
+		query: `SELECT * FROM presence WHERE ${devidStr} time >= now() - ${timeFrame} ${limitStr}`,
 	}
 	const url = `http://buoys.nauticspot.io:8086/query?pretty=false/&db=${influxOpt1.dbName}&q=${influxOpt1.query}`;
-	const objectSource1 = await fetchDataSource(url, devid);
+	const results = await fetchDataSource(url, devid);
+	const objectSource1 = influxResultsToObjectSingleOccurence(results);
 
-	// DATA SOURCE 2
-	const influxOpt2 = {
-		dbName: 'statsbouee4',
-		query: `SELECT * FROM payload WHERE ${devidStr} time >= now() - ${lastPeriodAmount}${lastPeriodUnit} ${limitStr}`,
-	}
-	const url2 = `http://buoys.nauticspot.io:8086/query?pretty=false/&db=${influxOpt2.dbName}&q=${influxOpt2.query}`;
-	const objectSource2 = await fetchDataSource(url2, devid);
-
-	const finalPresence = presenceDecisionTable(objectSource1, objectSource2);
 	const presenceObj = {
 		devid,
 		time: objectSource1[devid].time,
 		code: objectSource1[devid].CN,
-		presence: finalPresence,
+		presence: objectSource1[devid].presence_TS,
 	}
 	return(presenceObj);
 };
 
-const fetchDataSource = async (url, devid) => {
+const fetchDataSource = async (url) => {
 	const resp = await axios({
 		url: url,
 		headers: { 'Authorization': 'Token admin:vanille' }
 	});
-	const objectSource = normalizeDataSource(devid, resp.data.results);
-	return(objectSource);
+	return(resp.data.results);
 };
 
-const presenceDecisionTable = (obj1, obj2) => {
-	const total = obj1.presence_new + obj1.presence_new2 + obj2.presence_w_delai;
-	const presence = (total / 3) > 1 ? true : false;
-	return(presence);
-}
+/**
+ * ! Not used anymore due to buoys server changes - wait for updates on new implementations
+ * @param {*} devid 
+ * @param {*} rawResults 
+ * @returns 
+ */
+// const presenceDecisionTable = (obj1, obj2) => {
+// 	const total = obj1.presence_new + obj1.presence_new2 + obj2.presence_w_delai;
+// 	const presence = (total / 3) > 1 ? true : false;
+// 	return(presence);
+// }
 
 const normalizeDataSource = (devid, rawResults) => {
 	const serie = rawResults[0]?.series?.[0];
@@ -113,7 +133,7 @@ const normalizeDataSource = (devid, rawResults) => {
 
 // Take an influxdb query result object and transform it to an object containing captors data
 // where object keys are bouoy devid (captor number0-=)
-const influxResultsToObject = (influxRaw) => {
+const influxResultsToObjectSingleOccurence = (influxRaw) => {
 	const series = influxRaw[0].series[0];
 	const obj = {};
 	series.values.map(valuesArr => {
@@ -127,34 +147,129 @@ const influxResultsToObject = (influxRaw) => {
 	return(obj);
 };
 
-const verifyAccess = async (apiAuthToken, harbourId, devid) => {
-	// validate api token
-	const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
-	if (!erpUsers) {
-		throw new Error('Invalide API Token', { cause: { httpCode: 401 }});
+/**
+ * Returns a list of data entries for each captors
+ * @param {*} influxRaw 
+ * @returns 
+ */
+const influxResultsToObjectMultipleOccurences = (influxRaw) => {
+	const series = influxRaw[0].series[0];
+	const obj = {};
+	series.values.map(valuesArr => {
+		if (obj[valuesArr[2]]) {
+			obj[valuesArr[2]].push({
+				time: valuesArr[0],
+				buoy_num: valuesArr[1],
+				devid: valuesArr[2],
+				presence_TS: valuesArr[6],
+			});
+		} else {
+			obj[valuesArr[2]] = [{
+				time: valuesArr[0],
+				buoy_num: valuesArr[1],
+				devid: valuesArr[2],
+				presence_TS: valuesArr[6],
+			}]
+		}
+	});
+	return(obj);
+};
+
+// async function getAdminById(_id) {
+// 	return new Promise(resolve => {
+// 			STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
+// 					if (_data)
+// 							resolve(_data);
+// 					else
+// 							resolve(_err);
+// 			});
+// 	});
+// }
+
+const fetchDataFromBuoysServer = async (options) => {
+	const limit = options.limit;
+	const limitStr = (limit > 0) ? `LIMIT ${limit}` : '';
+	const timeFrame = options.timeFrame || '48h'; // h for hours / m for minutes /..
+	const devid = options.devid;
+	const devidStr = (devid === '') ? '' : `devid='${devid}' AND`;
+	const harbourId = options.harbourId;
+	const harbourIdStr = harbourId ? '' : `harbour-id='${harbourId}' AND`;
+	// // DATA SOURCE 1
+	const influxOpt1 = {
+		dbName: 'presence_jadespot_ts_new',
+		query: `SELECT * FROM presence WHERE ${devidStr}${harbourIdStr} time >= now() - ${timeFrame} ${limitStr}`,
 	}
-	// verify if ERP can access to the requested port absences
-	if (!harbourId || !erpUsers.harbourIds.includes(harbourId)) {
-		throw new Error('Invalid \'harbour-id\' parameter.', { cause: { httpCode: 401 }});
-	}
-	if (harbourId !== '4e.mx_85wK') { // Allowed only for cavalaire
-		throw new Error('Access Denied', { cause: { httpCode: 403 }});
-	}
-	if (CAPTEUR_NUMBER[devid] === undefined) {
-		throw new Error('Invalid \'devid\' parameter.', { cause: { httpCode: 401 }});
+	const url = `http://buoys.nauticspot.io:8086/query?pretty=false/&db=${influxOpt1.dbName}&q=${influxOpt1.query}`;
+	const respData = await fetchDataSource(url);
+	return(respData);
+};
+
+const getLastKnownPresenceByBuoyHandler = async (req, res) => {
+	console.log('====getPresenceByBuoyHandler====');
+	try {
+		const apiAuthToken = req.headers['x-auth-token'];
+		if (apiAuthToken) {
+			await verifyAccess(apiAuthToken, harbourId, devid); // will throw an error if something is wrong
+		} else if (req.cookie.fortpress) {
+			// TODO: find a way to do this
+			// console.log('req.cookie', req.cookie);
+		} else {
+			throw new error('Access not authorized !');
+		}
+
+		const buoysRawData = await fetchDataFromBuoysServer({
+			harbourId: req.get['harbour-id'],
+			devid: req.get.devid,
+			limit: req.get.limit,
+			timeFrame: req.get['time-frame'],
+		});
+		const buoysData = influxResultsToObjectMultipleOccurences(buoysRawData)
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			results: buoysData,
+		}));
+	} catch (error) {
+		let errorHttpCode;
+		if (error.response) {
+			console.error('[AXIOS ERROR]', error?.response?.data?.error);
+			myLogger.logError(error.response?.data?.error, { module: 'api_bouee' })
+		} else {
+			console.error('[ERROR]', error);
+			myLogger.logError(error, { module: 'api_bouee' })
+		}
+		errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 };
 
-const getBoueePresence = async (req, res) => {
+
+const getPresenceByBuoyHandler = async (req, res) => {
+	console.log('====getPresenceByBuoyHandler====');
 	try {
 		const apiAuthToken = req.headers['x-auth-token'];
+		console.log('apiAuthToken', apiAuthToken);
+		if (apiAuthToken) {
+			await verifyAccess(apiAuthToken, harbourId, devid); // will throw an error if something is wrong
+		} else if (req.cookie.fortpress) {
+			// TODO: find a way to do this
+			// console.log('req.cookie', req.cookie);
+		} else {
+			throw new error('Access not authorized !');
+		}
 		const harbourId = req.get["harbour-id"];
 		const devid = req.get.devid || '';
 
-		await verifyAccess(apiAuthToken, harbourId, devid); // will throw an error if something is wrong
-
-		const limit = req.get.limit || 0;
-		const presence = await fetchPresencesTest(devid, limit);
+		// const limit = req.get.limit || 1;
+		const presence = await fetchPresenceFromBuoysServer(devid, {
+			limit: req.get.limits,
+			timeFrame: req.get['time-frame'],
+		});
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -181,17 +296,19 @@ const getBoueePresence = async (req, res) => {
 
 
 
-const getByPort = async (req, res) => {
-	try {
-		const portId = req.param.port_id;
-		const portInfo = portsInfo[portId];
 
-		if (!portInfo) {
+const getPresenceByHarbourHandler = async (req, res) => {
+	try {
+		const harbourId = req.param.port_id;
+		const harbourInfo = portsInfo[harbourId];
+
+		if (!harbourInfo) {
 			throw new Error('Invalid port id', { cause: { httpCode: 401 }});
 		}
 		const timeOffset = "7m";
 		const dbName = 'presence_jadespot_ts_new';
 		const baseUrl = `http://buoys.nauticspot.io:8086/query?pretty=false/&db=${dbName}`;
+		// TODO: Add where port_id = xxx -
 		const queryUrl = `${baseUrl}&q=SELECT * FROM presence WHERE time >= now() - ${timeOffset}`;
 		const resp = await axios({
 			url: queryUrl,
@@ -199,7 +316,7 @@ const getByPort = async (req, res) => {
 			headers: { 'Authorization': 'Token admin:vanille' }
 		});
 		const results = resp.data.results;
-		const buoysObj = influxResultsToObject(results);
+		const buoysObj = influxResultsToObjectSingleOccurence(results);
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
@@ -300,8 +417,14 @@ const deleteCaptors = async (req, res) => {
 exports.router = [
 	{
 		on: true,
+		route: '/api-erp/bouee/last-known-presence',
+		handler: getLastKnownPresenceByBuoyHandler,
+		methode: 'GET'
+	},
+	{
+		on: true,
 		route: '/api-erp/bouee/presence',
-		handler: getBoueePresence,
+		handler: getPresenceByBuoyHandler,
 		methode: 'GET'
 	},
 	{
@@ -319,7 +442,7 @@ exports.router = [
 	{
 		on: true,
 		route: '/api-erp/bouee/ports/:port_id',
-		handler: getByPort,
+		handler: getPresenceByHarbourHandler,
 		methode: 'GET'
 	},
 	{

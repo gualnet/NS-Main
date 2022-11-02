@@ -1082,7 +1082,10 @@ exports.plugin =
             }
         }
         else {
-            var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
+					let _indexHtml = fs.readFileSync(path.join(__dirname, "index_viewer.html")).toString();
+					if (admin.data.roleBackOffice === ENUM.rolesBackOffice.SUPER_ADMIN) {
+						_indexHtml = fs.readFileSync(path.join(__dirname, "index_editor.html")).toString();
+					}
             var _mapHtml = fs.readFileSync(path.join(__dirname, "map.html")).toString();
             var _maps;
 
