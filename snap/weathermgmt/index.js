@@ -384,7 +384,14 @@ exports.plugin =
         var _harbour_id = admin.data.harbour_id;
 
 				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
-					throw(new Error('Access Denied', { cause: {httpCode: 401} }));
+					res.writeHead(401);
+					res.end('Accès non autorisé');
+					return;
+				}
+				if (_entity_id === 'SlEgXL3EGoi') {
+					res.writeHead(401);
+					res.end('Accès non autorisé');
+					return;
 				}
 
         if (req.method == "GET") {

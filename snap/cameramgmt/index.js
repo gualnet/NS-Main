@@ -163,7 +163,12 @@ exports.plugin = {
 
 		if (!verifyRoleAccess(admin.data.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
-			res.end('No access rights');
+			res.end('Accès non autorisé');
+			return;
+		}
+		if (_entity_id === 'SlEgXL3EGoi') {
+			res.writeHead(401);
+			res.end('Accès non autorisé');
 			return;
 		}
 

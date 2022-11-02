@@ -1,7 +1,18 @@
 const myLogger = require('../lib-js/myLogger');
+const ENUM = require('../lib-js/enums');
+const { verifyRoleAccess } = require('../lib-js/verify');
 const TYPES = require('../../types');
 var _harbourCol = "harbour";
 var _userCol = "user";
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
 
 function validateEmail(email) {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -368,6 +379,18 @@ exports.plugin =
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
+
+			if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+				res.writeHead(401);
+				res.end('Accès non autorisé');
+				return;
+			}
+			if (_entity_id === 'SlEgXL3EGoi') {
+				res.writeHead(401);
+				res.end('Accès non autorisé');
+				return;
+			}
+
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.harbour_id) {
                 //delete harbour
