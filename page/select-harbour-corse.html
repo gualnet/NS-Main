@@ -9,7 +9,8 @@
 	<!-- Fixed navbar -->
 	<header>
 		<img src="" id="entityLogo">
-		<p>Informations et réservations<br>de vos ports favoris !</p>
+		<!-- <p>Informations et réservation<br>de vos ports favoris !</p> -->
+		<p>Informations et réservation de vos ports favoris !</p>
 	</header>
 
 	<!-- Begin page content -->
@@ -89,7 +90,7 @@
 
 			const base = imgSize.width / 100;
 			
-			const left = base * 32;
+			const left = imgSize.left + (base * 32);
 			vortex.style.left = `${left}px`;
 			
 			const width = base * 38;
@@ -112,7 +113,7 @@
 
 			const base = imgSize.width / 100;
 			
-			const left = base * 0;
+			const left = imgSize.left + (base * 0);
 			vortex.style.left = `${left}px`;
 			
 			const width = base * 32;
@@ -153,7 +154,7 @@
 			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
-			const left = base * 20;
+			const left = imgSize.left + (base * 20);
 			vortex.style.left = `${left}px`;
 
 			const width = base * 32;
@@ -174,7 +175,7 @@
 
 			const base = imgSize.width / 100;
 			
-			const left = base * 54;
+			const left = imgSize.left + (base * 54);
 			vortex.style.left = `${left}px`;
 
 			const width = base * 22;
@@ -195,7 +196,7 @@
 
 			const base = imgSize.width / 100;
 			
-			const left = base * 72;
+			const left = imgSize.left + (base * 72);
 			vortex.style.left = `${left}px`;
 			
 			const width = base * 30;
@@ -228,8 +229,6 @@
 			box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, .16);
 			display: flex;
 			flex-direction: column;
-			height: 15rem;
-			justify-content: center;
 			margin: 0;
 			padding: 0 1rem;
 			width: 100%;
@@ -244,15 +243,16 @@
 		header > p {
 			color: rgb(0, 94, 149);
 			text-align: center;
-			width: 70%;
+			width: 90%;
+			font-size: large;
 		}
 
 		main {
 			background-color: sandybrown;
 			display: flex;
 			height: calc(100vh - 3rem);
-			margin-top: 3rem;
 			width: 100vw;
+			padding-top: 0;
 		}
 
 		#topCtn {
@@ -267,6 +267,7 @@
 			margin: 0;
 			padding: 0;
 			width: fit-content;
+			margin: 0 10px;
 		}
 
 		img {
