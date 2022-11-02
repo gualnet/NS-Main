@@ -1,7 +1,17 @@
 
+const ENUM = require('../lib-js/enums');
 const TYPES = require('../../types');
 const ENUMS = require('../lib-js/enums');
 const myLogger = require('../lib-js/myLogger');
+
+const ROLES = ENUM.rolesBackOffice;
+const AUTHORIZED_ROLES = [
+	ROLES.SUPER_ADMIN,
+	ROLES.ADMIN_MULTIPORTS,
+	ROLES.AGENT_SUPERVISEUR,
+	ROLES.AGENT_ADMINISTRATEUR,
+	ROLES.AGENT_CAPITAINERIE,
+];
 
 exports.setup = {
 	on: true,
@@ -32,6 +42,11 @@ const serveIndexPageHandler = async (req, res) => {
 		if (!adminUser) {
 			res.writeHead(401, 'Not Authorized', { 'Content-Type': 'application/json' });
 			res.end('Not Authorized');
+		}
+		if (adminUser.data.entity_id === 'SlEgXL3EGoi') {
+			res.writeHead(401);
+			res.end('Accès non autorisé');
+			return;
 		}
 
 		// get harbours according to user role

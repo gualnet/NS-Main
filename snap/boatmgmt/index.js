@@ -363,9 +363,15 @@ exports.plugin =
 		var _role = admin.role;
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
+	
 		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('No access rights');
+			return;
+		}
+		if (_entity_id === 'SlEgXL3EGoi') {
+			res.writeHead(401);
+			res.end('Accès non autorisé');
 			return;
 		}
 

@@ -722,6 +722,11 @@ exports.plugin =
 					res.end('No access rights');
 					return;
 				}
+				if (_entity_id === 'SlEgXL3EGoi') {
+					res.writeHead(401);
+					res.end('Accès non autorisé');
+					return;
+				}
 
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.com_id) {
