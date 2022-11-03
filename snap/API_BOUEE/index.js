@@ -53,10 +53,7 @@ const verifyAccess = async (apiAuthToken, harbourId, devid) => {
 	if (!harbourId || !erpUsers.harbourIds.includes(harbourId)) {
 		throw new Error('Invalid \'harbour-id\' parameter.', { cause: { httpCode: 401 }});
 	}
-	if (harbourId !== '4e.mx_85wK') { // Allowed only for cavalaire
-		throw new Error('Access Denied', { cause: { httpCode: 403 }});
-	}
-	if (CAPTEUR_NUMBER[devid] === undefined) {
+	if (portsInfo[harbourId][devid] === undefined) {
 		throw new Error('Invalid \'devid\' parameter.', { cause: { httpCode: 401 }});
 	}
 };
@@ -205,7 +202,6 @@ const fetchDataFromBuoysServer = async (options) => {
 };
 
 const getLastKnownPresenceByBuoyHandler = async (req, res) => {
-	console.log('====getPresenceByBuoyHandler====');
 	try {
 		const apiAuthToken = req.headers['x-auth-token'];
 		if (apiAuthToken) {
@@ -250,10 +246,10 @@ const getLastKnownPresenceByBuoyHandler = async (req, res) => {
 
 
 const getPresenceByBuoyHandler = async (req, res) => {
-	console.log('====getPresenceByBuoyHandler====');
 	try {
 		const apiAuthToken = req.headers['x-auth-token'];
-		console.log('apiAuthToken', apiAuthToken);
+		const devid = req.get.devid || '';
+		const harbourId = req.get["harbour-id"];
 		if (apiAuthToken) {
 			await verifyAccess(apiAuthToken, harbourId, devid); // will throw an error if something is wrong
 		} else if (req.cookie.fortpress) {
@@ -262,8 +258,6 @@ const getPresenceByBuoyHandler = async (req, res) => {
 		} else {
 			throw new error('Access not authorized !');
 		}
-		const harbourId = req.get["harbour-id"];
-		const devid = req.get.devid || '';
 
 		// const limit = req.get.limit || 1;
 		const presence = await fetchPresenceFromBuoysServer(devid, {
