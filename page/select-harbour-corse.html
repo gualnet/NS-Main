@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+{{element->header_app.html}}
+
+<body class="d-flex flex-column h-100">
+	<!-- screen loader -->
+	{{element->loader.html}}
+	<!-- Fixed navbar -->
+	<header>
+		<img src="" id="entityLogo">
+		<p>Informations et réservation<br>de vos ports favoris !</p>
+		<!-- <p>Informations et réservation de vos ports favoris !</p> -->
+	</header>
+
+	<!-- Begin page content -->
+	<main>
+		<div id="topCtn">
+			<div id="backgroundCtn">
+				<img id="imgBckg" src="/library/map-ports-corse.png" alt="">
+					<div class="vortex" id="vortex-cargese" onclick="harbourClickHandler('HeIrt89Ccc')"></div>
+					<div class="vortex" id="vortex-macinaggio" onclick="harbourClickHandler('rxHL7ucAo9')"></div>
+					<div class="vortex" id="vortex-ajaccio" onclick="harbourClickHandler('SlUyrmPHE9')"></div>
+					<div class="vortex" id="vortex-propriano" onclick="harbourClickHandler('rl4ZBaUpjc')"></div>
+					<div class="vortex" id="vortex-bonifacio" onclick="harbourClickHandler('BxqaMWYBqc')"></div>
+					<div class="vortex" id="vortex-porto-vecchio" onclick="harbourClickHandler('HgfhlHtaq9')"></div>
+			</div>
+		</div>
+	</main>
+
+	<script>
+		let G_harboursData
+
+		window.addEventListener('load', async () => {
+			setEntityLogo();
+			G_harboursData = await fetchHarbours();
+
+			setMaccinagioVortex();
+			setCargeseVortex();
+			setAjaccioVortex();
+			setProprianoVortex();
+			setBonifacioVortex();
+			setPortoVecchioVortex();
+		});
+		
+		window.addEventListener('resize', () => {
+			setTimeout(() => {
+				setMaccinagioVortex();
+			}, 500);
+		})
+
+		const fetchHarbours = async () => {
+			try {
+				const url = `/api/getharbours/${localStorage['entity_id']}`;
+				const response = await fetch(url, { method: 'GET' });
+				const respJson = await response.json();
+				const harbours = respJson.data;
+				return(harbours);
+			} catch (error) {
+				console.log('[ERROR]', error);
+				alert('Une erreur est survenu lors de la recuperation des données !');
+			}
+		};
+
+		const harbourClickHandler = (harbourId) => {
+			localStorage['harbour_id'] = harbourId;
+
+			for (let i = 0; i < G_harboursData.length; i++) {
+				if (G_harboursData[i].id == localStorage['harbour_id']) {
+					localStorage['harbourname'] = G_harboursData[i].name || '';
+					break;
+				}
+			}
+			window.location.href = ("/index-corse");
+		};
+
+		const setEntityLogo = () => {
+			const entityLogoEl = document.querySelector('#entityLogo');
+			entityLogoEl.src = localStorage['entity_logo'];
+		};
+
+		const setMaccinagioVortex = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const vortex = document.querySelector('#vortex-macinaggio');
+
+			const imgSize = imgElRect;
+			
+			vortex.style.top = `${imgElRect.top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 32);
+			vortex.style.left = `${left}px`;
+			
+			const width = base * 38;
+			vortex.style.width = `${width}px`;
+			
+			const height = base * 10;
+			vortex.style.height = `${height}px`;
+		};
+
+		const setCargeseVortex = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const vortex = document.querySelector('#vortex-cargese');
+
+			const imgSize = imgElRect;
+
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 46);
+			vortex.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 0);
+			vortex.style.left = `${left}px`;
+			
+			const width = base * 32;
+			vortex.style.width = `${width}px`;
+			
+			const height = base * 8;
+			vortex.style.height = `${height}px`;
+		};
+
+		const setAjaccioVortex = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgSize = imgEl.getBoundingClientRect();
+			const vortex = document.querySelector('#vortex-ajaccio');
+
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 63;
+			vortex.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+
+			let left = imgSize.left;
+			left += ((imgSize.height / 100) * 9.5);
+			vortex.style.left = `${left}px`;
+
+			const width = base * 31;
+			vortex.style.width = `${width}px`;
+			const height = base * 17;
+			vortex.style.height = `${height}px`;
+		};
+
+		const setProprianoVortex = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgSize = imgEl.getBoundingClientRect();
+			const vortex = document.querySelector('#vortex-propriano');
+
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 81;
+			vortex.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			const left = imgSize.left + (base * 20);
+			vortex.style.left = `${left}px`;
+
+			const width = base * 32;
+			vortex.style.width = `${width}px`;
+
+			const height = base * 10;
+			vortex.style.height = `${height}px`;
+		};
+
+		const setBonifacioVortex = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgSize = imgEl.getBoundingClientRect();
+			const vortex = document.querySelector('#vortex-bonifacio');
+
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 88;
+			vortex.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 54);
+			vortex.style.left = `${left}px`;
+
+			const width = base * 22;
+			vortex.style.width = `${width}px`;
+
+			const height = base * 15;
+			vortex.style.height = `${height}px`;
+		};
+
+		const setPortoVecchioVortex = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgSize = imgEl.getBoundingClientRect();
+			const vortex = document.querySelector('#vortex-porto-vecchio');
+
+			let top = imgSize.top;
+			top += (imgSize.height / 100) * 71;
+			vortex.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 72);
+			vortex.style.left = `${left}px`;
+			
+			const width = base * 30;
+			vortex.style.width = `${width}px`;
+			
+			const height = base * 15;
+			vortex.style.height = `${height}px`;
+		};
+
+	</script>
+
+	<style>
+		@font-face {
+			font-family: 'Poppins Regular';
+			font-style: normal;
+			font-weight: normal;
+			src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+		}
+
+		* {
+			font-family: 'Poppins Regular';
+		}
+
+		body {
+			font-family: 'Poppins Regular' !important;
+		}
+
+		header {
+			align-items: center;
+			box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, .16);
+			display: flex;
+			flex-direction: column;
+			margin: 0;
+			padding: 0 1rem;
+			width: 100%;
+		}
+		header > img {
+			align-self: center;
+			height: auto;
+			max-height: 50%;
+			max-width: 50%;
+			width: auto;
+		}
+		header > p {
+			color: rgb(0, 94, 149);
+			text-align: center;
+			width: 90%;
+			font-size: 24px;
+		}
+
+		main {
+			background-color: sandybrown;
+			display: flex;
+			height: calc(100vh - 3rem);
+			width: 100vw;
+			padding-top: 0;
+		}
+
+		#topCtn {
+			display: flex;
+			height: 90%;
+			width: 100%;
+		}
+
+		#backgroundCtn {
+			display: flex;
+			height: fit-content;
+			margin: 0;
+			padding: 0;
+			width: fit-content;
+			margin: 0 10px;
+		}
+
+		img {
+			height: auto;
+			width: 100%;
+		}
+
+		.vortex {
+			border: 1px solid rgba(0, 128, 0, 0.274);
+			height: 10px;
+			position: absolute;
+			width: 10px;
+		}
+	</style>
+
+	{{element->footer_app.html}}
+</body>
+
+</html>

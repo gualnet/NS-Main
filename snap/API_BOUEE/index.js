@@ -70,7 +70,7 @@ const fetchPresenceFromBuoysServer = async (devid, options) => {
 	const limitStr = (limit > 0) ? `LIMIT ${limit}` : '';
 	const timeFrame = options.timeFrame || '48h'; // h for hours / m for minutes /..
 	const devidStr = (devid === '') ? '' : `devid='${devid}' AND`;
-	// // DATA SOURCE 1
+	// DATA SOURCE 1
 	const influxOpt1 = {
 		dbName: 'presence_jadespot_ts_new',
 		query: `SELECT * FROM presence WHERE ${devidStr} time >= now() - ${timeFrame} ${limitStr}`,
@@ -256,7 +256,7 @@ const getPresenceByBuoyHandler = async (req, res) => {
 			// TODO: find a way to do this
 			// console.log('req.cookie', req.cookie);
 		} else {
-			throw new error('Access not authorized !');
+			throw new Error('Access not authorized !');
 		}
 
 		// const limit = req.get.limit || 1;
