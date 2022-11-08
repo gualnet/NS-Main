@@ -597,6 +597,7 @@ const getUserWhere = async (whereOpt) => {
 
 const resetPasswordRequestHandler = async (req, res) => {
 	try {
+		console.log(`[INFO] Reset password request for email [${req.get.email}]`);
 		// GET USER INFO
 		const findUserResp = await DB_NS.user.find({ email: req.get.email }, { raw: 1 });
 		if (findUserResp.error || findUserResp.data.length < 1) {
@@ -615,6 +616,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 		// GENERATE A RESET TOKEN
 		const tokenLength = 24;
 		const resetToken = crypto.randomBytes(tokenLength).toString('hex');
+		console.log('NEW TOKEN', resetToken)
 		user.resetPwdToken = resetToken;
 		user.updated_at = Date.now();
 
@@ -644,6 +646,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 			{ subject: 'Récupération du mot de passe', HTMLPart: emailTemplate }
 		);
 
+		console.log(`[INFO] Reset password request SUCCEED for email [${req.get.email}]`);
 		res.end(JSON.stringify({ message: 'success' }));
 	} catch (error) {
 		console.error('[ERROR]', error);
@@ -658,26 +661,34 @@ const resetPasswordRequestHandler = async (req, res) => {
 };
 
 const setNewPasswordHandler = async (req, res) => {
+	console.log(`[INFO] Set new password request for reset token [${req.post.recoveryToken}] STARTED`);
 	try {
 		const token = req.post.recoveryToken;
 		const password = req.post.newPassword;
 
-		const [user] = await getUserWhere({resetPwdToken: token});
-		if(!user) {
-			res.writeHead(404);
-			res.end(JSON.stringify({
-				success: false,
-				message: 'Ressource not found',
-				description: 'This token is invalid',
-			}));
-			return;
+		const findUserResp = await DB_NS.user.find({ resetPwdToken: token }, { raw: true });
+		// console.log('findUserResp', findUserResp);
+		if(findUserResp.error) {
+			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
+		} else if (findUserResp.data.length < 1) {
+			throw new Error('Invalid token', { cause: { httpCode: 404 }});
 		}
+		const user = findUserResp.data[0];
 		const newPasswordHash = UTILS.Crypto.createSHA512(user.id + password);
 
 		user.password = newPasswordHash;
 		user.resetPwdToken = null;
-		const updatedUser = await updateUser(user);
-
+		// const updatedUser = await updateUser(user);
+		const userId = user.id;
+		delete user.id;
+		const updatedUser = await DB_NS.user.update({ id: userId}, user);
+		// console.log('updatedUser', updatedUser);
+		if(updatedUser.error) {
+			throw new Error(updatedUser.error, { cause: { httpCode: 500 }});
+		} else if (updatedUser.data.length < 1) {
+			throw new Error('No user updated', { cause: { httpCode: 404 }});
+		}
+		console.log(`[INFO] Set new password request for reset token [${req.post.recoveryToken}] SUCEEDED`);
 		res.end(JSON.stringify({
 			success: true,
 			message: 'success',
