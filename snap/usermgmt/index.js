@@ -3,6 +3,8 @@ const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
 const {errorHandler} = require('../lib-js/errorHandler');
+/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+const DB_NS = SCHEMA.NAUTICSPOT;
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -298,57 +300,63 @@ async function addUserHandler(req, res) {
 	}
 	if (verifyPostReq(req, res, false)) {
 		var user = req.post;
-
-		var userByEmail = await findByColl({ email: user.email });
+		const resp = await DB_NS.user.find({ email: user.email });
+		if (resp.error) {
+			UTILS.httpUtil.dataError(req, res, "Error", "Email déjà enregistré", "1.0");
+			return;
+		}
 		let userByPhone = [];
 		if (user.phone) {
 			user.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
-			userByPhone = await findByColl({ phone: user.phone });
+			const resp = await DB_NS.user.find({ phone: user.phone });
+			if (resp.error) {
+				UTILS.httpUtil.dataError(req, res, "Error", "Téléphone déjà enregistré", "1.0");
+				return;
+			}
 		}
-		if (userByEmail[0] || userByPhone[0]) {
-			UTILS.httpUtil.dataError(req, res, "Error", "Email ou téléphone déjà enregistré", "1.0");
+		delete user.password_confirm;
+		user.id = UTILS.UID.generate();
+		user.password = UTILS.Crypto.createSHA512(user.id + user.password);
+		user.created_at = Date.now();
+		user.token = UTILS.Crypto.createSHA512(user.id + user.created_at + user.first_name);
+		const rawUser = {
+			boat_id: null,
+			category: null,
+			contract_number: null,
+			created_at: null,
+			email: null,
+			enabled: true,
+			first_name: null,
+			harbour_id: null,
+			id: null,
+			last_name: null,
+			onesignal_userid: null,
+			password: null,
+			phone: null,
+			prefix: null,
+			prefixed_phone: null,
+			resetPwdToken: null,
+			roleMobileApp: null,
+			show_communication_module: true,
+			show_reporting_module: true,
+			show_security_module: true,
+			token: null,
+			updated_at: null,
+			username: null,
+		};
+		const newUser = { ...rawUser, ...user };
+		delete newUser.id;
+		delete newUser.show_communication_module;
+		delete newUser.show_reporting_module;
+		delete newUser.show_security_module;
+		const createdUser = await DB_NS.user.insert({email: "test"});
+		if (createdUser) {
+			UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: createdUser.id, harbour_id: createdUser.harbour_id, token: createdUser.token }, "1.0");
 			return;
-		} else {
-			delete user.password_confirm;
-			user.id = UTILS.UID.generate();
-			user.password = UTILS.Crypto.createSHA512(user.id + user.password);
-			user.created_at = Date.now();
-			user.token = UTILS.Crypto.createSHA512(user.id + user.created_at + user.first_name);
-			const rawUser = {
-				boat_id: null,
-				category: null,
-				contract_number: null,
-				created_at: null,
-				email: null,
-				enabled: true,
-				first_name: null,
-				harbour_id: null,
-				id: null,
-				last_name: null,
-				onesignal_userid: null,
-				password: null,
-				phone: null,
-				prefix: null,
-				prefixed_phone: null,
-				resetPwdToken: null,
-				roleMobileApp: null,
-				show_communication_module: true,
-				show_reporting_module: true,
-				show_security_module: true,
-				token: null,
-				updated_at: null,
-				username: null,
-			};
-			const newUser = { ...rawUser, ...user };
-			const createdUser = await createUser(newUser);
-			if (createdUser) {
-				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: createdUser.id, harbour_id: createdUser.harbour_id, token: createdUser.token }, "1.0");
-				return;
-			}
-			else {
-				UTILS.httpUtil.dataError(req, res, "Error", "utilisateur non enregistré", "1.0");
-				return;
-			}
+		}
+		else {
+			UTILS.httpUtil.dataError(req, res, "Error", "utilisateur non enregistré", "1.0");
+			return;
 		}
 	}
 }
@@ -590,23 +598,40 @@ const getUserWhere = async (whereOpt) => {
 const resetPasswordRequestHandler = async (req, res) => {
 	try {
 		// GET USER INFO
-		const [user] = await getUserWhere({ email: req.get.email });
-		if (!user) { // no user found
-			res.writeHead(404);
-			res.end(JSON.stringify({
-				message: 'Ressource not found',
-				description: 'This user doesn\'t exists'
-			}));
-			return;
+		const findUserResp = await DB_NS.user.find({ email: req.get.email }, { raw: 1 });
+		if (findUserResp.error || findUserResp.data.length < 1) {
+			throw new Error('No User Found !', {
+				cause: {
+					request: req.get,
+					httpCode: 404,
+					message: 'Ressource not found',
+					description: 'This user doesn\'t exists'
+				}
+			});
 		}
+		/**@type {TYPES.T_user} */
+		const user = findUserResp.data[0];
 
 		// GENERATE A RESET TOKEN
 		const tokenLength = 24;
 		const resetToken = crypto.randomBytes(tokenLength).toString('hex');
 		user.resetPwdToken = resetToken;
 		user.updated_at = Date.now();
-		const userUpdated = await updateUser(user);
-		console.log('userUpdated',userUpdated);
+
+		// const userUpdated = await updateUser(user);
+		const userId = user.id;
+		delete user.id;
+		const updateUserResp = await DB_NS.user.update({ id: userId }, user, { raw: 1 });
+		if (updateUserResp.error || updateUserResp.data.length < 1) {
+			throw new Error('Failed to update user !', {
+				cause: {
+					request: req.get,
+					httpCode: 404,
+					message: 'User not updated',
+					description: 'This user doesn\'t exists'
+				}
+			});
+		}
 
 		// SEND RESET E-MAIL
 		let emailTemplate = fs.readFileSync(path.join(__dirname, "resetPasswordEmail.html")).toString();
