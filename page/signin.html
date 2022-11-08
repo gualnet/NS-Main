@@ -262,7 +262,7 @@
                 }).then(response => response.json()).then(_data => {
                     console.log(_data);
                     if (_data.success) {
-                        console.log(_data);
+                        console.log('signin resp data', _data);
                         var user = _data.data;
                         localStorage["user"] = user.id;
                         localStorage["harbour_id"] = user.harbour_id;
@@ -278,7 +278,8 @@
                         if (document.getElementById("error"))
                             document.getElementById("loginError").removeChild(document.getElementById("error"));
 
-                        document.getElementById("loginError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + _data.message + '</div>');
+												const errorMsg = _data.error.replace('Error: ', '');
+                        document.getElementById("loginError").insertAdjacentHTML("beforeend", '<div id="error" class="alert alert-danger" >ERREUR : ' + errorMsg + '</div>');
                     }
                 }).catch((error) => {
                     console.error('Error:', error);

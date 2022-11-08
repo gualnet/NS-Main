@@ -392,23 +392,53 @@ async function getUserInfos(_req, _res) {
 }
 
 async function loginHandler(req, res) {
-	var user = await findByColl({ "email": req.post.email });
+	try {
+		console.log(`[INFO] User login attempt mail: [${req.post.email}] START`);
 
-	if (user[0]) {
-		user = user[0];
-		var password = UTILS.Crypto.createSHA512(user.id + req.post.password);
-		if (user.password == password) {
-			user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
-			await updateUser(user);
-			UTILS.httpUtil.dataSuccess(req, res, "success, user logged", { id: user.id, harbour_id: user.harbour_id, token: user.token }, "1.0");
-			return;
-		} else {
-			UTILS.httpUtil.dataError(req, res, "Erreur", "Identifiants incorrects", null, "1.0");
-			return;
+		// var user = await findByColl({ "email": req.post.email });
+		const findUserResp = await DB_NS.user.find({ email: req.post.email });
+		if(findUserResp.error) {
+			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
+		} else if (findUserResp.data.length < 1) {
+			throw new Error('Invalid credentials', { cause: { httpCode: 404 }});
 		}
-	} else {
-		UTILS.httpUtil.dataError(req, res, "Erreur", "Identifiants incorrects", null, "1.0");
-		return;
+		/**@type {TYPES.T_user} */
+		const user = findUserResp.data[0];
+		const passHash = UTILS.Crypto.createSHA512(user.id + req.post.password);
+		if (user.password !== passHash) {
+			throw new Error('Invalid credentials', { cause: { httpCode: 404 }});
+		}
+
+		user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
+
+		const userId = user.id;
+		delete user.id;
+		const updatedUserResp = await DB_NS.user.update({ id: userId }, user, { raw: true });
+		if(updatedUserResp.error) {
+			throw new Error(updatedUserResp.error, { cause: { httpCode: 500 }});
+		} else if (updatedUserResp.data.length < 1) {
+			throw new Error('Failed to update reset token', { cause: { httpCode: 404 }});
+		}
+		const updatedUser = updatedUserResp.data[0];
+		console.log(`[INFO] User login attempt mail: [${req.post.email}] SUCCEEDED`);
+		res.end(JSON.stringify({
+			success: true,
+			message: 'success TOTO',
+			data: {
+				id: updatedUser.id,
+				harbour_id: updatedUser.harbour_id,
+				token: updatedUser.token
+			}
+		}))
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'usermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 }
 
