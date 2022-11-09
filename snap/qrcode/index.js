@@ -106,7 +106,25 @@ exports.plugin =
 	role: "admin",
 	handler: async (req, res) => {
 		// Check access rights
-		const admin = await getAdminById(req.userCookie.data.id);
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
+
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		if (findAdminResp.error) {
+			console.error(findAdminResp.error);
+			res.writeHead(500);
+			res.end('Internal Error');
+			return;
+		} else if (findAdminResp.data.length < 1) {
+			console.error('No dashboard user found');
+			res.writeHead(401);
+			res.end('Accès non autorisé');
+			return;
+		}
+		const admin = findAdminResp.data[0];
+
 		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('No access rights');
