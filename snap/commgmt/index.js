@@ -711,12 +711,30 @@ exports.plugin =
     title: "Gestion des communications",
     desc: "",
     handler: async (req, res) => {
-				var admin = await getAdminById(req.userCookie.data.id);
+			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+			const DB_NS = SCHEMA.NAUTICSPOT;
+			/**@type {TYPES.T_SCHEMA['fortpress']} */
+			const DB_FP = SCHEMA.fortpress;
+
+				// var admin = await getAdminById(req.userCookie.data.id);
+				const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+				if (findAdminResp.error) {
+					console.error(findAdminResp.error);
+					res.writeHead(500);
+					res.end('Internal Error');
+					return;
+				} else if (findAdminResp.data.length < 1) {
+					console.error('No dashboard user found');
+					res.writeHead(401);
+					res.end('Accès non autorisé');
+					return;
+				}
+				const admin = findAdminResp.data[0];
+
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
-
 				if (!verifyRoleAccess(admin.data.roleBackOffice, AUTHORIZED_ROLES)) {
 					res.writeHead(401);
 					res.end('No access rights');
@@ -727,7 +745,6 @@ exports.plugin =
 					res.end('Accès non autorisé');
 					return;
 				}
-
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.com_id) {
                 var currentCom = await getComById(req.post.id);
@@ -744,7 +761,6 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
-
             if (req.post.id) {
                 if (verifyPostReq(req, res)) {
 

@@ -3,8 +3,6 @@ const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
 const {errorHandler} = require('../lib-js/errorHandler');
-/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-const DB_NS = SCHEMA.NAUTICSPOT;
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -295,6 +293,9 @@ async function delMail(_id) {
 
 //routes handlers
 async function addUserHandler(req, res) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
 	if (req.post.prefix) {
 		req.post.prefix = completePhonePrefix(req.post.prefix);
 	}
@@ -392,6 +393,9 @@ async function getUserInfos(_req, _res) {
 }
 
 async function loginHandler(req, res) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
 	try {
 		console.log(`[INFO] User login attempt mail: [${req.post.email}] START`);
 
@@ -626,6 +630,9 @@ const getUserWhere = async (whereOpt) => {
 
 
 const resetPasswordRequestHandler = async (req, res) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
 	try {
 		console.log(`[INFO] Reset password request for email [${req.get.email}]`);
 		// GET USER INFO
@@ -693,11 +700,13 @@ const resetPasswordRequestHandler = async (req, res) => {
 const setNewPasswordHandler = async (req, res) => {
 	console.log(`[INFO] Set new password request for reset token [${req.post.recoveryToken}] STARTED`);
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const token = req.post.recoveryToken;
 		const password = req.post.newPassword;
 
 		const findUserResp = await DB_NS.user.find({ resetPwdToken: token }, { raw: true });
-		// console.log('findUserResp', findUserResp);
 		if(findUserResp.error) {
 			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
 		} else if (findUserResp.data.length < 1) {
@@ -708,11 +717,9 @@ const setNewPasswordHandler = async (req, res) => {
 
 		user.password = newPasswordHash;
 		user.resetPwdToken = null;
-		// const updatedUser = await updateUser(user);
 		const userId = user.id;
 		delete user.id;
-		const updatedUser = await DB_NS.user.update({ id: userId}, user);
-		// console.log('updatedUser', updatedUser);
+		const updatedUser = await DB_NS.user.update({ id: userId}, user, { raw: true });
 		if(updatedUser.error) {
 			throw new Error(updatedUser.error, { cause: { httpCode: 500 }});
 		} else if (updatedUser.data.length < 1) {
@@ -894,16 +901,34 @@ exports.plugin =
 	title: "Gestion des utilisateurs",
 	desc: "",
 	handler: async (req, res) => {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
+
+
 		console.log('==== usermgmt handler ====')
 		console.log('req.get', req.get)
 		console.log('req.post', req.post)
-		var admin = await getAdminById(req.userCookie.data.id);
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		if (findAdminResp.error) {
+			console.error(findAdminResp.error);
+			res.writeHead(500);
+			res.end('Internal Error');
+			return;
+		} else if (findAdminResp.data.length < 1) {
+			console.error('No dashboard user found');
+			res.writeHead(401);
+			res.end('Accès non autorisé');
+			return;
+		}
+		const admin = findAdminResp.data[0];
 		var _type = admin.data.type;
 		var _role = admin.role;
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
 
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('Accès non autorisé');
 			return;
@@ -916,16 +941,28 @@ exports.plugin =
 
 		if (req.method == "GET") {
 			if (req.get.mode && req.get.mode == "delete" && req.get.user_id) {
-				await delUser(req.get.user_id);
+				// await delUser(req.get.user_id);
+				await DB_NS.user.delete({ id: req.get.user_id}, { raw: true });
 			} else if (req.get.mode && req.get.mode == "delete" && req.get.mail_id) {
+				//! unused ?
 				await delMail(req.get.mail_id);
 			}
 			else if (req.get.user_id) {
+				//! useless ?
 				await getUserById(req.get.user_id);
 			}
 			else if (req.get.userlist) {
-				var userlist = await getUser();
-				UTILS.httpUtil.dataSuccess(req, res, userlist, "1.0");
+				//! unused ?
+				// var userlist = await getUser();
+				const findUserResp = await DB_NS.user.find({}, { raw: true });
+				if (findUserResp.error) {
+					console.error(findUserResp.error);
+					res.writeHead(500);
+					res.end('Internal Error');
+					return;
+				}
+				const userList = findUserResp.data;
+				UTILS.httpUtil.dataSuccess(req, res, userList, "1.0");
 				return;
 			}
 		}
@@ -968,14 +1005,39 @@ exports.plugin =
 			var _users = [];
 			/**@type {Array<TYPES.T_harbour>} */
 			let adminAllHarbours = [];
-			if (_role == "user") {
-				for (var i = 0; i < _harbour_id.length; i++) {
-					_users = _users.concat(await STORE.API_NEXT.getElements('user', { harbour_id: _harbour_id[i]}));
+			if (_role === 'user') {
+				const pendingPromises = [];
+				_harbour_id.map(harbourId => {
+					pendingPromises.push(DB_NS.user.find({ harbour_id: harbourId }, { raw: true }));
+				});
+				const findUserResponses = await Promise.all(pendingPromises);
+				findUserResponses.map(resp => {
+					if (resp.error) {
+						console.error(findUserResp.error);
+						res.writeHead(500);
+						res.end('Internal Error');
+						return;
+					} else {
+						_users.push(resp.data);
+					}
+				})
+			} else if (_role === 'admin') {
+				const findHarbourResp = await DB_NS.harbour.find({}, { raw: true });
+				if (findHarbourResp.error) {
+					console.error(findUserResp.error);
+					res.writeHead(500);
+					res.end('Internal Error');
+					return;
 				}
-			}
-			else if (_role == "admin") {
-				adminAllHarbours = await STORE.harbourmgmt.getHarbour();
-				_users = await STORE.API_NEXT.getElements('user', { harbour_id: adminAllHarbours[0].id});
+				adminAllHarbours = findHarbourResp.data;
+				const findUserResp = await DB_NS.user.find({ harbour_id: adminAllHarbours[0].id }, { raw: true });
+				if (findUserResp.error) {
+					console.error(findUserResp.error);
+					res.writeHead(500);
+					res.end('Internal Error');
+					return;
+				}
+				_users = findUserResp.data;
 			}
 			const roleOptions = generateRoleOptions(admin.data.roleBackOffice);
 
