@@ -391,12 +391,31 @@ exports.plugin =
 	title: "Gestion des groupes portuaires",
 	desc: "",
 	handler: async (req, res) => {
-			var admin;
+		var admin;
 		var _type;
 		var _entity_id;
 		var _harbour_id;
 		if (req.userCookie.data.id) {
-			admin = await getAdminById(req.userCookie.data.id);
+			// admin = await getAdminById(req.userCookie.data.id);
+			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+			const DB_NS = SCHEMA.NAUTICSPOT;
+			/**@type {TYPES.T_SCHEMA['fortpress']} */
+			const DB_FP = SCHEMA.fortpress;
+
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+			if (findAdminResp.error) {
+				console.error(findAdminResp.error);
+				res.writeHead(500);
+				res.end('Internal Error');
+				return;
+			} else if (findAdminResp.data.length < 1) {
+				console.error('No dashboard user found');
+				res.writeHead(401);
+				res.end('Accès non autorisé');
+				return;
+			}
+			admin = findAdminResp.data[0];
+
 			if (admin.id) {
 				if (admin.data.type)
 					_type = admin.data.type;

@@ -293,62 +293,71 @@ async function delMail(_id) {
 
 //routes handlers
 async function addUserHandler(req, res) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
 	if (req.post.prefix) {
 		req.post.prefix = completePhonePrefix(req.post.prefix);
 	}
 	if (verifyPostReq(req, res, false)) {
 		var user = req.post;
-
-		var userByEmail = await findByColl({ email: user.email });
+		const resp = await DB_NS.user.find({ email: user.email });
+		if (resp.error) {
+			UTILS.httpUtil.dataError(req, res, "Error", "Email déjà enregistré", "1.0");
+			return;
+		}
 		let userByPhone = [];
 		if (user.phone) {
 			user.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
-			userByPhone = await findByColl({ phone: user.phone });
+			const resp = await DB_NS.user.find({ phone: user.phone });
+			if (resp.error) {
+				UTILS.httpUtil.dataError(req, res, "Error", "Téléphone déjà enregistré", "1.0");
+				return;
+			}
 		}
-		if (userByEmail[0] || userByPhone[0]) {
-			UTILS.httpUtil.dataError(req, res, "Error", "Email ou téléphone déjà enregistré", "1.0");
+		delete user.password_confirm;
+		user.id = UTILS.UID.generate();
+		user.password = UTILS.Crypto.createSHA512(user.id + user.password);
+		user.created_at = Date.now();
+		user.token = UTILS.Crypto.createSHA512(user.id + user.created_at + user.first_name);
+		const rawUser = {
+			boat_id: null,
+			category: null,
+			contract_number: null,
+			created_at: null,
+			email: null,
+			enabled: true,
+			first_name: null,
+			harbour_id: null,
+			id: null,
+			last_name: null,
+			onesignal_userid: null,
+			password: null,
+			phone: null,
+			prefix: null,
+			prefixed_phone: null,
+			resetPwdToken: null,
+			roleMobileApp: null,
+			show_communication_module: true,
+			show_reporting_module: true,
+			show_security_module: true,
+			token: null,
+			updated_at: null,
+			username: null,
+		};
+		const newUser = { ...rawUser, ...user };
+		delete newUser.id;
+		delete newUser.show_communication_module;
+		delete newUser.show_reporting_module;
+		delete newUser.show_security_module;
+		const createdUser = await DB_NS.user.insert({email: "test"});
+		if (createdUser) {
+			UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: createdUser.id, harbour_id: createdUser.harbour_id, token: createdUser.token }, "1.0");
 			return;
-		} else {
-			delete user.password_confirm;
-			user.id = UTILS.UID.generate();
-			user.password = UTILS.Crypto.createSHA512(user.id + user.password);
-			user.created_at = Date.now();
-			user.token = UTILS.Crypto.createSHA512(user.id + user.created_at + user.first_name);
-			const rawUser = {
-				boat_id: null,
-				category: null,
-				contract_number: null,
-				created_at: null,
-				email: null,
-				enabled: true,
-				first_name: null,
-				harbour_id: null,
-				id: null,
-				last_name: null,
-				onesignal_userid: null,
-				password: null,
-				phone: null,
-				prefix: null,
-				prefixed_phone: null,
-				resetPwdToken: null,
-				roleMobileApp: null,
-				show_communication_module: true,
-				show_reporting_module: true,
-				show_security_module: true,
-				token: null,
-				updated_at: null,
-				username: null,
-			};
-			const newUser = { ...rawUser, ...user };
-			const createdUser = await createUser(newUser);
-			if (createdUser) {
-				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: createdUser.id, harbour_id: createdUser.harbour_id, token: createdUser.token }, "1.0");
-				return;
-			}
-			else {
-				UTILS.httpUtil.dataError(req, res, "Error", "utilisateur non enregistré", "1.0");
-				return;
-			}
+		}
+		else {
+			UTILS.httpUtil.dataError(req, res, "Error", "utilisateur non enregistré", "1.0");
+			return;
 		}
 	}
 }
@@ -384,23 +393,56 @@ async function getUserInfos(_req, _res) {
 }
 
 async function loginHandler(req, res) {
-	var user = await findByColl({ "email": req.post.email });
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 
-	if (user[0]) {
-		user = user[0];
-		var password = UTILS.Crypto.createSHA512(user.id + req.post.password);
-		if (user.password == password) {
-			user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
-			await updateUser(user);
-			UTILS.httpUtil.dataSuccess(req, res, "success, user logged", { id: user.id, harbour_id: user.harbour_id, token: user.token }, "1.0");
-			return;
-		} else {
-			UTILS.httpUtil.dataError(req, res, "Erreur", "Identifiants incorrects", null, "1.0");
-			return;
+	try {
+		console.log(`[INFO] User login attempt mail: [${req.post.email}] START`);
+
+		// var user = await findByColl({ "email": req.post.email });
+		const findUserResp = await DB_NS.user.find({ email: req.post.email });
+		if(findUserResp.error) {
+			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
+		} else if (findUserResp.data.length < 1) {
+			throw new Error('Invalid credentials', { cause: { httpCode: 404 }});
 		}
-	} else {
-		UTILS.httpUtil.dataError(req, res, "Erreur", "Identifiants incorrects", null, "1.0");
-		return;
+		/**@type {TYPES.T_user} */
+		const user = findUserResp.data[0];
+		const passHash = UTILS.Crypto.createSHA512(user.id + req.post.password);
+		if (user.password !== passHash) {
+			throw new Error('Invalid credentials', { cause: { httpCode: 404 }});
+		}
+
+		user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
+
+		const userId = user.id;
+		delete user.id;
+		const updatedUserResp = await DB_NS.user.update({ id: userId }, user, { raw: true });
+		if(updatedUserResp.error) {
+			throw new Error(updatedUserResp.error, { cause: { httpCode: 500 }});
+		} else if (updatedUserResp.data.length < 1) {
+			throw new Error('Failed to update reset token', { cause: { httpCode: 404 }});
+		}
+		const updatedUser = updatedUserResp.data[0];
+		console.log(`[INFO] User login attempt mail: [${req.post.email}] SUCCEEDED`);
+		res.end(JSON.stringify({
+			success: true,
+			message: 'success TOTO',
+			data: {
+				id: updatedUser.id,
+				harbour_id: updatedUser.harbour_id,
+				token: updatedUser.token
+			}
+		}))
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'usermgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
 	}
 }
 
@@ -588,25 +630,47 @@ const getUserWhere = async (whereOpt) => {
 
 
 const resetPasswordRequestHandler = async (req, res) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
 	try {
+		console.log(`[INFO] Reset password request for email [${req.get.email}]`);
 		// GET USER INFO
-		const [user] = await getUserWhere({ email: req.get.email });
-		if (!user) { // no user found
-			res.writeHead(404);
-			res.end(JSON.stringify({
-				message: 'Ressource not found',
-				description: 'This user doesn\'t exists'
-			}));
-			return;
+		const findUserResp = await DB_NS.user.find({ email: req.get.email }, { raw: 1 });
+		if (findUserResp.error || findUserResp.data.length < 1) {
+			throw new Error('No User Found !', {
+				cause: {
+					request: req.get,
+					httpCode: 404,
+					message: 'Ressource not found',
+					description: 'This user doesn\'t exists'
+				}
+			});
 		}
+		/**@type {TYPES.T_user} */
+		const user = findUserResp.data[0];
 
 		// GENERATE A RESET TOKEN
 		const tokenLength = 24;
 		const resetToken = crypto.randomBytes(tokenLength).toString('hex');
+		console.log('NEW TOKEN', resetToken)
 		user.resetPwdToken = resetToken;
 		user.updated_at = Date.now();
-		const userUpdated = await updateUser(user);
-		console.log('userUpdated',userUpdated);
+
+		// const userUpdated = await updateUser(user);
+		const userId = user.id;
+		delete user.id;
+		const updateUserResp = await DB_NS.user.update({ id: userId }, user, { raw: 1 });
+		if (updateUserResp.error || updateUserResp.data.length < 1) {
+			throw new Error('Failed to update user !', {
+				cause: {
+					request: req.get,
+					httpCode: 404,
+					message: 'User not updated',
+					description: 'This user doesn\'t exists'
+				}
+			});
+		}
 
 		// SEND RESET E-MAIL
 		let emailTemplate = fs.readFileSync(path.join(__dirname, "resetPasswordEmail.html")).toString();
@@ -619,6 +683,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 			{ subject: 'Récupération du mot de passe', HTMLPart: emailTemplate }
 		);
 
+		console.log(`[INFO] Reset password request SUCCEED for email [${req.get.email}]`);
 		res.end(JSON.stringify({ message: 'success' }));
 	} catch (error) {
 		console.error('[ERROR]', error);
@@ -633,26 +698,34 @@ const resetPasswordRequestHandler = async (req, res) => {
 };
 
 const setNewPasswordHandler = async (req, res) => {
+	console.log(`[INFO] Set new password request for reset token [${req.post.recoveryToken}] STARTED`);
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const token = req.post.recoveryToken;
 		const password = req.post.newPassword;
 
-		const [user] = await getUserWhere({resetPwdToken: token});
-		if(!user) {
-			res.writeHead(404);
-			res.end(JSON.stringify({
-				success: false,
-				message: 'Ressource not found',
-				description: 'This token is invalid',
-			}));
-			return;
+		const findUserResp = await DB_NS.user.find({ resetPwdToken: token }, { raw: true });
+		if(findUserResp.error) {
+			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
+		} else if (findUserResp.data.length < 1) {
+			throw new Error('Invalid token', { cause: { httpCode: 404 }});
 		}
+		const user = findUserResp.data[0];
 		const newPasswordHash = UTILS.Crypto.createSHA512(user.id + password);
 
 		user.password = newPasswordHash;
 		user.resetPwdToken = null;
-		const updatedUser = await updateUser(user);
-
+		const userId = user.id;
+		delete user.id;
+		const updatedUser = await DB_NS.user.update({ id: userId}, user, { raw: true });
+		if(updatedUser.error) {
+			throw new Error(updatedUser.error, { cause: { httpCode: 500 }});
+		} else if (updatedUser.data.length < 1) {
+			throw new Error('No user updated', { cause: { httpCode: 404 }});
+		}
+		console.log(`[INFO] Set new password request for reset token [${req.post.recoveryToken}] SUCEEDED`);
 		res.end(JSON.stringify({
 			success: true,
 			message: 'success',
@@ -828,16 +901,34 @@ exports.plugin =
 	title: "Gestion des utilisateurs",
 	desc: "",
 	handler: async (req, res) => {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
+
+
 		console.log('==== usermgmt handler ====')
 		console.log('req.get', req.get)
 		console.log('req.post', req.post)
-		var admin = await getAdminById(req.userCookie.data.id);
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		if (findAdminResp.error) {
+			console.error(findAdminResp.error);
+			res.writeHead(500);
+			res.end('Internal Error');
+			return;
+		} else if (findAdminResp.data.length < 1) {
+			console.error('No dashboard user found');
+			res.writeHead(401);
+			res.end('Accès non autorisé');
+			return;
+		}
+		const admin = findAdminResp.data[0];
 		var _type = admin.data.type;
 		var _role = admin.role;
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
 
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('Accès non autorisé');
 			return;
@@ -850,16 +941,28 @@ exports.plugin =
 
 		if (req.method == "GET") {
 			if (req.get.mode && req.get.mode == "delete" && req.get.user_id) {
-				await delUser(req.get.user_id);
+				// await delUser(req.get.user_id);
+				await DB_NS.user.delete({ id: req.get.user_id}, { raw: true });
 			} else if (req.get.mode && req.get.mode == "delete" && req.get.mail_id) {
+				//! unused ?
 				await delMail(req.get.mail_id);
 			}
 			else if (req.get.user_id) {
+				//! useless ?
 				await getUserById(req.get.user_id);
 			}
 			else if (req.get.userlist) {
-				var userlist = await getUser();
-				UTILS.httpUtil.dataSuccess(req, res, userlist, "1.0");
+				//! unused ?
+				// var userlist = await getUser();
+				const findUserResp = await DB_NS.user.find({}, { raw: true });
+				if (findUserResp.error) {
+					console.error(findUserResp.error);
+					res.writeHead(500);
+					res.end('Internal Error');
+					return;
+				}
+				const userList = findUserResp.data;
+				UTILS.httpUtil.dataSuccess(req, res, userList, "1.0");
 				return;
 			}
 		}
@@ -902,14 +1005,39 @@ exports.plugin =
 			var _users = [];
 			/**@type {Array<TYPES.T_harbour>} */
 			let adminAllHarbours = [];
-			if (_role == "user") {
-				for (var i = 0; i < _harbour_id.length; i++) {
-					_users = _users.concat(await STORE.API_NEXT.getElements('user', { harbour_id: _harbour_id[i]}));
+			if (_role === 'user') {
+				const pendingPromises = [];
+				_harbour_id.map(harbourId => {
+					pendingPromises.push(DB_NS.user.find({ harbour_id: harbourId }, { raw: true }));
+				});
+				const findUserResponses = await Promise.all(pendingPromises);
+				findUserResponses.map(resp => {
+					if (resp.error) {
+						console.error(findUserResp.error);
+						res.writeHead(500);
+						res.end('Internal Error');
+						return;
+					} else {
+						_users.push(resp.data);
+					}
+				})
+			} else if (_role === 'admin') {
+				const findHarbourResp = await DB_NS.harbour.find({}, { raw: true });
+				if (findHarbourResp.error) {
+					console.error(findUserResp.error);
+					res.writeHead(500);
+					res.end('Internal Error');
+					return;
 				}
-			}
-			else if (_role == "admin") {
-				adminAllHarbours = await STORE.harbourmgmt.getHarbour();
-				_users = await STORE.API_NEXT.getElements('user', { harbour_id: adminAllHarbours[0].id});
+				adminAllHarbours = findHarbourResp.data;
+				const findUserResp = await DB_NS.user.find({ harbour_id: adminAllHarbours[0].id }, { raw: true });
+				if (findUserResp.error) {
+					console.error(findUserResp.error);
+					res.writeHead(500);
+					res.end('Internal Error');
+					return;
+				}
+				_users = findUserResp.data;
 			}
 			const roleOptions = generateRoleOptions(admin.data.roleBackOffice);
 

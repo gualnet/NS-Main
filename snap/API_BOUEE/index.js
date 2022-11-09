@@ -204,13 +204,15 @@ const fetchDataFromBuoysServer = async (options) => {
 const getLastKnownPresenceByBuoyHandler = async (req, res) => {
 	try {
 		const apiAuthToken = req.headers['x-auth-token'];
+		const harbourId = req.get['harbour-id'];
+		const devid = req.get['devid'];
 		if (apiAuthToken) {
 			await verifyAccess(apiAuthToken, harbourId, devid); // will throw an error if something is wrong
 		} else if (req.cookie.fortpress) {
 			// TODO: find a way to do this
 			// console.log('req.cookie', req.cookie);
 		} else {
-			throw new error('Access not authorized !');
+			throw new Error('Access not authorized !');
 		}
 
 		const buoysRawData = await fetchDataFromBuoysServer({

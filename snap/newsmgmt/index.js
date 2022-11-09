@@ -192,7 +192,25 @@ exports.plugin =
     title: "Gestion des actualités",
     desc: "",
     handler: async (req, res) => {
-				var admin = await getAdminById(req.userCookie.data.id);
+			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+			const DB_NS = SCHEMA.NAUTICSPOT;
+			/**@type {TYPES.T_SCHEMA['fortpress']} */
+			const DB_FP = SCHEMA.fortpress;
+
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+			if (findAdminResp.error) {
+				console.error(findAdminResp.error);
+				res.writeHead(500);
+				res.end('Internal Error');
+				return;
+			} else if (findAdminResp.data.length < 1) {
+				console.error('No dashboard user found');
+				res.writeHead(401);
+				res.end('Accès non autorisé');
+				return;
+			}
+			const admin = findAdminResp.data[0];
+
         var _role = admin.role;
         var _type = admin.data.type;
         var _entity_id = admin.data.entity_id;
