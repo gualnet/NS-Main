@@ -79,10 +79,16 @@ exports.store = {
 const getUsersHandler = async (req, res) => {
 	console.log('getUsersHandler');
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
-		/** @type {Array<TYPES.T_user>} */
-		const users = await getElements(TABLES.USERS, searchOpt);
+		const findUserResp = await DB_NS.user.find(searchOpt, { raw: 1 });
+		if (findUserResp.error) {
+			throw new Error(findUserResp.error);
+		}
+		const users = findUserResp.data;
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -179,17 +185,22 @@ const updateUsersHandler = async (req, res) => {
 const deleteUsersHandler = async (req, res) => {
 	console.log('deleteUsersHandler')
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const searchObj = { ...req.get };
 
-		/**@type {Array<TYPES.T_user>} */
-		const deletedObj = await deleteElement(TABLES.USERS, searchObj);
-		console.log('Deleted Users', deletedObj)
+		const deleteUserResp = await DB_NS.user.delete(searchObj, { raw: 1 });
+		if (deleteUserResp.error) {
+			throw new Error(deleteUserResp.error);
+		}
+		const deletedUsers = deleteUserResp.data;
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			count: deletedObj.length,
-			users: deletedObj,
+			count: deletedUsers.length,
+			users: deletedUsers,
 		}));
 	} catch (error) {
 		console.error(error)
@@ -206,10 +217,20 @@ const deleteUsersHandler = async (req, res) => {
 const getBoatsHandler = async (req, res) => {
 	console.log('getBoatsHandler');
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
-		/** @type {Array<TYPES.T_user>} */
-		const boats = await getElements(TABLES.BOATS, searchOpt);
+		// /** @type {Array<TYPES.T_user>} */
+		// const boats = await getElements(TABLES.BOATS, searchOpt);
+
+		const findBoatResp = await DB_NS.boat.find(searchOpt, { raw: 1 });
+		console.log('findBoatResp',findBoatResp)
+		if (findBoatResp.error) {
+			throw new Error(findBoatResp.error);
+		}
+		const boats = findBoatResp.data;
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -217,8 +238,8 @@ const getBoatsHandler = async (req, res) => {
 			usersCount: boats.length,
 			boats: boats,
 		}));
-
 	} catch (error) {
+		console.error(error);
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: false,
@@ -295,17 +316,28 @@ const updateBoatsHandler = async (req, res) => {
 const deleteBoatsHandler = async (req, res) => {
 	console.log('deleteBoatsHandler')
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const searchObj = { ...req.get };
 
-		/**@type {Array<TYPES.T_boat>} */
-		const deletedObj = await deleteElement(TABLES.BOATS, searchObj);
-		console.log('Deleted boats', deletedObj)
+		// /**@type {Array<TYPES.T_boat>} */
+		// const deletedObj = await deleteElement(TABLES.BOATS, searchObj);
+
+		const deleteUserResp = await DB_NS.boat.delete(searchObj, { raw: 1 });
+		if (deleteUserResp.error) {
+			throw new Error(deleteUserResp.error);
+		}
+		const deletedUsers = deleteUserResp.data;
+
+
+		console.log('Deleted boats', deletedUsers)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			count: deletedObj.length,
-			boats: deletedObj,
+			count: deletedUsers.length,
+			boats: deletedUsers,
 		}));
 	} catch (error) {
 		console.error(error)
