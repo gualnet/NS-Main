@@ -293,23 +293,28 @@ async function delMail(_id) {
 
 //routes handlers
 async function addUserHandler(req, res) {
+	console.log('addUserHandler')
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
-
+	console.log('req.post', req.post);
 	if (req.post.prefix) {
 		req.post.prefix = completePhonePrefix(req.post.prefix);
 	}
 	if (verifyPostReq(req, res, false)) {
 		var user = req.post;
-		const resp = await DB_NS.user.find({ email: user.email });
+		const resp = await DB_NS.user.find({ email: user.email }, { raw: 1 });
+		console.log('findUser', resp);
 		if (resp.error) {
+			UTILS.httpUtil.dataError(req, res, "Error", "Internal Error", "1.0");
+			return;
+		} else if (resp.data.length > 0) {
 			UTILS.httpUtil.dataError(req, res, "Error", "Email déjà enregistré", "1.0");
 			return;
 		}
 		let userByPhone = [];
 		if (user.phone) {
 			user.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
-			const resp = await DB_NS.user.find({ phone: user.phone });
+			const resp = await DB_NS.user.find({ phone: user.phone }, { raw: 1 });
 			if (resp.error) {
 				UTILS.httpUtil.dataError(req, res, "Error", "Téléphone déjà enregistré", "1.0");
 				return;
@@ -320,37 +325,14 @@ async function addUserHandler(req, res) {
 		user.password = UTILS.Crypto.createSHA512(user.id + user.password);
 		user.created_at = Date.now();
 		user.token = UTILS.Crypto.createSHA512(user.id + user.created_at + user.first_name);
-		const rawUser = {
-			boat_id: null,
-			category: null,
-			contract_number: null,
-			created_at: null,
-			email: null,
-			enabled: true,
-			first_name: null,
-			harbour_id: null,
-			id: null,
-			last_name: null,
-			onesignal_userid: null,
-			password: null,
-			phone: null,
-			prefix: null,
-			prefixed_phone: null,
-			resetPwdToken: null,
-			roleMobileApp: null,
-			show_communication_module: true,
-			show_reporting_module: true,
-			show_security_module: true,
-			token: null,
-			updated_at: null,
-			username: null,
-		};
-		const newUser = { ...rawUser, ...user };
-		delete newUser.id;
-		delete newUser.show_communication_module;
-		delete newUser.show_reporting_module;
-		delete newUser.show_security_module;
-		const createdUser = await DB_NS.user.insert({email: "test"});
+		const createdUserResp = await DB_NS.user.create(user, { raw: 1 })
+		console.log('createdUserResp',createdUserResp);
+		if (createdUserResp.error) {
+			UTILS.httpUtil.dataError(req, res, "Error", "Internal Error", "1.0");
+			return;
+		}
+		const createdUser = createdUserResp.data;
+		console.log('createdUser',createdUser);
 		if (createdUser) {
 			UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: createdUser.id, harbour_id: createdUser.harbour_id, token: createdUser.token }, "1.0");
 			return;
@@ -363,8 +345,8 @@ async function addUserHandler(req, res) {
 }
 
 async function getUserInfos(_req, _res) {
-	/**@type {TYPES.T_SCHEMA} */
-	const FP_SCHEMA = SCHEMA;
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 	try {
 		const { userId, token } = _req.post;
 
@@ -377,7 +359,12 @@ async function getUserInfos(_req, _res) {
 			} else {
 				throw new Error('Wrong parameter, please provide a \'user id\' or a \'user token\'.');
 			}
-			const users = await findByColl(query)
+			// const users = await findByColl(query)
+			const findUserResp = await DB_NS.user.find(query, { raw: 1 });
+			if (findUserResp.error) {
+				throw new Error('User not found', { cause: { httpCode: 404 }});
+			}
+			const users = findUserResp.data;
 			if (users[0]) {
 				delete users[0].password;
 				delete users[0].resetPwdToken;
@@ -400,17 +387,17 @@ async function loginHandler(req, res) {
 		console.log(`[INFO] User login attempt mail: [${req.post.email}] START`);
 
 		// var user = await findByColl({ "email": req.post.email });
-		const findUserResp = await DB_NS.user.find({ email: req.post.email });
+		const findUserResp = await DB_NS.user.find({ email: req.post.email }, { raw: 1 });
 		if(findUserResp.error) {
 			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
 		} else if (findUserResp.data.length < 1) {
-			throw new Error('Invalid credentials', { cause: { httpCode: 404 }});
+			throw new Error('Email ou mot de pass invalide - 1', { cause: { httpCode: 404 }});
 		}
 		/**@type {TYPES.T_user} */
 		const user = findUserResp.data[0];
 		const passHash = UTILS.Crypto.createSHA512(user.id + req.post.password);
 		if (user.password !== passHash) {
-			throw new Error('Invalid credentials', { cause: { httpCode: 404 }});
+			throw new Error('Email ou mot de pass invalide - 2', { cause: { httpCode: 404 }});
 		}
 
 		user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);

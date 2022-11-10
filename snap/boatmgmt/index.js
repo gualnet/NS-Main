@@ -1,6 +1,7 @@
 const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
+const {errorHandler} = require('../lib-js/errorHandler');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -189,17 +190,38 @@ async function getAdminById(_id) {
 
 //handler that save boat in db
 async function addBoatHandler(_req, _res) {
-	_req.post.date = Date.now();
-	delete _req.post.ponton_id;
-	/**@type {TYPES.T_boat} */
-	var boat = await createBoat(_req.post);
+	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
 
-	/**@type {Array<TYPES.T_user>} */
-	const [user] = await STORE.API_NEXT.getElements('user', { id: _req.post.user_id });
-	user.boat_id = boat.id;
-	await STORE.API_NEXT.updateElement('user', { id: user.id }, user)
-	boat.enabled = false;
-	UTILS.httpUtil.dataSuccess(_req, _res, "Bateau enregistré", "1.0")
+		// CREATE BOAT
+		const creatBoatResp = await DB_NS.boat.create({
+			id: UTILS.UID.generate(),
+			harbour_id: _req.post.harbour_id,
+			is_resident: _req.post.is_resident,
+			place_id: _req.post.place_id,
+			user_id: _req.post.user_id,
+			name: _req.post.name,
+			longueur: _req.post.longueur,
+			largeur: _req.post.largeur,
+			tirant_eau: _req.post.tirant_eau,
+		});
+		if (creatBoatResp.error) {
+			throw new Error(creatBoatResp.error);
+		}
+		/**@type {TYPES.T_boat} */
+		const createdBoat = creatBoatResp.data;
+
+		// UPDATE USER
+		const updateUserResp = await DB_NS.user.update({ id: createdBoat.user_id }, {boat_id: createdBoat.id }, { raw: 1 });
+		if (updateUserResp.error) {
+			throw new Error(updateUserResp.error, { cause: { httpCode: 500 } });
+		}
+		const updatedUser = updateUserResp.data[0]
+		UTILS.httpUtil.dataSuccess(_req, _res, "Bateau enregistré", "1.0")
+	} catch (error) {
+		errorHandler(_res, error);
+	}
 }
 
 //handler that delete boat in db
@@ -302,9 +324,17 @@ async function verifyFormBoatHandler(_req, _res) {
 
 // handle that return the boat of the user
 async function getUserBoatsHandler(_req, _res) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
 	if (_req.get.user_id && _req.get.harbour_id) {
 		const { user_id, harbour_id } = _req.get;
-		const boats = await STORE.API_NEXT.getElements('boat', { user_id, harbour_id });
+
+		const findBoatResp = await DB_NS.boat.find({ user_id, harbour_id });
+		if (findBoatResp.error) {
+			throw new Error(findBoatResp.error);
+		}
+		const boats = findBoatResp.data;
 		if (boats[0]) {
 			UTILS.httpUtil.dataSuccess(_req, _res, 'success', boats, '1.0');
 			return;
