@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+const myLogger = require('../lib-js/myLogger');
 
 exports.setup = {
 	on: true,
@@ -41,7 +42,6 @@ const logAxiosError = (error) => {
 	}
 	console.error('error.config', error.config);
 }
-
 
 // ********
 // HANDLERS
@@ -278,6 +278,42 @@ const addReservation = async (req, res) => {
 	}
 };
 
+/**
+ * Retourne un lien de paiement des Ahres dans le cas un paiement est possible.
+ */
+const getPaymentLinkHandler = async (req, res) => {
+	try {
+		const { login, token, resa_id } = req.get;
+		const keyUser = OPTION.MAGELAN_USER_KEY;
+
+		const eResaUrl = `https://appli.magelan-eresa.com/appliValidResa/${login}/${token}/${resa_id}/${keyUser}`;
+
+		const response = await axios.get(eResaUrl);
+		console.log('response', response.data);
+		if (response.data.CodeErr === '2' ) {
+			throw new Error(response.data?.MessageErr || 'Unknown Internal Error');
+		}
+		const paymentLink = response?.data?.url_pay;
+		res.writeHead(response.status, response.statusText, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			data: {
+				link: paymentLink,
+			},
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		logAxiosError(error);
+		myLogger.logError(error, { module: 'magelan_api' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
 exports.router = [
 	{
     on: true,
@@ -308,6 +344,12 @@ exports.router = [
     route: "/api/eresa/add-reservation",
     method: "GET",
     handler: addReservation,
+  },
+	{
+    on: true,
+    route: "/api/eresa/appliValidResa",
+    method: "GET",
+    handler: getPaymentLinkHandler,
   },
 ];
 
