@@ -114,13 +114,12 @@
 			</div>
 		</div>
 
-		
-		<a target="_blank" href="https://www.resaportcorse.com/" id="resaBtn">
+		<a href="/magelan-login" id="resaBtn">
 		<div class="resa-container">
 				Je réserve ma place
 			</div>
 		</a>
-			
+
 		<div class="container mt-4">
 			<div class="row">
 				<div class="col">
@@ -428,7 +427,6 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
@@ -896,7 +894,6 @@
 				else if (activeSubCategories.vendeurLoueurHl)
 					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vendeurLoueurHl')");
 
-
 				if (!activeSubCategories.accastillage)
 					document.getElementById('accastillage').hidden = true;
 				if (!activeSubCategories.sos)
@@ -925,7 +922,6 @@
 			}
 
 			if (activeCategory.experience) {
-
 				if (activeSubCategories.nautic)
 					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=nautic')");
 				else if (activeSubCategories.terrestres)
@@ -938,7 +934,6 @@
 					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=vendeurLoueurEx')");
 				else if (activeSubCategories.experienceautre)
 					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=experienceautre')");
-
 
 				if (!activeSubCategories.nautic)
 					document.getElementById('nautic').hidden = true;
@@ -958,7 +953,6 @@
 			}
 
 			if (activeCategory.discovery) {
-
 				if (activeSubCategories.restaurant)
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=restaurant')");
 				else if (activeSubCategories.bar)
@@ -977,7 +971,6 @@
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=patrimoine')");
 				else if (activeSubCategories.mouillages)
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=mouillages')");
-
 
 				if (!activeSubCategories.restaurant)
 					document.getElementById('restaurant').hidden = true;
@@ -999,7 +992,6 @@
 				document.getElementById('discovery').hidden = true;
 				document.getElementById('discovery_link').hidden = true;
 			}
-
 		}).catch((error) => {
 			console.log(error);
 		});

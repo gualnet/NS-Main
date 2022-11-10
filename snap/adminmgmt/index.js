@@ -390,9 +390,6 @@ exports.plugin =
 		var _harbour_id;
 		let roleBackOffice = ENUM.rolesBackOffice.VISITEUR;
 		if (req.userCookie.data.id) {
-			console.log(req.userCookie.data.id);
-
-			// admin = await getAdminById(req.userCookie.data.id);
 			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
 			if (findAdminResp.error) {
 				console.error(findAdminResp.error);
@@ -405,8 +402,7 @@ exports.plugin =
 				res.end('Accès non autorisé');
 				return;
 			}
-			const admin = findAdminResp.data[0];
-			console.log('admin', admin)
+			admin = findAdminResp.data[0];
 
 			if (admin.id) {
 				if (admin.data.type)

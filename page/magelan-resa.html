@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Reservation ext</title>
+  <link rel="stylesheet" href="/css/pages/magelan-resa.css">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+	<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script src="/js/pages/magelan-resa.js"></script>
+</head>
+<body>
+  <div id="mainWrapper">
+
+		<!-- RESERVATION FORM -->
+		<div class="form-ctn">
+			<div class="form-top">
+				<div class="form-selector active" id="newResaBtn">Réserver mon escale</div>
+				<div class="form-selector" id="listResaBtn">Mes réservations</div>
+			</div>
+			<!-- NEW RESERVATION FORM -->
+			<div class="form-content" id="formNewResa">
+				<div class="section">
+					<div class="section-title-ctn flex-row">
+						<i class="anchor-ico"></i>
+						<div class="title">Préparer mon escale</div>
+					</div>
+					<div class="harbour-selector-ctn">
+						<select id="harbourSelect">
+							<option value="" disabled selected>Veuillez choisir un port</option>
+							<option value="2">Ajaccio - Port Charles Ornano</option>
+							<option value="5000">Bonifacio - Port de plaisance</option>
+							<option value="5100">Bonifacio - Mouillage de Sant'Amanza (Yacht)</option>
+							<option value="9">Macinaggio - Port de Macinaggio (Rogliano)</option>
+							<option value="11">Porto-Vecchio - Port de Porto-Vecchio</option>
+							<option value="12">Propriano - Port de Propriano</option>
+						</select>
+					</div>
+					<div class="date-button-ctn">
+							<div class="flex-col">
+								<label class="label" id="arriveeBtn">Arrivée</label>
+								<input id="input-date-start" name="date_start" type="text" class="form-control floating-input modal-date-input" required>
+							</div>
+							<div class="flex-col">
+								<label class="label" id="departBtn">Départ</label>
+								<input id="input-date-end" name="date_end" type="text" class="form-control floating-input modal-date-input" required>
+
+						</div>
+					</div>
+				</div>
+				<div class="section" id="sectionBoat">
+					<div class="section-title-ctn flex-row">
+						<i class="ship-ico"></i>
+						<div class="flex-row justify-space">
+							<div class="title">Mon bateau</div>
+							<div class="" id="boatEditBtn">Modifier</div>
+						</div>
+					</div>
+					<div class="boat-details-ctn">
+						<div class="flex-row">
+							<div class="size-ctn flex-row">
+								<div class="label">L</div>
+								<input class="display-bubble" id="input-boat-longueur" name="boat-longueur" type="text" class="form-control floating-input modal-date-input" placeholder="14,30" />
+							</div>
+							<div class="size-ctn  flex-row">
+								<div class="label">l</div>
+								<input class="display-bubble" id="input-boat-largeur" name="boat-largeur" type="text" class="form-control floating-input modal-date-input" placeholder="3,40" />
+							</div>
+						</div>
+						<div class="boat-types-ctn flex-row">
+							<button id="boatTypeMonocoqueBtn" type="button" class="btn btn-outline-primary active">Monocoque</button>
+							<button id="boatTypeVoilierBtn" type="button" class="btn btn-outline-primary" checked>Voilier</button>
+						</div>
+					</div>
+				</div>
+				<div class="section">
+					<div class="stay-details-ctn">
+						<div class="section-title-ctn flex-row">
+							<!-- <div class="icon">lune</div> -->
+							<i class="moon-ico"></i>
+							<div class="text">Nombre de nuits</div>
+							<input class="display-bubble" id="input-night-count" name="night-count" type="text" class="form-control floating-input modal-date-input" placeholder="0" disabled/>
+
+						</div>
+						<div class="section-title-ctn flex-row">
+							<!-- <div class="icon">lune</div> -->
+							<i class="moon-ico"></i>
+							<div class="text">Coût du sejour</div>
+							<span class="popover-ctn">
+								<div class="popover-label" id="priceInfoBtnLabel">?</div>
+								<div class="popover-message hide" id="priceInfoMsg">Le tarif peut-être ajusté à l'arrivée au port en fonction de la taille exacte du navire, du nombre de personnes à bord (taxe de séjour) et de la position du bateau dans le port. Le client est seul responsable de la conformité des informations fournies lors de la réservation.</div>
+							</span>
+							<div class="spinner-ctn hide" id="priceSpinnerCtn">
+								<div class="spinner-border text-primary" id="totalPriceSpinner" role="status">
+									<span class="visually-hidden">Loading...</span>
+								</div>
+							</div>
+							<input class="display-bubble" id="input-price-count" name="price-count" type="text" class="form-control floating-input modal-date-input" placeholder="0 €" disabled/>
+						</div>
+					</div>
+				</div>
+
+				<div class="text-area-ctn">
+					<div class="section-title-ctn flex-row">
+						<i class="comments-ico"></i>
+						<div class="title">Commentaire</div>
+					</div>
+					<textarea id="commentsArea" name="comment" cols="40" rows="5" placeholder="Laissez un message à l’attention de la capitainerie."></textarea>
+				</div>
+				<div>
+					<input class="form-check-input" id="cgvCheckbox" type="checkbox">
+					<label>J'accepte les <a target="_blank" href="https://www.resaportcorse.com/media/cgv_FR.pdf">conditions générales de vente</a></label>
+				</div>
+				<div class="action-button-ctn disabled">
+					<div class="main-button" id="reservationBtn">
+						Réserver avec Magelan eResa
+						<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+						</svg>
+					</div>
+				</div>
+			</div>
+			<!-- NEW RESERVATION FORM END -->
+
+			<!-- RESERVATION LIST START -->
+			<div class="form-content hide" id="formListResa">
+				<div class="section" id="formListResaSection">
+					<div class="resa-card-sub-section half-height" id="resaNewSectionTitleCtn">
+						<div class="section-title-ctn flex-row">
+							<i class="anchor-ico"></i>
+							<div class="title">En cours</div>
+						</div>
+						<div class="resa-list-ctn" id="resaListCtn">
+							<!-- reservations card here -->
+						</div>
+					</div>
+					<div class="resa-card-sub-section hide half-height" id="resaOldSectionTitleCtn">
+						<div class="section-title-ctn flex-row">
+							<i class="anchor-ico"></i>
+							<div class="title">Passé</div>
+						</div>
+						<div class="resa-list-ctn" id="resaOldListCtn">
+							<!-- reservations card here -->
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<!-- RESERVATION LIST END -->
+		</div>
+
+		<!-- BOAT EDIT MODAL -->
+		<div class="modal" tabindex="-1" role="dialog" id="boatEditModal">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Choisissez votre bateau</h5>
+						<div id="bemCloseBtn" class="close" data-dismiss="modal" aria-label="Close" onclick="boatCloseModalBtnOnClickHandler()">
+							<button type="button" class="btn-close" aria-label="Close"></button>
+						</div>
+					</div>
+					<div class="modal-body" id="bemBodyCtn">
+						<!-- boat rows -->
+					</div>
+					<div class="modal-footer">
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- BOAT EDIT MODAL END -->
+
+	</div>
+</body>
+</html>
