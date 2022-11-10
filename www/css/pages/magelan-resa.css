@@ -379,6 +379,13 @@ body {
 	display: flex;
 	justify-content: center;
 }
+#PaymentBtn {
+	margin-top: 1em;
+	height: 3em;
+	width: 35%;
+	align-self: flex-end;
+	margin-right: 20px;
+}
 
 /* BOAT EDIT MODAL */
 .modal {

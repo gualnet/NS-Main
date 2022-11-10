@@ -97,6 +97,25 @@ const boatTypeBtnClickHandler = (ev) => {
 	return;
 };
 
+const goToPaymentPageClickHandler = async (resaId) => {
+	try {
+		const token = localStorage['magelanToken'];
+		const login = localStorage['magelanLogin'];
+		const url = `/api/eresa/appliValidResa?login=${login}&token=${token}&resa_id=${resaId}`;
+		const resp = await fetch(url, { method: 'GET' });
+		const respJson = await resp.json();
+		const paymentLink = respJson.data.link;
+		if (paymentLink) {
+			open(paymentLink, '_blank');
+		} else {
+			throw new Error('No Payment Link');
+		}
+	} catch (error) {
+		console.error('[ERROR]', error);
+		alert(error)
+	}
+};
+
 // const dateChangeHandler = async (ev) => {
 // 	console.log('============================dateChangeHandler');
 // 	const arrivalDateEl = document.querySelector('#input-date-start');
@@ -411,16 +430,11 @@ const updateResaBtnStatus = () => {
 		const isCgvChecked = getCgvConsentStatus();
 		console.log('isCgvChecked', isCgvChecked);
 
-
 		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
 		actionBtnCtnEl.classList.remove('disabled');
 	} catch (error) {
 		console.warn(error);
 	}
-	
-
-
-	
 }
 
 const getUserReservationList = async () => {
@@ -449,8 +463,13 @@ const getUserReservationList = async () => {
 			const startDate = `${ddStart}/${mmStart}/${yyStart}`;
 			const endDate = `${ddEnd}/${mmEnd}/${yyEnd}`;
 			const status = reservation.resa_status;
+			const resaId = reservation.resa_id;
 			const statusColor = reservation.resa_status_couleur;
+			const paymentBtn = `<button id="PaymentBtn" type="button" class="btn btn-outline-primary active" onclick="goToPaymentPageClickHandler('${resaId}')">Payment</button>
+			`;
 			if (reservation.resa_date_fin > today) {
+				let displayPaymentBtn = status === 'Arrhes à régler' ? true : false;
+
 				htmlRow.push(`
 					<div class="resa-card">
 						<div class="resa-card-row">
@@ -461,6 +480,7 @@ const getUserReservationList = async () => {
 							<div>Statut</div>
 							<div style="color:${statusColor}">${status}</div>
 						</div>
+						${displayPaymentBtn ? paymentBtn : ''}
 					</div>
 				`);
 			} else {
@@ -527,7 +547,6 @@ const fetchUserBoatList = async () => {
 
 		const resp = await fetch(url);
 		const respJson = await resp.json();
-		console.log('respJson', respJson);
 		if (respJson.success === false) {
 			if (respJson.error === "Error: INVALID TOKEN") {
 				window.location = '/magelan-login';
