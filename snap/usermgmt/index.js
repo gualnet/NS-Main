@@ -640,7 +640,6 @@ const resetPasswordRequestHandler = async (req, res) => {
 		// GENERATE A RESET TOKEN
 		const tokenLength = 24;
 		const resetToken = crypto.randomBytes(tokenLength).toString('hex');
-		console.log('NEW TOKEN', resetToken)
 		user.resetPwdToken = resetToken;
 		user.updated_at = Date.now();
 
@@ -649,6 +648,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 		delete user.id;
 		const updateUserResp = await DB_NS.user.update({ id: userId }, user, { raw: 1 });
 		if (updateUserResp.error || updateUserResp.data.length < 1) {
+			console.error('[ERROR]', updateUserResp);
 			throw new Error('Failed to update user !', {
 				cause: {
 					request: req.get,
