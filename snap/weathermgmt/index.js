@@ -504,13 +504,17 @@ exports.plugin =
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
 
-							const getHarbourPromises = await _harbour_id.map(harbourId => DB_NS.harbour.find({ id: harbourId }, { raw: 1 }));
+							const getHarbourPromises = []
+							_harbour_id.map(harbourId => {
+								getHarbourPromises.push(DB_NS.harbour.find({ id: harbourId }, { raw: 1 }));
+							});
+
 							const userHarboursResp = await Promise.all(getHarbourPromises);
 							let findError;
 							const userHarbours = [];
 							userHarboursResp.map(resp => {
 								if (resp.error) findError = resp;
-								else userHarbours.push(resp.data);
+								else userHarbours.push(...resp.data);
 							});
 							if (findError?.error) {
 								console.error(error);
