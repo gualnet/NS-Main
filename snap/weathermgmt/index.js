@@ -1,3 +1,4 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
@@ -94,26 +95,15 @@ async function getWeatherById(_id) {
 }
 
 
-async function getWeather() {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_weatherCol, {}, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+async function getWeather(queryObj) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 
-async function getWeatherByHarbourId(_harbour_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_weatherCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+	const findWeatherResp = await DB_NS.weather.find(queryObj, { raw: 1 });
+	if (findWeatherResp.error) {
+		throw new Error(findWeatherResp);
+	}
+	return findWeatherResp.data;
 }
 
 async function delWeather(_id) {
@@ -148,20 +138,16 @@ async function updateWeather(_obj) {
         });
     });
 }
-async function getAdminById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
 
 async function getWeatherFromHarbourHandler(_req, _res) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 	try {
-    var weather = await getWeatherByHarbourId(_req.param.harbour_id)
+		const findWeatherResp = await DB_NS.weather.find({ id: _req.param.harbour_id }, { raw: 1 });
+		if (findWeatherResp.error) {
+			throw new Error(findWeatherResp.message);
+		}
+		let weather = findWeatherResp.data;
     weather = weather.sort(dynamicSort("date")).reverse();
     if (weather[0]) {
         UTILS.httpUtil.dataSuccess(_req, _res, "success", weather[0])
@@ -474,25 +460,29 @@ exports.plugin =
                 return reformat;
             }
 
-            if (_type == 'harbour_manager')
-                _weathers = await getWeatherByHarbourId(_harbour_id);
-            else
-                _weathers = await getWeather();
-
-            if (_role == "user") {
-                for (var i = 0; i < _harbour_id.length; i++) {
-                    _weathers = _weathers.concat(await getWeatherByHarbourId(_harbour_id[i]));
-                }
-            }
-            else if (_role == "admin")
-                _weathers = await getWeather();
+						try {
+							if (_role == "user") {
+								const promises = [];
+								_harbour_id.map(harbourId => {
+									promises.push(getWeather({ harbour_id: harbourId }));
+								});
+								const resp = await Promise.all(promises);
+								_weathers = resp.flat();
+							} else if (_role == "admin") {
+								_weathers = await getWeather();
+							}
+						} catch (error) {
+							console.error(error);
+							res.setHeader("Content-Type", "text/html");
+							res.end('OOPS.. Quelque chose c\'est mal passé !');
+							return;
+						}
 
             var _weatherGen = "";
             for (var i = 0; i < _weathers.length; i++) {
                 var date = new Date(_weathers[i].date);
                 var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
                 var currentHarbour = await STORE.harbourmgmt.getHarbourById(_weathers[i].harbour_id);
-
                 _weatherGen += _weatherHtml.replace(/__ID__/g, _weathers[i].id)
                     .replace(/__FORMID__/g, _weathers[i].id.replace(/\./g, "_"))
                     .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
@@ -514,8 +504,20 @@ exports.plugin =
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
 
-                const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
-                const userHarbours = await Promise.all(getHarbourPromises);
+							const getHarbourPromises = await _harbour_id.map(harbourId => DB_NS.harbour.find({ id: harbourId }, { raw: 1 }));
+							const userHarboursResp = await Promise.all(getHarbourPromises);
+							let findError;
+							const userHarbours = [];
+							userHarboursResp.map(resp => {
+								if (resp.error) findError = resp;
+								else userHarbours.push(resp.data);
+							});
+							if (findError?.error) {
+								console.error(error);
+								res.setHeader("Content-Type", "text/html");
+								res.end('OOPS.. Quelque chose c\'est mal passé !');
+								return;
+							}
                 userHarbours.map(userHarbour => {
                     harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
                 });
@@ -526,7 +528,15 @@ exports.plugin =
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
-                userHarbours = await STORE.harbourmgmt.getHarbour();
+
+							const findHarbourResp = await DB_NS.harbour.find({}, { raw: 1 });
+							if (findHarbourResp.error) {
+								console.error(error);
+								res.setHeader("Content-Type", "text/html");
+								res.end('OOPS.. Quelque chose c\'est mal passé !');
+								return;
+							}
+							userHarbours = findHarbourResp.data;
                 userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
                 for (var i = 0; i < userHarbours.length; i++) {
