@@ -32,7 +32,6 @@
 		let G_harboursData
 
 		window.addEventListener('load', async () => {
-			setEntityLogo();
 			G_harboursData = await fetchHarbours();
 
 			setMaccinagioVortex();
@@ -72,11 +71,6 @@
 				}
 			}
 			window.location.href = ("/index-corse");
-		};
-
-		const setEntityLogo = () => {
-			const entityLogoEl = document.querySelector('#entityLogo');
-			entityLogoEl.src = localStorage['entity_logo'];
 		};
 
 		const setMaccinagioVortex = () => {
@@ -233,6 +227,7 @@
 			padding: 0 1rem;
 			margin-top: 10px;
 			width: 100%;
+			margin-bottom: 5vw;
 		}		
 		header > p {
 			color: rgb(0, 94, 149);
