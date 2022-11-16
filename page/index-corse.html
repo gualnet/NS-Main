@@ -843,15 +843,19 @@
 					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
 				}
 
+				const userAgent = window.navigator.userAgent;
+				const isIos = (userAgent.toLowerCase().indexOf('iphone') !== -1) ? true : false;
 				const mapPdfEl = document.getElementById("map_pdf");
 				if (mapPdfEl) {
 					let mapLink;
 					if (harbour.google_map_link) {
-						mapLink = harbour.google_map_link; // embed external google map
+						mapLink = harbour.google_map_link; // embed external google my map link used by ios
+						if (!isIos) {
+							mapLink = mapLink.split('/maps').join('?gbOpenExternal=1maps'); // used by android
+						}
 					} else if (harbour.address) {
-						const userAgent = window.navigator.userAgent;
 						mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
-						if (userAgent.toLowerCase().indexOf('iphone') !== -1) {
+						if (isIos) {
 							mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
 						}
 					} else {
