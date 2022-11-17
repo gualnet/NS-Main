@@ -1005,7 +1005,7 @@ exports.plugin =
 						res.end('Internal Error');
 						return;
 					} else {
-						_users.push(resp.data);
+						_users.push(...resp.data);
 					}
 				})
 			} else if (_role === 'admin') {
