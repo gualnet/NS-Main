@@ -83,17 +83,6 @@ function verifyPostReq(_req, _res) {
     return true;
 }
 
-async function getWeatherById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_weatherCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-
 
 async function getWeather(queryObj) {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
@@ -106,26 +95,26 @@ async function getWeather(queryObj) {
 	return findWeatherResp.data;
 }
 
-async function delWeather(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Delete(_weatherCol, { id: _id }, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+async function delWeather(item) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const deleteWeatherResp = await DB_NS.weather.delete({ id : item }, { raw: 1 });
+	if (deleteWeatherResp.error) {
+		throw new Error(deleteWeatherResp);
+	}
+	return;
 }
 
-async function createWeather(_obj) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Create(_weatherCol, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+async function createWeather(item) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const createWeatherResp = await DB_NS.weather.create(item, { raw: 1 });
+	if (createWeatherResp.error) {
+		throw new Error(createWeatherResp);
+	}
+	return(createWeatherResp.data);
 }
 
 async function updateWeather(_obj) {
@@ -363,6 +352,7 @@ exports.plugin =
     title: "Gestion de la météo",
     desc: "",
     handler: async (req, res) => {
+			console.log('WEATHER PLUGIN HANDLER');
 			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 			const DB_NS = SCHEMA.NAUTICSPOT;
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
@@ -399,17 +389,28 @@ exports.plugin =
 				}
 
         if (req.method == "GET") {
-            if (req.get.mode && req.get.mode == "delete" && req.get.weather_id) {
-                var currentWeather = await getWeatherById(req.get.weather_id);
-                if (currentWeather.cloudinary_img_public_id) {
-                    await STORE.cloudinary.deleteFile(currentWeather.cloudinary_img_public_id);
-                }
-                await delWeather(req.get.weather_id);
-            }
-            else if (req.get.weather_id) {
-                await getWeatherById(req.get.weather_id);
-            }
-        }
+					try {
+						if (req.get.mode && req.get.mode == "delete" && req.get.weather_id) {
+							const [currentWeather] = await getWeather({ id: req.get.weather_id });
+							if (currentWeather?.cloudinary_img_public_id) {
+								await STORE.cloudinary.deleteFile(currentWeather.cloudinary_img_public_id);
+							}
+							await delWeather(req.get.weather_id);
+						}
+					} catch (error) {
+						console.error('[ERROR]', error);
+						STORE.mailjet.sendMailRaw({
+							email: 'noreply@nauticspot.fr',
+							name: 'Error logger',
+						}, {
+							email: 'g.aly@nauticspot.fr',
+							name: 'ADMIN',
+						}, error);
+						res.setHeader("Content-Type", "text/html");
+						res.end('OOPS.. Quelque chose c\'est mal passé !');
+						return;
+					}
+				}
         if (req.method == "POST") {
             if (req.post.id) {
                 if (verifyPostReq(req, res)) {
@@ -421,34 +422,49 @@ exports.plugin =
                 }
             }
             else {
+							if (!req.post.title) {
+								UTILS.httpUtil.dataError(req, res, "Le bulletin doit avoir un titre", "Le bulletin doit avoir un titre");
+								return;
+							}
+							if (!req.post.img) {
+								UTILS.httpUtil.dataError(req, res, "Le bulletin doit avoir une image", "Le bulletin doit avoir une image");
+								return;
+							}
+
                 if (typeof req.body == "object" && req.multipart) {
                     var _FD = req.post;
 
-                    _FD.date = Date.now();
+                    // _FD.date = Date.now();
                     _FD.created_at = Date.now();
-                    _FD.updated_at = _FD.created_at;
 
                     //img gesture
                     if (_FD.img) {
-                        var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-                        console.log(upload);
+                        const upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
                         _FD.img = upload.secure_url;
                         _FD.cloudinary_img_public_id = upload.public_id;
                     }
-                    var weather = await createWeather(_FD);
-                    console.log(weather);
-                    if (weather.id) {
-                        UTILS.httpUtil.dataSuccess(req, res, "Success", "Météo publié", "1.0");
-                        return;
-                    } else {
-                        UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la publication de la météo", "1.0");
-                        return;
-                    }
+										try {
+											const weather = await createWeather(_FD);
+											if (weather.id) {
+												console.log('[INFO] new waether created SUCCESS', weather);
+												UTILS.httpUtil.dataSuccess(req, res, "Success", "Météo publié", "1.0");
+												return;
+											} else {
+												console.error('[ERROR] New waether creation FAILURE', weather);
+												UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la publication de la météo", "1.0");
+												return;
+											}
+										} catch (error) {
+											console.error('[ERROR] New waether creation FAILURE', error);
+											UTILS.httpUtil.dataError(req, res, error, "Une Erreur c'est produite lors de la creation du bulletin.");
+											return;
+										}
+                    
                 }
             }
         }
         else {
-            var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
+					var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             var _weatherHtml = fs.readFileSync(path.join(__dirname, "weather.html")).toString();
             var _weathers;
 
@@ -488,7 +504,7 @@ exports.plugin =
                     .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
                     .replace(/__HARBOUR_ID__/g, currentHarbour.id)
                     .replace(/__CATEGORY__/g, _weathers[i].category)
-                    .replace(/__BULLETIN__/g, _weathers[i].img)
+                    .replace(/__BULLETIN__/g, _weathers[i].img || '')
                     .replace(/__TITLE__/g, _weathers[i].title)
                     .replace(/__DATE__/g, dateFormated)
                     .replace(/__DATETIMEORDER__/g, _weathers[i].date)
