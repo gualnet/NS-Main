@@ -1,7 +1,7 @@
 <div class="row" id="navbarRow">
 	<nav class="navbar fixed-bottom navbar-light bg-light nav-pills nav-fill">
 			<div class="nav-item">
-					<a class="navbar-brand" href="/index"><img id="navbar-index" src="/library/toolbar-anchor-48.png" style="height:24px;width:24px;"></a>
+					<a class="navbar-brand" href="/index" id="navbarIndexLink"><img id="navbar-index" src="/library/toolbar-anchor-48.png" style="height:24px;width:24px;"></a>
 			</div>
 			<div class="nav-item">
 					<a id="harbourmap" class="navbar-brand" href="/map"><img id="navbar-map" src="/library/toolbar-map-48-empty.png" style="height:24px;width:24px;"></a>
@@ -16,19 +16,40 @@
 </div>
 
 <script>
-	var url = window.location.href;
-	url = url.split('/');
-	var currentLocation = url[url.length - 1];
-	console.log(currentLocation);
-	if (currentLocation == "index")
-			document.getElementById('navbar-index').src = "/library/toolbar-anchor-blue-48.png";
-	else if (currentLocation == "map")
-			document.getElementById('navbar-map').src = "/library/toolbar-map-blue-48.png";
-	else if (currentLocation == "notifications")
+	window.addEventListener('load', async () => {
+		initNavbarBrandLink();
+		displayBlueIconWhenOnPage();
+
+		const userId = localStorage['user'];
+		const userCategory = (!userId) ? 'visitor' : 'yachtsman';
+		const harbourId = localStorage['harbour_id'];
+
+		const communications = await fetchCommunicationsNavbar(harbourId, userCategory);
+		checkIfUnreadCommunications(userId, communications);
+	});
+
+	const initNavbarBrandLink = () => {
+		if (localStorage['entity_id'] === 'BgSNKrOB59') {
+			const navbarIndexLinkEl = document.querySelector('#navbarIndexLink');
+			if (!navbarIndexLinkEl) return;
+			navbarIndexLinkEl.href = '/index-corse';
+		}
+	}
+
+	const displayBlueIconWhenOnPage = () => {
+		let url = window.location.href;
+		url = url.split('/');
+		const currentLocation = url[url.length - 1];
+		if (currentLocation == "index" || currentLocation == "index-corse")
+				document.getElementById('navbar-index').src = "/library/toolbar-anchor-blue-48.png";
+		else if (currentLocation == "map")
+				document.getElementById('navbar-map').src = "/library/toolbar-map-blue-48.png";
+		else if (window.location.href.includes("notification"))
 			document.getElementById('navbar-notif').src = "/library/toolbar-bell-blue-48.png";
-	else if (currentLocation == "profil")
+		else if (currentLocation == "profil")
 			document.getElementById('navbar-profil').src = "/library/toolbar-profile-blue-48.png";
-			
+	};
+
 	fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(data => {
 		const harbour = data.data
 		const harbourMapEl = document.getElementById("harbourmap");
@@ -50,14 +71,6 @@
 		}
 	}).catch((e) => console.error(e))
 
-	window.addEventListener('load', async (ev) => {
-		const userId = localStorage['user'];
-		const userCategory = (!userId) ? 'visitor' : 'yachtsman';
-		const harbourId = localStorage['harbour_id'];
-
-		const communications = await fetchCommunicationsNavbar(harbourId, userCategory);
-		checkIfUnreadCommunications(userId, communications);
-	});
 
 	const fetchCommunicationsNavbar = async (harbourId, userCategory) => {
 		try {
@@ -73,15 +86,33 @@
 	};
 
 	const checkIfUnreadCommunications = (userId, comms = []) => {
-		for(const com of comms) {
-			if (!com.read_id?.includes(userId)) {
+		if (window.location.href.includes('notification')) {
+			return;
+		}
+
+		const navbarNotifEl = document.getElementById('navbar-notif');
+		if (!navbarNotifEl) {
+			console.error('OOOPS navbarNotifEl not found')
+			return;
+		}
+
+		const readNotifStr = localStorage['read-notifications'];
+		if (!readNotifStr && comms.length > 0) { // if no read notif list but notifications..
+			navbarNotifEl.src = "/library/notification-active-48.png";
+			return;
+		}
+
+		let isUnreadComm = false;
+		for (const comm of comms) {
+			const commId = comm.id;
+			if (!readNotifStr.includes(commId)) {
 				isUnreadComm = true;
-				const navbarNotifEl = document.getElementById('navbar-notif');
-				if (navbarNotifEl) {
-					navbarNotifEl.src = "/library/notification-active-48.png";
-				}
 				break;
 			}
+		}
+
+		if (isUnreadComm) {
+				navbarNotifEl.src = "/library/notification-active-48.png";
 		}
 	};
 
