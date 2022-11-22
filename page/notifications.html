@@ -37,7 +37,7 @@
 
 		const displayCommunicationsCards = (comms = []) => {
 			const readCommsStr = localStorage["read-notifications"] || '';
-			comms.sort((a, b) => a.date < b.date ? 1 : -1);
+			comms.sort((a, b) => a.created_at < b.created_at ? 1 : -1);
 			comms.map(comm => {
 				let row = commsRow;
 				const isNew = (readCommsStr?.includes(comm.id)) ? false : true;
