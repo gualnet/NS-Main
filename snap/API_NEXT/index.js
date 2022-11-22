@@ -12,7 +12,7 @@ exports.setup = {
   on: true,
   title: 'API NEXT',
   description: 'some next level endpoints',
-  version: '1.1.0',
+  version: '1.2.0',
   api: true,
 }
 
@@ -896,6 +896,67 @@ const deleteOffersHandler = async (req, res) => {
 };
 
 // METEO
+const getMeteoHandler = async (req, res) => {
+	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		const item = req.get;
+		const findMeteoResp = await DB_NS.weather.find(item, { raw: 1 });
+		console.log('findMeteoResp', findMeteoResp);
+		if (findMeteoResp.error) {
+			throw new Error(findMeteoResp.message, { cause: findMeteoResp });
+		}
+		const weatherForecasts = findMeteoResp.data;
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: weatherForecasts.length,
+			offers: weatherForecasts,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const updateMeteoHandler = async (req, res) => {
+	console.log('updateMeteoHandler')
+	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		const searchObj = { ...req.get };
+		const updateObj = { ...req.body };
+
+		/**@type {TYPES.T_offer} */
+		const updateMeteoResp = await DB_NS.weather.update(searchObj, updateObj, { raw: 1 });
+		console.log('updateMeteoResp', updateMeteoResp);
+		if (updateMeteoResp.error) {
+			throw new Error(updateMeteoResp.message, { cause: updateMeteoResp });
+		}
+		const updatedItem = findMeteoResp.data;
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			offer: updatedItem,
+		}));
+	} catch (error) {
+		console.error(error)
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+
 const deleteMeteoHandler = async (req, res) => {
 	try {
 		console.log('deleteMeteoHandler')
@@ -1132,6 +1193,18 @@ exports.router = [
 		method: "DELETE",
 	},
 	// WEATHER
+	{
+		on: true,
+		route: "/api/next/weathers",
+		handler: getMeteoHandler,
+		method: "GET",
+	},
+	{
+		on: true,
+		route: "/api/next/weathers",
+		handler: updateMeteoHandler,
+		method: "PUT",
+	},
 	{
 		on: true,
 		route: "/api/next/weathers",
