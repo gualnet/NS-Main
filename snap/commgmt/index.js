@@ -217,10 +217,13 @@ async function getHarbourById(_id) {
 
 //handler that get a communication
 async function getComHandler(req, res) {
+	console.log('--getComHandler--')
+	console.log('GET', req.get);
     if(req.get.comid && req.get.userid) {
 			if (req.get.userid === 'undefined') req.get.userid = undefined;
 
-        var _data = await getComById(req.get.comid);
+        var _data = await getCom({ id: req.get.comid });
+				console.log('_data', _data);
         if(req.get.userid && _data.read_id) {
             var ids = _data.read_id.filter(id => id == req.get.userid)
             if(!ids[0]){
@@ -229,8 +232,9 @@ async function getComHandler(req, res) {
             }
         }
 
-        if (_data.id) {
-            UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
+				const com = _data[0];
+        if (com.id) {
+            UTILS.httpUtil.dataSuccess(req, res, "success", com, "1.0");
             return;
         }
         else {
