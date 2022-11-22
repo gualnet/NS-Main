@@ -50,17 +50,6 @@ function verifyPostReq(_req, _res) {
     return true;
 }
 
-//db functions <
-async function getComById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_comCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
 /**
  * 
  * @param {string} _id 
@@ -77,47 +66,40 @@ async function getEntityById(_id) {
     });
 }
 
-async function getCom() {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_comCol, {}, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-async function getComsByHarbourId(_harbour_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_comCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+async function getCom(search) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const findCommResp = await DB_NS.coms.find(search, { raw: 1 });
+	if (findCommResp.error) {
+		throw new Error(findCommResp.message, { cause: findCommResp });
+	}
+	return(findCommResp.data);
 }
 
-async function delCom(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Delete(_comCol, { id: _id }, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+async function delCom(search = {}) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	if (Object.keys.length < 1) {
+		throw new Error('Delete actions must have at least one search param', search);
+	}
+	const deleteComResp = await DB_NS.coms.delete(search, { raw: 1 });
+	if (deleteComResp.error) {
+		throw new Error(deleteComResp.message, { cause: deleteComResp });
+	}
+	return;
 }
 
-async function createCom(_obj) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Create(_comCol, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+async function createCom(item) {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		const createComsResp = await DB_NS.coms.create(item, { raw: 1 });
+		if (createComsResp.error) {
+			throw new Error(createComsResp.message, { cause: createComsResp });
+		}
+		return(createComsResp.data);
 }
 
 async function createUser(_obj) {
@@ -169,15 +151,17 @@ async function getUserByCategoryAndHarbourId(_category, _harbour_id) {
  * @param {TYPES.T_communication} _obj 
  * @returns {Promise<Array<TYPES.T_communication>>}
  */
-async function updateCom(_obj) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Update(_comCol, { id: _obj.id }, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+async function updateCom(item = {}) {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		const comId = item.id;
+		delete item.id;
+		const updatedComResp = await DB_NS.coms.update({ id: comId }, item, { raw: 1 });
+		if (updatedComResp.error) {
+			throw new Error(updatedComResp.message, { cause: updatedComResp });
+		}
+		return(updatedComResp.data);
 }
 
 async function updateUser(_obj) {
@@ -213,16 +197,6 @@ async function getUserById(_id) {
     });
 }
 
-async function getAdminById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
 /**
  * 
  * @param {string} _id 
@@ -243,10 +217,13 @@ async function getHarbourById(_id) {
 
 //handler that get a communication
 async function getComHandler(req, res) {
+	console.log('--getComHandler--')
+	console.log('GET', req.get);
     if(req.get.comid && req.get.userid) {
 			if (req.get.userid === 'undefined') req.get.userid = undefined;
 
-        var _data = await getComById(req.get.comid);
+        var _data = await getCom({ id: req.get.comid });
+				console.log('_data', _data);
         if(req.get.userid && _data.read_id) {
             var ids = _data.read_id.filter(id => id == req.get.userid)
             if(!ids[0]){
@@ -255,8 +232,9 @@ async function getComHandler(req, res) {
             }
         }
 
-        if (_data.id) {
-            UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
+				const com = _data[0];
+        if (com.id) {
+            UTILS.httpUtil.dataSuccess(req, res, "success", com, "1.0");
             return;
         }
         else {
@@ -573,32 +551,6 @@ const sendGoodbarberPushNotification = async (notification) => {
 	}
 };
 
-// DB Where getter/setter
-/**
- * @typedef findCommunicationsOptions
- * @property {string} [id]
- * @property {string} [harbour_id]
- * @property {string} [category]
- * @property {string} [title]
- * @property {string} [user_category]
- */
-/**
- * 
- * @param {findCommunicationsOptions} whereOptions 
- * @returns {Promise<Array<TYPES.T_communication>>}
- */
-const findCommunicationsWhere = (whereOptions) =>{
-	return(new Promise((resolve, reject) => {
-		STORE.db.linkdb.Find(_comCol, whereOptions, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				reject(_err);
-		});
-	}));
-};
-// DB Where getter/setter
-
 // API NEXT HANDLERS
 /**
  * 
@@ -622,7 +574,7 @@ const getCommunicationsHandler = async (req, res) => {
 		if (req.get.harbour_id) options.harbour_id = req.get.harbour_id;
 		if (req.get.title) options.title = req.get.title;
 		if (req.get.user_category) options.user_category = req.get.user_category;
-		const comms = await findCommunicationsWhere(options);
+		const comms = await getCom(options);
 		res.end(JSON.stringify(comms));
 	} catch (error) {
 		console.error('[ERROR]', error);
@@ -746,24 +698,27 @@ exports.plugin =
 				}
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.com_id) {
-                var currentCom = await getComById(req.post.id);
+							try {
+								const currentCom = await getCom({ id: req.get.com_id });
                 if (currentCom.cloudinary_img_public_id) {
                     await STORE.cloudinary.deleteFile(currentCom.cloudinary_img_public_id);
                 }
                 if (currentCom.cloudinary_pj_public_id) {
                     await STORE.cloudinary.deleteFile(currentCom.cloudinary_pj_public_id);
                 }
-                await delCom(req.get.com_id);
-            }
-            else if (req.get.com_id) {
-                await getComById(req.get.com_id);
+                await delCom({ id: req.get.com_id });
+							} catch (error) {
+								console.error('[ERROR]', error)
+								res.writeHead(500);
+								res.end('Internal error !');
+								return;
+							}
             }
         }
         if (req.method == "POST") {
             if (req.post.id) {
                 if (verifyPostReq(req, res)) {
-
-                    var currentCom = await getComById(req.post.id);
+                    var currentCom = await getCom({ id: req.post.id });
                     var _FD = req.post;
 
                     if (_FD.link)
@@ -777,7 +732,6 @@ exports.plugin =
                         if (currentCom.cloudinary_img_public_id) {
                             await STORE.cloudinary.deleteFile(currentCom.cloudinary_img_public_id);
                         }
-
                     }
 
                     //pj gesture
@@ -790,8 +744,8 @@ exports.plugin =
                         }
                     }
 
-                    var com = await updateCom(_FD);
-                    if (com[0].id) {
+                    var createdCom = await updateCom(_FD);
+                    if (createdCom[0].id) {
                         UTILS.httpUtil.dataSuccess(req, res, "Success", "Notification mis à jour", "1.0");
                         return;
                     } else {
@@ -809,7 +763,6 @@ exports.plugin =
                         if (_FD.link)
                             _FD.link = addProtocolToUrl(_FD.link);
 
-                        _FD.date = Date.now();
                         _FD.created_at = Date.now();
 
                         //img gesture
@@ -843,9 +796,8 @@ exports.plugin =
                             //     _FD.users_id = promise.users_id;
 
 
-                            var com = await createCom(_FD);
-                            console.log(com);
-                            if (com.id) {
+                            var createdCom = await createCom(_FD);
+                            if (createdCom.id) {
                                 UTILS.httpUtil.dataSuccess(req, res, "Success", "Notification envoyé", "1.0");
                                 return;
                             } else {
@@ -865,19 +817,16 @@ exports.plugin =
         else {
             var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             var _comHtml = fs.readFileSync(path.join(__dirname, "com.html")).toString();
-            var _Coms;
-            if (_type == "harbour_manager")
-                _Coms = await getComsByHarbourId(_harbour_id);
-            else
-                _Coms = await getCom();
+            var _Coms = [];
 
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _Coms = _Coms.concat(await getComsByHarbourId(_harbour_id[i]));
+                    _Coms = _Coms.concat(await getCom({ harbour_id: _harbour_id[i] }));
                 }
             }
-            else if (_role == "admin")
-                _Coms = await getCom();
+            else if (_role == "admin") {
+							_Coms = await getCom({});
+						}
 
 
             var _comGen = "";
