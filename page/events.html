@@ -23,10 +23,10 @@
 					<div class="content"></div>
 				</div>
 			</div>
-			<div class="container py-3">
-					{{element->navbar.html}}
-			</div>
 	</main>
+	<div class="container py-3">
+		{{element->navbar.html}}
+	</div>
 
 
 	<script>
@@ -71,7 +71,6 @@
 						.replace("__D_END__", new Date(event.date_end).toDateString())
 						.replace("__TITLE__", event.title)
 						.replace("__CONTENT__", event.description);
-
 					pastEvents.push(htmlEventRow);
 				} else if (event.date_end > refTimestamp) { // futur event
 					let htmlEventRow = eventRow
@@ -80,26 +79,14 @@
 						.replace("__D_END__", new Date(event.date_end).toDateString())
 						.replace("__TITLE__", event.title)
 						.replace("__CONTENT__", event.description);
-
-					incomingEvents.push(htmlEventRow);
-				} else {
-					let htmlEventRow = eventRow
-						.replace("__ID__", event.id)
-						.replace("__IMG__", event.img)
-						.replace("__D_END__", new Date(event.date_end).toDateString())
-						.replace("__TITLE__", event.title)
-						.replace("__CONTENT__", event.description);
-
 					incomingEvents.push(htmlEventRow);
 				}
 			});
-			console.log('incomingEvents', incomingEvents);
-			console.log('pastEvents', pastEvents);
 
-			const pastEventsCtnEl = document.getElementById("pastEventsCtn");
-			const pastEventsContentEl = pastEventsCtnEl.getElementById(".content");
-			const incomingEventsCtnEl = document.getElementById("incomingEventsCtn");
-			const incomingEventsContentEl = incomingEventsCtnEl.getElementById(".content");
+			const pastEventsCtnEl = document.querySelector("#pastEventsCtn");
+			const pastEventsContentEl = pastEventsCtnEl.querySelector(".content");
+			const incomingEventsCtnEl = document.querySelector("#incomingEventsCtn");
+			const incomingEventsContentEl = incomingEventsCtnEl.querySelector(".content");
 
 			if (pastEvents.length > 0 && incomingEvents.length > 0) {
 				// half half
@@ -112,15 +99,12 @@
 				pastEventsCtnEl.classList.add('full');
 				incomingEventsCtnEl.classList.add('hide');
 			} else {
-				pastEventsCtnEl.classList.add('half');
+				pastEventsCtnEl.classList.add('hide');
 				incomingEventsCtnEl.classList.add('half');
 			}
 
 			pastEventsContentEl.insertAdjacentHTML("beforeend", pastEvents.join(' '));
 			incomingEventsContentEl.insertAdjacentHTML("beforeend", incomingEvents.join(' '));
-
-			// document.getElementById("pastEventsCtn").insertAdjacentHTML("beforeend", pastEvents.join(' '));
-			// document.getElementById("incomingEventsCtn").insertAdjacentHTML("beforeend", incomingEvents.join(' '));
 		};
 
 
@@ -180,7 +164,8 @@
 			justify-content: center;
 		}
 		.sub_container > .content {
-			overflow-x: scroll;
+			overflow-x: hidden;
+			overflow-y: scroll;
 		}
 	</style>
 
