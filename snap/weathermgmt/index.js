@@ -507,7 +507,7 @@ exports.plugin =
                     .replace(/__BULLETIN__/g, _weathers[i].img || '')
                     .replace(/__TITLE__/g, _weathers[i].title)
                     .replace(/__DATE__/g, dateFormated)
-                    .replace(/__DATETIMEORDER__/g, _weathers[i].date)
+                    .replace(/__DATETIMEORDER__/g, _weathers[i].created_at || _weathers[i].date)
             }
             _indexHtml = _indexHtml.replace("__WEATHER__", _weatherGen).replace(/undefined/g, '');
 
