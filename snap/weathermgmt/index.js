@@ -132,7 +132,7 @@ async function getWeatherFromHarbourHandler(_req, _res) {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 	try {
-		const findWeatherResp = await DB_NS.weather.find({ id: _req.param.harbour_id }, { raw: 1 });
+		const findWeatherResp = await DB_NS.weather.find({ harbour_id: _req.param.harbour_id }, { raw: 1 });
 		if (findWeatherResp.error) {
 			throw new Error(findWeatherResp.message);
 		}
