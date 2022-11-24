@@ -403,10 +403,11 @@ async function loginHandler(req, res) {
 		user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
 
 		const userId = user.id;
+		delete user.password_confirm;
 		delete user.id;
 		const updatedUserResp = await DB_NS.user.update({ id: userId }, user, { raw: true });
 		if(updatedUserResp.error) {
-			throw new Error(updatedUserResp.error, { cause: { httpCode: 500 }});
+			throw new Error(updatedUserResp.message, { cause: { httpCode: 500 }});
 		} else if (updatedUserResp.data.length < 1) {
 			throw new Error('Failed to update reset token', { cause: { httpCode: 404 }});
 		}
