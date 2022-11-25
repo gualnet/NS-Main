@@ -145,75 +145,9 @@
 				"it": "",
 				"es": ""
 			},
-			"subcategory_activité": {
-				"fr": "Activités",
-				"en": "Activities",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_nautiques": {
-				"fr": "Nautiques",
-				"en": "Nautical",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_terrestres": {
-				"fr": "Terrestres",
-				"en": "Land",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_associations": {
-				"fr": "Associations",
-				"en": "Organizations",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_bourse": {
-				"fr": "Bourse aux équipiers",
-				"en": "Crew Exchange",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_restaurants": {
-				"fr": "Restaurants",
-				"en": "Restaurants",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_bars": {
-				"fr": "Bars",
-				"en": "Pubs",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_culture": {
-				"fr": "Culture",
-				"en": "Culture",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_detente": {
-				"fr": "Détente",
-				"en": "Relaxation",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_loisirs": {
-				"fr": "Loisirs",
-				"en": "Leisure",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_patrimoine": {
-				"fr": "Patrimoine",
-				"en": "Heritage",
-				"it": "",
-				"es": ""
-			},
-			"subcategory_mouillages": {
-				"fr": "Mouillages",
-				"en": "Mooring",
+			"subcategory_": {
+				"fr": "",
+				"en": "",
 				"it": "",
 				"es": ""
 			}
@@ -231,6 +165,129 @@
 				"it": "",
 				"es": ""
 			}
+		},
+		"informations-corse": {
+			"first_card_links_website": {
+				"fr": "Site web",
+				"en": "Website",
+				"it": "",
+				"es": ""
+			},
+			"first_card_links_harbour_map": {
+				"fr": "Plan du port",
+				"en": "Harbour map",
+				"it": "",
+				"es": ""
+			},
+			"first_card_links_tourism_office": {
+				"fr": "Office de tourisme",
+				"en": "Tourism Office",
+				"it": "",
+				"es": ""
+			},
+			"first_card_links_fee_schedule": {
+				"fr": "Grille tarifaire",
+				"en": "Fee schedule",
+				"it": "",
+				"es": ""
+			},
+			"title_office_hours": {
+				"fr": " Horaires - Bureau du port",
+				"en": " Hrs - Hrbr ffc",
+				"it": "",
+				"es": ""
+			},
+			"week_day_lundi": {
+				"fr": "Lundi",
+				"en": "Monday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_mardi": {
+				"fr": "Mardi",
+				"en": "Tuesday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_mercredi": {
+				"fr": "Mercredi",
+				"en": "Wednesday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_jeudi": {
+				"fr": "Jeudi",
+				"en": "Thursday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_vendredi": {
+				"fr": "Vendredi",
+				"en": "Friday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_samedi": {
+				"fr": "Samedi",
+				"en": "Saturday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_dimanche": {
+				"fr": "Dimanche",
+				"en": "Sunday",
+				"it": "",
+				"es": ""
+			},
+			"title_harbour_services": {
+				"fr": "Services au port",
+				"en": "Harbour services",
+				"it": "",
+				"es": ""
+			},
+			"btn_txt_sanitary_code": {
+				"fr": "Code sanitaire",
+				"en": "Sanitary code",
+				"it": "",
+				"es": ""
+			},
+			"btn_txt_wifi_password": {
+				"fr": "Mot de passe Wi-Fi",
+				"en": "Wi-Fi password",
+				"it": "",
+				"es": ""
+			},
+			"btn_txt_password_copied": {
+				"fr": "Mot de passe Copié",
+				"en": "Password copied",
+				"it": "",
+				"es": ""
+			},
+			"": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			}
+
 		}
 	},
 	"locale": {
