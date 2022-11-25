@@ -1,1 +1,1 @@
-{"group":{"resa-magelan":{"form-selector-1":{"en":"coucou1","fr":"Réserver mon escale","es":""},"form-selector-2":{"en":"coucou2","fr":"Mes réservations","es":""}}},"locale":{"en":{},"fr":{},"es":{}},"setup":{"auto":true}}
+{"group":{"index-corse":{},"select-harbour-corse":{"header_title_part_1":{"fr":"Informations et réservation","en":"information and reservations","it":"","es":""},"header_title_part_2":{"fr":"de vos ports favoris !","en":"of your favourite ports !","it":"","es":""}}},"locale":{"fr":{},"en":{},"it":{},"es":{}},"setup":{"auto":true,"default":"fr"}}
