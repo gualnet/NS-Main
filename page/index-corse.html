@@ -658,101 +658,6 @@
 		</div>
 	</main>
 
-	<!-- filter menu -->
-	<div class="filter">
-		<div class="container filters-container">
-			<button class="btn btn-danger small-btn filter-btn close text-white">
-				<svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-					<title>ionicons-v5-l</title>
-					<line x1='368' y1='368' x2='144' y2='144'
-						style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-					<line x1='368' y1='144' x2='144' y2='368'
-						style='fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px' />
-				</svg>
-			</button>
-
-			<h5 class="mb-0">
-				Filter Criteria
-			</h5>
-			<p class="small text-secondary mb-4">2154 products</p>
-
-			<div class="form-group floating-form-group active">
-				<label class="floating-label">
-					Select Price Range
-				</label>
-				<div id="rangeslider" class="mt-4"></div>
-			</div>
-
-			<div class="form-group floating-form-group pt-0">
-				<div class="row">
-					<div class="col">
-						<input type="number" min="0" max="500" value="100" step="1" id="input-select"
-							class="floating-input form-control">
-					</div>
-					<div class="col-auto pt-2"> to </div>
-					<div class="col">
-						<input type="number" min="0" max="500" value="100" step="1" id="input-number"
-							class="floating-input form-control">
-					</div>
-				</div>
-			</div>
-
-			<div class="form-group floating-form-group active">
-				<select class="form-control floating-input">
-					<option selected>Home</option>
-					<option>Room</option>
-					<option>Flats</option>
-				</select>
-				<label class="floating-label">Select Property Type</label>
-			</div>
-
-			<div class="form-group floating-form-group active">
-				<label class="floating-label">Select Facilities</label>
-
-				<div class="custom-control custom-switch mt-3 my-2">
-					<input type="checkbox" class="custom-control-input" id="Garden">
-					<label class="custom-control-label" for="Garden">Garden</label>
-				</div>
-				<div class="custom-control custom-switch my-2">
-					<input type="checkbox" class="custom-control-input" id="Gym">
-					<label class="custom-control-label" for="Gym">Gym</label>
-				</div>
-				<div class="custom-control custom-switch my-2">
-					<input type="checkbox" class="custom-control-input" id="Sport">
-					<label class="custom-control-label" for="Sport">Sport</label>
-				</div>
-				<div class="custom-control custom-switch my-2">
-					<input type="checkbox" class="custom-control-input" id="Parking">
-					<label class="custom-control-label" for="Parking">Parking</label>
-				</div>
-				<div class="custom-control custom-switch my-2">
-					<input type="checkbox" class="custom-control-input" id="kidsplay">
-					<label class="custom-control-label" for="kidsplay">Kid's Play</label>
-				</div>
-			</div>
-
-			<div class="form-group floating-form-group">
-				<input type="text" class="form-control floating-input">
-				<label class="floating-label">Keyword</label>
-			</div>
-
-			<div class="form-group floating-form-group active mb-4">
-				<select class="form-control floating-input ">
-					<option>10% </option>
-					<option>30%</option>
-					<option>50%</option>
-					<option>80%</option>
-				</select>
-				<label class="floating-label">Offer Discount</label>
-			</div>
-
-			<button class="btn btn-info btn-rounded btn-block">Search</button>
-			<br>
-
-		</div>
-	</div>
-	<div class="filter-backdrop"></div>
-
 	<script>
 		window.addEventListener('load', () => {
 			displayInfoInTopContainer();
@@ -1140,51 +1045,16 @@
 	<!-- Swiper slider  js-->
 	<script src="/vendor/swiper/js/swiper.min.js"></script>
 
-	<!-- nouislider js -->
-	<script src="/vendor/nouislider/nouislider.min.js"></script>
-
 	<!-- Customized jquery file  -->
 	<script src="/js/main.js"></script>
 	<script src="/js/color-scheme-demo.js"></script>
-
-	<!-- PWA app service registration and works -->
-	<script src="/library/pwa-services.js"></script>
 
 	<!-- page level custom script -->
 	<script>
 		"use strict"
 		$(window).on('load', function () {
-
-			/* range picker for filter */
-			var html5Slider = document.getElementById('rangeslider');
-			noUiSlider.create(html5Slider, {
-				start: [0, 100],
-				connect: true,
-				range: {
-					'min': 0,
-					'max': 500
-				}
-			});
-
 			var inputNumber = document.getElementById('input-number');
 			var select = document.getElementById('input-select');
-
-			html5Slider.noUiSlider.on('update', function (values, handle) {
-				var value = values[handle];
-
-				if (handle) {
-					inputNumber.value = value;
-				} else {
-					select.value = Math.round(value);
-				}
-			});
-			select.addEventListener('change', function () {
-				html5Slider.noUiSlider.set([this.value, null]);
-			});
-			inputNumber.addEventListener('change', function () {
-				html5Slider.noUiSlider.set([null, this.value]);
-			});
-
 
 			/* carousel */
 			var swiper = new Swiper('.swiper-products', {
@@ -1199,6 +1069,4 @@
 	<!-- __TPL_FOOTER_APP__ -->
 	{{element->footer_app.html}}
 </body>
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:07 GMT -->
-
 </html>
