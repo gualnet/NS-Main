@@ -115,8 +115,8 @@
 		</div>
 
 		<a href="/magelan-login" id="resaBtn">
-		<div class="resa-container">
-				Je réserve ma place
+			<div class="resa-container">
+				{{lang->index-corse.reservation_button_text}}
 			</div>
 		</a>
 
@@ -124,7 +124,7 @@
 			<div class="row">
 				<div class="col">
 					<a class="link-dark" style="text-decoration:none;color:black;" href="/informations-corse">
-						<h4 id="bureauDuPortTitle">Bureau du port<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+						<h4 id="bureauDuPortTitle">{{lang->index-corse.section_title_harbour_office}}<i style="float:right;" class="bi bi-arrow-right"></i></h4>
 					</a>
 				</div>
 			</div>
@@ -148,7 +148,7 @@
 									</div>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Informations</span>
+											<span class="text-secondary pb-2 pt-2">{{lang->index-corse.main_btn_news}}</span>
 										</div>
 									</div>
 								</div>
@@ -164,7 +164,7 @@
 									</div>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary  pb-2 pt-2">Plan du port</span>
+											<span class="text-secondary  pb-2 pt-2">{{lang->index-corse.main_btn_harbour_map}}</span>
 										</div>
 									</div>
 								</div>
@@ -180,7 +180,7 @@
 									</div>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Bulletin météo</span>
+											<span class="text-secondary pb-2 pt-2">{{lang->index-corse.main_btn_weather_forecast}}</span>
 										</div>
 									</div>
 								</div>
@@ -196,7 +196,7 @@
 									</div>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Conciergerie</span>
+											<span class="text-secondary pb-2 pt-2">{{lang->index-corse.main_btn_concierge}}</span>
 										</div>
 									</div>
 								</div>
@@ -214,7 +214,7 @@
 									</a>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">FAQ</span>
+											<span class="text-secondary pb-2 pt-2">{{lang->index-corse.main_btn_faq}}</span>
 										</div>
 									</div>
 								</div>
@@ -232,7 +232,7 @@
 									</a>
 									<div class="row">
 										<div class="col d-flex justify-content-center">
-											<span class="text-secondary pb-2 pt-2">Environnement</span>
+											<span class="text-secondary pb-2 pt-2">{{lang->index-corse.main_btn_environment}}</span>
 										</div>
 									</div>
 								</div>
@@ -247,7 +247,7 @@
 			<div class="row">
 				<div class="col">
 					<a class="link-dark" style="text-decoration:none;color:black;" href="/articles">
-						<h4>Actualités<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+						<h4>{{lang->index-corse.section_title_news}}<i style="float:right;" class="bi bi-arrow-right"></i></h4>
 					</a>
 				</div>
 			</div>
@@ -260,7 +260,7 @@
 			<div class="row">
 				<div class="col">
 					<a class="link-dark" style="text-decoration:none;color:black;" href="/events">
-						<h4>Evénements<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+						<h4>{{lang->index-corse.section_title_events}}<i style="float:right;" class="bi bi-arrow-right"></i></h4>
 					</a>
 				</div>
 			</div>
@@ -272,7 +272,8 @@
 		<div class="container mt-4" id="harbourlife_link">
 			<div class="row">
 				<div class="col">
-					<h4>Vie au port<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+					<!-- <h4><i style="float:right;" class="bi bi-arrow-right"></i></h4> -->
+					<h4>{{lang->index-corse.section_title_harbour_life}}<i style="float:right;" class="bi bi-arrow-right"></i></h4>
 				</div>
 			</div>
 		</div>
@@ -300,7 +301,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454035/Nauticspot-Next/partenaires/Maintenance_ns71zp.png">
-										<span class="">Maintenance</span>
+										<span class="">{{lang->index-corse.subcategory_maintenance}}</span>
 									</div>
 								</div>
 							</div>
@@ -313,7 +314,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Accastillage_fb0glq.png">
-										<span class="">Accastillage</span>
+										<span class="">{{lang->index-corse.subcategory_accastillage}}</span>
 									</div>
 								</div>
 							</div>
@@ -326,7 +327,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454042/Nauticspot-Next/partenaires/Alimentation_g6l6jl.png">
-										<span class="">Alimentation</span>
+										<span class="">{{lang->index-corse.subcategory_alimentation}}</span>
 									</div>
 								</div>
 							</div>
@@ -339,7 +340,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Sant%C3%A9_ot5lak.png">
-										<span class="">Santé</span>
+										<span class="">{{lang->index-corse.subcategory_sante}}</span>
 									</div>
 								</div>
 							</div>
@@ -352,7 +353,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652956258/Nauticspot-Next/partenaires/annonces_cxaz1j.png">
-										<span class="">Annonces</span>
+										<span class="">{{lang->index-corse.subcategory_annonces}}</span>
 									</div>
 								</div>
 							</div>
@@ -365,7 +366,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454039/Nauticspot-Next/partenaires/Laverie_gwrc01.png">
-										<span class="">Laveries</span>
+										<span class="">{{lang->index-corse.subcategory_laveries}}</span>
 									</div>
 								</div>
 							</div>
@@ -378,7 +379,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454044/Nauticspot-Next/partenaires/Transport_rpgytz.png">
-										<span class="">Transport</span>
+										<span class="">{{lang->index-corse.subcategory_transport}}</span>
 									</div>
 								</div>
 							</div>
@@ -391,7 +392,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454040/Nauticspot-Next/partenaires/Commerces_zgtayw.png">
-										<span class="">Boutiques</span>
+										<span class="">{{lang->index-corse.subcategory_boutiques}}</span>
 									</div>
 								</div>
 							</div>
@@ -404,7 +405,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png">
-										<span class="">Vendeur • Loueur</span>
+										<span class="">{{lang->index-corse.subcategory_vendeur_loueur}}</span>
 									</div>
 								</div>
 							</div>
@@ -417,7 +418,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
-										<span class="">Autres</span>
+										<span class="">{{lang->index-corse.subcategory_autre}}</span>
 									</div>
 								</div>
 								<div class="row text-center">
@@ -434,7 +435,7 @@
 		<div class="container mt-4" id="experience_link">
 			<div class="row">
 				<div class="col">
-					<h4>Expériences<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+					<h4>{{lang->index-corse.section_title_experiences}}<i style="float:right;" class="bi bi-arrow-right"></i></h4>
 				</div>
 			</div>
 		</div>
@@ -450,8 +451,8 @@
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png">
 										<span class="">
-											<div style="font-size: 12px;">Activités</div>
-											<div style="font-weight: bold;">Nautiques</div>
+											<div style="font-size: 12px;">{{lang->index-corse.subcategory_activité}}</div>
+											<div style="font-weight: bold;">{{lang->index-corse.subcategory_nautiques}}</div>
 										</span>
 									</div>
 								</div>
@@ -465,7 +466,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png">
-										<span class="">Vendeur • Loueur</span>
+										<span class="">{{lang->index-corse.subcategory_vendeur_loueur}}</span>
 									</div>
 								</div>
 							</div>
@@ -479,8 +480,8 @@
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png">
 										<span class="">
-											<div style="font-size: 12px;">Activités</div>
-											<div style="font-weight: bold;">Terrestres</div>
+											<div style="font-size: 12px;">{{lang->index-corse.subcategory_activité}}</div>
+											<div style="font-weight: bold;">{{lang->index-corse.subcategory_terrestres}}</div>
 										</span>
 									</div>
 								</div>
@@ -494,7 +495,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png">
-										<span class="">Associations</span>
+										<span class="">{{lang->index-corse.subcategory_associations}}</span>
 									</div>
 								</div>
 							</div>
@@ -507,7 +508,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png">
-										<span class="">Bourse aux équipiers</span>
+										<span class="">{{lang->index-corse.subcategory_bourse}}</span>
 									</div>
 								</div>
 							</div>
@@ -520,7 +521,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
-										<span class="">Autres</span>
+										<span class="">{{lang->index-corse.subcategory_autre}}</span>
 									</div>
 								</div>
 							</div>
@@ -533,7 +534,7 @@
 		<div class="container mt-4" id="discovery_link">
 			<div class="row">
 				<div class="col">
-					<h4>Découverte<i style="float:right;" class="bi bi-arrow-right"></i></h4>
+					<h4>{{lang->index-corse.section_title_discovery}}<i style="float:right;" class="bi bi-arrow-right"></i></h4>
 				</div>
 			</div>
 		</div>
@@ -548,7 +549,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/restaurant_puz279.png">
-										<span class="">Restaurants</span>
+										<span class="">{{lang->index-corse.subcategory_restaurants}}</span>
 									</div>
 								</div>
 							</div>
@@ -561,7 +562,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/bar_lqdraf.png">
-										<span class="">Bars</span>
+										<span class="">{{lang->index-corse.subcategory_bars}}</span>
 									</div>
 								</div>
 							</div>
@@ -574,7 +575,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png">
-										<span class="">Culture</span>
+										<span class="">{{lang->index-corse.subcategory_culture}}</span>
 									</div>
 								</div>
 							</div>
@@ -587,7 +588,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652776957/Nauticspot-Next/partenaires/spa_vjrula.png">
-										<span class="">Détente</span>
+										<span class="">{{lang->index-corse.subcategory_detente}}</span>
 									</div>
 								</div>
 							</div>
@@ -600,7 +601,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652956491/Nauticspot-Next/partenaires/loisirs_ciiyig.png">
-										<span class="">Loisirs</span>
+										<span class="">{{lang->index-corse.subcategory_loisirs}}</span>
 									</div>
 								</div>
 							</div>
@@ -613,7 +614,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png">
-										<span class="">Patrimoine</span>
+										<span class="">{{lang->index-corse.subcategory_patrimoine}}</span>
 									</div>
 								</div>
 							</div>
@@ -626,7 +627,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1658744354/Nauticspot-Next/partenaires/mouillages_qypytw.png">
-										<span class="">Mouillages</span>
+										<span class="">{{lang->index-corse.subcategory_mouillages}}</span>
 									</div>
 								</div>
 							</div>
@@ -639,7 +640,7 @@
 									<div class="col">
 										<img class="shadow"
 											src="https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png">
-										<span class="">Autres</span>
+										<span class="">{{lang->index-corse.subcategory_autre}}</span>
 									</div>
 								</div>
 							</div>
@@ -762,7 +763,7 @@
 
 		const displayInfoInTopContainer = () => {
 			const harbourNameEl = document.querySelector('#harbourName');
-			harbourNameEl.innerHTML = `Bienvenue au port de </br> ${localStorage['harbourname']}`;
+			harbourNameEl.innerHTML = `{{lang->index-corse.main_title}} </br> ${localStorage['harbourname']}`;
 		}
 
 		const displayResaButton = () => {
