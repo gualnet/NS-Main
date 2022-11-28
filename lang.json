@@ -83,9 +83,99 @@
 			}
 		},
 		"informations-corse": {
-			"first_card_links_website": {
+			"link_website": {
 				"fr": "Site web",
 				"en": "Website",
+				"it": "",
+				"es": ""
+			},
+			"link_tourism_office": {
+				"fr": "Office de tourisme",
+				"en": "Tourism Office",
+				"it": "",
+				"es": ""
+			},
+			"link_harbour_map": {
+				"fr": "Plan du port",
+				"en": "Harbour map",
+				"it": "",
+				"es": ""
+			},
+			"link_fee_schedule": {
+				"fr": "Grille tarifaire",
+				"en": "Pricing",
+				"it": "",
+				"es": ""
+			},
+			"title_office_hours": {
+				"fr": "Horaires - Bureau du port",
+				"en": "Opening hours - Harbour Office",
+				"it": "",
+				"es": ""
+			},
+			"week_day_lundi": {
+				"fr": "Lundi",
+				"en": "Monday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_mardi": {
+				"fr": "Mardi",
+				"en": "Tuesday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_mercredi": {
+				"fr": "Mercredi",
+				"en": "Wednesday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_jeudi": {
+				"fr": "Jeudi",
+				"en": "Thursday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_vendredi": {
+				"fr": "Vendredi",
+				"en": "Friday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_samedi": {
+				"fr": "Samedi",
+				"en": "Saturday",
+				"it": "",
+				"es": ""
+			},
+			"week_day_dimanche": {
+				"fr": "Dimanche",
+				"en": "Sunday",
+				"it": "",
+				"es": ""
+			},
+			"title_harbour_services": {
+				"fr": "Services au port",
+				"en": "Harbour services",
+				"it": "",
+				"es": ""
+			},
+			"btn_txt_sanitary_code": {
+				"fr": "Code sanitaire",
+				"en": "Sanitary code",
+				"it": "",
+				"es": ""
+			},
+			"btn_txt_wifi_password": {
+				"fr": "Mot de passe Wi-Fi",
+				"en": "Wi-Fi password",
+				"it": "",
+				"es": ""
+			},
+			"btn_txt_password_copied": {
+				"fr": "Mot de passe Copié",
+				"en": "Password copied",
 				"it": "",
 				"es": ""
 			}
@@ -120,6 +210,12 @@
 			"category_discovery": {
 				"fr": "Découverte",
 				"en": "Discovery",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_sos": {
+				"fr": "SOS",
+				"en": "SOS",
 				"it": "",
 				"es": ""
 			},

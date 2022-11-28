@@ -288,7 +288,7 @@
 									<div class="col">
 										<img class="shadow harbouLifeCategoryBtn"
 											src="https://res.cloudinary.com/nauticspot/image/upload/v1652953549/Nauticspot-Next/partenaires/SOS_jrboxy.png">
-										<span class="">SOS</span>
+										<span class="">{{lang->partners.subcategory_sos}}</span>
 									</div>
 								</div>
 							</div>
@@ -740,11 +740,11 @@
 				}
 
 				if (!harbour.email_concierge) {
-					// document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
+					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;
 				}
 				const erpLinkEl = document.getElementById('erp_link');
 				if (erpLinkEl && (!harbour.erp_link || !localStorage['token'])) {
-					// document.getElementById('erp_link').hidden = true;
+					document.getElementById('erp_link').hidden = true;
 				} else if (erpLinkEl) {
 					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
 				}
@@ -765,7 +765,7 @@
 							mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
 						}
 					} else {
-						// mapPdfEl.hidden = true;
+						mapPdfEl.hidden = true;
 					}
 					mapPdfEl.addEventListener('click', () => window.location.href = mapLink);
 				}
@@ -804,31 +804,31 @@
 				else if (activeSubCategories.vendeurLoueurHl)
 					document.getElementById('harbourlife_link').setAttribute('onclick', "window.location.href = ('/harborlife?select=vendeurLoueurHl')");
 
-				// if (!activeSubCategories.accastillage)
-				// 	document.getElementById('accastillage').hidden = true;
-				// if (!activeSubCategories.sos)
-				// 	document.getElementById('sos').hidden = true;
-				// if (!activeSubCategories.maintenance)
-				// 	document.getElementById('maintenance').hidden = true;
-				// if (!activeSubCategories.sante)
-				// 	document.getElementById('sante').hidden = true;
-				// if (!activeSubCategories.annonce)
-				// 	document.getElementById('annonce').hidden = true;
-				// if (!activeSubCategories.laverie)
-				// 	document.getElementById('laverie').hidden = true;
-				// if (!activeSubCategories.transport)
-				// 	document.getElementById('transport').hidden = true;
-				// if (!activeSubCategories.boutique)
-				// 	document.getElementById('boutique').hidden = true;
-				// if (!activeSubCategories.alimentation)
-				// 	document.getElementById('alimentation').hidden = true;
-				// if (!activeSubCategories.vieportautre)
-				// 	document.getElementById('vieportautre').hidden = true;
-				// if (!activeSubCategories.vendeurLoueurHl)
-				// 	document.getElementById('vendeurLoueurHl').hidden = true;
+				if (!activeSubCategories.accastillage)
+					document.getElementById('accastillage').hidden = true;
+				if (!activeSubCategories.sos)
+					document.getElementById('sos').hidden = true;
+				if (!activeSubCategories.maintenance)
+					document.getElementById('maintenance').hidden = true;
+				if (!activeSubCategories.sante)
+					document.getElementById('sante').hidden = true;
+				if (!activeSubCategories.annonce)
+					document.getElementById('annonce').hidden = true;
+				if (!activeSubCategories.laverie)
+					document.getElementById('laverie').hidden = true;
+				if (!activeSubCategories.transport)
+					document.getElementById('transport').hidden = true;
+				if (!activeSubCategories.boutique)
+					document.getElementById('boutique').hidden = true;
+				if (!activeSubCategories.alimentation)
+					document.getElementById('alimentation').hidden = true;
+				if (!activeSubCategories.vieportautre)
+					document.getElementById('vieportautre').hidden = true;
+				if (!activeSubCategories.vendeurLoueurHl)
+					document.getElementById('vendeurLoueurHl').hidden = true;
 			} else {
-				// document.getElementById('harbourlife').hidden = true;
-				// document.getElementById('harbourlife_link').hidden = true;
+				document.getElementById('harbourlife').hidden = true;
+				document.getElementById('harbourlife_link').hidden = true;
 			}
 
 			if (activeCategory.experience) {
@@ -845,21 +845,21 @@
 				else if (activeSubCategories.experienceautre)
 					document.getElementById('experience_link').setAttribute('onclick', "window.location.href = ('/experiences?select=experienceautre')");
 
-				// if (!activeSubCategories.nautic)
-				// 	document.getElementById('nautic').hidden = true;
-				// if (!activeSubCategories.terrestres)
-				// 	document.getElementById('terrestres').hidden = true;
-				// if (!activeSubCategories.association)
-				// 	document.getElementById('association').hidden = true;
-				// if (!activeSubCategories.equipbourse)
-				// 	document.getElementById('equipbourse').hidden = true;
-				// if (!activeSubCategories.vendeurLoueurEx)
-				// 	document.getElementById('vendeurLoueurEx').hidden = true;
-				// if (!activeSubCategories.experienceautre)
-				// 	document.getElementById('experienceautre').hidden = true;
+				if (!activeSubCategories.nautic)
+					document.getElementById('nautic').hidden = true;
+				if (!activeSubCategories.terrestres)
+					document.getElementById('terrestres').hidden = true;
+				if (!activeSubCategories.association)
+					document.getElementById('association').hidden = true;
+				if (!activeSubCategories.equipbourse)
+					document.getElementById('equipbourse').hidden = true;
+				if (!activeSubCategories.vendeurLoueurEx)
+					document.getElementById('vendeurLoueurEx').hidden = true;
+				if (!activeSubCategories.experienceautre)
+					document.getElementById('experienceautre').hidden = true;
 			} else {
-				// document.getElementById('experience').hidden = true;
-				// document.getElementById('experience_link').hidden = true;
+				document.getElementById('experience').hidden = true;
+				document.getElementById('experience_link').hidden = true;
 			}
 
 			if (activeCategory.discovery) {
@@ -882,25 +882,25 @@
 				else if (activeSubCategories.mouillages)
 					document.getElementById('discovery_link').setAttribute('onclick', "window.location.href = ('/discovery?select=mouillages')");
 
-				// if (!activeSubCategories.restaurant)
-				// 	document.getElementById('restaurant').hidden = true;
-				// if (!activeSubCategories.bar)
-				// 	document.getElementById('bar').hidden = true;
-				// if (!activeSubCategories.culture)
-				// 	document.getElementById('culture').hidden = true;
-				// if (!activeSubCategories.divertissement)
-				// 	document.getElementById('divertissement').hidden = true;
-				// if (!activeSubCategories.detente)
-				// 	document.getElementById('detente').hidden = true;
-				// if (!activeSubCategories.decouverteautre)
-				// 	document.getElementById('decouverteautre').hidden = true;
-				// if (!activeSubCategories.patrimoine)
-				// 	document.getElementById('patrimoine').hidden = true;
-				// if (!activeSubCategories.mouillages)
-				// 	document.getElementById('mouillages').hidden = true;
+				if (!activeSubCategories.restaurant)
+					document.getElementById('restaurant').hidden = true;
+				if (!activeSubCategories.bar)
+					document.getElementById('bar').hidden = true;
+				if (!activeSubCategories.culture)
+					document.getElementById('culture').hidden = true;
+				if (!activeSubCategories.divertissement)
+					document.getElementById('divertissement').hidden = true;
+				if (!activeSubCategories.detente)
+					document.getElementById('detente').hidden = true;
+				if (!activeSubCategories.decouverteautre)
+					document.getElementById('decouverteautre').hidden = true;
+				if (!activeSubCategories.patrimoine)
+					document.getElementById('patrimoine').hidden = true;
+				if (!activeSubCategories.mouillages)
+					document.getElementById('mouillages').hidden = true;
 			} else {
-				// document.getElementById('discovery').hidden = true;
-				// document.getElementById('discovery_link').hidden = true;
+				document.getElementById('discovery').hidden = true;
+				document.getElementById('discovery_link').hidden = true;
 			}
 		}).catch((error) => {
 			console.log(error);
@@ -964,7 +964,7 @@
 					document.getElementById("articles_container").insertAdjacentHTML("beforeend", rowCurrent);
 				}
 			} else {
-				// document.getElementById("articles_link").hidden = true;
+				document.getElementById("articles_link").hidden = true;
 			}
 		}).catch((error) => {
 			console.log(error);
@@ -1017,7 +1017,7 @@
 					document.getElementById("events_container").insertAdjacentHTML("beforeend", rowCurrent);
 				}
 			} else {
-				// document.getElementById("event_link").hidden = true;
+				document.getElementById("event_link").hidden = true;
 			}
 		}).catch((error) => {
 			console.log(error);
