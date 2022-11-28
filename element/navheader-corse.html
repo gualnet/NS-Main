@@ -1,0 +1,137 @@
+<header class="header bg-light" onclick="window.location.href = '/index-corse'" id="navbarHeader">
+	<div class="row">
+		<div class="col-2">
+			<img id="returnBtn" style="height:24px;" src="/library/nav-header-return.png" />
+		</div>
+		<div class="col-8 d-flex justify-content-center">
+			<h5 style="white-space:pre-warp;"><span style="color:#000000;" id="harbour_name"></span></h5>
+		</div>
+		<div>
+			<div></div>
+		</div>
+	</div>
+	<script>
+		window.addEventListener('load', () => {
+			document.getElementById("harbour_name").innerHTML = localStorage["harbourname"];
+			corseRules();
+			otherHarbourRules();
+			multiHarbourEntities();
+		});
+
+		const corseRules = () => {
+			if (localStorage['entity_id'] !== 'BgSNKrOB59') return; // abort if not corse entity
+
+			const navbarHeaderEl = document.querySelector('#navbarHeader');
+			if (!navbarHeaderEl) return;
+
+			if (location.pathname.includes('index-corse')) {
+				setWindowLocationLink('select-harbour-corse');
+			} else if (location.pathname.includes('events')) {
+				setWindowLocationLink('index-corse');
+			} else if (location.pathname.includes('event')) {
+				setWindowLocationLink('events');
+			} else if (location.pathname.includes('communications')) {
+				setWindowLocationLink('index-corse');
+			} else if (location.pathname.includes('communication')) {
+				setWindowLocationLink('communications');
+			} else if (location.pathname.includes('articles')) {
+				setWindowLocationLink('index-corse');
+			} else if (location.pathname.includes('actualite')) {
+				setWindowLocationLink('articles');
+			} else if (location.pathname.includes('partner')) {
+				navbarHeaderEl.addEventListener('click', (ev) => {
+					ev.preventDefault();
+					history.back();
+				});
+			} else {
+				setWindowLocationLink('/index-corse');
+			}
+		};
+
+		const otherHarbourRules = () => {
+			if (localStorage['entity_id'] === 'BgSNKrOB59') return;
+
+			const navbarHeaderEl = document.querySelector('#navbarHeader');
+			if (location.pathname.includes('actualite')) {
+				setWindowLocationLink('/articles')
+			} else if (location.pathname.includes('events')) {
+				setWindowLocationLink('/index')
+			} else if (location.pathname.includes('event')) {
+				setWindowLocationLink('/events')
+			} else if (location.pathname.includes('notifications')) {
+				console.log('HERE notifications')
+				setWindowLocationLink('/index')
+			} else if (location.pathname.includes('notification')) {
+				setWindowLocationLink('/notifications')
+			} else if (location.pathname.includes('offers')) {
+				setWindowLocationLink('/index')
+			} else if (location.pathname.includes('offer')) {
+				setWindowLocationLink('/offers')
+			} else if (location.pathname.includes('partner')) {
+				navbarHeaderEl.addEventListener('click', (ev) => {
+					history.back();
+				});
+			} else {
+				setWindowLocationLink('/index')
+			}
+		};
+
+		const setWindowLocationLink = (targetPage) => {
+			const navbarHeaderEl = document.querySelector('#navbarHeader');
+			navbarHeaderEl.addEventListener('click', (ev) => {
+				window.location = targetPage;
+			});
+		};
+
+		const multiHarbourEntities = () => {
+			const currentEntityId = localStorage['entity_id'];
+			const allowedEntities = ['VgZpWU_BEY'];
+
+			if (!allowedEntities.includes(currentEntityId)) return;
+
+			if (location.pathname.includes('index')) {
+				setWindowLocationLink('selectharbour?account=false');
+			}
+		};
+
+	</script>
+</header>
+<style>
+	#return_link {
+		color: #004577 !important;
+	}
+</style>
+
+<script>
+	/********
+ * LANG *
+ ********/
+	window.addEventListener("DOMContentLoaded", (e) => {
+		const userLanguage = window.localStorage['lang'];
+		const urlPath = window.location.pathname;
+		const urlLangValue = urlPath.split('/')[1];
+		const authorizedLang = ['en', 'it'];
+		if (!userLanguage && !urlLangValue) { // default fr
+		} else if (!userLanguage && urlLangValue) {
+			const pathArr = window.location.pathname.split('/');
+			pathArr.splice(0, 1);
+			if (!authorizedLang.includes(pathArr[0])) return;
+			pathArr.splice(0, 1);
+			const newUrl = `${window.location.origin}/${pathArr.join('/')}`;
+			window.location.href = newUrl;
+		} else if (authorizedLang.includes(userLanguage) && !authorizedLang.includes(urlLangValue)) {
+			const pathArr = window.location.pathname.split('/');
+			const enUrl = pathArr.splice(0, 1, userLanguage);
+			const newUrl = `${window.location.origin}/${pathArr.join('/')}`;
+			window.location.href = newUrl;
+		} else if (authorizedLang.includes(userLanguage)
+			&& authorizedLang.includes(urlLangValue)
+			&& userLanguage !== urlLangValue) {
+			const pathArr = window.location.pathname.split('/');
+			pathArr.splice(1, 1, userLanguage);
+			pathArr.splice(0, 1);
+			const newUrl = `${window.location.origin}/${pathArr.join('/')}`;
+			window.location.href = newUrl;
+		}
+	});
+</script>
