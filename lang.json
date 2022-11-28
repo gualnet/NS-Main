@@ -1,1 +1,270 @@
-{"group":{"index-corse":{"main_title":{"fr":"Bienvenue au port de","en":"Welcome to the harbour of","it":"","es":""},"reservation_button_text":{"fr":"Je réserve ma place","en":"I book my place","it":"","es":""},"main_btn_news":{"fr":"Informations","en":"News","it":"","es":""},"main_btn_harbour_map":{"fr":"Plan du port","en":"Harbour map","it":"","es":""},"main_btn_weather_forecast":{"fr":"Bulletin météo","en":"Weather forecast","it":"","es":""},"main_btn_concierge":{"fr":"Conciergerie","en":"Concierge","it":"","es":""},"main_btn_faq":{"fr":"FAQ","en":"FAQ","it":"","es":""},"main_btn_environment":{"fr":"Environnement","en":"Environment","it":"","es":""},"section_title_harbour_office":{"fr":"Bureau du port","en":"Harbour office","it":"","es":""},"section_title_events":{"fr":"Évènement","en":"Events","it":"","es":""},"section_title_news":{"fr":"Actualités","en":"News","it":"","es":""},"section_title_harbour_life":{"fr":"Vie au port","en":"Harbour's life","it":"","es":""},"section_title_experiences":{"fr":"Expériences","en":"Experiences","it":"","es":""},"section_title_discovery":{"fr":"Découverte","en":"Discovery","it":"","es":""},"subcategory_maintenance":{"fr":"Maintenance","en":"Services","it":"","es":""},"subcategory_accastillage":{"fr":"Accastillage","en":"Fitting","it":"","es":""},"subcategory_alimentation":{"fr":"Alimentation","en":"Grocery","it":"","es":""},"subcategory_sante":{"fr":"Santé","en":"Health","it":"","es":""},"subcategory_annonces":{"fr":"Annonces","en":"Announcements","it":"","es":""},"subcategory_laveries":{"fr":"Laveries","en":"Laundries","it":"","es":""},"subcategory_transport":{"fr":"Transport","en":"Transport","it":"","es":""},"subcategory_boutiques":{"fr":"Boutiques","en":"Shops","it":"","es":""},"subcategory_vendeur_loueur":{"fr":"Vendeur • Loueur","en":"Seller • Renter","it":"","es":""},"subcategory_autre":{"fr":"Autres","en":"Others","it":"","es":""},"subcategory_":{"fr":"","en":"","it":"","es":""}},"select-harbour-corse":{"header_title_part_1":{"fr":"Informations et réservation","en":"information and reservations","it":"","es":""},"header_title_part_2":{"fr":"de vos ports favoris !","en":"of your favourite ports !","it":"","es":""}},"informations-corse":{"first_card_links_website":{"fr":"Site web","en":"Website","it":"","es":""}},"events":{"title_upcoming":{"fr":"Événements à venir","en":"Upcoming events","it":"","es":""},"title_past":{"fr":"Événements passés","en":"Past events","it":"","es":""}}},"locale":{"fr":{},"en":{},"it":{},"es":{}},"setup":{"auto":true,"default":"fr"}}
+{
+	"group": {
+		"index-corse": {
+			"main_title": {
+				"fr": "Bienvenue au port de",
+				"en": "Welcome to the harbour of",
+				"it": "",
+				"es": ""
+			},
+			"reservation_button_text": {
+				"fr": "Je réserve ma place",
+				"en": "I book my place",
+				"it": "",
+				"es": ""
+			},
+			"main_btn_news": {
+				"fr": "Informations",
+				"en": "News",
+				"it": "",
+				"es": ""
+			},
+			"main_btn_harbour_map": {
+				"fr": "Plan du port",
+				"en": "Harbour map",
+				"it": "",
+				"es": ""
+			},
+			"main_btn_weather_forecast": {
+				"fr": "Bulletin météo",
+				"en": "Weather forecast",
+				"it": "",
+				"es": ""
+			},
+			"main_btn_concierge": {
+				"fr": "Conciergerie",
+				"en": "Concierge",
+				"it": "",
+				"es": ""
+			},
+			"main_btn_faq": {
+				"fr": "FAQ",
+				"en": "FAQ",
+				"it": "",
+				"es": ""
+			},
+			"main_btn_environment": {
+				"fr": "Environnement",
+				"en": "Environment",
+				"it": "",
+				"es": ""
+			},
+			"section_title_harbour_office": {
+				"fr": "Bureau du port",
+				"en": "Harbour office",
+				"it": "",
+				"es": ""
+			},
+			"section_title_events": {
+				"fr": "Évènement",
+				"en": "Events",
+				"it": "",
+				"es": ""
+			},
+			"section_title_news": {
+				"fr": "Actualités",
+				"en": "News",
+				"it": "",
+				"es": ""
+			}
+		},
+		"select-harbour-corse": {
+			"header_title_part_1": {
+				"fr": "Informations et réservation",
+				"en": "information and reservations",
+				"it": "",
+				"es": ""
+			},
+			"header_title_part_2": {
+				"fr": "de vos ports favoris !",
+				"en": "of your favourite ports !",
+				"it": "",
+				"es": ""
+			}
+		},
+		"informations-corse": {
+			"first_card_links_website": {
+				"fr": "Site web",
+				"en": "Website",
+				"it": "",
+				"es": ""
+			}
+		},
+		"events": {
+			"title_upcoming": {
+				"fr": "Événements à venir",
+				"en": "Upcoming events",
+				"it": "",
+				"es": ""
+			},
+			"title_past": {
+				"fr": "Événements passés",
+				"en": "Past events",
+				"it": "",
+				"es": ""
+			}
+		},
+		"partners": {
+			"category_harbour_life": {
+				"fr": "Vie au port",
+				"en": "Harbour's life",
+				"it": "",
+				"es": ""
+			},
+			"category_experiences": {
+				"fr": "Expériences",
+				"en": "Experiences",
+				"it": "",
+				"es": ""
+			},
+			"category_discovery": {
+				"fr": "Découverte",
+				"en": "Discovery",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_maintenance": {
+				"fr": "Maintenance",
+				"en": "Services",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_accastillage": {
+				"fr": "Accastillage",
+				"en": "Fitting",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_alimentation": {
+				"fr": "Alimentation",
+				"en": "Grocery",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_sante": {
+				"fr": "Santé",
+				"en": "Health",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_annonces": {
+				"fr": "Annonces",
+				"en": "Announcements",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_laveries": {
+				"fr": "Laveries",
+				"en": "Laundries",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_transport": {
+				"fr": "Transport",
+				"en": "Transport",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_boutiques": {
+				"fr": "Boutiques",
+				"en": "Shops",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_vendeur_loueur": {
+				"fr": "Vendeur • Loueur",
+				"en": "Seller • Renter",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_autre": {
+				"fr": "Autres",
+				"en": "Others",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_activity": {
+				"fr": "Activités",
+				"en": "Activities",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_nautiques": {
+				"fr": "Nautiques",
+				"en": "Nautical",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_terrestres": {
+				"fr": "Terrestres",
+				"en": "Land-based",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_associations": {
+				"fr": "Associations",
+				"en": "Associations",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_bourse": {
+				"fr": "Bourse aux équipiers",
+				"en": "Crew exchange",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_restaurants": {
+				"fr": "Restaurants",
+				"en": "Restaurants",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_bars": {
+				"fr": "Bars",
+				"en": "Pubs",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_culture": {
+				"fr": "Culture",
+				"en": "Culture",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_detente": {
+				"fr": "Détente",
+				"en": "Relaxation",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_loisirs": {
+				"fr": "Loisirs",
+				"en": "Leisure",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_patrimoine": {
+				"fr": "Patrimoine",
+				"en": "Patrimony",
+				"it": "",
+				"es": ""
+			},
+			"subcategory_mouillages": {
+				"fr": "Mouillages",
+				"en": "Mooring",
+				"it": "",
+				"es": ""
+			}
+		}
+	},
+	"locale": {
+		"fr": {},
+		"en": {},
+		"it": {},
+		"es": {}
+	},
+	"setup": {
+		"auto": true,
+		"default": "fr"
+	}
+}
