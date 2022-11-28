@@ -268,8 +268,8 @@
 				"es": ""
 			},
 			"subcategory_vendeur_loueur": {
-				"fr": "Vendeur • Loueur",
-				"en": "Seller • Renter",
+				"fr": "<div>Vendeur</div> <div>•</div> <div>Loueur</div>",
+				"en": "<div>Seller</div> <div>•</div> <div>Renter</div>",
 				"it": "",
 				"es": ""
 			},

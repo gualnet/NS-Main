@@ -67,7 +67,7 @@
 
 						<div class="swiper-slide nav-btn" id="vendeur-loueur-hl"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('/harborlife?select=vendeurLoueurHl')">{{lang->partners.subcategory_vendeur_loueur}}</span>
+							<span class="small" id="vendeurSpan" onclick="clickOnNavBtnHandler('/harborlife?select=vendeurLoueurHl')">{{lang->partners.subcategory_vendeur_loueur}}</span>
 						</div>
 
 						<div class="swiper-slide nav-btn" id="vieportautre"
@@ -160,8 +160,8 @@
 					document.getElementById('alimentation').hidden = true;
 				if (!activeSubCategories.vieportautre)
 					document.getElementById('vieportautre').hidden = true;
-				if (!activeSubCategories.vendeurLoueurHl)
-					document.getElementById('vendeur-loueur-hl').hidden = true;
+				// if (!activeSubCategories.vendeurLoueurHl)
+				// 	document.getElementById('vendeur-loueur-hl').hidden = true;
 			}).catch((error) => {
 				console.log(error);
 			});
@@ -301,6 +301,12 @@
 			height: 100%;
 			justify-content: center;
 			text-align: center;
+		}
+		.nav-btn span#vendeurSpan {
+			max-width: 100%;
+			display: flex;
+			flex-direction: column;
+			line-height: 100%;
 		}
 
 		/* *************************** */
