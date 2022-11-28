@@ -160,8 +160,8 @@
 					document.getElementById('alimentation').hidden = true;
 				if (!activeSubCategories.vieportautre)
 					document.getElementById('vieportautre').hidden = true;
-				// if (!activeSubCategories.vendeurLoueurHl)
-				// 	document.getElementById('vendeur-loueur-hl').hidden = true;
+				if (!activeSubCategories.vendeurLoueurHl)
+					document.getElementById('vendeur-loueur-hl').hidden = true;
 			}).catch((error) => {
 				console.log(error);
 			});
