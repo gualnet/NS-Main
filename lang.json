@@ -4,67 +4,67 @@
 			"main_title": {
 				"fr": "Bienvenue au port de",
 				"en": "Welcome to the harbour of",
-				"it": "",
+				"it": "Benvenuti nel porto di",
 				"es": ""
 			},
 			"reservation_button_text": {
 				"fr": "Je réserve ma place",
 				"en": "I book my place",
-				"it": "",
+				"it": "Reserve il mio posto",
 				"es": ""
 			},
 			"main_btn_news": {
 				"fr": "Informations",
 				"en": "News",
-				"it": "",
+				"it": "Informazione",
 				"es": ""
 			},
 			"main_btn_harbour_map": {
 				"fr": "Plan du port",
 				"en": "Harbour map",
-				"it": "",
+				"it": "Piano del porto",
 				"es": ""
 			},
 			"main_btn_weather_forecast": {
 				"fr": "Bulletin météo",
 				"en": "Weather forecast",
-				"it": "",
+				"it": "Bollettino meteo",
 				"es": ""
 			},
 			"main_btn_concierge": {
 				"fr": "Conciergerie",
 				"en": "Concierge",
-				"it": "",
+				"it": "Concierge",
 				"es": ""
 			},
 			"main_btn_faq": {
 				"fr": "FAQ",
 				"en": "FAQ",
-				"it": "",
+				"it": "FAQ",
 				"es": ""
 			},
 			"main_btn_environment": {
 				"fr": "Environnement",
 				"en": "Environment",
-				"it": "",
+				"it": "Ambiente",
 				"es": ""
 			},
 			"section_title_harbour_office": {
 				"fr": "Bureau du port",
 				"en": "Harbour office",
-				"it": "",
+				"it": "Capitaneria",
 				"es": ""
 			},
 			"section_title_events": {
-				"fr": "Évènement",
+				"fr": "Évènements",
 				"en": "Events",
-				"it": "",
+				"it": "Eventi",
 				"es": ""
 			},
 			"section_title_news": {
 				"fr": "Actualités",
 				"en": "News",
-				"it": "",
+				"it": "Notizia",
 				"es": ""
 			}
 		},
@@ -72,13 +72,13 @@
 			"header_title_part_1": {
 				"fr": "Informations et réservation",
 				"en": "information and reservations",
-				"it": "",
+				"it": "Informazioni e prenotazioni",
 				"es": ""
 			},
 			"header_title_part_2": {
 				"fr": "de vos ports favoris !",
 				"en": "of your favourite ports !",
-				"it": "",
+				"it": "dei tuoi porti preferiti",
 				"es": ""
 			}
 		},
@@ -86,97 +86,97 @@
 			"link_website": {
 				"fr": "Site web",
 				"en": "Website",
-				"it": "",
+				"it": "Sito web",
 				"es": ""
 			},
 			"link_tourism_office": {
 				"fr": "Office de tourisme",
 				"en": "Tourism Office",
-				"it": "",
+				"it": "Ufficio turistico",
 				"es": ""
 			},
 			"link_harbour_map": {
 				"fr": "Plan du port",
 				"en": "Harbour map",
-				"it": "",
+				"it": "Piano del porto",
 				"es": ""
 			},
 			"link_fee_schedule": {
 				"fr": "Grille tarifaire",
 				"en": "Pricing",
-				"it": "",
+				"it": "Prezzi",
 				"es": ""
 			},
 			"title_office_hours": {
 				"fr": "Horaires - Bureau du port",
 				"en": "Opening hours - Harbour Office",
-				"it": "",
+				"it": "Orario - Capitaneria",
 				"es": ""
 			},
 			"week_day_lundi": {
 				"fr": "Lundi",
 				"en": "Monday",
-				"it": "",
+				"it": "Lunedi",
 				"es": ""
 			},
 			"week_day_mardi": {
 				"fr": "Mardi",
 				"en": "Tuesday",
-				"it": "",
+				"it": "Martedi",
 				"es": ""
 			},
 			"week_day_mercredi": {
 				"fr": "Mercredi",
 				"en": "Wednesday",
-				"it": "",
+				"it": "Mercoledi",
 				"es": ""
 			},
 			"week_day_jeudi": {
 				"fr": "Jeudi",
 				"en": "Thursday",
-				"it": "",
+				"it": "Giovedi",
 				"es": ""
 			},
 			"week_day_vendredi": {
 				"fr": "Vendredi",
 				"en": "Friday",
-				"it": "",
+				"it": "Venerdi",
 				"es": ""
 			},
 			"week_day_samedi": {
 				"fr": "Samedi",
 				"en": "Saturday",
-				"it": "",
+				"it": "Sabato",
 				"es": ""
 			},
 			"week_day_dimanche": {
 				"fr": "Dimanche",
 				"en": "Sunday",
-				"it": "",
+				"it": "Domenica",
 				"es": ""
 			},
 			"title_harbour_services": {
 				"fr": "Services au port",
 				"en": "Harbour services",
-				"it": "",
+				"it": "Servizi portuali",
 				"es": ""
 			},
 			"btn_txt_sanitary_code": {
 				"fr": "Code sanitaire",
 				"en": "Sanitary code",
-				"it": "",
+				"it": "Codice sanitario",
 				"es": ""
 			},
 			"btn_txt_wifi_password": {
 				"fr": "Mot de passe Wi-Fi",
 				"en": "Wi-Fi password",
-				"it": "",
+				"it": "Wi-Fi password",
 				"es": ""
 			},
 			"btn_txt_password_copied": {
 				"fr": "Mot de passe Copié",
 				"en": "Password copied",
-				"it": "",
+				"it": "Password copiata",
 				"es": ""
 			}
 		},
@@ -184,13 +184,13 @@
 			"title_upcoming": {
 				"fr": "Événements à venir",
 				"en": "Upcoming events",
-				"it": "",
+				"it": "Eventi a venire",
 				"es": ""
 			},
 			"title_past": {
 				"fr": "Événements passés",
 				"en": "Past events",
-				"it": "",
+				"it": "Eventi passati",
 				"es": ""
 			}
 		},
@@ -198,157 +198,157 @@
 			"category_harbour_life": {
 				"fr": "Vie au port",
 				"en": "Harbour's life",
-				"it": "",
+				"it": "Vita portuale",
 				"es": ""
 			},
 			"category_experiences": {
 				"fr": "Expériences",
 				"en": "Experiences",
-				"it": "",
+				"it": "Esperienze",
 				"es": ""
 			},
 			"category_discovery": {
 				"fr": "Découverte",
 				"en": "Discovery",
-				"it": "",
+				"it": "Scoperta",
 				"es": ""
 			},
 			"subcategory_sos": {
 				"fr": "SOS",
 				"en": "SOS",
-				"it": "",
+				"it": "SOS",
 				"es": ""
 			},
 			"subcategory_maintenance": {
 				"fr": "Maintenance",
 				"en": "Services",
-				"it": "",
+				"it": "Manutenzione",
 				"es": ""
 			},
 			"subcategory_accastillage": {
 				"fr": "Accastillage",
 				"en": "Fitting",
-				"it": "",
+				"it": "Attrezzatura",
 				"es": ""
 			},
 			"subcategory_alimentation": {
 				"fr": "Alimentation",
 				"en": "Grocery",
-				"it": "",
+				"it": "Alimentazione",
 				"es": ""
 			},
 			"subcategory_sante": {
 				"fr": "Santé",
 				"en": "Health",
-				"it": "",
+				"it": "Salute",
 				"es": ""
 			},
 			"subcategory_annonces": {
 				"fr": "Annonces",
 				"en": "Announcements",
-				"it": "",
+				"it": "Annunci",
 				"es": ""
 			},
 			"subcategory_laveries": {
 				"fr": "Laveries",
 				"en": "Laundries",
-				"it": "",
+				"it": "Lavanderie",
 				"es": ""
 			},
 			"subcategory_transport": {
 				"fr": "Transport",
 				"en": "Transport",
-				"it": "",
+				"it": "Trasporto",
 				"es": ""
 			},
 			"subcategory_boutiques": {
 				"fr": "Boutiques",
 				"en": "Shops",
-				"it": "",
+				"it": "Negozi",
 				"es": ""
 			},
 			"subcategory_vendeur_loueur": {
 				"fr": "<div>Vendeur</div> <div>•</div> <div>Loueur</div>",
 				"en": "<div>Seller</div> <div>•</div> <div>Renter</div>",
-				"it": "",
+				"it": "<div>Venditore</div> <div>•</div> <div>Locatore</div>",
 				"es": ""
 			},
 			"subcategory_autre": {
 				"fr": "Autres",
 				"en": "Others",
-				"it": "",
+				"it": "Altri",
 				"es": ""
 			},
 			"subcategory_activity": {
 				"fr": "Activités",
 				"en": "Activities",
-				"it": "",
+				"it": "Attività",
 				"es": ""
 			},
 			"subcategory_nautiques": {
 				"fr": "Nautiques",
 				"en": "Nautical",
-				"it": "",
+				"it": "Nautico",
 				"es": ""
 			},
 			"subcategory_terrestres": {
 				"fr": "Terrestres",
 				"en": "Land-based",
-				"it": "",
+				"it": "Terrestre",
 				"es": ""
 			},
 			"subcategory_associations": {
 				"fr": "Associations",
 				"en": "Associations",
-				"it": "",
+				"it": "Associazioni",
 				"es": ""
 			},
 			"subcategory_bourse": {
 				"fr": "Bourse aux équipiers",
 				"en": "Crew exchange",
-				"it": "",
+				"it": "Borsa ai membri",
 				"es": ""
 			},
 			"subcategory_restaurants": {
 				"fr": "Restaurants",
 				"en": "Restaurants",
-				"it": "",
+				"it": "Ristoranti",
 				"es": ""
 			},
 			"subcategory_bars": {
 				"fr": "Bars",
 				"en": "Pubs",
-				"it": "",
+				"it": "Bar",
 				"es": ""
 			},
 			"subcategory_culture": {
 				"fr": "Culture",
 				"en": "Culture",
-				"it": "",
+				"it": "Cultura",
 				"es": ""
 			},
 			"subcategory_detente": {
 				"fr": "Détente",
 				"en": "Relaxation",
-				"it": "",
+				"it": "Rilassamento",
 				"es": ""
 			},
 			"subcategory_loisirs": {
 				"fr": "Loisirs",
 				"en": "Leisure",
-				"it": "",
+				"it": "Hobby",
 				"es": ""
 			},
 			"subcategory_patrimoine": {
 				"fr": "Patrimoine",
 				"en": "Patrimony",
-				"it": "",
+				"it": "Patrimonio",
 				"es": ""
 			},
 			"subcategory_mouillages": {
 				"fr": "Mouillages",
 				"en": "Mooring",
-				"it": "",
+				"it": "Ormeggio",
 				"es": ""
 			}
 		}
