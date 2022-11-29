@@ -1,5 +1,5 @@
 
-console.log('Magelan Login Script');
+
 
 window.addEventListener('load', () => {
 	addEventsListenersOnLoad();

@@ -42,11 +42,8 @@
 			try {
 				const url = `/api/events/${localStorage['harbour_id']}`;
 				const resp = await fetch(url, { method: 'GET' });
-				console.log('FETCHED EVENTS', resp);
 				const respJson = await resp.json();
-				console.log('respJson', respJson);
 				const events = respJson.data;
-				console.log('EVENTS', events);
 				return(events);
 			} catch (error) {
 				console.error('[ERROR] Une erreur est survenue lors de la recuperation des evenements');

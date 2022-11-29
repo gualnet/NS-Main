@@ -11,7 +11,7 @@
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <!-- Fixed navbar -->
-        {{element->navheader-corse.html}}
+        {{element->navheader.html}}
         <div class="product-image-top">
             <img id="img" class="background" src="" alt="">
         </div>
@@ -212,7 +212,6 @@
 
             fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 							var harbour = _data.data;
-							console.log('harbour',harbour);
 							const latitude = harbour.latitude;
 							const longitude = harbour.longitude;
 
@@ -295,7 +294,7 @@
                             document.getElementById("sanitaryButtons").hidden = true;
                         }
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     })
                 } else {
                     document.getElementById("wifiButtons").hidden = true;
@@ -305,7 +304,7 @@
 
 
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             });
 
             function showHours() {
@@ -349,11 +348,11 @@
                                 document.getElementById("wifiCopiedButton").hidden = false;
 
                             }).catch((error) => {
-                                console.log(error);
+                                console.error(error);
                             })
                         }
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     })
                 }
             }
