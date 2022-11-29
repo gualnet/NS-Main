@@ -107,6 +107,12 @@
 				"it": "Prezzi",
 				"es": ""
 			},
+			"link_harbour_regulations": {
+				"fr": "Règlement du port",
+				"en": "Harbour regulations",
+				"it": "Regolamenti portuali",
+				"es": ""
+			},
 			"title_office_hours": {
 				"fr": "Horaires - Bureau du port",
 				"en": "Opening hours - Harbour Office",
