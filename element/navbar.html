@@ -31,8 +31,14 @@
 	const initNavbarBrandLink = () => {
 		if (localStorage['entity_id'] === 'BgSNKrOB59') {
 			const navbarIndexLinkEl = document.querySelector('#navbarIndexLink');
-			if (!navbarIndexLinkEl) return;
-			navbarIndexLinkEl.href = '/index-corse';
+			if (navbarIndexLinkEl) {
+				navbarIndexLinkEl.href = '/index-corse';
+			};
+
+			const navbarProfilEl = document.querySelector('#navbar-profil');
+			if (navbarProfilEl) {
+				navbarProfilEl.parentElement.parentElement.style.display = 'none';
+			}
 		}
 	}
 
