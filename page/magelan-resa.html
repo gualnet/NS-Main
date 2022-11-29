@@ -547,11 +547,6 @@
 		const MonocoqueEl = document.querySelector('#boatTypeMonocoqueBtn');
 		MonocoqueEl.addEventListener('click', boatTypeBtnClickHandler);
 
-		// const arrivalDateEl = document.querySelector('#input-date-start');
-		// arrivalDateEl.addEventListener('change', dateChangeHandler);
-		// const departureDateEl = document.querySelector('#input-date-end');
-		// departureDateEl.addEventListener('change', dateChangeHandler);
-
 		const newResaBtnEl = document.querySelector('#newResaBtn');
 		newResaBtnEl.addEventListener('click', formSelectorHandler)
 		const listResaBtnEl = document.querySelector('#listResaBtn');
@@ -650,19 +645,6 @@
 		}
 	};
 
-	// const dateChangeHandler = async (ev) => {
-	// 	console.log('============================dateChangeHandler');
-	// 	const arrivalDateEl = document.querySelector('#input-date-start');
-	// 	const arrivalDate = arrivalDateEl.value;
-	// 	const departureDateEl = document.querySelector('#input-date-end');
-	// 	const departureDate = departureDateEl.value;
-
-
-	// 	updateNightsCounter();
-	// 	await updateTotalPrice();
-	// 	updateResaBtnStatus();
-	// };
-
 	const formSelectorHandler = (ev) => {
 		const formContentNewEl = document.querySelector('#formNewResa');
 		const formContentListEl = document.querySelector('#formListResa');
@@ -719,10 +701,6 @@
 	};
 
 	const cgvCheckboxOnChangeHandler = (ev) => {
-		console.log('=======cgvCheckboxOnChangeHandler=======');
-		// /**@type {HTMLInputElement} */
-		// const target = ev.target
-		// console.log('value', target.checked);
 		updateResaBtnStatus();
 	}
 
@@ -875,8 +853,6 @@
 				dateFormat: 'dd/mm/yy',
 			})
 			.on('change', () => {
-				// console.log('from', from)
-				// console.log('to', to)
 				updateNightsCounter();
 				updateTotalPrice();
 				updateResaBtnStatus();
@@ -935,34 +911,22 @@
 			document.querySelector('#priceSpinnerCtn').classList.add('hide');
 			document.querySelector('#input-price-count').classList.remove('hide');
 
-			// const actionBtnCtnEl = document.querySelector('.action-button-ctn');
-			// actionBtnCtnEl.classList.remove('disabled');
 			updateNightsCounter();
 		} catch (error) {
 			console.error('ERROR', error);
-			// alert(error);
 		}
 	};
 
 	const updateResaBtnStatus = () => {
-		console.log('=====updateResaBtnStatus=====')
 		try {
 			const harbourId = getFormHarbourId();
-			console.log('harbourId', harbourId);
 			const startDate = getFormArrivalDate();
-			console.log('startDate', startDate);
 			const endDate = getFormDepartureDate();
-			console.log('endDate', endDate);
 			const longueur = getFormBoatLongueur();
-			console.log('longueur', longueur);
 			const largeur = getFormBoatLargeur();
-			console.log('largeur', largeur);
 			const boatType = getFormBoatType();
-			console.log('boatType', boatType);
 			const comments = getFormComments();
-			console.log('comments', comments);
 			const isCgvChecked = getCgvConsentStatus();
-			console.log('isCgvChecked', isCgvChecked);
 
 			const actionBtnCtnEl = document.querySelector('.action-button-ctn');
 			actionBtnCtnEl.classList.remove('disabled');
@@ -977,7 +941,6 @@
 
 			const resp = await fetch(url);
 			const respJson = await resp.json();
-			console.log('respJson', respJson);
 			const reservations = Object.values(respJson.data);
 			reservations.sort((a, b) => b.resa_date_debut - a.resa_date_debut);
 
@@ -1033,7 +996,6 @@
 			`);
 				}
 			})
-
 
 			const resaNewSectionTitleCtnEl = document.querySelector('#resaNewSectionTitleCtn');
 			const resaOldSectionTitleCtnEl = document.querySelector('#resaOldSectionTitleCtn');
@@ -1102,7 +1064,6 @@
 			const startDate = options.startDate.replaceAll('-', '');
 			const endDate = options.endDate.replaceAll('-', '');
 			const url = `/api/eresa/add-reservation/?boatId=${options.boatId}&portId=${options.harbourId}&startDate=${startDate}&endDate=${endDate}&comments="${options.comments}"&login=${options.login}&token=${options.token}`;
-			console.log('===>url', url)
 
 			const actionBtnCtnEl = document.querySelector('.action-button-ctn');
 			const reservationBtnEl = document.querySelector('#reservationBtn');
@@ -1161,19 +1122,19 @@
 		<!-- RESERVATION FORM -->
 		<div class="form-ctn">
 			<div class="form-top">
-				<div class="form-selector active" id="newResaBtn">Réserver mon escale</div>
-				<div class="form-selector" id="listResaBtn">Mes réservations</div>
+				<div class="form-selector active" id="newResaBtn">{{lang->magelan-resa.form_title_1}}</div>
+				<div class="form-selector" id="listResaBtn">{{lang->magelan-resa.form_title_2}}</div>
 			</div>
 			<!-- NEW RESERVATION FORM -->
 			<div class="form-content" id="formNewResa">
 				<div class="section">
 					<div class="section-title-ctn flex-row">
 						<i class="anchor-ico"></i>
-						<div class="title">Préparer mon escale</div>
+						<div class="title">{{lang->magelan-resa.form_title_3}}</div>
 					</div>
 					<div class="harbour-selector-ctn">
 						<select id="harbourSelect">
-							<option value="" disabled selected>Veuillez choisir un port</option>
+							<option value="" disabled selected>{{lang->magelan-resa.form_dropdown_title_1}}</option>
 							<option value="2">Ajaccio - Port Charles Ornano</option>
 							<option value="5000">Bonifacio - Port de plaisance</option>
 							<option value="5100">Bonifacio - Mouillage de Sant'Amanza (Yacht)</option>
@@ -1184,12 +1145,12 @@
 					</div>
 					<div class="date-button-ctn">
 						<div class="flex-col">
-							<label class="label" id="arriveeBtn">Arrivée</label>
+							<label class="label" id="arriveeBtn">{{lang->magelan-resa.form_date_arrival}}</label>
 							<input id="input-date-start" name="date_start" type="text"
 								class="form-control floating-input modal-date-input" required>
 						</div>
 						<div class="flex-col">
-							<label class="label" id="departBtn">Départ</label>
+							<label class="label" id="departBtn">{{lang->magelan-resa.form_date_departure}}</label>
 							<input id="input-date-end" name="date_end" type="text"
 								class="form-control floating-input modal-date-input" required>
 
@@ -1200,8 +1161,8 @@
 					<div class="section-title-ctn flex-row">
 						<i class="ship-ico"></i>
 						<div class="flex-row justify-space">
-							<div class="title">Mon bateau</div>
-							<div class="" id="boatEditBtn">Modifier</div>
+							<div class="title">{{lang->magelan-resa.form_title_4}}</div>
+							<div class="" id="boatEditBtn">{{lang->magelan-resa.form_title_5}}</div>
 						</div>
 					</div>
 					<div class="boat-details-ctn">
@@ -1218,8 +1179,8 @@
 							</div>
 						</div>
 						<div class="boat-types-ctn flex-row">
-							<button id="boatTypeMonocoqueBtn" type="button" class="btn btn-outline-primary active">Monocoque</button>
-							<button id="boatTypeVoilierBtn" type="button" class="btn btn-outline-primary" checked>Voilier</button>
+							<button id="boatTypeMonocoqueBtn" type="button" class="btn btn-outline-primary active">{{lang->magelan-resa.form_single_shell}}</button>
+							<button id="boatTypeVoilierBtn" type="button" class="btn btn-outline-primary" checked>{{lang->magelan-resa.form_sailboat}}</button>
 						</div>
 					</div>
 				</div>
@@ -1228,7 +1189,7 @@
 						<div class="section-title-ctn flex-row">
 							<!-- <div class="icon">lune</div> -->
 							<i class="moon-ico"></i>
-							<div class="text">Nombre de nuits</div>
+							<div class="text">{{lang->magelan-resa.form_nights_count}}</div>
 							<input class="display-bubble" id="input-night-count" name="night-count" type="text"
 								class="form-control floating-input modal-date-input" placeholder="0" disabled />
 
@@ -1236,17 +1197,14 @@
 						<div class="section-title-ctn flex-row">
 							<!-- <div class="icon">lune</div> -->
 							<i class="moon-ico"></i>
-							<div class="text">Coût du sejour</div>
+							<div class="text">{{lang->magelan-resa.form_stay_cost}}</div>
 							<span class="popover-ctn">
 								<div class="popover-label" id="priceInfoBtnLabel">?</div>
-								<div class="popover-message hide" id="priceInfoMsg">Le tarif peut-être ajusté à l'arrivée au port en
-									fonction de la taille exacte du navire, du nombre de personnes à bord (taxe de séjour) et de la
-									position du bateau dans le port. Le client est seul responsable de la conformité des informations
-									fournies lors de la réservation.</div>
+								<div class="popover-message hide" id="priceInfoMsg">{{lang->magelan-resa.</div>
 							</span>
 							<div class="spinner-ctn hide" id="priceSpinnerCtn">
 								<div class="spinner-border text-primary" id="totalPriceSpinner" role="status">
-									<span class="visually-hidden">Loading...</span>
+									<span class="visually-hidden">{{lang->magelan-resa.msg_btn_loading}}</span>
 								</div>
 							</div>
 							<input class="display-bubble" id="input-price-count" name="price-count" type="text"
@@ -1258,20 +1216,19 @@
 				<div class="text-area-ctn">
 					<div class="section-title-ctn flex-row">
 						<i class="comments-ico"></i>
-						<div class="title">Commentaire</div>
+						<div class="title">{{lang->magelan-resa.form_title_6}}</div>
 					</div>
 					<textarea id="commentsArea" name="comment" cols="40" rows="5"
-						placeholder="Laissez un message à l’attention de la capitainerie."></textarea>
+						placeholder="{{lang->magelan-resa.msg_comment_area}}"></textarea>
 				</div>
 				<div id="cgvCtn">
 					<input class="form-check-input" id="cgvCheckbox" type="checkbox">
-					<label>J'accepte les <a target="_blank" href="https://www.resaportcorse.com/media/cgv_FR.pdf">conditions
-							générales de vente</a></label>
+					<label>{{lang->magelan-resa.msg_accept_cgv_1}}<a target="_blank" href="https://www.resaportcorse.com/media/cgv_FR.pdf">{{lang->magelan-resa.msg_accept_cgv_2}}</a></label>
 				</div>
 				<div class="action-button-ctn disabled">
 					<div class="main-button" id="reservationBtn">
-						Réserver avec Magelan eResa
-						<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor"
+						{{lang->magelan-resa.msg_btn_reserve}}
+						<svg width="1em" height="1em" fill="currentColor"
 							class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
 							<path
 								d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
@@ -1287,7 +1244,7 @@
 					<div class="resa-card-sub-section half-height" id="resaNewSectionTitleCtn">
 						<div class="section-title-ctn flex-row">
 							<i class="anchor-ico"></i>
-							<div class="title">En cours</div>
+							<div class="title">{{lang->magelan-resa.form_title_7}}</div>
 						</div>
 						<div class="resa-list-ctn" id="resaListCtn">
 							<!-- reservations card here -->
@@ -1296,7 +1253,7 @@
 					<div class="resa-card-sub-section hide half-height" id="resaOldSectionTitleCtn">
 						<div class="section-title-ctn flex-row">
 							<i class="anchor-ico"></i>
-							<div class="title">Passé</div>
+							<div class="title">{{lang->magelan-resa.form_title_8}}</div>
 						</div>
 						<div class="resa-list-ctn" id="resaOldListCtn">
 							<!-- reservations card here -->
@@ -1313,7 +1270,7 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title">Choisissez votre bateau</h5>
+						<h5 class="modal-title">{{lang->magelan-resa.modal_select_boat}}</h5>
 						<div id="bemCloseBtn" class="close" data-dismiss="modal" aria-label="Close"
 							onclick="boatCloseModalBtnOnClickHandler()">
 							<button type="button" class="btn-close" aria-label="Close"></button>
