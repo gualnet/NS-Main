@@ -205,7 +205,7 @@
 									</div>
 								</div>
 								<div id="faq_button" class="col-4 px-2">
-									<a target="_blank" href="">
+									<a href="/faq-corse">
 									<div class="row">
 										<div class="col d-flex justify-content-center">
 											<span style="width:80px; height:80px;border-radius: 15px;"
@@ -665,7 +665,6 @@
 		window.addEventListener('load', () => {
 			displayInfoInTopContainer();
 			displayResaButton();
-			setFaqLink();
 			setEnvLink();
 		});
 
@@ -679,28 +678,8 @@
 			if (localStorage['harbour_id'] === 'HeIrt89Ccc' && resaBtnEl) {
 				resaBtnEl.classList.add('hide');
 			}
-		}
-
-		const setFaqLink = () => {
-			const faqLinks = {
-				"SlUyrmPHE9": "https://www.lesportscorses.com/ajaccio/questions-frequentes-2/", // Ajaccio
-				"HgfhlHtaq9": "https://www.lesportscorses.com/porto-vecchio/questions-frequentes-2/", // Porto Vecchio
-				"BxqaMWYBqc": "https://www.lesportscorses.com/bonifacio/questions-frequentes-2/", // Bonifacio
-				"rl4ZBaUpjc": "https://www.lesportscorses.com/propriano/questions-frequentes-2/", // Propriano
-				"rxHL7ucAo9": "https://www.lesportscorses.com/macinaggio/questions-frequentes-2", // Macinaggio
-				"HeIrt89Ccc": "https://www.lesportscorses.com/carghese/questions-frequentes-2", // Carghese
-			};
-			const harbourID = localStorage['harbour_id'];
-			const link = faqLinks[harbourID] || undefined;
-			if (!link) {
-				const faqBtnEL = document.querySelector('#faq_button');
-				faqBtnEL.style.display = 'none';
-			} else {
-				const faqBtnEL = document.querySelector('#faq_button');
-				const aEL = faqBtnEL.querySelector('a');
-				aEL.href = link;
-			}
 		};
+
 		const setEnvLink = () => {
 			const faqLinks = {
 				"SlUyrmPHE9": "https://www.lesportscorses.com/ajaccio/environnement/", // Ajaccio
