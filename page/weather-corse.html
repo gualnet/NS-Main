@@ -5,7 +5,6 @@
 {{element->header_app.html}}
 
 <body class="body-scroll d-flex flex-column h-100 menu-overlay">
-
 	<style>
 		#compassContainer {
 			width: 100px;
@@ -135,13 +134,8 @@
 	<main class="flex-shrink-0">
 		<!-- Fixed navbar -->
 		{{element->navheader.html}}
-		<nav class="navbar navbar-light fixed-top" style="margin-top:30px;">
-			<a id="return_link" class="navbar-brand" href="/index-corse">
-				<i style="font-size:30px;" class="bi bi-arrow-left-circle-fill"></i>
-			</a>
-		</nav>
 
-		<div class="card text-white bg-light mt-5 mb-3 ml-3 mr-3 rounded" id="weather_card" onclick="weatherOnClickHandler()">
+		<div class="card text-white bg-light mt-5 mb-3 ml-3 mr-3 rounded" id="weather_card" onclick="">
 			<div class="card-body rounded" style="background-color: rgba(0, 0, 0, 0.2);width: 100%;height: 100%;">
 				<div class="row">
 					<div class="col">
@@ -207,34 +201,11 @@
 
 	</main>
 
-	<!-- Required jquery and libraries -->
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-	<!-- cookie js -->
-	<script src="js/jquery.cookie.js"></script>
-
-	<!-- Swiper slider  js-->
-	<script src="vendor/swiper/js/swiper.min.js"></script>
-
-	<!-- Masonry js -->
-	<script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-	<!-- nouislider js -->
-	<script src="vendor/nouislider/nouislider.min.js"></script>
-
-	<!-- Customized jquery file  -->
-	<script src="js/main.js"></script>
-	<script src="js/color-scheme-demo.js"></script>
-
 	<!-- page level custom script -->
 	<script>
 		window.addEventListener('load', async () => {
 			const harbour = await fetchHarbourData();
-			console.log('>>harbour', harbour)
 			const forecast = await fetchWeatherForecastLink();
-			console.log('>>forecast', forecast)
 
 			displayForecastLinkBtn({ forecastLink: forecast.img });
 			fetchWeatherByCoords(harbour);
@@ -246,15 +217,13 @@
 				const url = `/api/weather/${localStorage["harbour_id"]}`;
 				const resp = await fetch(url);
 				const jsonResp = await resp.json();
-				// console.log('jsonResp', jsonResp);
 				const weatherForecastData = jsonResp.data;
-				// console.log('weatherData', weatherForecastData);
 				return (weatherForecastData);
 			} catch (error) {
 				console.error('[ERROR]', error);
 				document.getElementById("weather").innerHTML = `
 					<p class="text-secondary text-justify" style="padding-top:100px;">
-						Aucun bulletin météo publié pour ce port.
+						{{lang->weather.msg_no_forecast_available}}
 					</p>
 				`;
 			}
@@ -271,7 +240,7 @@
 			} else {
 				document.getElementById("weather").innerHTML = `
 					<p class="text-secondary text-justify" style="padding-top:100px;">
-						Aucun bulletin météo publié pour ce port.
+						{{lang->weather.msg_no_forecast_available}}
 					</p>
 				`;
 			}
@@ -283,9 +252,7 @@
 				const url = `/api/getharbour/${localStorage['harbour_id']}`;
 				const resp = await fetch(url);
 				const jsonResp = await resp.json();
-				console.log('jsonResp', jsonResp);
 				const harbour = jsonResp.data;
-				console.log('harbour', harbour);
 				return (harbour);
 			} catch (error) {
 				console.error('[ERROR]', error);
@@ -297,11 +264,7 @@
 				const url = `/api/weather/coord?latitude=${harbour.latitude}&longitude=${harbour.longitude}`;
 				const resp = await fetch(url);
 				const jsonResp = await resp.json();
-				console.log('jsonResp', jsonResp);
 				const weather = JSON.parse(jsonResp.data.data).data.weather;
-				console.log('weather', weather);
-				// console.log('weather2', weather.data);
-				// console.log('weather3', weather.data.weather);
 				const date = new Date();
 				const hour = date.getHours();
 				const minutes = date.getMinutes();
@@ -315,7 +278,6 @@
 				const rainHeavy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337765/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain_kztbgd.png"
 				const sunshineClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337766/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunshine_rzbzqh.png"
 
-				console.log('weatherCode', weather[0].hourly[hour].weatherCode);
 				switch (weather[0].hourly[hour].weatherCode) {
 					case '395':	//Moderate or heavy snow in area with thunder
 						document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
@@ -490,14 +452,7 @@
 			}
 		};
 
-		const displayWeatherData = async () => {
-
-		};
-
-
-
 	</script>
 	{{element->footer_app.html}}
 </body>
-
 </html>

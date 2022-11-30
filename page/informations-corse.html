@@ -55,16 +55,16 @@
                 </div>
                 <div class="row" style="margin: 20px" id="linksCtn">
                     <div class="col-6">
-                        <a id="website" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5">Site web</span></a>
+                        <a id="website" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5">{{lang->informations-corse.link_website}}</span></a>
                     </div>
                     <div class="col-6">
-                        <a id="touristwebsite" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5; text-align: right">Office de tourisme</span></a>
+                        <a id="touristwebsite" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5; text-align: right">{{lang->informations-corse.link_tourism_office}}</span></a>
                     </div>
                     <div class="col-6">
-                        <a id="harbour_map" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5">Plan du port</span></a>
+                        <a id="harbour_map" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5">{{lang->informations-corse.link_harbour_map}}</span></a>
                     </div>
                     <div class="col-6">
-                        <a id="price_list" target="_blank" class="small vm hide"><span style="font-size: 12px; color: #1D68D5; text-align: right">Grille tarifaire</span></a>
+                        <a id="price_list" target="_blank" class="small vm hide"><span style="font-size: 12px; color: #1D68D5; text-align: right">{{lang->informations-corse.link_fee_schedule}}</span></a>
                     </div>
                     <div class="col-6" id="pj">
                         <a id="pj_link" target="_blank" class="small vm"><span style="font-size: 12px; color: #1D68D5" id="pj_name"></span></a>
@@ -74,37 +74,37 @@
             <div class="card" style="border-radius: 25px;" id="hoursInfo" onclick="showMenu();" hidden>
                 <div class="card-header" style="margin: 0 20px 0 20px">
                     <div class="row">
-                        <div class="col"><h6><i style="color: #0C5BCC !important;" class="bi bi-arrow-left"></i> Horaires - Bureau du port</h6></div>
+                        <div class="col"><h6><i style="color: #0C5BCC !important;" class="bi bi-arrow-left"></i>{{lang->informations-corse.title_office_hours}}</h6></div>
                     </div>
 
                 </div>
                 <div class="card-body" style="margin: 0 20px 0 20px">
                     <div class="row">
-                        <div class="col-6">Lundi</div>
+                        <div class="col-6">{{lang->informations-corse.week_day_lundi}}</div>
                         <div class="col-6" id="lundi" style="font-size: 15px"></div>
                     </div>
                     <div class="row">
-                        <div class="col-6">Mardi</div>
+                        <div class="col-6">{{lang->informations-corse.week_day_mardi}}</div>
                         <div class="col-6" id="mardi" style="font-size: 15px"></div>
                     </div>
                     <div class="row">
-                        <div class="col-6">Mercredi</div>
+                        <div class="col-6">{{lang->informations-corse.week_day_mercredi}}</div>
                         <div class="col-6" id="mercredi" style="font-size: 15px"></div>
                     </div>
                     <div class="row">
-                        <div class="col-6">Jeudi</div>
+                        <div class="col-6">{{lang->informations-corse.week_day_jeudi}}</div>
                         <div class="col-6" id="jeudi" style="font-size: 15px"></div>
                     </div>
                     <div class="row">
-                        <div class="col-6">Vendredi</div>
+                        <div class="col-6">{{lang->informations-corse.week_day_vendredi}}</div>
                         <div class="col-6" id="vendredi" style="font-size: 15px"></div>
                     </div>
                     <div class="row">
-                        <div class="col-6">Samedi</div>
+                        <div class="col-6">{{lang->informations-corse.week_day_samedi}}</div>
                         <div class="col-6" id="samedi" style="font-size: 15px"></div>
                     </div>
                     <div class="row">
-                        <div class="col-6">Dimanche</div>
+                        <div class="col-6">{{lang->informations-corse.week_day_dimanche}}</div>
                         <div class="col-6" id="dimanche" style="font-size: 15px"></div>
                     </div>
                 </div>
@@ -115,13 +115,13 @@
 
                     <div class="row">
                         <div class="col">
-                            <h6 class="border-bottom border-color" style="font-weight: bold; color: #222; padding-bottom: 10px;">Services au port</h6><br>
+                            <h6 class="border-bottom border-color" style="font-weight: bold; color: #222; padding-bottom: 10px;">{{lang->informations-corse.title_harbour_services}}</h6><br>
                         </div>
                     </div>
                     <div class="row" id="sanitaryButtons">
                         <div class="col">
                             <button id="sanitaryCodeButton" onclick="showSanitaryCode();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0;width: 175px; height: 50px; box-shadow: 0px 2px 16px #999">
-                                <span style="color: #0C5BCC">Code sanitaire</span>  <img class="fit-picture" src="/library/eye.png" style="width: 27px; padding-left: 10px;">
+                                <span style="color: #0C5BCC">{{lang->informations-corse.btn_txt_sanitary_code}}</span>  <img class="fit-picture" src="/library/eye.png" style="width: 27px; padding-left: 10px;">
                             </button>
                             <button id="sanitaryCode" onclick="showSanitaryButton();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0;width: 100%; height: 50px; box-shadow: 0px 2px 16px #999" hidden>
                                 <span style="color: #0C5BCC" id="sanitary_code"></span>  <i style="color: #0C5BCC !important; font-size: 27px;" class="bi bi-unlock-fill"></i>
@@ -131,7 +131,7 @@
                     <div class="row" id="wifiButtons">
                         <div class="col" style="margin-top: 10px; margin-bottom: 40px">
                             <button id="wifiButton" onclick="showWifiCode();" style="border-radius: 50px; background-color: #0C5BCC; border-color: #FFF0;width: 175px; height: 50px; box-shadow: 0px 2px 16px #999">
-                                <span style="color: #FFF">Mot de passe Wi-Fi</span>
+                                <span style="color: #FFF">{{lang->informations-corse.btn_txt_wifi_password}}</span>
                                 <img class="fit-picture" src="/library/eyew.png" style="width: 27px; padding-left: 10px;">
                             </button>
                             <button id="wifiCopyButton" onclick="copyWifiCode();" style="border-radius: 50px; background-color: #0C5BCC; border-color: #FFF0; width: 100%; height: 50px; box-shadow: 0px 2px 16px #999" hidden>
@@ -139,7 +139,7 @@
                                 <img class="fit-picture" src="/library/copy.png" style="width: 27px; padding-left: 10px;">
                             </button>
                             <button id="wifiCopiedButton" onclick="showWifiButton();" style="border-radius: 50px; background-color: #FFF; border-color: #FFF0; width: 100%; height: 50px; box-shadow: 0px 2px 16px #999" hidden>
-                                <span style="color: #0C5BCC">Mot de passe Copié</span>
+                                <span style="color: #0C5BCC">{{lang->informations-corse.btn_txt_password_copied}}</span>
                                 <i style="width: 27px; padding-left: 10px;color:#0C5BCC;" class="bi bi-check-lg"></i>
                             </button>
 
@@ -202,9 +202,7 @@
 							linksCtnEl.insertAdjacentHTML('beforeend', `
 								<div class="col-6">
 									<a id="harbourRules" target="_blank" class="small vm" href="http://www.bonifacio-marina.corsica/wp-content/uploads/2021/05/bonifacio-marina-brochure-fr.pdf">
-										<span style="font-size: 12px; color: #1D68D5; text-align: right">
-											Règlement du port
-										</span>
+										<span style="font-size: 12px; color: #1D68D5; text-align: right">{{lang->informations-corse.link_harbour_regulations}}</span>
 									</a>
 								</div>
 							`);
@@ -214,7 +212,6 @@
 
             fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 							var harbour = _data.data;
-							console.log('harbour',harbour);
 							const latitude = harbour.latitude;
 							const longitude = harbour.longitude;
 
@@ -234,25 +231,16 @@
                     document.getElementById('img').src = localStorage['entity_logo'];
                 }
 
-                //document.getElementById("address").insertAdjacentHTML('beforeend', harbour.address);
                 document.getElementById("buoy").insertAdjacentHTML('beforeend', harbour.buoy);
                 document.getElementById("electricity").insertAdjacentHTML('beforeend', harbour.electricity);
-                //document.getElementById("email").insertAdjacentHTML('beforeend', harbour.email);
                 document.getElementById("fuel").insertAdjacentHTML('beforeend', harbour.fuel);
-                //document.getElementById("hours").insertAdjacentHTML('beforeend', harbour.hours);
-                //document.getElementById("latitude").insertAdjacentHTML('beforeend', harbour.latitude);
-                //document.getElementById("longitude").insertAdjacentHTML('beforeend', harbour.longitude);
                 document.getElementById("longmax").insertAdjacentHTML('beforeend', harbour.longmax);
                 document.getElementById("harbourname").insertAdjacentHTML('beforeend', '<h5>' + harbour.name + '<h5>');
-                //document.getElementById("telcapitainerie").insertAdjacentHTML('beforeend', harbour.phone);
                 document.getElementById("telcapitainerie").href = 'tel:' + harbour.prefixed_phone;
-                //document.getElementById("telurgence").insertAdjacentHTML('beforeend', harbour.phone_urgency);
                 document.getElementById("telurgence").href = 'tel:' + harbour.phone_urgency;
-                //document.getElementById("mail").insertAdjacentHTML('beforeend', harbour.email);
                 document.getElementById("mail").href = 'mailto:' + harbour.email;
                 document.getElementById("places").insertAdjacentHTML('beforeend', harbour.places);
                 document.getElementById("shower").insertAdjacentHTML('beforeend', harbour.showers);
-                //document.getElementById("technical_informations").insertAdjacentHTML('beforeend', harbour.technical_informations);
                 document.getElementById("tirantdeau").insertAdjacentHTML('beforeend', harbour.tirantdeau);
                 document.getElementById("toilet").insertAdjacentHTML('beforeend', harbour.toilet);
                 document.getElementById("website").href = harbour.website;
@@ -306,7 +294,7 @@
                             document.getElementById("sanitaryButtons").hidden = true;
                         }
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     })
                 } else {
                     document.getElementById("wifiButtons").hidden = true;
@@ -316,7 +304,7 @@
 
 
             }).catch((error) => {
-                console.log(error);
+                console.error(error);
             });
 
             function showHours() {
@@ -354,19 +342,17 @@
                 if (localStorage['token']) {
                     fetch("/api/user/session", { method: "post", body: data }).then(response => response.json()).then(_data => {
                         if (_data.success) {
-                            //document.getElementById("sanitary_code").insertAdjacentHTML('beforeend', harbour.sanitary_code);
-                            //document.getElementById("wifi_pass").insertAdjacentHTML('beforeend', );
                             fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
                                 navigator.clipboard.writeText(_data.data.wifi_pass);
                                 document.getElementById("wifiCopyButton").hidden = true;
                                 document.getElementById("wifiCopiedButton").hidden = false;
 
                             }).catch((error) => {
-                                console.log(error);
+                                console.error(error);
                             })
                         }
                     }).catch((error) => {
-                        console.log(error);
+                        console.error(error);
                     })
                 }
             }
@@ -379,37 +365,6 @@
 
 
     </main>
-
-
-
-    <!-- Required jquery and libraries -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- cookie js -->
-    <script src="js/jquery.cookie.js"></script>
-
-    <!-- Swiper slider  js-->
-    <script src="vendor/swiper/js/swiper.min.js"></script>
-
-    <!-- Masonry js -->
-    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-    <!-- nouislider js -->
-    <script src="vendor/nouislider/nouislider.min.js"></script>
-
-    <!-- Customized jquery file  -->
-    <script src="js/main.js"></script>
-    <script src="js/color-scheme-demo.js"></script>
-
-    <!-- page level custom script -->
-    <script>
-        "use strict"
-        $(window).on('load', function () {
-
-        });
-    </script>
 
     <style>
         @font-face {
@@ -431,5 +386,4 @@
     {{element->footer_app.html}}
 
 </body>
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/property-details.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:50:04 GMT -->
 </html>

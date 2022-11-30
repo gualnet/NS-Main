@@ -21,36 +21,36 @@
 					<div class="swiper-wrapper">
 						<div class="swiper-slide nav-btn" id="restaurant"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/restaurant_puz279.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=restaurant')">Restaurants</span>
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=restaurant')">{{lang->partners.subcategory_restaurants}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="bar"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652776956/Nauticspot-Next/partenaires/bar_lqdraf.png'); background-size: cover;"
 							onclick="clickOnNavBtnHandler('discovery?select=bar')">
-							<span class="small">Bar</span>
+							<span class="small">{{lang->partners.subcategory_bars}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="culture"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=culture')">Culture</span>
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=culture')">{{lang->partners.subcategory_culture}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="detente"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652776957/Nauticspot-Next/partenaires/spa_vjrula.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=detente')">Détente</span>
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=detente')">{{lang->partners.subcategory_detente}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="divertissement"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652956491/Nauticspot-Next/partenaires/loisirs_ciiyig.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=divertissement')">Loisirs</span>
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=divertissement')">{{lang->partners.subcategory_loisirs}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="patrimoine"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957144/Nauticspot-Next/partenaires/culture_n9zmhr.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=patrimoine')">Patrimoine</span>
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=patrimoine')">{{lang->partners.subcategory_patrimoine}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="mouillages"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1658744354/Nauticspot-Next/partenaires/mouillages_qypytw.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=mouillages')">Mouillages</span>
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=mouillages')">{{lang->partners.subcategory_mouillages}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="decouverteautre"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=decouverteautre')">Autre</span>
+							<span class="small" onclick="clickOnNavBtnHandler('discovery?select=decouverteautre')">{{lang->partners.subcategory_autre}}</span>
 						</div>
 
 					</div>
@@ -59,17 +59,9 @@
 			<!-- SWIPER END -->
 
 			<script>
-				url = new URL(window.location.href);
+				const url = new URL(window.location.href);
 				const queryString = window.location.search;
 				const urlParams = new URLSearchParams(queryString);
-				console.log(urlParams.get('select'));
-				// if (urlParams.get != null) {
-				// 	try {
-				// 		// document.getElementById(urlParams.get('select')).className = "text-primary";
-				// 	} catch (e) {
-				// 		console.log(e);
-				// 	}
-				// }
 
 				const clickOnNavBtnHandler = (url) => {
 					console.log('clickOnNavBtnHandler', url)
@@ -87,28 +79,9 @@
 		<br />
 	</main>
 
-	<!-- Required jquery and libraries -->
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-	<!-- cookie js -->
-	<script src="js/jquery.cookie.js"></script>
-
 	<!-- Swiper slider  js-->
-	<script src="vendor/swiper/js/swiper.min.js"></script>
+	<script src="/vendor/swiper/js/swiper.min.js"></script>
 
-	<!-- Masonry js -->
-	<script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-	<!-- nouislider js -->
-	<script src="vendor/nouislider/nouislider.min.js"></script>
-
-	<!-- Customized jquery file  -->
-	<script src="js/main.js"></script>
-	<script src="js/color-scheme-demo.js"></script>
-
-	<!-- page level custom script -->
 	<script>
 		"use strict"
 		$(window).on('load', function () {
@@ -334,6 +307,4 @@
 	{{element->footer_app.html}}
 
 </body>
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/newoffer.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
-
 </html>

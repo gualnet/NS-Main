@@ -22,30 +22,28 @@
 					<div class="swiper-wrapper">
 						<div class="swiper-slide nav-btn" id="nautic"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Nautiques_qnxifh.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=nautic')">Activités
-								nautiques</span>
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=nautic')">{{lang->partners.subcategory_activity}} {{lang->partners.subcategory_nautiques}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="vendeur-loueur-ex"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652953544/Nauticspot-Next/partenaires/vendeur-loueur_tu1pib.png'); background-size: cover;"
 							onclick="clickOnNavBtnHandler('/experiences?select=vendeurLoueurEx')">
-							<span class="small">Vendeur • Loueur</span>
+							<span class="small" id="vendeurSpan">{{lang->partners.subcategory_vendeur_loueur}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="terrestres"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454046/Nauticspot-Next/partenaires/Terrestres_r4si8p.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=terrestres')">Activités terrestres</span>
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=terrestres')">{{lang->partners.subcategory_activity}}</br>{{lang->partners.subcategory_terrestres}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="association"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957003/Nauticspot-Next/partenaires/association_tkdq6b.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=association')">Associations</span>
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=association')">{{lang->partners.subcategory_associations}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="equipbourse"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/v1652957039/Nauticspot-Next/partenaires/Bourse-aux-equipiers_nugnse.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=equipbourse')">Bourse aux
-								équipiers</span>
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=equipbourse')">{{lang->partners.subcategory_bourse}}</span>
 						</div>
 						<div class="swiper-slide nav-btn" id="experienceautre"
 							style="background-image: url('https://res.cloudinary.com/nauticspot/image/upload/w_140,h_95,c_fill/v1652454038/Nauticspot-Next/partenaires/Autre_wwmail.png'); background-size: cover;">
-							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=experienceautre')">Autre</span>
+							<span class="small" onclick="clickOnNavBtnHandler('/experiences?select=experienceautre')">{{lang->partners.subcategory_autre}}</span>
 						</div>
 
 					</div>
@@ -58,15 +56,6 @@
 				url = new URL(window.location.href);
 				const queryString = window.location.search;
 				const urlParams = new URLSearchParams(queryString);
-				console.log(urlParams.get('select'));
-				// if (urlParams.get != null) {
-				// 	try {
-				// 		document.getElementById(urlParams.get('select')).className = "text-primary";
-				// 	} catch (e) {
-				// 		console.log(e);
-				// 	}
-				// }
-				//url.location
 
 				const clickOnNavBtnHandler = (url) => {
 					console.log('clickOnNavBtnHandler', url)
@@ -86,28 +75,8 @@
 		<br />
 	</main>
 
-
-
-	<!-- Required jquery and libraries -->
-	<script src="js/jquery-3.3.1.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-	<!-- cookie js -->
-	<script src="js/jquery.cookie.js"></script>
-
 	<!-- Swiper slider  js-->
-	<script src="vendor/swiper/js/swiper.min.js"></script>
-
-	<!-- Masonry js -->
-	<script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-	<!-- nouislider js -->
-	<script src="vendor/nouislider/nouislider.min.js"></script>
-
-	<!-- Customized jquery file  -->
-	<script src="js/main.js"></script>
-	<script src="js/color-scheme-demo.js"></script>
+	<script src="/vendor/swiper/js/swiper.min.js"></script>
 
 	<!-- page level custom script -->
 	<script>
@@ -257,6 +226,12 @@
 			justify-content: center;
 			text-align: center;
 		}
+		.nav-btn span#vendeurSpan {
+			max-width: 100%;
+			display: flex;
+			flex-direction: column;
+			line-height: 100%;
+		}
 
 		/* *************************** */
 		/* * partner-experience-card * */
@@ -326,6 +301,4 @@
 	</style>
 	{{element->footer_app.html}}
 </body>
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/newoffer.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
-
 </html>

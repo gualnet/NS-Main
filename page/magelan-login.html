@@ -1,43 +1,343 @@
 <!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <title>Reservation ext</title>
-  <link rel="stylesheet" href="/css/pages/magelan-login.css">
-  <script src="/js/pages/magelan-login.js"></script>
-</head>
-<body>
-  <div id="mainWrapper">
+<html lang="fr" class="h-100">
 
+<!-- __TPL_HEADER_APP__ -->
+{{element->header_app.html}}
+<!-- __TPL_NAVHEADER__ -->
+{{element->navheader.html}}
+<body>
+	<style>
+		@font-face {
+		font-family: 'Poppins Regular';
+		font-style: normal;
+		font-weight: normal;
+		src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+	}
+	html {
+		height: -webkit-fill-available;
+	}
+	:root {
+		--vh: 1vh;
+	}
+	* {
+		margin: 0px;
+		padding: 0px;
+		box-sizing: border-box;
+	}
+	header .row {
+		display: flex;
+		align-items: center;
+	}
+	body {
+		align-items: center;
+		background-image: url('/library/Background.png');
+		background-size: cover;
+		display: flex;
+		font-family: 'Poppins Regular';
+		height: 100vh;
+		justify-content: center;
+		width: 100vw;
+		font-size: 2em;
+	}
+	
+	#mainWrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: calc(100% - 1rem);
+		width: calc(100% - 1rem);
+	}
+	
+	.form-ctn {
+		background-color: rgba(255, 255, 255, 0.01);
+		border-radius: 20px;
+		box-shadow: 5px 0px 25px 0px #00000011;
+		display: flex;
+		flex-direction: column;
+		height: auto;
+		width: 80%;
+		margin: 4rem auto auto auto;
+		padding: 1rem;
+	}
+	
+	.form-content {
+		margin: 1rem;
+	}
+	
+	.title-ctn {
+		font-size: 1.5rem;
+		text-align: center;
+	}
+	
+	.presentation-ctn {
+		margin-bottom: 1rem;
+		align-items: center;
+		display: flex;
+		height: auto;
+		justify-content: center;
+		text-align: center;
+		width: 100%;
+		font-size: medium;
+	}
+	
+	.input-ctn {
+		display: flex;
+		flex-direction: column;
+		height: auto;
+		width: 100%;
+	}
+	.input-ctn > input {
+		border-radius: 40px;
+    border: 0px;
+    height: 2rem;
+    margin: 0.5rem 0;
+    padding-left: 2rem;
+    width: 100%;
+    font-size: medium;
+	}
+	
+	.buttons-ctn {
+		display: flex;
+		flex-direction: column;
+		padding: 0 1rem 1rem 1rem;
+	}
+	
+	.buttons-ctn > #pwd-forget-btn {
+		align-items: center;
+		display: flex;
+		height: auto;
+		justify-content: flex-end;
+		width: 100%;
+		font-size: .8rem;
+		color: rgb(40, 100, 240);
+		text-decoration: underline;
+	}
+	
+	.buttons-ctn #login-btn {
+		align-items: center;
+    align-self: center;
+    background-color: rgb(40, 100, 240);
+    border-radius: 40px;
+    color: white;
+    display: flex;
+    height: 2rem;
+    justify-content: center;
+    padding: 10px 40px;
+    width: 85%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: bolder;
+	}
+	.buttons-ctn #login-btn.error {
+		background-color: rgb(240, 40, 40);
+	}
+	.buttons-ctn #login-btn.success {
+		background-color: rgb(40, 167, 69);
+	}
+	.buttons-ctn #loginText.hide {
+		display: none;
+	}
+	
+	.buttons-ctn > .register-ctn {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		font-size: .7rem;
+	}
+	
+	.buttons-ctn > .register-ctn > label {
+	
+	}
+	.buttons-ctn > .register-ctn > #register-btn {
+		color: rgb(40, 100, 240);
+		text-decoration: underline;
+	}
+	
+	/* SPINNER */
+	.lds-ellipsis {
+		display: inline-block;
+    width: 85%;
+    position: relative;
+    height: 5rem;
+	}
+	.lds-ellipsis.hide {
+		display: none;
+	}
+	.lds-ellipsis div {
+		position: absolute;
+		top: 33px;
+		width: 13px;
+		height: 13px;
+		border-radius: 50%;
+		background: #fff;
+		animation-timing-function: cubic-bezier(0, 1, 1, 0);
+	}
+	.lds-ellipsis div:nth-child(1) {
+		left: 8px;
+		animation: lds-ellipsis1 0.6s infinite;
+	}
+	.lds-ellipsis div:nth-child(2) {
+		left: 8px;
+		animation: lds-ellipsis2 0.6s infinite;
+	}
+	.lds-ellipsis div:nth-child(3) {
+		left: 32px;
+		animation: lds-ellipsis2 0.6s infinite;
+	}
+	.lds-ellipsis div:nth-child(4) {
+		left: 56px;
+		animation: lds-ellipsis3 0.6s infinite;
+	}
+	@keyframes lds-ellipsis1 {
+		0% {
+			transform: scale(0);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+	@keyframes lds-ellipsis3 {
+		0% {
+			transform: scale(1);
+		}
+		100% {
+			transform: scale(0);
+		}
+	}
+	@keyframes lds-ellipsis2 {
+		0% {
+			transform: translate(0, 0);
+		}
+		100% {
+			transform: translate(24px, 0);
+		}
+	}
+	
+	/* SPINNER END */
+	</style>
+	
+	<script>
+		window.addEventListener('load', () => {
+			addEventsListenersOnLoad();
+		});
+	
+		const addEventsListenersOnLoad = () => {
+			const connexionBtnEl = document.querySelector('#login-btn');
+			if (connexionBtnEl) {
+				connexionBtnEl.addEventListener('click', clickOnConnexionBtnHandler);
+			}
+		}
+	
+		const clickOnConnexionBtnHandler = async (ev) => {
+			const loginInputEl = document.querySelector('#loginInput');
+			const pwdInputEl = document.querySelector('#pwdInput');
+	
+			if (!loginInputEl || !pwdInputEl) {
+				console.error('input element not found');
+				return;
+			}
+	
+			const login = loginInputEl.value;
+			const pwd = pwdInputEl.value;
+	
+			await fetchLoginMagelan(login, pwd);
+		};
+	
+		const fetchLoginMagelan = async (login, password) => {
+			console.log('fetchLoginMagelan');
+			try {
+				const url = `/api/eresa/login/?login=${login}&password=${password}`
+				console.log('url', url)
+	
+				const loginTextEl = document.querySelector('#loginText');
+				loginTextEl.classList.add('hide');
+	
+				const loginSpinnerEl = document.querySelector('#loginSpinner');
+				loginSpinnerEl.classList.remove('hide');
+	
+				const res = await fetch(url);
+				console.log('res', res)
+				if (res.ok === false) {
+					throw new Error(res.statusText);
+				}
+				const jsonResp = await res.json();
+				if (!jsonResp.success) {
+					// Error do something
+					throw new Error('Error');
+				}
+	
+				console.log('XXXX')
+				const loginBtnEl = document.querySelector('#login-btn');
+				loginBtnEl.classList.add('success');
+				loginSpinnerEl.classList.add('hide');
+				loginTextEl.innerHTML = 'Success';
+				loginTextEl.classList.remove('hide');
+	
+	
+				console.log('jsonResp', jsonResp.data);
+				const magelanLogin = jsonResp.data.login;
+				const magelanToken = jsonResp.data.token;
+				if (magelanToken) {
+					localStorage['magelanLogin'] = magelanLogin;
+					localStorage['magelanToken'] = magelanToken;
+					window.location.href = '/magelan-resa';
+				} else {
+					window.location.href = '/magelan-login';
+				}
+			} catch (error) {
+				console.error(error);
+				const loginBtnEl = document.querySelector('#login-btn');
+				const loginTextEl = document.querySelector('#loginText');
+				const loginSpinnerEl = document.querySelector('#loginSpinner');
+				loginBtnEl.classList.add('error');
+				loginTextEl.classList.remove('hide');
+				loginTextEl.innerHTML = 'Error';
+				loginSpinnerEl.classList.add('hide');
+			}
+		};
+	
+		const changePageLocationTo = (url) => {
+			if (url) {
+				window.location.href = url;
+			} else {
+				console.error(`Wrong url '${url}'`);
+			}
+		};
+	</script>
+
+	<div id="mainWrapper">
 		<!-- LOGIN FORM -->
 		<div class="form-ctn">
-			<div class="title-ctn">Réserver mon escale</div>
+			<div class="title-ctn">{{lang->magelan-login.msg_reserve_stop}}</div>
 			<div class="form-content">
-				<div class="presentation-ctn">
-					Pour les demandes d’escale sur le réseau de port Magelan, je connecte mon compte Magelan eResa
-				</div>
+				<div class="presentation-ctn">{{lang->magelan-login.msg_module_presentation}}</div>
 				<div class="input-ctn">
 					<input id="loginInput" type="text" name="login" placeholder="Email">
-					<input id="pwdInput" type="password" name="password" placeholder="Mot de passe">
+					<input id="pwdInput" type="password" name="password" placeholder="{{lang->magelan-login.field_password}}">
 				</div>
 				<div class="buttons-ctn">
 					<div id="pwd-forget-btn">
-						<a href="https://www.resaportcorse.com/utilisateur/utilisateur/lostpassword" target="_blank">
-							Mot de passe oublié ?
-						</a>
+						<a href="https://www.resaportcorse.com/utilisateur/utilisateur/lostpassword" target="_blank">{{lang->magelan-login.pwd_forgot}}</a>
 					</div>
 					<div id="login-btn">
-						<div id="loginText">Connexion</div>
-						<div id="loginSpinner" class="lds-ellipsis hide"><div></div><div></div><div></div><div></div></div>
+						<div id="loginText">{{lang->magelan-login.title_btn_connection}}</div>
+						<div id="loginSpinner" class="lds-ellipsis hide">
+							<div></div>
+							<div></div>
+							<div></div>
+							<div></div>
+						</div>
 
 					</div>
 					<div class="register-ctn">
-						<div class="label">Pas encore inscrit ?</div>
+						<div class="label">{{lang->magelan-login.msg_not_registered}}</div>
 						<a href="https://www.resaportcorse.com/utilisateur/inscription" target="_blank">
-							<div id="register-btn">Créer mon compte</div>
+							<div id="register-btn">{{lang->magelan-login.link_register}}</div>
 						</a>
 					</div>
-					<div ></div>
+					<div></div>
 				</div>
 			</div>
 		</div>
@@ -45,4 +345,8 @@
 
 	</div>
 </body>
+<div class="container py-3" style="position: absolute;">
+	<!-- __TPL_NAVBAR__ -->
+	{{element->navbar.html}}
+</div>
 </html>

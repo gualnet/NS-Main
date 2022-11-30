@@ -1,37 +1,1138 @@
 <!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <title>Reservation ext</title>
-  <link rel="stylesheet" href="/css/pages/magelan-resa.css">
+<html lang="fr" class="h-100">
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-	<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  <script src="/js/pages/magelan-resa.js"></script>
-</head>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<!-- __TPL_HEADER_APP__ -->
+{{element->header_app.html}}
+<!-- __TPL_NAVHEADER__ -->
+{{element->navheader.html}}
+
+<style>
+	@font-face {
+		font-family: 'Poppins Regular';
+		font-style: normal;
+		font-weight: normal;
+		src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+	}
+
+	html {
+		height: -webkit-fill-available;
+	}
+
+	:root {
+		--vh: 1vh;
+	}
+
+	* {
+		margin: 0px;
+		padding: 0px;
+		box-sizing: border-box;
+	}
+
+	body {
+		align-items: center;
+		background-image: url('/library/Background.png');
+		backdrop-filter: blur(20px);
+
+		background-size: cover;
+		display: flex;
+		font-family: 'Poppins Regular';
+		height: 100vh;
+		justify-content: center;
+		width: 100vw;
+	}
+
+	.flex-row {
+		display: flex;
+		align-items: center;
+	}
+
+	.flex-col {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.main-button {
+		background-color: rgb(40, 100, 240);
+		color: white;
+		font-weight: bold;
+		padding: 10px 40px;
+		border-radius: 40px;
+	}
+
+	#mainWrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: calc(100% - 1rem);
+		width: calc(100% - 1rem);
+	}
+
+	.form-ctn {
+		background-color: rgba(255, 255, 255, 0.01);
+		border-radius: 20px;
+		box-shadow: 5px 0px 25px 0px #00000011;
+		display: flex;
+		flex-direction: column;
+		height: 90%;
+		width: 80%;
+	}
+
+	/* FORM TOP */
+	.form-ctn>.form-top {
+		border-radius: 20px 20px 0px 0px;
+		height: fit-content;
+		display: flex;
+	}
+
+	.form-top>.form-selector {
+		width: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border: 1px solid rgba(128, 128, 128, 0.1);
+		font-size: x-small;
+		height: 2rem;
+	}
+
+	.form-selector:first-of-type {
+		border-radius: 20px 0px 0px 0px;
+	}
+
+	.form-selector:last-of-type {
+		border-radius: 0px 20px 0px 0px;
+	}
+
+	.form-selector.active {
+		border-bottom: 0px;
+	}
+
+	/* FORM CONTENT */
+	.form-ctn>.form-content {
+		padding: 1.2rem;
+		font-size: .6rem;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		justify-content: space-around;
+	}
+
+	.form-ctn>.form-content.hide {
+		display: none;
+	}
+
+	.form-ctn>.form-content#formListResa {
+		display: flex;
+		justify-content: inherit;
+		height: 100%;
+	}
+
+	.form-ctn>.form-content#formListResa.hide {
+		display: none;
+	}
+
+	.section#formListResaSection {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+	}
+
+	.section-title-ctn {
+		display: flex;
+		height: auto;
+		width: 100%;
+		align-items: center;
+		margin-bottom: 1em;
+	}
+
+	.section-title-ctn .anchor-ico {
+		background-image: url('/library/anchor.svg');
+		background-repeat: no-repeat;
+		background-size: contain;
+		height: 21px;
+		width: 24px;
+	}
+
+	.section-title-ctn .ship-ico {
+		background-image: url('/library/ship.svg');
+		background-repeat: no-repeat;
+		background-size: contain;
+		height: 20px;
+		width: 25px;
+	}
+
+	.section-title-ctn .moon-ico {
+		background-image: url('/library/moon.svg');
+		background-repeat: no-repeat;
+		background-size: contain;
+		height: 21px;
+		width: 24px;
+	}
+
+	.section-title-ctn .comments-ico {
+		background-image: url('/library/comments.svg');
+		background-repeat: no-repeat;
+		background-size: cover;
+		height: 21px;
+		width: 24px;
+	}
+
+	.section-title-ctn .title {
+		margin-left: 1em;
+	}
+
+	#sectionBoat>.flex-row .justify-space {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+		padding-right: 10px;
+	}
+
+	.resa-card-sub-section {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		height: 50%;
+		overflow: scroll;
+	}
+
+	.resa-card-sub-section.half-height {
+		height: 50%;
+	}
+
+	.resa-card-sub-section.full-height {
+		height: 100%;
+	}
+
+	.harbour-selector-ctn {
+		display: flex;
+		height: auto;
+		width: 100%;
+		justify-content: center;
+		margin-bottom: 1em;
+	}
+
+	#harbourSelect.error {
+		border: 1px solid red;
+	}
+
+	.harbour-selector-ctn select {
+		height: 3em;
+		width: 100%;
+		border-radius: 40px;
+		font-size: 1em;
+		text-align: center;
+	}
+
+	.date-button-ctn {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 1em;
+		font-size: 2em;
+		/* border: 1px solid blue; */
+	}
+
+	.date-button-ctn .flex-col {
+		justify-content: center;
+		align-items: center;
+		width: 50%;
+
+	}
+
+	.date-button-ctn>div>.label {
+		background-color: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 1rem;
+		padding: 10px 10px;
+		border-radius: 40px;
+		margin-bottom: 0px;
+	}
+
+	.date-button-ctn>div>input {
+		width: 90%;
+		line-height: 24px;
+		height: 24px;
+		font-size: small;
+		text-align: center;
+	}
+
+	.boat-details-ctn {
+		display: flex;
+		justify-content: space-between;
+		height: auto;
+		flex-direction: column;
+		margin-bottom: .5rem;
+	}
+
+	.boat-details-ctn .size-ctn {
+		display: flex;
+		width: 50%;
+		height: auto;
+	}
+
+	.boat-details-ctn .label {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 5px 20px;
+		width: 30%;
+	}
+
+	.boat-details-ctn .display-bubble {
+		width: 50%;
+		background-color: white;
+		border-radius: 40px;
+		border: 0px;
+		text-align: center;
+		font-size: .5rem;
+	}
+
+	.boat-details-ctn .boat-types-ctn {
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 1em;
+	}
+
+	.boat-types-ctn>.btn-outline-primary.btn {
+		border-radius: 40px;
+		padding: 2px 20px;
+		font-size: .8rem;
+	}
+
+	.stay-details-ctn .text {
+		width: 60%;
+	}
+
+	.stay-details-ctn .display-bubble {
+		width: 30%;
+		background-color: white;
+		border-radius: 40px;
+		border: 0px;
+		text-align: center;
+		font-size: 1em;
+		padding: 5px 0;
+	}
+
+	.stay-details-ctn .display-bubble.hide {
+		display: none;
+	}
+
+	.stay-details-ctn .spinner-ctn {
+		width: 30%;
+		background-color: white;
+		border-radius: 40px;
+		border: 0px;
+		text-align: center;
+		font-size: 1em;
+		padding: 5px 0;
+	}
+
+	.stay-details-ctn .spinner-ctn.hide {
+		display: none;
+	}
+
+	.stay-details-ctn .popover-label {
+		background-color: rgb(194, 194, 194);
+		height: 1.5em;
+		width: 1.5em;
+		border-radius: 50px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: white;
+		margin-right: 1em;
+	}
+
+	.stay-details-ctn .popover-message {
+		box-sizing: border-box;
+		position: absolute;
+		top: 5rem;
+		left: 20px;
+		width: calc(100% - 40px);
+		display: block;
+		border: 1px solid rgb(228, 228, 228);
+		background-color: rgb(240, 240, 240);
+		padding: 1rem 2rem;
+		border-radius: 1em;
+		text-align: justify;
+	}
+
+	.stay-details-ctn .popover-message.hide {
+		display: none;
+	}
+
+
+
+	.text-area-ctn {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.text-area-ctn>textarea {
+		display: flex;
+		width: 100%;
+		border-radius: 10px;
+		padding: 10px;
+		font-size: 10px;
+	}
+
+	#cgvCtn {
+		display: flex;
+	}
+
+	.form-check-input {
+		position: inherit;
+		margin: 0px;
+		padding: 0px;
+		height: fit-content;
+		margin-right: 4px;
+	}
+
+	.action-button-ctn {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.action-button-ctn>.main-button {
+		width: 100%;
+		display: flex;
+		justify-content: space-evenly;
+		align-items: center;
+	}
+
+	.action-button-ctn.success>.main-button {
+		background-color: green;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.action-button-ctn.error>.main-button {
+		background-color: red;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.action-button-ctn.disabled>.main-button {
+		background-color: grey;
+	}
+
+	/* reservation list */
+	.resa-list-ctn {}
+
+	/* reservation list card */
+	.resa-card {
+		background-color: rgba(255, 255, 255, 0.01);
+		backdrop-filter: blur(20px);
+		border-radius: 20px;
+		box-shadow: 5px 0px 25px 0px #00000011;
+		display: flex;
+		flex-direction: column;
+		padding: 1em;
+	}
+
+	.resa-card-row {
+		display: flex;
+		width: 100%;
+		height: 3em;
+		margin: .2em 0;
+		border: 1px solid #00000020;
+		background-color: #00000005;
+		align-items: center;
+		padding: 1em 1em;
+		border-radius: 3em;
+	}
+
+	.resa-card-row :nth-child(1) {
+		width: 30%;
+	}
+
+	.resa-card-row :nth-child(2) {
+		width: 70%;
+		display: flex;
+		justify-content: center;
+	}
+
+	#PaymentBtn {
+		margin-top: 1em;
+		height: 3em;
+		width: 35%;
+		align-self: flex-end;
+		margin-right: 20px;
+		border-radius: 30px;
+	}
+
+	/* BOAT EDIT MODAL */
+	.modal {
+		background-color: rgba(0, 0, 0, .5);
+	}
+
+	.modal-dialog {
+		transform: translate(0px, 50%);
+	}
+
+	#bemBodyCtn>.boat-row {
+		display: flex;
+		width: 100%;
+		height: auto;
+		padding: 0 2em;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 40px;
+		background-color: rgba(128, 128, 128, 0.04);
+		margin: 1em 0em;
+	}
+
+	#bemBodyCtn>.boat-row.active {
+		background-color: rgba(128, 128, 128, 0.08);
+	}
+
+	#bemBodyCtn>.boat-row>.boat-row__name {
+		/* background-color: blue; */
+		width: 40%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	#bemBodyCtn>.boat-row>.boat-row__longueur {
+		/* background-color: gray; */
+		width: 20%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	#bemBodyCtn>.boat-row>.boat-row__largeur {
+		/* background-color: red; */
+		width: 20%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	#bemBodyCtn>.boat-row>.boat-row__tirant {
+		/* background-color: gold; */
+		width: 20%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	/*  */
+	.hide {
+		display: none;
+	}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+	let G_boatList = []; // keep the fetched boat list
+	let G_selectedBoat; // keep the selected boat object id within G_boatList like G_boatList[G_selectedBoat] = boat object
+
+	window.addEventListener('load', () => {
+		const reservationBtnEl = document.querySelector('#reservationBtn');
+		reservationBtnEl.addEventListener('click', reservationClickHandler);
+
+		const harbourSelectEl = document.querySelector('#harbourSelect');
+		harbourSelectEl.addEventListener('change', harbourSelectChangeHandler);
+
+		const VoilierEl = document.querySelector('#boatTypeVoilierBtn');
+		VoilierEl.addEventListener('click', boatTypeBtnClickHandler);
+		const MonocoqueEl = document.querySelector('#boatTypeMonocoqueBtn');
+		MonocoqueEl.addEventListener('click', boatTypeBtnClickHandler);
+
+		const newResaBtnEl = document.querySelector('#newResaBtn');
+		newResaBtnEl.addEventListener('click', formSelectorHandler)
+		const listResaBtnEl = document.querySelector('#listResaBtn');
+		listResaBtnEl.addEventListener('click', formSelectorHandler)
+
+		const arriveeBtnEl = document.querySelector('#arriveeBtn');
+		arriveeBtnEl.addEventListener('click', arriveeBtnClickHandler);
+
+		const boatEditBtnEl = document.querySelector('#boatEditBtn');
+		boatEditBtnEl.addEventListener('click', boatEditOnClickHandler);
+
+		const departBtnEl = document.querySelector('#departBtn');
+		departBtnEl.addEventListener('click', departBtnClickHandler);
+
+		const priceInfoBtnEl = document.querySelector('#priceInfoBtnLabel');
+		priceInfoBtnEl.addEventListener('click', priceInfoBtnLabelOnCLickHandler);
+
+		const cgvCheckboxEl = document.querySelector('#cgvCheckbox');
+		cgvCheckboxEl.addEventListener('click', cgvCheckboxOnChangeHandler);
+
+		displayBoatData();
+		initJqueryElements();
+		updateResaBtnStatus() // ! DEV
+	});
+
+
+	// ========
+	// HANDLERS
+	// ========
+	/**
+	 * @param {PointerEvent} ev 
+	 */
+	const reservationClickHandler = async (ev) => {
+		console.log('reservationClickHandler', ev);
+		const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+		if (actionBtnCtnEl.classList.contains('disabled')) {
+			console.log('NO OP')
+			return;
+		}
+
+		const resaOptions = {};
+		resaOptions.harbourId = getFormHarbourId();
+		resaOptions.startDate = getFormArrivalDate();
+		resaOptions.endDate = getFormDepartureDate();
+		resaOptions.comments = getFormComments();
+		resaOptions.login = localStorage['magelanLogin'];
+		resaOptions.token = localStorage['magelanToken'];
+		resaOptions.boatId = await getSelectedBoatId();
+
+		requestAddReservation(resaOptions);
+	};
+
+	const harbourSelectChangeHandler = () => {
+		const harbourSelect = document.querySelector('#harbourSelect');
+		harbourSelect.classList.remove('error');
+		updateTotalPrice();
+		updateResaBtnStatus();
+	};
+
+	/**
+	 * @param {PointerEvent} ev 
+	 */
+	const boatTypeBtnClickHandler = (ev) => {
+		const target = ev.target;
+		const VoilierEl = document.querySelector('#boatTypeVoilierBtn');
+		const MonocoqueEl = document.querySelector('#boatTypeMonocoqueBtn');
+		if (target.id === VoilierEl.id) {
+			VoilierEl.classList.add('active');
+			MonocoqueEl.classList.remove('active')
+		} else {
+			VoilierEl.classList.remove('active');
+			MonocoqueEl.classList.add('active')
+		}
+		const type = target.innerText;
+		updateTotalPrice();
+		updateResaBtnStatus();
+		return;
+	};
+
+	const goToPaymentPageClickHandler = async (resaId) => {
+		try {
+			const token = localStorage['magelanToken'];
+			const login = localStorage['magelanLogin'];
+			const url = `/api/eresa/appliValidResa?login=${login}&token=${token}&resa_id=${resaId}`;
+			const resp = await fetch(url, { method: 'GET' });
+			const respJson = await resp.json();
+			const paymentLink = respJson.data.link;
+			if (paymentLink) {
+				open(paymentLink, '_blank');
+			} else {
+				throw new Error('No Payment Link');
+			}
+		} catch (error) {
+			console.error('[ERROR]', error);
+			alert(error)
+		}
+	};
+
+	const formSelectorHandler = (ev) => {
+		const formContentNewEl = document.querySelector('#formNewResa');
+		const formContentListEl = document.querySelector('#formListResa');
+		const target = ev.target;
+		if (target.id === 'newResaBtn') {
+			formContentNewEl.classList.remove('hide');
+			formContentListEl.classList.add('hide');
+		} else if (target.id === 'listResaBtn') {
+			getUserReservationList();
+			formContentNewEl.classList.add('hide');
+			formContentListEl.classList.remove('hide');
+		}
+	};
+
+	const arriveeBtnClickHandler = (ev) => {
+		$('#input-date-start').datepicker('show');
+	};
+
+
+	const departBtnClickHandler = (ev) => {
+		$('#input-date-end').datepicker('show');
+	};
+
+	/**
+	 * @param {PointerEvent} ev 
+	 */
+	const boatEditOnClickHandler = (ev) => {
+		document.querySelector('#boatEditModal').style.display = 'block';
+		displayBoatsInEditModal();
+	};
+
+	const boatCloseModalBtnOnClickHandler = (ev) => {
+		document.querySelector('#boatEditModal').style.display = 'none';
+	};
+
+	const boatEditRowOnClickHandler = async (index) => {
+		G_selectedBoat = index;
+		const selectedBoat = G_boatList[G_selectedBoat];
+
+		document.querySelector('#boatEditModal').style.display = 'none';
+		setFormBoatLongueur(selectedBoat.bateau_longueur)
+		setFormBoatLargeur(selectedBoat.bateau_largeur)
+		await updateTotalPrice();
+		updateResaBtnStatus();
+	};
+
+	const priceInfoBtnLabelOnCLickHandler = (ev) => {
+		const priceInfoBtnLabelEl = ev.target;
+		const priceInfoMsgEl = document.querySelector('#priceInfoMsg');
+		priceInfoMsgEl.classList.remove('hide');
+		setTimeout(() => {
+			priceInfoMsgEl.classList.add('hide');
+		}, 4000);
+	};
+
+	const cgvCheckboxOnChangeHandler = (ev) => {
+		updateResaBtnStatus();
+	}
+
+	// ********************
+	// FORM GETTERS SETTERS
+	// ********************
+
+	const getFormHarbourId = () => {
+		/** @type {HTMLSelectElement}  */
+		const harbourSelect = document.querySelector('#harbourSelect');
+		console.dir(harbourSelect)
+
+		/** @type {HTMLOptionElement}  */
+		const selectedOption = harbourSelect.querySelectorAll('option')[harbourSelect.selectedIndex];
+		console.log(selectedOption)
+		if (selectedOption.value === '') {
+			console.error('No Harbour Selected')
+			harbourSelect.classList.add('error');
+			throw (new Error('Veuillez choisir un port'))
+		}
+		const harbourId = selectedOption.value;
+		return (harbourId);
+	};
+
+	const getFormArrivalDate = () => {
+		/** @type {HTMLInputElement} */
+		const arrivalDateEl = document.querySelector('#input-date-start');
+		const arrivalDate = arrivalDateEl.value;
+		if (arrivalDate === '') {
+			console.error('No Arrival Date Selected')
+			arrivalDateEl.classList.add('error');
+			throw (new Error('Veuillez choisir une date d\'arrivée'));
+		}
+		const DD = arrivalDate.split('/')[0];
+		const MM = arrivalDate.split('/')[1];
+		const YY = arrivalDate.split('/')[2];
+		const arrivalDateFromated = `${YY}${MM}${DD}`;
+		return (arrivalDateFromated)
+	};
+
+	const getFormDepartureDate = () => {
+		/** @type {HTMLInputElement} */
+		const departureDateEl = document.querySelector('#input-date-end');
+		console.dir(departureDateEl)
+		const departureDate = departureDateEl.value;
+		if (departureDate === '') {
+			console.error('No Departure Date Selected')
+			departureDateEl.classList.add('error');
+			throw (new Error('Veuillez choisir une date de départ'));
+		}
+		const DD = departureDate.split('/')[0];
+		const MM = departureDate.split('/')[1];
+		const YY = departureDate.split('/')[2];
+		const departureDateFromated = `${YY}${MM}${DD}`;
+		return (departureDateFromated)
+	};
+
+	const getFormBoatLongueur = () => {
+		const longueurEl = document.querySelector('#input-boat-longueur');
+		const longueur = longueurEl.value;
+		if (!longueur || longueur === '') {
+			console.error('Empty longueur value')
+			harbourSelect.classList.add('error');
+			throw (new Error('Veuillez specifier la longueur du bateau'));
+		}
+		return (longueur)
+	};
+	const setFormBoatLongueur = (value) => {
+		if (!value || value === '') {
+			console.warn('Empty value not accepted as longueur value')
+		}
+		const longueurEl = document.querySelector('#input-boat-longueur');
+		longueurEl.value = value;
+	};
+
+	const getFormBoatLargeur = () => {
+		const largeurEl = document.querySelector('#input-boat-largeur');
+		const largeur = largeurEl.value;
+		if (!largeur || largeur === '') {
+			console.error('Empty largeur value')
+			harbourSelect.classList.add('error');
+			throw (new Error('Veuillez specifier la largeur du bateau'));
+		}
+		return (largeur)
+	};
+	const setFormBoatLargeur = (value) => {
+		if (!value || value === '') {
+			console.warn('Empty value not accepted as largeur value')
+		}
+		const largeurEl = document.querySelector('#input-boat-largeur');
+		largeurEl.value = value;
+	};
+
+	const getFormBoatType = () => {
+		const VoilierEl = document.querySelector('#boatTypeVoilierBtn');
+		if (VoilierEl.classList.contains('active')) {
+			const type = VoilierEl.innerText;
+			return (type);
+		}
+		const MonocoqueEl = document.querySelector('#boatTypeMonocoqueBtn');
+		if (MonocoqueEl.classList.contains('active')) {
+			const type = MonocoqueEl.innerText;
+			return (type);
+		}
+	};
+
+	const getFormComments = () => {
+		const commentsAreaEl = document.querySelector('#commentsArea');
+		const comments = commentsAreaEl.value;
+		return (comments);
+	};
+
+	const getCgvConsentStatus = () => {
+		console.log('=========getCgvConsentStatus==========');
+		const cgvCheckboxEl = document.querySelector('#cgvCheckbox');
+		console.log('cgvCheckboxEl', cgvCheckboxEl);
+		const isChecked = cgvCheckboxEl.checked;
+		console.log('isChecked', isChecked);
+		if (!isChecked) throw new Error('CGV not accepted');
+		return (isChecked);
+	};
+
+	// ********
+	// SERVICES
+	// ********
+
+	const initJqueryElements = () => {
+		const todayDate = new Date();
+		from = $("#input-date-start")
+			.datepicker({
+				minDate: todayDate,
+				dateFormat: 'dd/mm/yy',
+			})
+			.on('change', (ev) => {
+				console.log('INNER ON CHANGE', this)
+				console.log('ev', ev)
+				const DD = ev.target.value.split('/')[0];
+				const MM = ev.target.value.split('/')[1];
+				const YY = ev.target.value.split('/')[2];
+				const newDate = new Date(`${MM}/${DD}/${YY}`);
+				console.log('NEW DATE', newDate)
+				to.datepicker('option', 'minDate', newDate);
+				updateNightsCounter();
+				updateTotalPrice();
+				updateResaBtnStatus();
+			});
+		to = $("#input-date-end")
+			.datepicker({
+				defaultDate: '+1D',
+				dateFormat: 'dd/mm/yy',
+			})
+			.on('change', () => {
+				updateNightsCounter();
+				updateTotalPrice();
+				updateResaBtnStatus();
+			});
+	};
+
+	/**
+	 * @param {string} dateStart date string yyyy-mm-dd
+	 * @param {string} dateEnd date string yyyy-mm-dd
+	 * @returns 
+	 */
+	const updateNightsCounter = () => {
+		const dateStart = getFormArrivalDate();
+		const dateEnd = getFormDepartureDate();
+
+		if (!dateStart || !dateEnd || dateStart === '' || dateEnd === '') {
+			console.warn('Abort updateNightsCounter');
+			return;
+		}
+
+		let YY = dateStart.slice(0, 4);
+		let MM = dateStart.slice(4, 6);
+		let DD = dateStart.slice(6, 8);
+		const start = new Date(`${MM}/${DD}/${YY}`);
+		YY = dateEnd.slice(0, 4);
+		MM = dateEnd.slice(4, 6);
+		DD = dateEnd.slice(6, 8);
+		const end = new Date(`${MM}/${DD}/${YY}`);
+		const delta = end - start;
+		const days = delta / (60 * 60 * 24 * 1000);
+		const nightsCountEl = document.querySelector('#input-night-count');
+		nightsCountEl.value = days;
+	};
+
+	const updateTotalPrice = async () => {
+		try {
+			const harbourId = getFormHarbourId();
+			const startDate = getFormArrivalDate();
+			const endDate = getFormDepartureDate();
+			const longueur = getFormBoatLongueur();
+			const largeur = getFormBoatLargeur();
+			const boatType = getFormBoatType();
+			const comments = getFormComments();
+			const login = localStorage['magelanLogin'];
+			const token = localStorage['magelanToken'];
+
+			document.querySelector('#priceSpinnerCtn').classList.remove('hide');
+			document.querySelector('#input-price-count').classList.add('hide');
+
+			const resp = await fetch(`/api/eresa/price/?harbourId=${harbourId}&startDate=${startDate}&endDate=${endDate}&longueur=${longueur}&largeur=${largeur}&boatType=${boatType}&comments=${comments}&login=${login}&token=${token}`, { method: 'GET' });
+			const respJson = await resp.json()
+			const estimatedPriceArr = Object.values(respJson.data.resaList);
+			const price = estimatedPriceArr[0]?.total || '-';
+			const priceEl = document.querySelector('#input-price-count');
+			priceEl.value = `${price} €`;
+			document.querySelector('#priceSpinnerCtn').classList.add('hide');
+			document.querySelector('#input-price-count').classList.remove('hide');
+
+			updateNightsCounter();
+		} catch (error) {
+			console.error('ERROR', error);
+		}
+	};
+
+	const updateResaBtnStatus = () => {
+		try {
+			const harbourId = getFormHarbourId();
+			const startDate = getFormArrivalDate();
+			const endDate = getFormDepartureDate();
+			const longueur = getFormBoatLongueur();
+			const largeur = getFormBoatLargeur();
+			const boatType = getFormBoatType();
+			const comments = getFormComments();
+			const isCgvChecked = getCgvConsentStatus();
+
+			const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+			actionBtnCtnEl.classList.remove('disabled');
+		} catch (error) {
+			console.warn(error);
+		}
+	}
+
+	const getUserReservationList = async () => {
+		try {
+			const url = `/api/eresa/list-reservations/?login=${localStorage['magelanLogin']}&token=${localStorage['magelanToken']}`;
+
+			const resp = await fetch(url);
+			const respJson = await resp.json();
+			const reservations = Object.values(respJson.data);
+			reservations.sort((a, b) => b.resa_date_debut - a.resa_date_debut);
+
+			const today = new Date().toLocaleDateString().split('/').reverse().join(''); // date of today fotmat: YYYYMMDD
+
+			const htmlRow = [];
+			const htmlRowOld = [];
+			Object.values(reservations).map(reservation => {
+				const harbourName = reservation.resa_port_ville;
+				const yyStart = reservation.resa_date_debut.slice(2, 4);
+				const mmStart = reservation.resa_date_debut.slice(4, 6);
+				const ddStart = reservation.resa_date_debut.slice(6, 8);
+				const yyEnd = reservation.resa_date_fin.slice(2, 4);
+				const mmEnd = reservation.resa_date_fin.slice(4, 6);
+				const ddEnd = reservation.resa_date_fin.slice(6, 8);
+
+				const startDate = `${ddStart}/${mmStart}/${yyStart}`;
+				const endDate = `${ddEnd}/${mmEnd}/${yyEnd}`;
+				const status = reservation.resa_status;
+				const resaId = reservation.resa_id;
+				const statusColor = reservation.resa_status_couleur;
+				const paymentBtn = `<button id="PaymentBtn" type="button" class="btn btn-outline-primary active" onclick="goToPaymentPageClickHandler('${resaId}')">Payment</button>
+			`;
+				if (reservation.resa_date_fin > today) {
+					let displayPaymentBtn = status === 'Arrhes à régler' ? true : false;
+
+					htmlRow.push(`
+					<div class="resa-card">
+						<div class="resa-card-row">
+							<div>${harbourName}</div>
+							<div>${startDate} - ${endDate}</div>
+						</div>
+						<div class="resa-card-row">
+							<div>Statut</div>
+							<div style="color:${statusColor}">${status}</div>
+						</div>
+						${displayPaymentBtn ? paymentBtn : ''}
+					</div>
+				`);
+				} else {
+					// Old Resa
+					htmlRowOld.push(`
+				<div class="resa-card">
+					<div class="resa-card-row">
+						<div>${harbourName}</div>
+						<div>${startDate} - ${endDate}</div>
+					</div>
+					<div class="resa-card-row">
+						<div>Statut</div>
+						<div style="color:${statusColor}">${status}</div>
+					</div>
+				</div>
+			`);
+				}
+			})
+
+			const resaNewSectionTitleCtnEl = document.querySelector('#resaNewSectionTitleCtn');
+			const resaOldSectionTitleCtnEl = document.querySelector('#resaOldSectionTitleCtn');
+			const resaOldListCtnEl = document.querySelector('#resaOldListCtn');
+			const resaListCtnEl = document.querySelector('#resaListCtn');
+			resaListCtnEl.innerHTML = htmlRow.join(''); // place new or empty resa list
+			if (htmlRowOld.length > 0) {
+				// place old resa by dividing the space in 2
+				resaOldSectionTitleCtnEl.classList.remove('hide');
+				resaOldListCtnEl.innerHTML = htmlRowOld.join('');
+			} else {
+				// if no old resa allocate full space to display new resa
+				resaNewSectionTitleCtnEl.classList.replace('half-height', 'full-height');
+				resaOldSectionTitleCtnEl.classList.add('hide');
+			}
+		} catch (error) {
+			console.error('Error', error);
+			alert(error);
+		}
+	};
+
+	const displayBoatData = async () => {
+		const boats = await fetchUserBoatList();
+		if (!boats) {
+			console.warn('No boats found');
+			return;
+		}
+		const boat = boats[0];
+		if (!boat) {
+			console.warn('No boat found');
+			return;
+		}
+		G_boatList = boats;
+		G_selectedBoat = 0;
+
+		const boatLongueurEl = document.querySelector('#input-boat-longueur');
+		boatLongueurEl.value = boat.bateau_longueur;
+		const boatLargeurEl = document.querySelector('#input-boat-largeur');
+		boatLargeurEl.value = boat.bateau_largeur;
+	};
+
+	const fetchUserBoatList = async () => {
+		try {
+			const url = `/api/eresa/list-boats/?login=${localStorage['magelanLogin']}&token=${localStorage['magelanToken']}`;
+
+			const resp = await fetch(url);
+			const respJson = await resp.json();
+			if (respJson.success === false) {
+				if (respJson.error === "Error: INVALID TOKEN") {
+					window.location = '/magelan-login';
+				}
+				return;
+			}
+
+			const boats = respJson.data;
+			const boatsArr = Object.values(boats);
+			return (boatsArr);
+		} catch (error) {
+			console.error('Error', error);
+			alert(error);
+		}
+	};
+
+	const requestAddReservation = async (options) => {
+		try {
+			const startDate = options.startDate.replaceAll('-', '');
+			const endDate = options.endDate.replaceAll('-', '');
+			const url = `/api/eresa/add-reservation/?boatId=${options.boatId}&portId=${options.harbourId}&startDate=${startDate}&endDate=${endDate}&comments="${options.comments}"&login=${options.login}&token=${options.token}`;
+
+			const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+			const reservationBtnEl = document.querySelector('#reservationBtn');
+			reservationBtnEl.innerHTML = 'Demande en cours...';
+			const resp = await fetch(url);
+			const respJson = await resp.json();
+			if (respJson.success === false) {
+				throw new Error('Ooops une petite erreur est survenue');
+			}
+
+			actionBtnCtnEl.classList.add('success');
+			reservationBtnEl.innerText = 'Succes';
+		} catch (error) {
+			console.error('Error', error);
+			const actionBtnCtnEl = document.querySelector('.action-button-ctn');
+			const reservationBtnEl = document.querySelector('#reservationBtn');
+			actionBtnCtnEl.classList.add('error');
+			reservationBtnEl.innerText = 'Erreur';
+			alert(error);
+		}
+	};
+
+	const displayBoatsInEditModal = async () => {
+		const boatRows = [];
+		G_boatList = await fetchUserBoatList();
+		G_boatList.map((boat, index) => {
+			const selectedClass = (index === G_selectedBoat) ? ' active' : '';
+			boatRows.push(`
+			<div class="boat-row${selectedClass}" id="bemBoatRow_${boat.bateau_id}" onclick="boatEditRowOnClickHandler(${index})">
+				<div class="boat-row__name">${boat.bateau_nom}</div>
+				<div class="boat-row__longueur">${boat.bateau_longueur}</div>
+				<div class="boat-row__largeur">${boat.bateau_largeur}</div>
+				<div class="boat-row__tirant">${boat.bateau_tirant}</div>
+			</div>
+		`);
+		});
+
+		const bemBodyCtnEl = document.querySelector('#bemBodyCtn');
+		bemBodyCtnEl.innerHTML = '';
+		bemBodyCtnEl.insertAdjacentHTML('afterbegin', boatRows.join(''));
+	};
+
+	const getSelectedBoatId = async () => {
+		let selectedBoat;
+		if (G_boatList?.length > 0 && G_selectedBoat !== undefined) {
+			selectedBoat = G_boatList[G_selectedBoat];
+		}
+		const selectedBoatId = selectedBoat.bateau_id;
+		return (selectedBoatId);
+	};
+</script>
+
 <body>
-  <div id="mainWrapper">
+	<div id="mainWrapper">
 
 		<!-- RESERVATION FORM -->
 		<div class="form-ctn">
 			<div class="form-top">
-				<div class="form-selector active" id="newResaBtn">Réserver mon escale</div>
-				<div class="form-selector" id="listResaBtn">Mes réservations</div>
+				<div class="form-selector active" id="newResaBtn">{{lang->magelan-resa.form_title_1}}</div>
+				<div class="form-selector" id="listResaBtn">{{lang->magelan-resa.form_title_2}}</div>
 			</div>
 			<!-- NEW RESERVATION FORM -->
 			<div class="form-content" id="formNewResa">
 				<div class="section">
 					<div class="section-title-ctn flex-row">
 						<i class="anchor-ico"></i>
-						<div class="title">Préparer mon escale</div>
+						<div class="title">{{lang->magelan-resa.form_title_3}}</div>
 					</div>
 					<div class="harbour-selector-ctn">
 						<select id="harbourSelect">
-							<option value="" disabled selected>Veuillez choisir un port</option>
+							<option value="" disabled selected>{{lang->magelan-resa.form_dropdown_title_1}}</option>
 							<option value="2">Ajaccio - Port Charles Ornano</option>
 							<option value="5000">Bonifacio - Port de plaisance</option>
 							<option value="5100">Bonifacio - Mouillage de Sant'Amanza (Yacht)</option>
@@ -41,14 +1142,15 @@
 						</select>
 					</div>
 					<div class="date-button-ctn">
-							<div class="flex-col">
-								<label class="label" id="arriveeBtn">Arrivée</label>
-								<input id="input-date-start" name="date_start" type="text" class="form-control floating-input modal-date-input" required>
-							</div>
-							<div class="flex-col">
-								<label class="label" id="departBtn">Départ</label>
-								<input id="input-date-end" name="date_end" type="text" class="form-control floating-input modal-date-input" required>
-
+						<div class="flex-col">
+							<label class="label" id="arriveeBtn">{{lang->magelan-resa.form_date_arrival}}</label>
+							<input id="input-date-start" name="date_start" type="text"
+								class="form-control floating-input modal-date-input" required>
+						</div>
+						<div class="flex-col">
+							<label class="label" id="departBtn">{{lang->magelan-resa.form_date_departure}}</label>
+							<input id="input-date-end" name="date_end" type="text"
+								class="form-control floating-input modal-date-input" required>
 						</div>
 					</div>
 				</div>
@@ -56,24 +1158,28 @@
 					<div class="section-title-ctn flex-row">
 						<i class="ship-ico"></i>
 						<div class="flex-row justify-space">
-							<div class="title">Mon bateau</div>
-							<div class="" id="boatEditBtn">Modifier</div>
+							<div class="title">{{lang->magelan-resa.form_title_4}}</div>
+							<div class="" id="boatEditBtn">{{lang->magelan-resa.form_title_5}}</div>
 						</div>
 					</div>
 					<div class="boat-details-ctn">
 						<div class="flex-row">
 							<div class="size-ctn flex-row">
 								<div class="label">L</div>
-								<input class="display-bubble" id="input-boat-longueur" name="boat-longueur" type="text" class="form-control floating-input modal-date-input" placeholder="14,30" />
+								<input class="display-bubble" id="input-boat-longueur" name="boat-longueur" type="text"
+									class="form-control floating-input modal-date-input" placeholder="14,30" />
 							</div>
 							<div class="size-ctn  flex-row">
 								<div class="label">l</div>
-								<input class="display-bubble" id="input-boat-largeur" name="boat-largeur" type="text" class="form-control floating-input modal-date-input" placeholder="3,40" />
+								<input class="display-bubble" id="input-boat-largeur" name="boat-largeur" type="text"
+									class="form-control floating-input modal-date-input" placeholder="3,40" />
 							</div>
 						</div>
 						<div class="boat-types-ctn flex-row">
-							<button id="boatTypeMonocoqueBtn" type="button" class="btn btn-outline-primary active">Monocoque</button>
-							<button id="boatTypeVoilierBtn" type="button" class="btn btn-outline-primary" checked>Voilier</button>
+							<button id="boatTypeMonocoqueBtn" type="button"
+								class="btn btn-outline-primary active">{{lang->magelan-resa.form_single_shell}}</button>
+							<button id="boatTypeVoilierBtn" type="button" class="btn btn-outline-primary"
+								checked>{{lang->magelan-resa.form_sailboat}}</button>
 						</div>
 					</div>
 				</div>
@@ -82,24 +1188,26 @@
 						<div class="section-title-ctn flex-row">
 							<!-- <div class="icon">lune</div> -->
 							<i class="moon-ico"></i>
-							<div class="text">Nombre de nuits</div>
-							<input class="display-bubble" id="input-night-count" name="night-count" type="text" class="form-control floating-input modal-date-input" placeholder="0" disabled/>
+							<div class="text">{{lang->magelan-resa.form_nights_count}}</div>
+							<input class="display-bubble" id="input-night-count" name="night-count" type="text"
+								class="form-control floating-input modal-date-input" placeholder="0" disabled />
 
 						</div>
 						<div class="section-title-ctn flex-row">
 							<!-- <div class="icon">lune</div> -->
 							<i class="moon-ico"></i>
-							<div class="text">Coût du sejour</div>
+							<div class="text">{{lang->magelan-resa.form_stay_cost}}</div>
 							<span class="popover-ctn">
 								<div class="popover-label" id="priceInfoBtnLabel">?</div>
-								<div class="popover-message hide" id="priceInfoMsg">Le tarif peut-être ajusté à l'arrivée au port en fonction de la taille exacte du navire, du nombre de personnes à bord (taxe de séjour) et de la position du bateau dans le port. Le client est seul responsable de la conformité des informations fournies lors de la réservation.</div>
+								<div class="popover-message hide" id="priceInfoMsg">{{lang->magelan-resa.</div>
 							</span>
 							<div class="spinner-ctn hide" id="priceSpinnerCtn">
 								<div class="spinner-border text-primary" id="totalPriceSpinner" role="status">
-									<span class="visually-hidden">Loading...</span>
+									<span class="visually-hidden">{{lang->magelan-resa.msg_btn_loading}}</span>
 								</div>
 							</div>
-							<input class="display-bubble" id="input-price-count" name="price-count" type="text" class="form-control floating-input modal-date-input" placeholder="0 €" disabled/>
+							<input class="display-bubble" id="input-price-count" name="price-count" type="text"
+								class="form-control floating-input modal-date-input" placeholder="0 €" disabled />
 						</div>
 					</div>
 				</div>
@@ -107,18 +1215,22 @@
 				<div class="text-area-ctn">
 					<div class="section-title-ctn flex-row">
 						<i class="comments-ico"></i>
-						<div class="title">Commentaire</div>
+						<div class="title">{{lang->magelan-resa.form_title_6}}</div>
 					</div>
-					<textarea id="commentsArea" name="comment" cols="40" rows="5" placeholder="Laissez un message à l’attention de la capitainerie."></textarea>
+					<textarea id="commentsArea" name="comment" cols="40" rows="5"
+						placeholder="{{lang->magelan-resa.msg_comment_area}}"></textarea>
 				</div>
-				<div>
+				<div id="cgvCtn">
 					<input class="form-check-input" id="cgvCheckbox" type="checkbox">
-					<label>J'accepte les <a target="_blank" href="https://www.resaportcorse.com/media/cgv_FR.pdf">conditions générales de vente</a></label>
+					<label>{{lang->magelan-resa.msg_accept_cgv_1}}<a target="_blank"
+							href="https://www.resaportcorse.com/media/cgv_FR.pdf">{{lang->magelan-resa.msg_accept_cgv_2}}</a></label>
 				</div>
 				<div class="action-button-ctn disabled">
 					<div class="main-button" id="reservationBtn">
-						Réserver avec Magelan eResa
-						<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+						{{lang->magelan-resa.msg_btn_reserve}}
+						<svg width="1em" height="1em" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+							<path
+								d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />
 						</svg>
 					</div>
 				</div>
@@ -131,7 +1243,7 @@
 					<div class="resa-card-sub-section half-height" id="resaNewSectionTitleCtn">
 						<div class="section-title-ctn flex-row">
 							<i class="anchor-ico"></i>
-							<div class="title">En cours</div>
+							<div class="title">{{lang->magelan-resa.form_title_7}}</div>
 						</div>
 						<div class="resa-list-ctn" id="resaListCtn">
 							<!-- reservations card here -->
@@ -140,7 +1252,7 @@
 					<div class="resa-card-sub-section hide half-height" id="resaOldSectionTitleCtn">
 						<div class="section-title-ctn flex-row">
 							<i class="anchor-ico"></i>
-							<div class="title">Passé</div>
+							<div class="title">{{lang->magelan-resa.form_title_8}}</div>
 						</div>
 						<div class="resa-list-ctn" id="resaOldListCtn">
 							<!-- reservations card here -->
@@ -157,8 +1269,9 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title">Choisissez votre bateau</h5>
-						<div id="bemCloseBtn" class="close" data-dismiss="modal" aria-label="Close" onclick="boatCloseModalBtnOnClickHandler()">
+						<h5 class="modal-title">{{lang->magelan-resa.modal_select_boat}}</h5>
+						<div id="bemCloseBtn" class="close" data-dismiss="modal" aria-label="Close"
+							onclick="boatCloseModalBtnOnClickHandler()">
 							<button type="button" class="btn-close" aria-label="Close"></button>
 						</div>
 					</div>
@@ -170,9 +1283,16 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- BOAT EDIT MODAL END -->
 
 	</div>
+	<!-- __TPL_FOOTER_APP__ -->
+	{{element->footer_app.html}}
 </body>
+<div class="container py-3" style="position: absolute;">
+	<!-- __TPL_NAVBAR__ -->
+	{{element->navbar.html}}
+</div>
+
 </html>
