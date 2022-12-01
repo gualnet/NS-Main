@@ -1159,7 +1159,6 @@
 		}
 
 		const displaySecurityBtn = async (entity, user, boat) => {
-			console.log('=======displaySecurityBtn===========')
 			let isHidden = false;
 			if (!entity || entity.security_module === false) {
 				isHidden = true;
@@ -1171,7 +1170,7 @@
 				isHidden = true;
 			}
 			// In any case if it's an agent, show the button
-			if (!['Visiteur', 'Plaisancier'].includes(user?.roleMobileApp)) {
+			if (user?.roleMobileApp && !['Visiteur', 'Plaisancier'].includes(user?.roleMobileApp)) {
 				isHidden = false;
 			}
 			document.getElementById("securites").hidden = isHidden;
@@ -1529,7 +1528,7 @@
 
 		if (!localStorage["user"]) {
 			document.getElementById("absences").hidden = true;
-			// document.getElementById("securites").hidden = true;
+			document.getElementById("securites").hidden = true;
 			document.getElementById("challenges").hidden = true;
 		} else {
 			fetch("/api/get/userboats?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
