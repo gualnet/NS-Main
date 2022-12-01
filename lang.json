@@ -1,2 +1,644 @@
-{"group":{"index-corse":{"main_title":{"fr":"Bienvenue au port de","en":"Welcome to the harbour of","it":"Benvenuti nel porto di","es":""},"reservation_button_text":{"fr":"Je réserve ma place","en":"I book my place","it":"Reserve il mio posto","es":""},"main_btn_news":{"fr":"Informations","en":"News","it":"Informazione","es":""},"main_btn_harbour_map":{"fr":"Plan du port","en":"Harbour map","it":"Piano del porto","es":""},"main_btn_weather_forecast":{"fr":"Bulletin météo","en":"Weather forecast","it":"Bollettino meteo","es":""},"main_btn_concierge":{"fr":"Conciergerie","en":"Concierge","it":"Concierge","es":""},"main_btn_faq":{"fr":"FAQ","en":"FAQ","it":"FAQ","es":""},"main_btn_environment":{"fr":"Environnement","en":"Environment","it":"Ambiente","es":""},"section_title_harbour_office":{"fr":"Bureau du port","en":"Harbour office","it":"Capitaneria","es":""},"section_title_events":{"fr":"Évènements","en":"Events","it":"Eventi","es":""},"section_title_news":{"fr":"Actualités","en":"News","it":"Notizia","es":""}},"select-harbour-corse":{"header_title_part_1":{"fr":"Informations et réservation","en":"information and reservations","it":"Informazioni e prenotazioni","es":""},"header_title_part_2":{"fr":"de vos ports favoris !","en":"of your favourite ports !","it":"dei tuoi porti preferiti","es":""}},"informations-corse":{"link_website":{"fr":"Site web","en":"Website","it":"Sito web","es":""},"link_tourism_office":{"fr":"Office de tourisme","en":"Tourism Office","it":"Ufficio turistico","es":""},"link_harbour_map":{"fr":"Plan du port","en":"Harbour map","it":"Piano del porto","es":""},"link_fee_schedule":{"fr":"Grille tarifaire","en":"Pricing","it":"Prezzi","es":""},"link_harbour_regulations":{"fr":"Règlement du port","en":"Harbour regulations","it":"Regolamenti portuali","es":""},"title_office_hours":{"fr":"Horaires - Bureau du port","en":"Opening hours - Harbour Office","it":"Orario - Capitaneria","es":""},"week_day_lundi":{"fr":"Lundi","en":"Monday","it":"Lunedi","es":""},"week_day_mardi":{"fr":"Mardi","en":"Tuesday","it":"Martedi","es":""},"week_day_mercredi":{"fr":"Mercredi","en":"Wednesday","it":"Mercoledi","es":""},"week_day_jeudi":{"fr":"Jeudi","en":"Thursday","it":"Giovedi","es":""},"week_day_vendredi":{"fr":"Vendredi","en":"Friday","it":"Venerdi","es":""},"week_day_samedi":{"fr":"Samedi","en":"Saturday","it":"Sabato","es":""},"week_day_dimanche":{"fr":"Dimanche","en":"Sunday","it":"Domenica","es":""},"title_harbour_services":{"fr":"Services au port","en":"Harbour services","it":"Servizi portuali","es":""},"btn_txt_sanitary_code":{"fr":"Code sanitaire","en":"Sanitary code","it":"Codice sanitario","es":""},"btn_txt_wifi_password":{"fr":"Mot de passe Wi-Fi","en":"Wi-Fi password","it":"Wi-Fi password","es":""},"btn_txt_password_copied":{"fr":"Mot de passe Copié","en":"Password copied","it":"Password copiata","es":""}},"events":{"title_upcoming":{"fr":"Événements à venir","en":"Upcoming events","it":"Eventi a venire","es":""},"title_past":{"fr":"Événements passés","en":"Past events","it":"Eventi passati","es":""}},"partners":{"category_harbour_life":{"fr":"Vie au port","en":"Harbour's life","it":"Vita portuale","es":""},"category_experiences":{"fr":"Expériences","en":"Experiences","it":"Esperienze","es":""},"category_discovery":{"fr":"Découverte","en":"Discovery","it":"Scoperta","es":""},"subcategory_sos":{"fr":"SOS","en":"SOS","it":"SOS","es":""},"subcategory_maintenance":{"fr":"Maintenance","en":"Services","it":"Manutenzione","es":""},"subcategory_accastillage":{"fr":"Accastillage","en":"Fitting","it":"Attrezzatura","es":""},"subcategory_alimentation":{"fr":"Alimentation","en":"Grocery","it":"Alimentazione","es":""},"subcategory_sante":{"fr":"Santé","en":"Health","it":"Salute","es":""},"subcategory_annonces":{"fr":"Annonces","en":"Announcements","it":"Annunci","es":""},"subcategory_laveries":{"fr":"Laveries","en":"Laundries","it":"Lavanderie","es":""},"subcategory_transport":{"fr":"Transport","en":"Transport","it":"Trasporto","es":""},"subcategory_boutiques":{"fr":"Boutiques","en":"Shops","it":"Negozi","es":""},"subcategory_vendeur_loueur":{"fr":"<div>Vendeur</div> <div>•</div> <div>Loueur</div>","en":"<div>Seller</div> <div>•</div> <div>Renter</div>","it":"<div>Venditore</div> <div>•</div> <div>Locatore</div>","es":""},"subcategory_autre":{"fr":"Autres","en":"Others","it":"Altri","es":""},"subcategory_activity":{"fr":"Activités","en":"Activities","it":"Attività","es":""},"subcategory_nautiques":{"fr":"Nautiques","en":"Nautical","it":"Nautico","es":""},"subcategory_terrestres":{"fr":"Terrestres","en":"Land-based","it":"Terrestre","es":""},"subcategory_associations":{"fr":"Associations","en":"Associations","it":"Associazioni","es":""},"subcategory_bourse":{"fr":"Bourse aux équipiers","en":"Crew exchange","it":"Borsa ai membri","es":""},"subcategory_restaurants":{"fr":"Restaurants","en":"Restaurants","it":"Ristoranti","es":""},"subcategory_bars":{"fr":"Bars","en":"Pubs","it":"Bar","es":""},"subcategory_culture":{"fr":"Culture","en":"Culture","it":"Cultura","es":""},"subcategory_detente":{"fr":"Détente","en":"Relaxation","it":"Rilassamento","es":""},"subcategory_loisirs":{"fr":"Loisirs","en":"Leisure","it":"Hobby","es":""},"subcategory_patrimoine":{"fr":"Patrimoine","en":"Patrimony","it":"Patrimonio","es":""},"subcategory_mouillages":{"fr":"Mouillages","en":"Mooring","it":"Ormeggio","es":""}},
-"weather":{"msg_no_forecast_available":{"fr":"Aucun bulletin météo publié pour ce port.","en":"No weather report published for this port.","it":"Non è stato pubblicato alcun bollettino meteo per questo porto.","es":""}},"magelan-login":{"pwd_forgot":{"fr":"Mot de passe oublié ?","en":"Password forgotten?","it":"Hai dimenticato la password?","es":""},"msg_reserve_stop":{"fr":"Réserver mon escale","en":"Book my stopover","it":"Prenota il mio scalo","es":""},"msg_module_presentation":{"fr":"Pour les demandes d’escale sur le réseau de port Magelan, je connecte mon compte Magelan eResa","en":"For stopover requests on the Magelan port network, I connect my Magelan eResa account","it":"Per richiedere una sosta sulla rete portuale Magelan, collego il mio account Magelan eResa","es":""},"title_btn_connection":{"fr":"Connexion","en":"Login","it":"Accesso","es":""},"msg_not_registered":{"fr":"Pas encore inscrit ?","en":"Not yet registered?","it":"Non siete ancora registrati?","es":""},"link_register":{"fr":"Créer mon compte","en":"Create my account","it":"Creare il mio account","es":""},"field_password":{"fr":"Mot de passe","en":"Password","it":"Password","es":""}},"magelan-resa":{"form_title_1":{"fr":"Réserver mon escale","en":"Book my stopover","it":"Prenota il mio scalo","es":""},"form_title_2":{"fr":"Mes réservations","en":"My bookings","it":"Le mie prenotazioni","es":""},"form_title_3":{"fr":"Préparer mon escale","en":"Prepare my stopover","it":"Prepara il mio scalo","es":""},"form_dropdown_title_1":{"fr":"Veuillez choisir un port","en":"Please select a port","it":"","es":""},"form_date_arrival":{"fr":"Arrivée","en":"Check-in","it":"Arrivo","es":""},"form_date_departure":{"fr":"Départ","en":"Check-out","it":"Partenza","es":""},"form_title_4":{"fr":"Mon bateau","en":"My boat","it":"Mia Barca","es":""},"form_title_5":{"fr":"Modifier","en":"Edit","it":"Modificare","es":""},"form_single_shell":{"fr":"Monocoque","en":"Monohull","it":"Monoscafo","es":""},"form_sailboat":{"fr":"Voilier","en":"Sailboat","it":"Vela","es":""},"form_nights_count":{"fr":"Nombre de nuits","en":"Number of nights","it":"Numero di notti","es":""},"form_stay_cost":{"fr":"Coût du sejour","en":"Cost of stay","it":"Costo del soggiorno","es":""},"msg_price_disclamer":{"fr":"Le tarif peut-être ajusté à l'arrivée au port en fonction de la taille exacte du navire, du nombre de personnes à bord (taxe de séjour) et de la position du bateau dans le port. Le client est seul responsable de la conformité des informations fournies lors de la réservation.","en":"The rate may be adjusted upon arrival in port according to the exact size of the vessel, the number of people on board (tourist tax) and the position of the vessel in the port. The client is solely responsible for the accuracy of the information provided at the time of booking.","it":"La tariffa può essere adeguata all'arrivo in porto in base alle dimensioni esatte della barca, al numero di persone a bordo (tassa di soggiorno) e alla posizione della barca nel porto. Il cliente è l'unico responsabile della conformità delle informazioni fornite durante la prenotazione.","es":""},"msg_btn_loading":{"fr":"Chargement...","en":"Loading...","it":"Caricamento...","es":""},"form_title_6":{"fr":"Commentaire","en":"Comment","it":"Commento","es":""},"msg_accept_cgv_1":{"fr":"J'accepte les ","en":"I accept the ","it":"Accetto le","es":""},"msg_accept_cgv_2":{"fr":"conditions générales de vente","en":"general conditions of sale","it":"condizioni generali di vendita","es":""},"msg_btn_reserve":{"fr":"Réserver avec Magelan eResa","en":"Book with Magelan eResa","it":"Prenota con","es":""},"msg_comment_area":{"fr":"Laissez un message à l’attention de la capitainerie.","en":"Leave a message for the attention of the harbourmaster.","it":"Lascia un messaggio all'attenzione della Capitaneria di Porto.","es":""},"form_title_7":{"fr":"En cours","en":"Ongoing","it":"In corso","es":""},"form_title_8":{"fr":"Passé","en":"Past","it":"Passato","es":""},"modal_select_boat":{"fr":"Choisissez votre bateau","en":"Select your boat","it":"Scegli la tua barca","es":""}}},"locale":{"fr":{},"en":{},"it":{},"es":{}},"setup":{"auto":true,"default":"fr"}}
+{
+	"group": {
+		"index-corse": {
+			"main_title": {
+				"fr": "Bienvenue au port de",
+				"en": "Welcome to the harbour of",
+				"it": "Benvenuti nel porto di",
+				"es": ""
+			},
+			"reservation_button_text": {
+				"fr": "Je réserve ma place",
+				"en": "I book my place",
+				"it": "Reserve il mio posto",
+				"es": ""
+			},
+			"main_btn_news": {
+				"fr": "Informations",
+				"en": "News",
+				"it": "Informazione",
+				"es": ""
+			},
+			"main_btn_harbour_map": {
+				"fr": "Plan du port",
+				"en": "Harbour map",
+				"it": "Piano del porto",
+				"es": ""
+			},
+			"main_btn_weather_forecast": {
+				"fr": "Bulletin météo",
+				"en": "Weather forecast",
+				"it": "Bollettino meteo",
+				"es": ""
+			},
+			"main_btn_concierge": {
+				"fr": "Conciergerie",
+				"en": "Concierge",
+				"it": "Concierge",
+				"es": ""
+			},
+			"main_btn_faq": {
+				"fr": "FAQ",
+				"en": "FAQ",
+				"it": "FAQ",
+				"es": ""
+			},
+			"main_btn_environment": {
+				"fr": "Environnement",
+				"en": "Environment",
+				"it": "Ambiente",
+				"es": ""
+			},
+			"section_title_harbour_office": {
+				"fr": "Bureau du port",
+				"en": "Harbour office",
+				"it": "Capitaneria",
+				"es": ""
+			},
+			"section_title_events": {
+				"fr": "Évènements",
+				"en": "Events",
+				"it": "Eventi",
+				"es": ""
+			},
+			"section_title_news": {
+				"fr": "Actualités",
+				"en": "News",
+				"it": "Notizia",
+				"es": ""
+			}
+		},
+		"select-harbour-corse": {
+			"header_title_part_1": {
+				"fr": "Informations et réservation",
+				"en": "information and reservations",
+				"it": "Informazioni e prenotazioni",
+				"es": ""
+			},
+			"header_title_part_2": {
+				"fr": "de vos ports favoris !",
+				"en": "of your favourite ports !",
+				"it": "dei tuoi porti preferiti",
+				"es": ""
+			}
+		},
+		"informations-corse": {
+			"link_website": {
+				"fr": "Site web",
+				"en": "Website",
+				"it": "Sito web",
+				"es": ""
+			},
+			"link_tourism_office": {
+				"fr": "Office de tourisme",
+				"en": "Tourism Office",
+				"it": "Ufficio turistico",
+				"es": ""
+			},
+			"link_harbour_map": {
+				"fr": "Plan du port",
+				"en": "Harbour map",
+				"it": "Piano del porto",
+				"es": ""
+			},
+			"link_fee_schedule": {
+				"fr": "Grille tarifaire",
+				"en": "Pricing",
+				"it": "Prezzi",
+				"es": ""
+			},
+			"link_harbour_regulations": {
+				"fr": "Règlement du port",
+				"en": "Harbour regulations",
+				"it": "Regolamenti portuali",
+				"es": ""
+			},
+			"title_office_hours": {
+				"fr": "Horaires - Bureau du port",
+				"en": "Opening hours - Harbour Office",
+				"it": "Orario - Capitaneria",
+				"es": ""
+			},
+			"week_day_lundi": {
+				"fr": "Lundi",
+				"en": "Monday",
+				"it": "Lunedi",
+				"es": ""
+			},
+			"week_day_mardi": {
+				"fr": "Mardi",
+				"en": "Tuesday",
+				"it": "Martedi",
+				"es": ""
+			},
+			"week_day_mercredi": {
+				"fr": "Mercredi",
+				"en": "Wednesday",
+				"it": "Mercoledi",
+				"es": ""
+			},
+			"week_day_jeudi": {
+				"fr": "Jeudi",
+				"en": "Thursday",
+				"it": "Giovedi",
+				"es": ""
+			},
+			"week_day_vendredi": {
+				"fr": "Vendredi",
+				"en": "Friday",
+				"it": "Venerdi",
+				"es": ""
+			},
+			"week_day_samedi": {
+				"fr": "Samedi",
+				"en": "Saturday",
+				"it": "Sabato",
+				"es": ""
+			},
+			"week_day_dimanche": {
+				"fr": "Dimanche",
+				"en": "Sunday",
+				"it": "Domenica",
+				"es": ""
+			},
+			"title_harbour_services": {
+				"fr": "Services au port",
+				"en": "Harbour services",
+				"it": "Servizi portuali",
+				"es": ""
+			},
+			"btn_txt_sanitary_code": {
+				"fr": "Code sanitaire",
+				"en": "Sanitary code",
+				"it": "Codice sanitario",
+				"es": ""
+			},
+			"btn_txt_wifi_password": {
+				"fr": "Mot de passe Wi-Fi",
+				"en": "Wi-Fi password",
+				"it": "Wi-Fi password",
+				"es": ""
+			},
+			"btn_txt_password_copied": {
+				"fr": "Mot de passe Copié",
+				"en": "Password copied",
+				"it": "Password copiata",
+				"es": ""
+			}
+		},
+		"events": {
+			"title_upcoming": {
+				"fr": "Événements à venir",
+				"en": "Upcoming events",
+				"it": "Eventi a venire",
+				"es": ""
+			},
+			"title_past": {
+				"fr": "Événements passés",
+				"en": "Past events",
+				"it": "Eventi passati",
+				"es": ""
+			}
+		},
+		"partners": {
+			"category_harbour_life": {
+				"fr": "Vie au port",
+				"en": "Harbour's life",
+				"it": "Vita portuale",
+				"es": ""
+			},
+			"category_experiences": {
+				"fr": "Expériences",
+				"en": "Experiences",
+				"it": "Esperienze",
+				"es": ""
+			},
+			"category_discovery": {
+				"fr": "Découverte",
+				"en": "Discovery",
+				"it": "Scoperta",
+				"es": ""
+			},
+			"subcategory_sos": {
+				"fr": "SOS",
+				"en": "SOS",
+				"it": "SOS",
+				"es": ""
+			},
+			"subcategory_maintenance": {
+				"fr": "Maintenance",
+				"en": "Services",
+				"it": "Manutenzione",
+				"es": ""
+			},
+			"subcategory_accastillage": {
+				"fr": "Accastillage",
+				"en": "Fitting",
+				"it": "Attrezzatura",
+				"es": ""
+			},
+			"subcategory_alimentation": {
+				"fr": "Alimentation",
+				"en": "Grocery",
+				"it": "Alimentazione",
+				"es": ""
+			},
+			"subcategory_sante": {
+				"fr": "Santé",
+				"en": "Health",
+				"it": "Salute",
+				"es": ""
+			},
+			"subcategory_annonces": {
+				"fr": "Annonces",
+				"en": "Announcements",
+				"it": "Annunci",
+				"es": ""
+			},
+			"subcategory_laveries": {
+				"fr": "Laveries",
+				"en": "Laundries",
+				"it": "Lavanderie",
+				"es": ""
+			},
+			"subcategory_transport": {
+				"fr": "Transport",
+				"en": "Transport",
+				"it": "Trasporto",
+				"es": ""
+			},
+			"subcategory_boutiques": {
+				"fr": "Boutiques",
+				"en": "Shops",
+				"it": "Negozi",
+				"es": ""
+			},
+			"subcategory_vendeur_loueur": {
+				"fr": "<div>Vendeur</div> <div>•</div> <div>Loueur</div>",
+				"en": "<div>Seller</div> <div>•</div> <div>Renter</div>",
+				"it": "<div>Venditore</div> <div>•</div> <div>Locatore</div>",
+				"es": ""
+			},
+			"subcategory_autre": {
+				"fr": "Autres",
+				"en": "Others",
+				"it": "Altri",
+				"es": ""
+			},
+			"subcategory_activity": {
+				"fr": "Activités",
+				"en": "Activities",
+				"it": "Attività",
+				"es": ""
+			},
+			"subcategory_nautiques": {
+				"fr": "Nautiques",
+				"en": "Nautical",
+				"it": "Nautico",
+				"es": ""
+			},
+			"subcategory_terrestres": {
+				"fr": "Terrestres",
+				"en": "Land-based",
+				"it": "Terrestre",
+				"es": ""
+			},
+			"subcategory_associations": {
+				"fr": "Associations",
+				"en": "Associations",
+				"it": "Associazioni",
+				"es": ""
+			},
+			"subcategory_bourse": {
+				"fr": "Bourse aux équipiers",
+				"en": "Crew exchange",
+				"it": "Borsa ai membri",
+				"es": ""
+			},
+			"subcategory_restaurants": {
+				"fr": "Restaurants",
+				"en": "Restaurants",
+				"it": "Ristoranti",
+				"es": ""
+			},
+			"subcategory_bars": {
+				"fr": "Bars",
+				"en": "Pubs",
+				"it": "Bar",
+				"es": ""
+			},
+			"subcategory_culture": {
+				"fr": "Culture",
+				"en": "Culture",
+				"it": "Cultura",
+				"es": ""
+			},
+			"subcategory_detente": {
+				"fr": "Détente",
+				"en": "Relaxation",
+				"it": "Rilassamento",
+				"es": ""
+			},
+			"subcategory_loisirs": {
+				"fr": "Loisirs",
+				"en": "Leisure",
+				"it": "Hobby",
+				"es": ""
+			},
+			"subcategory_patrimoine": {
+				"fr": "Patrimoine",
+				"en": "Patrimony",
+				"it": "Patrimonio",
+				"es": ""
+			},
+			"subcategory_mouillages": {
+				"fr": "Mouillages",
+				"en": "Mooring",
+				"it": "Ormeggio",
+				"es": ""
+			}
+		},
+		"weather": {
+			"msg_no_forecast_available": {
+				"fr": "Aucun bulletin météo publié pour ce port.",
+				"en": "No weather report published for this port.",
+				"it": "Non è stato pubblicato alcun bollettino meteo per questo porto.",
+				"es": ""
+			}
+		},
+		"magelan-login": {
+			"pwd_forgot": {
+				"fr": "Mot de passe oublié ?",
+				"en": "Password forgotten?",
+				"it": "Hai dimenticato la password?",
+				"es": ""
+			},
+			"msg_reserve_stop": {
+				"fr": "Réserver mon escale",
+				"en": "Book my stopover",
+				"it": "Prenota il mio scalo",
+				"es": ""
+			},
+			"msg_module_presentation": {
+				"fr": "Pour les demandes d’escale sur le réseau de port Magelan, je connecte mon compte Magelan eResa",
+				"en": "For stopover requests on the Magelan port network, I connect my Magelan eResa account",
+				"it": "Per richiedere una sosta sulla rete portuale Magelan, collego il mio account Magelan eResa",
+				"es": ""
+			},
+			"title_btn_connection": {
+				"fr": "Connexion",
+				"en": "Login",
+				"it": "Accesso",
+				"es": ""
+			},
+			"msg_not_registered": {
+				"fr": "Pas encore inscrit ?",
+				"en": "Not yet registered?",
+				"it": "Non siete ancora registrati?",
+				"es": ""
+			},
+			"link_register": {
+				"fr": "Créer mon compte",
+				"en": "Create my account",
+				"it": "Creare il mio account",
+				"es": ""
+			},
+			"field_password": {
+				"fr": "Mot de passe",
+				"en": "Password",
+				"it": "Password",
+				"es": ""
+			}
+		},
+		"magelan-resa": {
+			"form_title_1": {
+				"fr": "Réserver mon escale",
+				"en": "Book my stopover",
+				"it": "Prenota il mio scalo",
+				"es": ""
+			},
+			"form_title_2": {
+				"fr": "Mes réservations",
+				"en": "My bookings",
+				"it": "Le mie prenotazioni",
+				"es": ""
+			},
+			"form_title_3": {
+				"fr": "Préparer mon escale",
+				"en": "Prepare my stopover",
+				"it": "Prepara il mio scalo",
+				"es": ""
+			},
+			"form_dropdown_title_1": {
+				"fr": "Veuillez choisir un port",
+				"en": "Please select a port",
+				"it": "",
+				"es": ""
+			},
+			"form_date_arrival": {
+				"fr": "Arrivée",
+				"en": "Check-in",
+				"it": "Arrivo",
+				"es": ""
+			},
+			"form_date_departure": {
+				"fr": "Départ",
+				"en": "Check-out",
+				"it": "Partenza",
+				"es": ""
+			},
+			"form_title_4": {
+				"fr": "Mon bateau",
+				"en": "My boat",
+				"it": "Mia Barca",
+				"es": ""
+			},
+			"form_title_5": {
+				"fr": "Modifier",
+				"en": "Edit",
+				"it": "Modificare",
+				"es": ""
+			},
+			"form_single_shell": {
+				"fr": "Monocoque",
+				"en": "Monohull",
+				"it": "Monoscafo",
+				"es": ""
+			},
+			"form_sailboat": {
+				"fr": "Voilier",
+				"en": "Sailboat",
+				"it": "Vela",
+				"es": ""
+			},
+			"form_nights_count": {
+				"fr": "Nombre de nuits",
+				"en": "Number of nights",
+				"it": "Numero di notti",
+				"es": ""
+			},
+			"form_stay_cost": {
+				"fr": "Coût du sejour",
+				"en": "Cost of stay",
+				"it": "Costo del soggiorno",
+				"es": ""
+			},
+			"msg_price_disclamer": {
+				"fr": "Le tarif peut-être ajusté à l'arrivée au port en fonction de la taille exacte du navire, du nombre de personnes à bord (taxe de séjour) et de la position du bateau dans le port. Le client est seul responsable de la conformité des informations fournies lors de la réservation.",
+				"en": "The rate may be adjusted upon arrival in port according to the exact size of the vessel, the number of people on board (tourist tax) and the position of the vessel in the port. The client is solely responsible for the accuracy of the information provided at the time of booking.",
+				"it": "La tariffa può essere adeguata all'arrivo in porto in base alle dimensioni esatte della barca, al numero di persone a bordo (tassa di soggiorno) e alla posizione della barca nel porto. Il cliente è l'unico responsabile della conformità delle informazioni fornite durante la prenotazione.",
+				"es": ""
+			},
+			"msg_btn_loading": {
+				"fr": "Chargement...",
+				"en": "Loading...",
+				"it": "Caricamento...",
+				"es": ""
+			},
+			"form_title_6": {
+				"fr": "Commentaire",
+				"en": "Comment",
+				"it": "Commento",
+				"es": ""
+			},
+			"msg_accept_cgv_1": {
+				"fr": "J'accepte les ",
+				"en": "I accept the ",
+				"it": "Accetto le",
+				"es": ""
+			},
+			"msg_accept_cgv_2": {
+				"fr": "conditions générales de vente",
+				"en": "general conditions of sale",
+				"it": "condizioni generali di vendita",
+				"es": ""
+			},
+			"msg_btn_reserve": {
+				"fr": "Réserver avec Magelan eResa",
+				"en": "Book with Magelan eResa",
+				"it": "Prenota con",
+				"es": ""
+			},
+			"msg_comment_area": {
+				"fr": "Laissez un message à l’attention de la capitainerie.",
+				"en": "Leave a message for the attention of the harbourmaster.",
+				"it": "Lascia un messaggio all'attenzione della Capitaneria di Porto.",
+				"es": ""
+			},
+			"form_title_7": {
+				"fr": "En cours",
+				"en": "Ongoing",
+				"it": "In corso",
+				"es": ""
+			},
+			"form_title_8": {
+				"fr": "Passé",
+				"en": "Past",
+				"it": "Passato",
+				"es": ""
+			},
+			"modal_select_boat": {
+				"fr": "Choisissez votre bateau",
+				"en": "Select your boat",
+				"it": "Scegli la tua barca",
+				"es": ""
+			}
+		},
+		"faq-corse": {
+			"top_title": {
+				"fr": "Une Question ?",
+				"en": "Any questions?",
+				"it": "Una domanda ?",
+				"es": ""
+			},
+			"top_description": {
+				"fr": "Pour vous aider, voici les <strong>questions fréquentes </strong>posées par les plaisanciers et visiteurs du port.",
+				"en": "To help you, here are the <strong>frequent questions</strong> asked by boaters and visitors to the port.",
+				"it": "Per aiutarti, ecco le <strong>domande frequenti</strong> poste da naviganti e visitatori del porto",
+				"es": ""
+			},
+			"question_1": {
+				"fr": "Est il possible de réserver par téléphone ou par email ?",
+				"en": "Is it possible to book by phone or email?",
+				"it": "È possibile prenotare per telefono o e-mail?",
+				"es": ""
+			},
+			"answer_1": {
+				"fr": "Non, les réservations se font uniquement via notre site internet ou notre application rubrique « Réserver une place »",
+				"en": "No, reservations can only be made via our website or our application under the heading \"Reserve a place\".",
+				"it": "No, le prenotazioni vengono effettuate solo tramite il nostro sito web o la nostra applicazione alla voce \"Prenota un posto\"",
+				"es": ""
+			},
+			"question_2": {
+				"fr": "Est il obligatoire de réserver une place au port de plaisance ?",
+				"en": "Is it compulsory to reserve a place at the marina?",
+				"it": "È obbligatorio prenotare un posto barca in marina?",
+				"es": ""
+			},
+			"answer_2": {
+				"fr": "Il n’est pas obligatoire de réserver néanmoins seule la réservation peut vous garantir de disposer une place à votre arrivée",
+				"en": "It is not mandatory to make a reservation, but only a reservation can guarantee that you will have a place on your arrival.",
+				"it": "Non è obbligatorio prenotare, ma solo la prenotazione può garantirti un posto al tuo arrivo.",
+				"es": ""
+			},
+			"question_3": {
+				"fr": "Le tarif comprend-il l'eau et l'électricité ?",
+				"en": "Does the tariff include water and electricity?",
+				"it": "Il prezzo include acqua ed elettricità?",
+				"es": ""
+			},
+			"answer_3": {
+				"fr": "Le tarif est « tout inclus », il comprend donc la place de port, l’eau, l’électricité, le WIFI, les sanitaires et la pompe à eaux usées.",
+				"en": "The price is \"all inclusive\", which means that it includes the berth, water, electricity, WIFI, sanitary facilities and a waste water pump.",
+				"it": "Il prezzo è “tutto compreso”, quindi comprende il posto barca, l'acqua, l'elettricità, il WIFI, i bagni e la pompa delle acque nere.",
+				"es": ""
+			},
+			"question_4": {
+				"fr": "Avez-vous un code wifi ?",
+				"en": "Do you have a wifi code?",
+				"it": "Hai un codice wifi?",
+				"es": ""
+			},
+			"answer_4": {
+				"fr": "Oui nous disposons d’un code wifi gratuit pour les plaisanciers.",
+				"en": "Yes we have a free wifi code for boaters.",
+				"it": "Sì, abbiamo un codice wifi gratuito per i navigatori",
+				"es": ""
+			},
+			"question_5": {
+				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
+				"en": "Are the toilets open 24 hours a day?",
+				"it": "I bagni sono aperti 24 ore al giorno?",
+				"es": ""
+			},
+			"answer_5": {
+				"fr": "Non, les sanitaires ferment 30min avant la fermeture des locaux. Les WC sont en libre accès et les douches sont gratuites à l’aide d’un jeton si vous êtes plaisancier.",
+				"en": "No, the sanitary facilities close 30min before closing time. The toilets are freely accessible and the showers are free with a token if you are a yachtsman.",
+				"it": "No, i bagni chiudono 30 minuti prima della chiusura dei locali. Le toilette sono liberamente accessibili e le docce sono gratuite con gettone se sei un navigatore.",
+				"es": ""
+			},
+			"question_6": {
+				"fr": "A quelle heure peut-on arriver au port ?",
+				"en": "What time can we arrive at the port?",
+				"it": "A che ora possiamo arrivare al porto?",
+				"es": ""
+			},
+			"answer_6": {
+				"fr": "Votre place de réservation est libre à partir de 12h et doit être libérée à cette même heure. N’hésitez pas à contacter la capitainerie si vous souhaitez vous présenter plus tôt ou libérer le poste plus tard. En fonction des dimensions de navires nous sommes également en mesure de vous accueillir à toute heure de la nuit.",
+				"en": "Your booking place is free from 12.00 noon and must be vacated by that time. Please contact the harbour master's office if you wish to arrive earlier or leave the berth later. Depending on the size of the ship, we are also able to accommodate you at any time of the night.",
+				"it": "Il tuo posto prenotato è libero dalle 12:00 e deve essere rilasciato a quest'ora. Non esitate a contattare la Capitaneria di Porto se desiderate presentarvi prima o lasciare il posto più tardi. A seconda delle dimensioni delle navi, siamo anche in grado di accogliervi a qualsiasi ora della notte",
+				"es": ""
+			}
+		}
+	},
+	"locale": {
+		"fr": {},
+		"en": {},
+		"it": {},
+		"es": {}
+	},
+	"setup": {
+		"auto": true,
+		"default": "fr"
+	}
+}
