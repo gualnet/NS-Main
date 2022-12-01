@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<!-- __TPL_HEADER_APP__ -->
+{{element->header_app.html}}
+<!-- __TPL_LOADER__ -->
+{{element->loader.html}}
+
+
+<body>
+	<div class="navheader-container">
+		<!-- __TPL_NAVHEADER__ -->
+		{{element->navheader.html}}
+	</div>
+
+	<main>
+
+		<div class="top-container">
+		</div>
+
+		<div class="middle-container">
+
+		</div>
+
+	</main>
+
+	<div class="container py-3" id="navbarCtn">
+		<!-- __TPL_NAVBAR__ -->
+		{{element->navbar.html}}
+	</div>
+</body>
+
+
+<style>
+	body {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		font-family: 'Poppins Regular';
+		background: url("/library/background.png") #FFF fixed;
+		/* VARS */
+		--text-color-blue: #1d2f79;
+		--text-color-black: rgb(50, 50, 50);
+		--text-color-black: rgb(50, 50, 50);
+	}
+
+	main {
+		background-size: cover;
+		background: url("/library/background.png") #FFF fixed;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		margin-top: 45px;
+		padding: 1rem;
+		color: var(--text-color-blue);
+	}
+
+	.top-container {
+		margin-bottom: 2rem;
+	}
+
+	.middle-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin-top: 10px;
+	}
+
+	#navbarCtn {
+		height: 56px;
+	}
+</style>
+
+<script>
+
+	window.addEventListener('load', () => {
+		initCardHeightValues();
+	});
+
+	const initCardHeightValues = () => {
+		setTimeout(() => {
+			const allCardEl = document.querySelectorAll('.card');
+			allCardEl.forEach(item => {
+				const cardHeadEl = item.querySelector('.card__head');
+				item.style.height = `${cardHeadEl.clientHeight + 20}px`;
+				item.style.maxHeight = `${cardHeadEl.clientHeight + 20}px`;
+			});
+		}, 1000);
+	}
+
+	const cardOnclickHandler = (cardId) => {
+		const cardEl = document.querySelector(`#${cardId}`);
+		const contentCtnEl = cardEl.querySelector('.card__content');
+		if (contentCtnEl.classList.contains('hidden')) {
+			unfoldCardHandler(cardEl);
+		} else {
+			foldCardHandler(cardEl);
+		}
+	}
+
+	const foldCardHandler = (cardEl) => {
+		const headCtnEl = cardEl.querySelector('.card__head');
+		const headCtnRect = headCtnEl.getBoundingClientRect();
+		const contentCtnEl = cardEl.querySelector('.card__content');
+		const contentCtnRect = contentCtnEl.getBoundingClientRect();
+		const arrowEl = cardEl.querySelector('.card__head__arrow');
+
+		const animationtotalLength = 200;
+		const animationIntervalLength = 50;
+
+		contentCtnEl.classList.add('hidden');
+		arrowEl.classList.remove('rotate');
+
+		cardEl.style.height = `${headCtnRect.height + contentCtnRect.height + 20}px`;
+		const heightInterval = contentCtnRect.height / (animationtotalLength / animationIntervalLength);
+
+		const intervalID = setInterval(() => {
+			const cardRect = cardEl.getBoundingClientRect();
+			cardEl.style.height = `${cardRect.height - heightInterval}px`;
+		}, animationIntervalLength);
+
+		setTimeout(() => {
+			clearInterval(intervalID);
+			const headCtnRect = headCtnEl.getBoundingClientRect();
+			cardEl.style.height = `${headCtnRect.height + 20}px`;
+			cardEl.style.maxHeight = `${headCtnRect.height + 20}px`;
+		}, animationtotalLength);
+	};
+
+	const unfoldCardHandler = (cardEl) => {
+		const headCtnEl = cardEl.querySelector('.card__head');
+		const contentCtnEl = cardEl.querySelector('.card__content');
+		const arrowEl = cardEl.querySelector('.card__head__arrow');
+
+		const animationtotalLength = 200;
+		const animationIntervalLength = 50;
+
+		contentCtnEl.classList.remove('hidden');
+		arrowEl.classList.add('rotate');
+		cardEl.style.height = `${cardEl.style.height}px`;
+		// cardEl.style.maxHeight = `${cardEl.style.height}px`;
+		const heightInterval = (contentCtnEl.clientHeight + 10) / (animationtotalLength / animationIntervalLength);
+
+		const intervalID = setInterval(() => {
+			const cardRect = cardEl.getBoundingClientRect();
+			cardEl.style.height = `${cardRect.height + heightInterval}px`;
+			cardEl.style.maxHeight = `${cardRect.height + heightInterval}px`;
+		}, animationIntervalLength);
+
+		setTimeout(() => {
+			clearInterval(intervalID);
+			const headCtnRect = headCtnEl.getBoundingClientRect();
+			const contentCtnRect = contentCtnEl.getBoundingClientRect();
+			cardEl.style.height = `${headCtnRect.height + contentCtnRect.height + 30}px`;
+			cardEl.style.maxHeight = `${headCtnRect.height + contentCtnRect.height + 30}px`;
+		}, animationtotalLength + 50);
+	};
+</script>
