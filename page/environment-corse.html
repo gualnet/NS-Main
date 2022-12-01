@@ -15,13 +15,62 @@
 
 	<main>
 
-		<div class="top-container">
+		<div class="container_1">
+			<h4>{{lang->environment-corse.ctn_1_title}}</h4>
+			<p>{{lang->environment-corse.ctn_1_description}}</p>
 		</div>
 
-		<div class="middle-container">
-
+		<div class="container_2">
+			<h5>{{lang->environment-corse.ctn_2_title}}</h5>
+			<div class="card_container">
+				<div class="card">
+					<div class="card_img"><img src="/library/picto-recyclage.png" alt="recyclage"></div>
+					<div class="card_text">{{lang->environment-corse.ctn_2_card_1_text}}</div>
+				</div>
+				<div class="card">
+					<div class="card_img"><img src="/library/picto-economie.png" alt="economie"></div>
+					<div class="card_text">{{lang->environment-corse.ctn_2_card_2_text}}</div>
+				</div>
+				<div class="card">
+					<div class="card_img"><img src="/library/picto-eau.png" alt="eau"></div>
+					<div class="card_text">{{lang->environment-corse.ctn_2_card_3_text}}</div>
+				</div>
+				<div class="card">
+					<div class="card_img"><img src="/library/picto-economie.png" alt="economie"></div>
+					<div class="card_text">{{lang->environment-corse.ctn_2_card_4_text}}</div>
+				</div>
+			</div>
 		</div>
 
+		<div class="container_3">
+			<h5>{{lang->environment-corse.ctn_3_title}}</h5>
+			<div class="video_frame">
+				<iframe width="100%" height="100%" src="https://www.youtube.com/embed/ui_Z0389jD0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			</div>
+		</div>
+
+		<div class="container_4">
+			<h5>{{lang->environment-corse.ctn_4_title}}</h5>
+			<div class="ico_container">
+				<a target="_blank" href="https://play.google.com/store/apps/details?id=fr.donia.app&hl=fr&gl=US"><img src="/library/google-store.png" alt=""></a>
+				<a target="_blank" href="https://apps.apple.com/fr/app/donia/id751225905"><img src="/library/apple-store.png" alt=""></a>
+			</div>
+		</div>
+
+		<div class="container_5">
+			<h5>{{lang->environment-corse.ctn_5_title}}</h5>
+			<div class="card_container">
+				<div class="card">
+					<div class="card_img"><img src="/library/picto-attention.png" alt="recyclage"></div>
+					<div class="card_text">{{lang->environment-corse.ctn_5_card_1_text}}</div>
+				</div>
+				<div class="card">
+					<div class="card_img"><img src="/library/picto-feu.png" alt="recyclage"></div>
+					<div class="card_text">{{lang->environment-corse.ctn_5_card_2_text}}</div>
+				</div>
+			</div>
+
+		</div>
 	</main>
 
 	<div class="container py-3" id="navbarCtn">
@@ -40,7 +89,7 @@
 		background: url("/library/background.png") #FFF fixed;
 		/* VARS */
 		--text-color-blue: #1d2f79;
-		--text-color-black: rgb(50, 50, 50);
+		--text-color-blue_2: #3b51a9;
 		--text-color-black: rgb(50, 50, 50);
 	}
 
@@ -53,107 +102,150 @@
 		margin-top: 45px;
 		padding: 1rem;
 		color: var(--text-color-blue);
+		overflow-y: scroll;
 	}
 
-	.top-container {
-		margin-bottom: 2rem;
-	}
-
-	.middle-container {
+	.container_1 {
+		align-items: center;
 		display: flex;
 		flex-direction: column;
+		height: fit-content;
+		justify-content: center;
+		margin-bottom: 12px;
+		margin-top: 12px;
+		width: 100%;
+		width: 100%;
+	}
+	.container_1 > h4 {
+		margin: 4px 0px;
+	}
+	.container_1 > p {
+		text-align: center;
+		color: var(--text-color-blue_2);
+	}
+
+	.container_2 {
+		align-items: center;
+		display: flex;
+		flex-direction: column;
+		height: fit-content;
+		justify-content: center;
+		width: 100%;
+		margin-bottom: 12px;
+		margin-top: 12px;
+	}
+	.container_2 > h5 {
+		margin: 2px 0px;
+	}
+	.container_2 > .card_container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: fit-content;
+	}
+	.container_2 > .card_container > .card {
+		display: flex;
+		flex-direction: row;
+		margin: 4px 0px;
+	}
+	.container_2 .card_img {
+		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin-top: 10px;
+		height: 100%;
+		width: 25%;
+	}
+	.container_2 .card_img > img {
+		height: 32px;
+		width: 32px;
+	}
+	.container_2 .card_text {
+		display: flex;
+		align-items: center;
+		width: 75%;
+		padding: 0 8px;
+		font-size: smaller;
+		text-align: justify;
+		min-height: 4rem;
+	}
+
+	.container_3 {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 12px;
+		margin-top: 12px;
+	}
+	.container_3 > h4 {
+		margin: 4px 0px;
+	}
+
+	.container_4 {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 12px;
+		margin-top: 12px;
+	}
+	.container_4 > h4 {
+		margin: 4px 0px;
+	}
+	.container_4 .ico_container {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		height: fit-content;
+		justify-content: space-evenly;
+	}
+	.container_4 a {
+		width: 40%;
+	}
+	.container_4 img {
+		width: 100%;
+	}
+
+	.container_5 {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 12px;
+		margin-top: 12px;
+	}
+	.container_5 > .card_container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: fit-content;
+	}
+	.container_5 > .card_container > .card {
+		display: flex;
+		flex-direction: row;
+		margin: 5px 0px;
+		background-image: linear-gradient(126deg,#e52020 12%,#edad00 88%);
+		color: white;
+	}
+	.container_5 .card_img {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		width: 25%;
+	}
+	.container_5 .card_img > img {
+		height: 32px;
+		width: 32px;
+	}
+	.container_5 .card_text {
+		display: flex;
+		align-items: center;
+		width: 75%;
+		padding: 8px 8px;
+		font-size: smaller;
+		text-align: justify;
+		min-height: 6rem;
 	}
 
 	#navbarCtn {
 		height: 56px;
 	}
 </style>
-
-<script>
-
-	window.addEventListener('load', () => {
-		initCardHeightValues();
-	});
-
-	const initCardHeightValues = () => {
-		setTimeout(() => {
-			const allCardEl = document.querySelectorAll('.card');
-			allCardEl.forEach(item => {
-				const cardHeadEl = item.querySelector('.card__head');
-				item.style.height = `${cardHeadEl.clientHeight + 20}px`;
-				item.style.maxHeight = `${cardHeadEl.clientHeight + 20}px`;
-			});
-		}, 1000);
-	}
-
-	const cardOnclickHandler = (cardId) => {
-		const cardEl = document.querySelector(`#${cardId}`);
-		const contentCtnEl = cardEl.querySelector('.card__content');
-		if (contentCtnEl.classList.contains('hidden')) {
-			unfoldCardHandler(cardEl);
-		} else {
-			foldCardHandler(cardEl);
-		}
-	}
-
-	const foldCardHandler = (cardEl) => {
-		const headCtnEl = cardEl.querySelector('.card__head');
-		const headCtnRect = headCtnEl.getBoundingClientRect();
-		const contentCtnEl = cardEl.querySelector('.card__content');
-		const contentCtnRect = contentCtnEl.getBoundingClientRect();
-		const arrowEl = cardEl.querySelector('.card__head__arrow');
-
-		const animationtotalLength = 200;
-		const animationIntervalLength = 50;
-
-		contentCtnEl.classList.add('hidden');
-		arrowEl.classList.remove('rotate');
-
-		cardEl.style.height = `${headCtnRect.height + contentCtnRect.height + 20}px`;
-		const heightInterval = contentCtnRect.height / (animationtotalLength / animationIntervalLength);
-
-		const intervalID = setInterval(() => {
-			const cardRect = cardEl.getBoundingClientRect();
-			cardEl.style.height = `${cardRect.height - heightInterval}px`;
-		}, animationIntervalLength);
-
-		setTimeout(() => {
-			clearInterval(intervalID);
-			const headCtnRect = headCtnEl.getBoundingClientRect();
-			cardEl.style.height = `${headCtnRect.height + 20}px`;
-			cardEl.style.maxHeight = `${headCtnRect.height + 20}px`;
-		}, animationtotalLength);
-	};
-
-	const unfoldCardHandler = (cardEl) => {
-		const headCtnEl = cardEl.querySelector('.card__head');
-		const contentCtnEl = cardEl.querySelector('.card__content');
-		const arrowEl = cardEl.querySelector('.card__head__arrow');
-
-		const animationtotalLength = 200;
-		const animationIntervalLength = 50;
-
-		contentCtnEl.classList.remove('hidden');
-		arrowEl.classList.add('rotate');
-		cardEl.style.height = `${cardEl.style.height}px`;
-		// cardEl.style.maxHeight = `${cardEl.style.height}px`;
-		const heightInterval = (contentCtnEl.clientHeight + 10) / (animationtotalLength / animationIntervalLength);
-
-		const intervalID = setInterval(() => {
-			const cardRect = cardEl.getBoundingClientRect();
-			cardEl.style.height = `${cardRect.height + heightInterval}px`;
-			cardEl.style.maxHeight = `${cardRect.height + heightInterval}px`;
-		}, animationIntervalLength);
-
-		setTimeout(() => {
-			clearInterval(intervalID);
-			const headCtnRect = headCtnEl.getBoundingClientRect();
-			const contentCtnRect = contentCtnEl.getBoundingClientRect();
-			cardEl.style.height = `${headCtnRect.height + contentCtnRect.height + 30}px`;
-			cardEl.style.maxHeight = `${headCtnRect.height + contentCtnRect.height + 30}px`;
-		}, animationtotalLength + 50);
-	};
-</script>

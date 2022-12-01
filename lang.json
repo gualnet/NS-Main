@@ -629,6 +629,86 @@
 				"it": "Il tuo posto prenotato è libero dalle 12:00 e deve essere rilasciato a quest'ora. Non esitate a contattare la Capitaneria di Porto se desiderate presentarvi prima o lasciare il posto più tardi. A seconda delle dimensioni delle navi, siamo anche in grado di accogliervi a qualsiasi ora della notte",
 				"es": ""
 			}
+		},
+		"environment-corse": {
+			"ctn_1_title": {
+				"fr": "ENVIRONNEMENT",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_1_description": {
+				"fr": "Retrouvez les bonnes pratiques et informations pour la protection de l’environnement",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_2_title": {
+				"fr": "Les bonnes pratiques",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_2_card_1_text": {
+				"fr": "Nombreux points de collecte des ordures ménagères et du tri sélectif sur le port.",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_2_card_2_text": {
+				"fr": "Installations « Port propre » sur l’aire de carénage. Pompes à eaux grises et noires et pompes à eaux de cale.",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_2_card_3_text": {
+				"fr": "Pistolets à eau obligatoires.</br>Raccords rapides sur les bornes à eau.",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_2_card_4_text": {
+				"fr": "Utilisation raisonnée de l’eau potable notamment pour le lavage des bateaux.</br>Eau chaude solaire pour les douches.",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_3_title": {
+				"fr": "Protégeons la posidonie",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_4_title": {
+				"fr": "Téléchargez Donia",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_5_title": {
+				"fr": "Que faire en cas d'urgence ?",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_5_card_1_text": {
+				"fr": "En cas de pollution il est demandé aux plaisanciers de contacter la capitainerie via la VHF 9",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"ctn_5_card_2_text": {
+				"fr": "En cas d’incendie si la capitainerie est ouverte nous vous demandons de contacter la capitainerie via la VHF 9. Si notre administration est fermée nous vous demandons de contacter directement les pompiers par téléphone au 18",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			}
 		}
 	},
 	"locale": {
