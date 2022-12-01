@@ -222,13 +222,15 @@
 	});
 
 	const initCardHeightValues = () => {
-		console.log('====initCardHeightValues====')
-		const allCardEl = document.querySelectorAll('.card');
-		allCardEl.forEach(item => {
-			const cardHeadEl = item.querySelector('.card__head');
-			item.style.height = `${cardHeadEl.clientHeight + 20}px`;
-			item.style.maxHeight = `${cardHeadEl.clientHeight + 20}px`;
-		})
+		setTimeout(() => {
+			const allCardEl = document.querySelectorAll('.card');
+			allCardEl.forEach(item => {
+				const cardHeadEl = item.querySelector('.card__head');
+				item.style.height = `${cardHeadEl.clientHeight + 20}px`;
+				item.style.maxHeight = `${cardHeadEl.clientHeight + 20}px`;
+			});
+		}, 1000);
+		
 	}
 
 	const cardOnclickHandler = (cardId) => {
