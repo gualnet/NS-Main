@@ -242,7 +242,6 @@
 	}
 
 	const foldCardHandler = (cardEl) => {
-		const cardRect = cardEl.getBoundingClientRect();
 		const headCtnEl = cardEl.querySelector('.card__head');
 		const headCtnRect = headCtnEl.getBoundingClientRect();
 		const contentCtnEl = cardEl.querySelector('.card__content');
@@ -259,21 +258,21 @@
 		const heightInterval = contentCtnRect.height / (animationtotalLength / animationIntervalLength);
 
 		const intervalID = setInterval(() => {
-			const rect = cardEl.getBoundingClientRect();
-			cardEl.style.height = `${rect.height - heightInterval}px`;
+			const cardRect = cardEl.getBoundingClientRect();
+			cardEl.style.height = `${cardRect.height - heightInterval}px`;
 		}, animationIntervalLength);
 
 		setTimeout(() => {
 			clearInterval(intervalID);
+			const headCtnRect = headCtnEl.getBoundingClientRect();
+			cardEl.style.height = `${headCtnRect.height + 20}px`;
+			cardEl.style.maxHeight = `${headCtnRect.height + 20}px`;
 		}, animationtotalLength);
 	};
 
 	const unfoldCardHandler = (cardEl) => {
-		const cardRect = cardEl.getBoundingClientRect();
 		const headCtnEl = cardEl.querySelector('.card__head');
-		const headCtnRect = headCtnEl.getBoundingClientRect();
 		const contentCtnEl = cardEl.querySelector('.card__content');
-		const contentCtnRect = contentCtnEl.getBoundingClientRect();
 		const arrowEl = cardEl.querySelector('.card__head__arrow');
 
 		const animationtotalLength = 200;
@@ -292,6 +291,10 @@
 
 		setTimeout(() => {
 			clearInterval(intervalID);
+			const headCtnRect = headCtnEl.getBoundingClientRect();
+			const contentCtnRect = contentCtnEl.getBoundingClientRect();
+			cardEl.style.height = `${headCtnRect.height + contentCtnRect.height + 30}px`;
+			cardEl.style.maxHeight = `${headCtnRect.height + contentCtnRect.height + 30}px`;
 		}, animationtotalLength);
 	};
 </script>
