@@ -30,10 +30,16 @@ Table of content
 html {
   width: 100%;
 }
+@font-face {
+	font-family: 'Poppins Regular';
+	font-style: normal;
+	font-weight: normal;
+	src: local('Poppins Regular'), url('/library/Poppins-Regular.woff') format('woff');
+}
 
 body {
   font-size: 16px;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Poppins Regular', 'Roboto', sans-serif;
   color: #222222;
   background: url("../img/background2.png") #F3F7FA fixed;
   background-position: center top;
