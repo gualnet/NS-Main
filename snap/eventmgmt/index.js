@@ -155,36 +155,44 @@ const createEventNew = async (obj) => {
 const createNewEventHandler = async (req, res) => {
 	console.log('===createNewEventHandler===');
 	try {
-		const splitedStartDate = req.post.dates[0].split(' ')[1].split('/');
-		const startDD = splitedStartDate[0];
-		const startMM = splitedStartDate[1];
-		const startYYY = splitedStartDate[2];
-		const startDateTimestamp = new Date(`${startMM}/${startDD}/${startYYY}`).getTime();
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
 
-		const splitedEndDate = req.post.dates[1].split(' ')[1].split('/');
-		const endDD = splitedEndDate[0];
-		const endMM = splitedEndDate[1];
-		const endYYY = splitedEndDate[2];
-		const endDateTimestamp = new Date(`${endMM}/${endDD}/${endYYY}`).getTime();
+		// CHECK IF TITLE ALREADY EXISTS
+		const findEventsResp = await DB_NS.events.find({ title: req.post.title }, { raw: 1 });
+		if (findEventsResp.error) {
+			throw new Error(findEventsResp.message, { cause: {findEventsResp} });
+		} else if (findEventsResp.data?.length > 0) {
+			throw new Error("This event title already exists", { cause: { httpCode: "400" } });
+		}
 
 		/**@type {TYPES.T_event} */
 		const newEvent = {
-			title: req.post.titles[0],
-			description: req.post.descriptions[0],
-			content: req.post.content || 'NO CONTENT',
-			img: req.post.img_links[0],
+			title: req.post.title,
+			description: req.post.description,
+			content: req.post.content,
+			img: req.post.img,
 			harbour_id: req.post.harbour_id,
-			category: req.post.category || 'event',
-			cloudinary_img_public_id: null,
-			date_start: startDateTimestamp,
-			date_end: endDateTimestamp,
+			category: req.post.category,
+			cloudinary_img_public_id: req.post.cloudinary_img_public_id,
+			date_start: req.post.date_start,
+			date_end: req.post.date_end,
 			created_at: new Date(Date.now()).getTime(),
 			date: new Date(Date.now()).getTime(),
 		}
-		const createResp = await createEventNew(newEvent);
+		console.log('newEvent', newEvent);
+
+		const createdEventResp = await DB_NS.events.create(newEvent);
+		if (createdEventResp.error) {
+			throw new Error(createdEventResp.message, { cause: {createdEventResp} });
+		}
+		const createdEvent = createdEventResp.data;
+		console.log('createdEvent',createdEvent);
+
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
+			event: createdEvent,
 		}));
 	} catch (error) {
 		errorHandler(res, error);
