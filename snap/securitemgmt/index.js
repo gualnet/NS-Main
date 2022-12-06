@@ -93,6 +93,37 @@ async function delSecurite(_id) {
     });
 }
 
+const getSecuriteV2 = async (searchObj) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const findIncidentResp = await DB_NS.securite.find(searchObj, { raw: 1 });
+	if (findIncidentResp.error) {
+		console.error(findIncidentResp);
+		throw new Error(findIncidentResp.message, { cause: findIncidentResp });
+	}
+
+	const foundIncidents = findIncidentResp.data;
+	return(foundIncidents);
+};
+
+const createSecuriteV2 = async (securiteObj) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Creation incident START')
+	const createIncidentResp = await DB_NS.securite.create(securiteObj, { raw: 1 });
+	console.log('createIncidentResp',createIncidentResp);
+	if (createIncidentResp.error) {
+		console.error(createIncidentResp);
+		throw new Error(createIncidentResp.message, { cause: createIncidentResp });
+	}
+
+	const createdIncident = createIncidentResp.data;
+	console.log('Creation incident SUCCESS');
+	return(createdIncident);
+};
+
 async function createSecurite(_obj) {
     return new Promise(resolve => {
         STORE.db.linkdb.Create(_securiteCol, _obj, function (_err, _data) {
@@ -313,8 +344,6 @@ exports.plugin =
     title: "Gestion des incidents",
     desc: "",
     handler: async (req, res) => {
-			try {
-				// console.log('req.userCookie',req.userCookie);
 				/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 				const DB_NS = SCHEMA.NAUTICSPOT;
 				/**@type {TYPES.T_SCHEMA['fortpress']} */
@@ -406,20 +435,32 @@ exports.plugin =
             var _securiteHtml = fs.readFileSync(path.join(__dirname, "securite.html")).toString();
 
             var _Securites = [];
-            if (_role == "user") {
+						try {
+							if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _Securites = _Securites.concat(await getSecuritesByHarbourId(_harbour_id[i]));
+										_Securites = _Securites.concat(await getSecuriteV2({ harbour_id: _harbour_id[i] }));
                 }
-            }
-            else if (_role == "admin") {
-                _Securites = await getSecurite();
-            }
-
-        
-
+							}
+							else if (_role == "admin") {
+									_Securites = await getSecuriteV2({});
+							}
+						} catch (error) {
+							console.error(error)
+							const errorDiv = `
+							<div style="display: block;" id="error" class="alert alert-danger" role="alert">Une erreur est survenue lors de la recupération des données</div>
+							`;
+							_indexHtml = _indexHtml
+								.replace('<div id="harbourError"></div>', errorDiv)
+								.replace('__HARBOUR_ID_INPUT__', '')
+								.replace('__SECURITES__', '')
+							res.setHeader("Content-Type", "text/html");
+							res.end(_indexHtml);
+							return;
+						}
 
             var _securiteGen = "";
             var statusoptions = "";
+						console.log('SEC ===>', _Securites)
             for (var i = 0; i < _Securites.length; i++) {
                 if (_Securites[i].category == "securite") {
                     _Securites[i].category = "événement";
@@ -487,15 +528,5 @@ exports.plugin =
             res.end(_indexHtml);
             return;
         }
-			} catch (error) {
-				console.error('[ERROR]', error);
-				myLogger.logError(error, { module: 'securitemgmt' })
-				const errorHttpCode = error.cause?.httpCode || 500;
-				res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-				res.end(JSON.stringify({
-					success: false,
-					error: error.toString(),
-				}));
-			}
     }
 }
