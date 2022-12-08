@@ -214,7 +214,7 @@
 
 		const fetchWeatherForecastLink = async () => {
 			try {
-				const url = `/api/weather/${localStorage["harbour_id"]}`;
+				const url = `/api/weather/forecasts/${localStorage["harbour_id"]}`;
 				const resp = await fetch(url);
 				const jsonResp = await resp.json();
 				const weatherForecastData = jsonResp.data;
