@@ -628,6 +628,78 @@
 				"en": "Your booking place is free from 12.00 noon and must be vacated by that time. Please contact the harbour master's office if you wish to arrive earlier or leave the berth later. Depending on the size of the ship, we are also able to accommodate you at any time of the night.",
 				"it": "Il tuo posto prenotato è libero dalle 12:00 e deve essere rilasciato a quest'ora. Non esitate a contattare la Capitaneria di Porto se desiderate presentarvi prima o lasciare il posto più tardi. A seconda delle dimensioni delle navi, siamo anche in grado di accogliervi a qualsiasi ora della notte",
 				"es": ""
+			},
+			"question_7": {
+				"fr": "Y'a-t-il une navette pour monter au village de Cargèse ?",
+				"en": "Is there a shuttle bus to the village of Cargèse?",
+				"it": "C'è un bus navetta per il villaggio di Cargèse?",
+				"es": ""
+			},
+			"answer_7": {
+				"fr": "Non",
+				"en": "No",
+				"it": "Non",
+				"es": ""
+			},
+			"question_8": {
+				"fr": "Y'a-t-il un point alimentation ?",
+				"en": "Is there a food point?",
+				"it": "C'è un punto di ristoro?",
+				"es": ""
+			},
+			"answer_8": {
+				"fr": "Non mais le Spar effectue des livraisons selon un montant commandé",
+				"en": "No, but the Spar makes deliveries according to an ordered amount",
+				"it": "No, ma Spar effettua le consegne in base a una quantità ordinata.",
+				"es": ""
+			},
+			"question_9": {
+				"fr": "Peut-on louer un véhicule ?",
+				"en": "Can we rent a vehicle?",
+				"it": "È possibile noleggiare un veicolo?",
+				"es": ""
+			},
+			"answer_9": {
+				"fr": "Non",
+				"en": "No",
+				"it": "Non",
+				"es": ""
+			},
+			"question_10": {
+				"fr": "Est-il possible de réserver par téléphone ou par email ?",
+				"en": "Is it possible to book by phone or email?",
+				"it": "È possibile prenotare per telefono o via e-mail?",
+				"es": ""
+			},
+			"answer_10": {
+				"fr": "Oui nous disposons d’un code wifi gratuit pour les plaisanciers",
+				"en": "Yes we have a free wifi code for boaters",
+				"it": "Sì, abbiamo un codice wifi gratuito per i diportisti",
+				"es": ""
+			},
+			"question_11": {
+				"fr": "Le tarif comprend-il l'eau et l'électricité ?",
+				"en": "Does the tariff include water and electricity?",
+				"it": "Il prezzo include acqua ed elettricità?",
+				"es": ""
+			},
+			"answer_11": {
+				"fr": "Le tarif comprend l’ensemble des services",
+				"en": "The price includes all services",
+				"it": "Il prezzo include tutti i servizi",
+				"es": ""
+			},
+			"question_X": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"answer_X": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
 			}
 		},
 		"environment-corse": {
