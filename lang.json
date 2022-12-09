@@ -689,6 +689,102 @@
 				"it": "Il prezzo include tutti i servizi",
 				"es": ""
 			},
+			"question_12": {
+				"fr": "Est il possible de réserver par téléphone ou par email ?",
+				"en": "Is it possible to book by phone or email?",
+				"it": "È possibile prenotare per telefono o via e-mail?",
+				"es": ""
+			},
+			"answer_12": {
+				"fr": "NON seulement via la plateforme de réservation",
+				"en": "NO only via the booking platform",
+				"it": "NO solo tramite la piattaforma di prenotazione",
+				"es": ""
+			},
+			"question_13": {
+				"fr": "Est il obligatoire de réserver une place au port de plaisance ?",
+				"en": "Is it compulsory to reserve a place in the marina?",
+				"it": "È obbligatorio prenotare un posto in marina?",
+				"es": ""
+			},
+			"answer_13": {
+				"fr": "NON mais préférable en juillet et en août",
+				"en": "NO but preferable in July and August",
+				"it": "NO ma preferibilmente in luglio e agosto",
+				"es": ""
+			},
+			"question14": {
+				"fr": "Le tarif comprend-il l'eau et l'électricité ?",
+				"en": "Does the tariff include water and electricity?",
+				"it": "La tariffa comprende acqua ed elettricità?",
+				"es": ""
+			},
+			"answer14": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_15": {
+				"fr": "Avez-vous un code wifi ?",
+				"en": "Do you have a wifi code?",
+				"it": "Avete un codice wifi?",
+				"es": ""
+			},
+			"answer_15": {
+				"fr": "OUI (un code WIFI est attribué à chaque plaisancier à son arrivée et en fonction de la durée de son séjour)",
+				"en": "YES (a WIFI code is given to each yachtsman on arrival and according to the duration of his stay)",
+				"it": "SI (un codice WIFI viene dato a ogni diportista all'arrivo e in base alla durata del soggiorno)",
+				"es": ""
+			},
+			"question_16": {
+				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
+				"en": "Are the toilets open 24 hours a day?",
+				"it": "I servizi igienici sono aperti 24 ore su 24?",
+				"es": ""
+			},
+			"answer_16": {
+				"fr": "Non mais accessibles de 6h à minuit (accès extérieur)",
+				"en": "No but accessible from 6am to midnight (outdoor access)",
+				"it": "No, ma accessibile dalle 6 a mezzanotte (accesso esterno)",
+				"es": ""
+			},
+			"question_17": {
+				"fr": "A quelle heure peut-on arriver au port ?",
+				"en": "What time can we arrive at the port?",
+				"it": "A che ora possiamo arrivare al porto?",
+				"es": ""
+			},
+			"answer_17": {
+				"fr": "24/24h et 7/7J – Mais pour avoir une assistance à l’amarrage, il est nécessaire d’arriver durant les horaires d’ouverture de la capitainerie",
+				"en": "24 hours a day, 7 days a week - But to get mooring assistance, it is necessary to arrive during the harbour office's opening hours",
+				"it": "24/24h e 7/7D - Ma per avere assistenza all'ormeggio è necessario presentarsi negli orari di apertura della Capitaneria di Porto.",
+				"es": ""
+			},
+			"question_X": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"answer_X": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"question_X": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
+			"answer_X": {
+				"fr": "",
+				"en": "",
+				"it": "",
+				"es": ""
+			},
 			"question_X": {
 				"fr": "",
 				"en": "",
