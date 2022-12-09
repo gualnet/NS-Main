@@ -97,20 +97,20 @@ function verifyPostReq(_req, _res) {
 			}
 	}
 	*/
-	if (_req.post.phone) {
-		if (!_req.post.prefix || _req.post.prefix.length < 1) {
-			UTILS.httpUtil.dataError(_req, _res, "Error", "Préfixe du numéro de téléphone requis", "100", "1.0");
-			return false;
-		}
-		if (!_req.post.phone || _req.post.phone.length < 1) {
-			UTILS.httpUtil.dataError(_req, _res, "Error", "Numéro de téléphone requis", "100", "1.0");
-			return false;
-		}
-		if (!validatePhone(_req.post.phone)) {
-			UTILS.httpUtil.dataError(_req, _res, "Error", "Numéro de téléphone incorrect", "100", "1.0");
-			return false;
-		}
-	}
+	// if (_req.post.phone) {
+	// 	if (!_req.post.prefix || _req.post.prefix.length < 1) {
+	// 		UTILS.httpUtil.dataError(_req, _res, "Error", "Préfixe du numéro de téléphone requis", "100", "1.0");
+	// 		return false;
+	// 	}
+	// 	if (!_req.post.phone || _req.post.phone.length < 1) {
+	// 		UTILS.httpUtil.dataError(_req, _res, "Error", "Numéro de téléphone requis", "100", "1.0");
+	// 		return false;
+	// 	}
+	// 	if (!validatePhone(_req.post.phone)) {
+	// 		UTILS.httpUtil.dataError(_req, _res, "Error", "Numéro de téléphone incorrect", "100", "1.0");
+	// 		return false;
+	// 	}
+	// }
 	if (_req.post.website) {
 		if (validateUrl(_req.post.website) != true) {
 			UTILS.httpUtil.dataError(_req, _res, "Error", "URL incorrect", "100", "1.0");

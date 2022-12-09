@@ -663,9 +663,41 @@
 
 	<script>
 		window.addEventListener('load', () => {
+			attributeFaqLink();
 			displayInfoInTopContainer();
 			displayResaButton();
 		});
+
+		const attributeFaqLink = () => {
+			const currentHarbourId = localStorage["harbour_id"];
+			const faqBtnEL = document.querySelector('#faq_button');
+			const faqLinkEl = faqBtnEL.querySelector('a');
+			console.log('faqLinkEl',faqLinkEl)
+			switch (currentHarbourId) {
+				case 'BxqaMWYBqc': // bonifacio
+					faqLinkEl.href = '/faq-bonifacio';
+					break;
+				case 'HeIrt89Ccc': // cargese
+					faqLinkEl.href = '/faq-cargese';
+					break;
+				case 'HgfhlHtaq9': // porto-vecchio
+					faqLinkEl.href = '/faq-porto-vecchio';
+					break;
+				case 'SlUyrmPHE9': // ajaccio
+					faqLinkEl.href = '/faq-ajaccio';
+					break;
+				case 'rl4ZBaUpjc': // propriano
+					faqLinkEl.href = '/faq-propriano';
+					break;
+				case 'rxHL7ucAo9': // macinaggio
+					faqLinkEl.href = '/faq-macinaggio';
+					break;
+
+				default:
+					break;
+			}
+		}
+
 
 		const displayInfoInTopContainer = () => {
 			const harbourNameEl = document.querySelector('#harbourName');

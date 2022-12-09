@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<!-- __TPL_HEADER_APP__ -->
+{{element->header_app.html}}
+<!-- __TPL_LOADER__ -->
+{{element->loader.html}}
+
+
+<body>
+	<div class="navheader-container">
+		<!-- __TPL_NAVHEADER__ -->
+		{{element->navheader.html}}
+	</div>
+
+	<main>
+
+		<div class="top-container">
+			<h5 class="" id="topTitle">{{lang->faq-corse.top_title}}</h5>
+			<p class="" id="topDescription">{{lang->faq-corse.top_description}}</p>
+		</div>
+
+		<div class="middle-container">
+			<div class="card" id="card1" onclick="cardOnclickHandler('card1')">
+				<div class="card__head">
+					<div class="card__head__text">{{lang->faq-corse.question_23}}</div>
+					<div class="card__head__arrow"> > </div>
+				</div>
+				<div class="card__content hidden">
+					<div class="card__content__text">{{lang->faq-corse.answer_23}}</div>
+				</div>
+			</div>
+
+			<div class="card" id="card2" onclick="cardOnclickHandler('card2')">
+				<div class="card__head">
+					<div class="card__head__text">{{lang->faq-corse.question_24}}</div>
+					<div class="card__head__arrow"> > </div>
+				</div>
+				<div class="card__content hidden">
+					<div class="card__content__text">{{lang->faq-corse.answer_24}}</div>
+				</div>
+			</div>
+
+			<div class="card" id="card3" onclick="cardOnclickHandler('card3')">
+				<div class="card__head">
+					<div class="card__head__text">{{lang->faq-corse.question_25}}</div>
+					<div class="card__head__arrow"> > </div>
+				</div>
+				<div class="card__content hidden">
+					<div class="card__content__text">{{lang->faq-corse.answer_25}}</div>
+				</div>
+			</div>
+
+			<div class="card" id="card4" onclick="cardOnclickHandler('card4')">
+				<div class="card__head">
+					<div class="card__head__text">{{lang->faq-corse.question_26}}</div>
+					<div class="card__head__arrow"> > </div>
+				</div>
+				<div class="card__content hidden">
+					<div class="card__content__text">{{lang->faq-corse.answer_26}}</div>
+				</div>
+			</div>
+
+			<div class="card" id="card5" onclick="cardOnclickHandler('card5')">
+				<div class="card__head">
+					<div class="card__head__text">{{lang->faq-corse.question_27}}</div>
+					<div class="card__head__arrow"> > </div>
+				</div>
+				<div class="card__content hidden">
+					<div class="card__content__text">{{lang->faq-corse.answer_27}}</div>
+				</div>
+			</div>
+
+			<div class="card" id="card6" onclick="cardOnclickHandler('card6')">
+				<div class="card__head">
+					<div class="card__head__text">{{lang->faq-corse.question_28}}</div>
+					<div class="card__head__arrow"> > </div>
+				</div>
+				<div class="card__content hidden">
+					<div class="card__content__text">{{lang->faq-corse.answer_28}}</div>
+				</div>
+			</div>
+
+		</div>
+
+	</main>
+
+	<div class="container py-3" id="navbarCtn">
+		<!-- __TPL_NAVBAR__ -->
+		{{element->navbar.html}}
+	</div>
+</body>
+
+
+<style>
+	body {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		font-family: 'Poppins Regular';
+		background: url("/library/background.png") #FFF fixed;
+		/* VARS */
+		--text-color-blue: #1d2f79;
+		--text-color-black: rgb(50, 50, 50);
+		--text-color-black: rgb(50, 50, 50);
+	}
+
+	main {
+		background-size: cover;
+		background: url("/library/background.png") #FFF fixed;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		margin-top: 45px;
+		padding: 1rem;
+		color: var(--text-color-blue);
+	}
+
+	.top-container {
+		margin-bottom: 2rem;
+	}
+
+	.top-container #topTitle {
+		font-family: 'Poppins Regular';
+		padding-left: 5%;
+    font-weight: 900;
+    font-size: 1.6rem;
+    text-align: center;
+	}
+
+	.top-container #topDescription {
+		color: var(--text-color-black);
+		text-align: center;
+	}
+
+	.middle-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin-top: 10px;
+	}
+
+	.middle-container > .card {
+		padding: 10px;
+		border: 1px solid var(--text-color-blue);
+		border-radius: 20px;
+		display: flex;
+		width: 90%;
+		margin: .5rem 0 0 .5rem;
+		/* height: fit-content; */
+	}
+
+	.middle-container .card__head {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.middle-container .card__head__text {
+		width: calc(100% - 30px);
+		font-weight: 700;
+		font-size: medium;
+		color: #1D3079;
+	}
+
+	.middle-container .card__head__arrow {
+		align-items: center;
+		background-color: var(--text-color-blue);
+		border-radius: 20px;
+		color: white;
+		display: flex;
+		font-size: medium;
+		font-weight: 700;
+		height: 20px;
+		justify-content: center;
+		width: 20px;
+		transform: rotate(0deg);
+		transition: transform .2s linear;
+	}
+
+	.middle-container .card__head__arrow.rotate {
+		transform: rotate(90deg);
+		transition: transform .2s linear;
+	}
+
+
+	.middle-container .card__content {
+		display: flex;
+		margin-top: 10px;
+		max-height: fit-content;
+		padding: 0px 6px;
+		transform-origin: top;
+		transform: scaleY(1);
+		transition: transform .2s linear;
+		width: 100%;
+	}
+
+	.middle-container .card__content.hidden {
+		transform: scaleY(0);
+		transform-origin: top;
+		transition: transform .2s linear;
+	}
+
+	.middle-container .card__content__text {
+		text-align: justify;
+		font-weight: 200;
+		font-size: .9rem;
+		color: var(--text-color-black);
+		transform: scaleY(1);
+		transform-origin: top;
+	}
+
+	#navbarCtn {
+		height: 56px;
+	}
+</style>
+
+<script>
+
+	window.addEventListener('load', () => {
+		initCardHeightValues();
+	});
+
+	const initCardHeightValues = () => {
+		setTimeout(() => {
+			const allCardEl = document.querySelectorAll('.card');
+			allCardEl.forEach(item => {
+				const cardHeadEl = item.querySelector('.card__head');
+				item.style.height = `${cardHeadEl.clientHeight + 20}px`;
+				item.style.maxHeight = `${cardHeadEl.clientHeight + 20}px`;
+			});
+		}, 1000);
+	}
+
+	const cardOnclickHandler = (cardId) => {
+		const cardEl = document.querySelector(`#${cardId}`);
+		const contentCtnEl = cardEl.querySelector('.card__content');
+		if (contentCtnEl.classList.contains('hidden')) {
+			unfoldCardHandler(cardEl);
+		} else {
+			foldCardHandler(cardEl);
+		}
+	}
+
+	const foldCardHandler = (cardEl) => {
+		const headCtnEl = cardEl.querySelector('.card__head');
+		const headCtnRect = headCtnEl.getBoundingClientRect();
+		const contentCtnEl = cardEl.querySelector('.card__content');
+		const contentCtnRect = contentCtnEl.getBoundingClientRect();
+		const arrowEl = cardEl.querySelector('.card__head__arrow');
+
+		const animationtotalLength = 200;
+		const animationIntervalLength = 50;
+
+		contentCtnEl.classList.add('hidden');
+		arrowEl.classList.remove('rotate');
+
+		cardEl.style.height = `${headCtnRect.height + contentCtnRect.height + 20}px`;
+		const heightInterval = contentCtnRect.height / (animationtotalLength / animationIntervalLength);
+
+		const intervalID = setInterval(() => {
+			const cardRect = cardEl.getBoundingClientRect();
+			cardEl.style.height = `${cardRect.height - heightInterval}px`;
+		}, animationIntervalLength);
+
+		setTimeout(() => {
+			clearInterval(intervalID);
+			const headCtnRect = headCtnEl.getBoundingClientRect();
+			cardEl.style.height = `${headCtnRect.height + 20}px`;
+			cardEl.style.maxHeight = `${headCtnRect.height + 20}px`;
+		}, animationtotalLength);
+	};
+
+	const unfoldCardHandler = (cardEl) => {
+		const headCtnEl = cardEl.querySelector('.card__head');
+		const contentCtnEl = cardEl.querySelector('.card__content');
+		const arrowEl = cardEl.querySelector('.card__head__arrow');
+
+		const animationtotalLength = 200;
+		const animationIntervalLength = 50;
+
+		contentCtnEl.classList.remove('hidden');
+		arrowEl.classList.add('rotate');
+		cardEl.style.height = `${cardEl.style.height}px`;
+		// cardEl.style.maxHeight = `${cardEl.style.height}px`;
+		const heightInterval = (contentCtnEl.clientHeight + 10) / (animationtotalLength / animationIntervalLength);
+
+		const intervalID = setInterval(() => {
+			const cardRect = cardEl.getBoundingClientRect();
+			cardEl.style.height = `${cardRect.height + heightInterval}px`;
+			cardEl.style.maxHeight = `${cardRect.height + heightInterval}px`;
+		}, animationIntervalLength);
+
+		setTimeout(() => {
+			clearInterval(intervalID);
+			const headCtnRect = headCtnEl.getBoundingClientRect();
+			const contentCtnRect = contentCtnEl.getBoundingClientRect();
+			cardEl.style.height = `${headCtnRect.height + contentCtnRect.height + 30}px`;
+			cardEl.style.maxHeight = `${headCtnRect.height + contentCtnRect.height + 30}px`;
+		}, animationtotalLength + 50);
+	};
+</script>
