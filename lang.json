@@ -713,13 +713,13 @@
 				"it": "NO ma preferibilmente in luglio e agosto",
 				"es": ""
 			},
-			"question14": {
+			"question_14": {
 				"fr": "Le tarif comprend-il l'eau et l'électricité ?",
 				"en": "Does the tariff include water and electricity?",
 				"it": "La tariffa comprende acqua ed elettricità?",
 				"es": ""
 			},
-			"answer14": {
+			"answer_14": {
 				"fr": "Oui",
 				"en": "Yes",
 				"it": "Sì",
@@ -761,40 +761,208 @@
 				"it": "24/24h e 7/7D - Ma per avere assistenza all'ormeggio è necessario presentarsi negli orari di apertura della Capitaneria di Porto.",
 				"es": ""
 			},
-			"question_X": {
-				"fr": "",
-				"en": "",
-				"it": "",
+			"question_18": {
+				"fr": "Comment réserver une place au port ?",
+				"en": "How to book a place in the port?",
+				"it": "Come prenotare un posto nel porto?",
 				"es": ""
 			},
-			"answer_X": {
-				"fr": "",
-				"en": "",
-				"it": "",
+			"answer_18": {
+				"fr": "Il suffit d’aller sur le site resaportcorse.com et de faire la demande en ligne",
+				"en": "Just go to the website resaportcorse.com and apply online",
+				"it": "Basta andare sul sito web resaportcorse.com e fare domanda online.",
 				"es": ""
 			},
-			"question_X": {
-				"fr": "",
-				"en": "",
-				"it": "",
+			"question_19": {
+				"fr": "Avez-vous un code wifi ?",
+				"en": "Do you have a wifi code?",
+				"it": "Avete un codice wifi?",
 				"es": ""
 			},
-			"answer_X": {
-				"fr": "",
-				"en": "",
-				"it": "",
+			"answer_19": {
+				"fr": "Oui nous disposons d’un code wifi gratuit pour les plaisanciers",
+				"en": "Yes we have a free wifi code for boaters",
+				"it": "Sì, abbiamo un codice wifi gratuito per i diportisti",
 				"es": ""
 			},
-			"question_X": {
-				"fr": "",
-				"en": "",
-				"it": "",
+			"question_20": {
+				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
+				"en": "Are the toilets open 24 hours a day?",
+				"it": "I servizi igienici sono aperti 24 ore su 24?",
 				"es": ""
 			},
-			"answer_X": {
-				"fr": "",
-				"en": "",
-				"it": "",
+			"answer_20": {
+				"fr": "Non, les douches ferment 30min avant la fermeture des locaux et pour les toilettes extérieurs nous vous donnons un code pour y accéder.",
+				"en": "No, the showers close 30 minutes before closing time and for the outside toilets we give you a code to access them.",
+				"it": "No, le docce chiudono 30 minuti prima dell'orario di chiusura e per i bagni esterni vi diamo un codice per accedervi.",
+				"es": ""
+			},
+			"question_21": {
+				"fr": "Y'a t-il un accès à la météo marine ?",
+				"en": "Is there access to marine weather?",
+				"it": "C'è accesso al meteo marino?",
+				"es": ""
+			},
+			"answer_21": {
+				"fr": "Oui, la météo est affiché tous les jours dans la vitrine extérieur.",
+				"en": "Yes, the weather forecast is displayed every day in the window outside.",
+				"it": "Sì, le previsioni del tempo sono esposte ogni giorno nella vetrina esterna.",
+				"es": ""
+			},
+			"question_22": {
+				"fr": "A quelle heure peut-on arriver au port ?",
+				"en": "What time can we arrive at the port?",
+				"it": "A che ora possiamo arrivare al porto?",
+				"es": ""
+			},
+			"answer_22": {
+				"fr": "Votre place de réservation est libre à partir de 12h, juqu’à la fermeture des locaux.",
+				"en": "Your booking place is free from 12:00 until the premises close.",
+				"it": "Il vostro posto di prenotazione è libero dalle 12:00 fino alla chiusura del locale.",
+				"es": ""
+			},
+			"question_23": {
+				"fr": "Est il possible de réserver par téléphone ou par email ?",
+				"en": "Is it possible to book by phone or email?",
+				"it": "È possibile prenotare per telefono o via e-mail?",
+				"es": ""
+			},
+			"answer_23": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_24": {
+				"fr": "Est il obligatoire de réserver une place au port de plaisance ?",
+				"en": "Is it compulsory to reserve a place at the marina?",
+				"it": "È obbligatorio prenotare un posto barca in marina?",
+				"es": ""
+			},
+			"answer_24": {
+				"fr": "La réservation d’une place au port de plaisance est le seul moyen de vous garantir une place.",
+				"en": "Reserving a berth at the marina is the only way to guarantee a place.",
+				"it": "La prenotazione di un posto barca al porto è l'unico modo per garantirsi un posto.",
+				"es": ""
+			},
+			"question_25": {
+				"fr": "Le tarif comprend-il l'eau et l'électricité ?",
+				"en": "Does the tariff include water and electricity?",
+				"it": "Il prezzo include acqua ed elettricità?",
+				"es": ""
+			},
+			"answer_25": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_26": {
+				"fr": "Avez-vous un code wifi ?",
+				"en": "Do you have a wifi code?",
+				"it": "Hai un codice wifi?",
+				"es": ""
+			},
+			"answer_26": {
+				"fr": "Wifi gratuit du pays Ajaccien",
+				"en": "Free Wifi in the Ajaccio region",
+				"it": "Wifi gratuito nella regione di Ajaccio",
+				"es": ""
+			},
+			"question_27": {
+				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
+				"en": "Are the toilets open 24 hours a day?",
+				"it": "I servizi igienici sono aperti 24 ore su 24?",
+				"es": ""
+			},
+			"answer_27": {
+				"fr": "Aux heures d’ouverture de la capitainerie",
+				"en": "During the opening hours of the harbour office",
+				"it": "Durante gli orari di apertura della Capitaneria di Porto",
+				"es": ""
+			},
+			"question_28": {
+				"fr": "A quelle heure peut-on arriver au port ?",
+				"en": "What time can we arrive at the port?",
+				"it": "A che ora possiamo arrivare al porto?",
+				"es": ""
+			},
+			"answer_28": {
+				"fr": "Aux heures d’ouverture de la capitainerie",
+				"en": "During the opening hours of the harbour office",
+				"it": "Durante gli orari di apertura della Capitaneria di Porto",
+				"es": ""
+			},
+			"question_29": {
+				"fr": "Est il possible de réserver par téléphone ou par email ?",
+				"en": "Is it possible to book by phone or email?",
+				"it": "È possibile prenotare per telefono o via e-mail?",
+				"es": ""
+			},
+			"answer_29": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_30": {
+				"fr": "Est il obligatoire de réserver une place au port de plaisance ?",
+				"en": "Is it compulsory to reserve a place in the marina?",
+				"it": "È obbligatorio prenotare un posto in marina?",
+				"es": ""
+			},
+			"answer_30": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_31": {
+				"fr": "Le tarif comprend-il l'eau et l'électricité ?",
+				"en": "Does the tariff include water and electricity?",
+				"it": "La tariffa comprende acqua ed elettricità?",
+				"es": ""
+			},
+			"answer_31": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_32": {
+				"fr": "Avez-vous un code wifi ?",
+				"en": "Do you have a wifi code?",
+				"it": "Hai un codice wifi?",
+				"es": ""
+			},
+			"answer_32": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_33": {
+				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
+				"en": "Are the toilets open 24 hours a day?",
+				"it": "I bagni sono aperti 24 ore al giorno?",
+				"es": ""
+			},
+			"answer_33": {
+				"fr": "Oui",
+				"en": "Yes",
+				"it": "Sì",
+				"es": ""
+			},
+			"question_34": {
+				"fr": "A quelle heure peut-on arriver au port ?",
+				"en": "What time can we arrive at the port?",
+				"it": "A che ora possiamo arrivare al porto?",
+				"es": ""
+			},
+			"answer_34": {
+				"fr": "15h à 20h",
+				"en": "3pm to 8pm",
+				"it": "Dalle 15.00 alle 20.00",
 				"es": ""
 			}
 		},

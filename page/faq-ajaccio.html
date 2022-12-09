@@ -23,61 +23,61 @@
 		<div class="middle-container">
 			<div class="card" id="card1" onclick="cardOnclickHandler('card1')">
 				<div class="card__head">
-					<div class="card__head__text">{{lang->faq-corse.question_1}}</div>
+					<div class="card__head__text">{{lang->faq-corse.question_23}}</div>
 					<div class="card__head__arrow"> > </div>
 				</div>
 				<div class="card__content hidden">
-					<div class="card__content__text">{{lang->faq-corse.answer_1}}</div>
+					<div class="card__content__text">{{lang->faq-corse.answer_23}}</div>
 				</div>
 			</div>
 
 			<div class="card" id="card2" onclick="cardOnclickHandler('card2')">
 				<div class="card__head">
-					<div class="card__head__text">{{lang->faq-corse.question_2}}</div>
+					<div class="card__head__text">{{lang->faq-corse.question_24}}</div>
 					<div class="card__head__arrow"> > </div>
 				</div>
 				<div class="card__content hidden">
-					<div class="card__content__text">{{lang->faq-corse.answer_2}}</div>
+					<div class="card__content__text">{{lang->faq-corse.answer_24}}</div>
 				</div>
 			</div>
 
 			<div class="card" id="card3" onclick="cardOnclickHandler('card3')">
 				<div class="card__head">
-					<div class="card__head__text">{{lang->faq-corse.question_3}}</div>
+					<div class="card__head__text">{{lang->faq-corse.question_25}}</div>
 					<div class="card__head__arrow"> > </div>
 				</div>
 				<div class="card__content hidden">
-					<div class="card__content__text">{{lang->faq-corse.answer_3}}</div>
+					<div class="card__content__text">{{lang->faq-corse.answer_25}}</div>
 				</div>
 			</div>
 
 			<div class="card" id="card4" onclick="cardOnclickHandler('card4')">
 				<div class="card__head">
-					<div class="card__head__text">{{lang->faq-corse.question_4}}</div>
+					<div class="card__head__text">{{lang->faq-corse.question_26}}</div>
 					<div class="card__head__arrow"> > </div>
 				</div>
 				<div class="card__content hidden">
-					<div class="card__content__text">{{lang->faq-corse.answer_4}}</div>
+					<div class="card__content__text">{{lang->faq-corse.answer_26}}</div>
 				</div>
 			</div>
 
 			<div class="card" id="card5" onclick="cardOnclickHandler('card5')">
 				<div class="card__head">
-					<div class="card__head__text">{{lang->faq-corse.question_5}}</div>
+					<div class="card__head__text">{{lang->faq-corse.question_27}}</div>
 					<div class="card__head__arrow"> > </div>
 				</div>
 				<div class="card__content hidden">
-					<div class="card__content__text">{{lang->faq-corse.answer_5}}</div>
+					<div class="card__content__text">{{lang->faq-corse.answer_27}}</div>
 				</div>
 			</div>
 
 			<div class="card" id="card6" onclick="cardOnclickHandler('card6')">
 				<div class="card__head">
-					<div class="card__head__text">{{lang->faq-corse.question_6}}</div>
+					<div class="card__head__text">{{lang->faq-corse.question_28}}</div>
 					<div class="card__head__arrow"> > </div>
 				</div>
 				<div class="card__content hidden">
-					<div class="card__content__text">{{lang->faq-corse.answer_6}}</div>
+					<div class="card__content__text">{{lang->faq-corse.answer_28}}</div>
 				</div>
 			</div>
 
@@ -154,7 +154,7 @@
 	.middle-container .card__head {
 		display: flex;
 		flex-direction: row;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
 	}
 
@@ -188,12 +188,13 @@
 
 	.middle-container .card__content {
 		display: flex;
-		max-height: fit-content;
-		width: 100%;
 		margin-top: 10px;
-		transform: scaleY(1);
+		max-height: fit-content;
+		padding: 0px 6px;
 		transform-origin: top;
+		transform: scaleY(1);
 		transition: transform .2s linear;
+		width: 100%;
 	}
 
 	.middle-container .card__content.hidden {
