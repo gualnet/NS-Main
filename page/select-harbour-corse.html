@@ -15,13 +15,19 @@
 	<main>
 		<div id="topCtn">
 			<div id="backgroundCtn">
-				<img id="imgBckg" src="/library/map-ports-corse.png" alt="">
+				<img id="imgBckg" src="/library/map-ports-corse-2.png" alt="">
 					<div class="vortex" id="vortex-cargese" onclick="harbourClickHandler('HeIrt89Ccc')"></div>
 					<div class="vortex" id="vortex-macinaggio" onclick="harbourClickHandler('rxHL7ucAo9')"></div>
 					<div class="vortex" id="vortex-ajaccio" onclick="harbourClickHandler('SlUyrmPHE9')"></div>
 					<div class="vortex" id="vortex-propriano" onclick="harbourClickHandler('rl4ZBaUpjc')"></div>
 					<div class="vortex" id="vortex-bonifacio" onclick="harbourClickHandler('BxqaMWYBqc')"></div>
 					<div class="vortex" id="vortex-porto-vecchio" onclick="harbourClickHandler('HgfhlHtaq9')"></div>
+					<div class="button" id="btn-cargese" onclick="harbourClickHandler('HeIrt89Ccc')"></div>
+					<div class="button" id="btn-macinaggio" onclick="harbourClickHandler('rxHL7ucAo9')"></div>
+					<div class="button" id="btn-ajaccio" onclick="harbourClickHandler('SlUyrmPHE9')"></div>
+					<div class="button" id="btn-propriano" onclick="harbourClickHandler('rl4ZBaUpjc')"></div>
+					<div class="button" id="btn-bonifacio" onclick="harbourClickHandler('BxqaMWYBqc')"></div>
+					<div class="button" id="btn-porto-vecchio" onclick="harbourClickHandler('HgfhlHtaq9')"></div>
 			</div>
 		</div>
 	</main>
@@ -38,6 +44,13 @@
 			setProprianoVortex();
 			setBonifacioVortex();
 			setPortoVecchioVortex();
+
+			setMaccinagioBtnDiv();
+			setCargeseBtnDiv();
+			setAjaccioBtnDiv();
+			setProprianoBtnDiv();
+			setBonifacioBtnDiv();
+			setPortoVecchioBtnDiv();
 		});
 		
 		window.addEventListener('resize', () => {
@@ -78,20 +91,23 @@
 
 			const imgSize = imgElRect;
 			
-			vortex.style.top = `${imgElRect.top}px`;
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 23);
+			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
 			
-			const left = imgSize.left + (base * 32);
+			const left = imgSize.left + (base * 31);
 			vortex.style.left = `${left}px`;
 			
-			const width = base * 38;
+			const width = base * 30;
 			vortex.style.width = `${width}px`;
 			
 			const height = base * 10;
 			vortex.style.height = `${height}px`;
 		};
 
+		// vortex === une div placée sur le nom d'un port pour click handle
 		const setCargeseVortex = () => {
 			const imgEl = document.querySelector('#imgBckg');
 			const imgElRect = imgEl.getBoundingClientRect();
@@ -108,7 +124,7 @@
 			const left = imgSize.left + (base * 0);
 			vortex.style.left = `${left}px`;
 			
-			const width = base * 32;
+			const width = base * 28;
 			vortex.style.width = `${width}px`;
 			
 			const height = base * 8;
@@ -121,18 +137,18 @@
 			const vortex = document.querySelector('#vortex-ajaccio');
 
 			let top = imgSize.top;
-			top += (imgSize.height / 100) * 63;
+			top += (imgSize.height / 100) * 56;
 			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
 
 			let left = imgSize.left;
-			left += ((imgSize.height / 100) * 9.5);
+			left += ((imgSize.height / 100) * 0);
 			vortex.style.left = `${left}px`;
 
-			const width = base * 31;
+			const width = base * 35;
 			vortex.style.width = `${width}px`;
-			const height = base * 17;
+			const height = base * 10;
 			vortex.style.height = `${height}px`;
 		};
 
@@ -142,17 +158,17 @@
 			const vortex = document.querySelector('#vortex-propriano');
 
 			let top = imgSize.top;
-			top += (imgSize.height / 100) * 81;
+			top += (imgSize.height / 100) * 65;
 			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
-			const left = imgSize.left + (base * 20);
+			const left = imgSize.left + (base * 9.5);
 			vortex.style.left = `${left}px`;
 
-			const width = base * 32;
+			const width = base * 30;
 			vortex.style.width = `${width}px`;
 
-			const height = base * 10;
+			const height = base * 9.5;
 			vortex.style.height = `${height}px`;
 		};
 
@@ -162,18 +178,18 @@
 			const vortex = document.querySelector('#vortex-bonifacio');
 
 			let top = imgSize.top;
-			top += (imgSize.height / 100) * 88;
+			top += (imgSize.height / 100) * 69.5;
 			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
 			
-			const left = imgSize.left + (base * 54);
+			const left = imgSize.left + (base * 25);
 			vortex.style.left = `${left}px`;
 
-			const width = base * 22;
+			const width = base * 30;
 			vortex.style.width = `${width}px`;
 
-			const height = base * 15;
+			const height = base * 10;
 			vortex.style.height = `${height}px`;
 		};
 
@@ -183,20 +199,161 @@
 			const vortex = document.querySelector('#vortex-porto-vecchio');
 
 			let top = imgSize.top;
-			top += (imgSize.height / 100) * 71;
+			top += (imgSize.height / 100) * 59.5;
 			vortex.style.top = `${top}px`;
 
 			const base = imgSize.width / 100;
 			
-			const left = imgSize.left + (base * 72);
+			const left = imgSize.left + (base * 53);
 			vortex.style.left = `${left}px`;
 			
-			const width = base * 30;
+			const width = base * 34;
 			vortex.style.width = `${width}px`;
 			
-			const height = base * 15;
+			const height = base * 10;
 			vortex.style.height = `${height}px`;
 		};
+
+		const setMaccinagioBtnDiv = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const button = document.querySelector('#btn-macinaggio');
+
+			const imgSize = imgElRect;
+
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 32.5);
+			button.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 75);
+			button.style.left = `${left}px`;
+			
+			const width = base * 25;
+			button.style.width = `${width}px`;
+			
+			const height = base * 5;
+			button.style.height = `${height}px`;
+		};
+
+		const setCargeseBtnDiv = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const button = document.querySelector('#btn-cargese');
+
+			const imgSize = imgElRect;
+
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 36.5);
+			button.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 75);
+			button.style.left = `${left}px`;
+			
+			const width = base * 25;
+			button.style.width = `${width}px`;
+			
+			const height = base * 5;
+			button.style.height = `${height}px`;
+		}
+
+
+		const setAjaccioBtnDiv = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const button = document.querySelector('#btn-ajaccio');
+
+			const imgSize = imgElRect;
+
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 40.5);
+			button.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 75);
+			button.style.left = `${left}px`;
+			
+			const width = base * 25;
+			button.style.width = `${width}px`;
+			
+			const height = base * 5;
+			button.style.height = `${height}px`;
+		};
+
+		const setProprianoBtnDiv = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const button = document.querySelector('#btn-propriano');
+
+			const imgSize = imgElRect;
+
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 44.5);
+			button.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 75);
+			button.style.left = `${left}px`;
+			
+			const width = base * 25;
+			button.style.width = `${width}px`;
+			
+			const height = base * 5;
+			button.style.height = `${height}px`;
+		};
+
+		const setBonifacioBtnDiv = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const button = document.querySelector('#btn-bonifacio');
+
+			const imgSize = imgElRect;
+
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 48.5);
+			button.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 75);
+			button.style.left = `${left}px`;
+			
+			const width = base * 25;
+			button.style.width = `${width}px`;
+			
+			const height = base * 5;
+			button.style.height = `${height}px`;
+		};
+
+		const setPortoVecchioBtnDiv = () => {
+			const imgEl = document.querySelector('#imgBckg');
+			const imgElRect = imgEl.getBoundingClientRect();
+			const button = document.querySelector('#btn-porto-vecchio');
+
+			const imgSize = imgElRect;
+
+			let top = imgElRect.top;
+			top += ((imgSize.height / 100) * 52.5);
+			button.style.top = `${top}px`;
+
+			const base = imgSize.width / 100;
+			
+			const left = imgSize.left + (base * 75);
+			button.style.left = `${left}px`;
+			
+			const width = base * 25;
+			button.style.width = `${width}px`;
+			
+			const height = base * 5;
+			button.style.height = `${height}px`;
+		};
+
+
 
 	</script>
 
@@ -225,7 +382,7 @@
 			padding: 0 1rem;
 			margin-top: 10px;
 			width: 100%;
-			margin-bottom: 5vw;
+			/* margin-bottom: 5vw; */
 		}		
 		header > p {
 			color: rgb(0, 94, 149);
@@ -244,7 +401,7 @@
 
 		#topCtn {
 			display: flex;
-			height: 90%;
+			height: 100%;
 			width: 100%;
 		}
 
@@ -254,7 +411,6 @@
 			margin: 0;
 			padding: 0;
 			width: fit-content;
-			margin: 0 10px;
 		}
 
 		img {
@@ -263,6 +419,13 @@
 		}
 
 		.vortex {
+			border: 1px solid salmon;
+			height: 10px;
+			position: absolute;
+			width: 10px;
+		}
+		.button {
+			border: 1px solid red;
 			height: 10px;
 			position: absolute;
 			width: 10px;
