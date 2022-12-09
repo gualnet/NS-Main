@@ -61,8 +61,8 @@
 			if (localStorage['entity_id'] !== CORSE_ENTITY) return; // abort if not corse entity
 			checkLangFlag();
 
-			const navbarHeaderEl = document.querySelector('#navbarHeader');
-			if (!navbarHeaderEl) return;
+			const returnBtnEl = document.querySelector('#returnBtn');
+			if (!returnBtnEl) return;
 
 			if (location.pathname.includes('index-corse')) {
 				setWindowLocationLink('select-harbour-corse');
@@ -79,7 +79,7 @@
 			} else if (location.pathname.includes('actualite')) {
 				setWindowLocationLink('articles');
 			} else if (location.pathname.includes('partner')) {
-				navbarHeaderEl.addEventListener('click', (ev) => {
+				returnBtnEl.addEventListener('click', (ev) => {
 					ev.preventDefault();
 					history.back();
 				});
