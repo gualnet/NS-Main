@@ -650,7 +650,7 @@
 			"answer_8": {
 				"fr": "Non mais le Spar effectue des livraisons selon un montant commandé",
 				"en": "No, but the Spar makes deliveries according to an ordered amount",
-				"it": "No, ma Spar effettua le consegne in base a una quantità ordinata.",
+				"it": "No, ma il Spar effettua le consegne in base a una quantità ordinata.",
 				"es": ""
 			},
 			"question_9": {
@@ -674,7 +674,7 @@
 			"answer_10": {
 				"fr": "Oui nous disposons d’un code wifi gratuit pour les plaisanciers",
 				"en": "Yes we have a free wifi code for boaters",
-				"it": "Sì, abbiamo un codice wifi gratuito per i diportisti",
+				"it": "Sì, abbiamo un codice wifi gratuito per i naviganti",
 				"es": ""
 			},
 			"question_11": {
@@ -734,13 +734,13 @@
 			"answer_15": {
 				"fr": "OUI (un code WIFI est attribué à chaque plaisancier à son arrivée et en fonction de la durée de son séjour)",
 				"en": "YES (a WIFI code is given to each yachtsman on arrival and according to the duration of his stay)",
-				"it": "SI (un codice WIFI viene dato a ogni diportista all'arrivo e in base alla durata del soggiorno)",
+				"it": "SI (un codice WIFI viene dato a ogni naviganti all'arrivo e in base alla durata del soggiorno)",
 				"es": ""
 			},
 			"question_16": {
 				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
 				"en": "Are the toilets open 24 hours a day?",
-				"it": "I servizi igienici sono aperti 24 ore su 24?",
+				"it": "I bagni sono aperti 24 ore su 24?",
 				"es": ""
 			},
 			"answer_16": {
@@ -782,13 +782,13 @@
 			"answer_19": {
 				"fr": "Oui nous disposons d’un code wifi gratuit pour les plaisanciers",
 				"en": "Yes we have a free wifi code for boaters",
-				"it": "Sì, abbiamo un codice wifi gratuito per i diportisti",
+				"it": "Sì, abbiamo un codice wifi gratuito per i naviganti",
 				"es": ""
 			},
 			"question_20": {
 				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
 				"en": "Are the toilets open 24 hours a day?",
-				"it": "I servizi igienici sono aperti 24 ore su 24?",
+				"it": "I bagni sono aperti 24 ore su 24?",
 				"es": ""
 			},
 			"answer_20": {
@@ -816,7 +816,7 @@
 				"es": ""
 			},
 			"answer_22": {
-				"fr": "Votre place de réservation est libre à partir de 12h, juqu’à la fermeture des locaux.",
+				"fr": "Votre place de réservation est libre à partir de 12h, jusqu’à la fermeture des locaux.",
 				"en": "Your booking place is free from 12:00 until the premises close.",
 				"it": "Il vostro posto di prenotazione è libero dalle 12:00 fino alla chiusura del locale.",
 				"es": ""
@@ -872,7 +872,7 @@
 			"question_27": {
 				"fr": "Les sanitaires sont-ils ouverts 24h/24 ?",
 				"en": "Are the toilets open 24 hours a day?",
-				"it": "I servizi igienici sono aperti 24 ore su 24?",
+				"it": "I bagni sono aperti 24 ore su 24?",
 				"es": ""
 			},
 			"answer_27": {
