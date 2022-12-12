@@ -216,6 +216,44 @@
 							height: 95px;
 							border-radius: 5px;
 						}
+
+
+						/* NEWS CARD */
+
+						#articles_container .card-body {
+							max-height: 95px;
+							overflow-y: hidden;
+						}
+
+						/* .news-card {
+							display: flex;
+							height: 95px;
+							width: 100%;
+						}
+
+						.new-card__img-ctn {
+							display: flex;
+							height: 100%;
+							width: 35%;
+						}
+						.new-card__img-ctn > img {
+							height: 100%;
+							width: 100%;
+						}
+
+						.new-card__content-ctn {
+							display: flex;
+							flex-direction: column;
+						}
+
+						.new-card__content-ctn > .new-card__title-ctn {
+
+						}
+
+						.new-card__content-ctn > .new-card__description-ctn {
+							
+						} */
+						/* NEWS CARD END */
 					</style>
 
 					<div class="card text-white bg-light mb-3 rounded" id="weather_card" onclick="weatherCardOnClickHandler()">
@@ -1692,6 +1730,22 @@
 			}
 		}
 
+		// const newsRow = `
+		// 	<div class="news-card" onclick="window.location.href = (\'/actualite?id=__ID__\');">
+		// 		<div class="new-card__img-ctn">
+		// 			<img src="__IMG__" alt="">
+		// 		</div>
+		// 		<div class="new-card__content-ctn">
+		// 			<div class="new-card__title-ctn">
+		// 				<h6 style="font-size: 13px; margin-top: 10px;"><strong>__TITLE__</strong></h6>
+		// 			</div>
+		// 			<div class="new-card__description-ctn">
+		// 				<div class="text-muted small">__DESCRIPTION__</div>
+		// 			</div>
+		// 		</div>
+		// 	</div>
+		// `;
+
 		var newsRow = '<div class="row">'
 			+ '<div class="col">'
 			+ '<div class="card product-card-small mb-3" onclick="window.location.href = (\'/actualite?id=__ID__\');">'
@@ -1718,6 +1772,7 @@
 			+ '</div>'
 			+ '</div>';
 
+
 		fetch("/api/news/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 			if (_data.data[0]) {
 				var articles = _data.data.sort(dynamicSort("date")).reverse();
@@ -1726,7 +1781,13 @@
 				for (var i = 0; i < articlesLimit; i++) {
 					var date = new Date(articles[i].date);
 					var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
-					var rowCurrent = newsRow.replace("__ID__", articles[i].id).replace("__TITLE__", articles[i].title).replace("__DATE__", dateFormated).replace("__DESCRIPTION__", articles[i].description);
+
+					let description = articles[i].description;
+					if (description.length > 100) description = description.slice(0, 100) + '...';
+					var rowCurrent = newsRow
+						.replace("__ID__", articles[i].id)
+						.replace("__TITLE__", articles[i].title)
+						.replace("__DATE__", dateFormated).replace("__DESCRIPTION__", description);
 
 					if (articles[i].img) {
 						rowCurrent = rowCurrent.replace('__IMG__', articles[i].img)
