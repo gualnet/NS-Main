@@ -146,6 +146,20 @@ async function getPartner() {
 		});
 	});
 }
+async function getPartnerV2(searchOpt) {
+	
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const findPartnersResp = await DB_NS.partner.find(searchOpt, { raw: 1 });
+	if (findPartnersResp.error) {
+		console.error('[ERROR]', findPartnersResp);
+		throw new Error(findPartnersResp.message, { cause: findPartnersResp });
+	}
+
+	const partners = findPartnersResp.data;
+	return partners;
+}
 
 async function getPartnerByHarbourId(_harbour_id) {
 	return new Promise(resolve => {
@@ -677,15 +691,25 @@ exports.plugin =
 			}
 			_indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
 
-
-			if (_role == "user") {
-				for (var i = 0; i < _harbour_id.length; i++) {
-					_partners = _partners.concat(await getPartnerByHarbourId(_harbour_id[i]));
+			try {
+				if (_role == "user") {
+					for (var i = 0; i < _harbour_id.length; i++) {
+						_partners = await getPartnerV2({ harbour_id: _harbour_id[i] });
+					}
+				} else if (_role == "admin") {
+					_partners = await getPartnerV2({});
+					_partners = _partners.slice(0, 100);
 				}
-			}
-			else if (_role == "admin") {
-				_partners = await getPartner();
-				_partners = _partners.slice(0, 50);
+			} catch (error) {
+				console.error('[ERROR]', error);
+
+				_indexHtml = _indexHtml
+					.replace("__PARTNERS__", '')
+					.replace("<div id=\"harbourError\"></div>", '<div id="harbourError" class="alert alert-danger">Erreur lors du chargement des partenaires</div>');
+
+				res.setHeader("Content-Type", "text/html");
+				res.end(_indexHtml);
+				return;
 			}
 
 			var categories = `
@@ -755,8 +779,6 @@ exports.plugin =
 					.replace(/__SPOTYRIDE_LINK__/g, _partners[i].spotyrideLink || '');
 			}
 			_indexHtml = _indexHtml.replace("__PARTNERS__", _partnerGen).replace(/undefined/g, '');
-
-
 
 			res.setHeader("Content-Type", "text/html");
 			res.end(_indexHtml);
