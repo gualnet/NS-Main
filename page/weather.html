@@ -146,7 +146,7 @@
                 pagination: 'false'
             });
 
-            fetch("/api/weather/" + localStorage["harbour_id"]).then(response => response.json()).then(_data => {
+            fetch("/api/weather/forecasts/" + localStorage["harbour_id"]).then(response => response.json()).then(_data => {
                 if (_data.data.data) {
                     document.getElementById("weather").innerHTML = '<p class="text-secondary text-justify" style="padding-top:100px;">Aucun bulletin météo publié pour ce port.</p>';
                 } else {
