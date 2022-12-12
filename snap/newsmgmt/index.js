@@ -1,4 +1,5 @@
 
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
@@ -78,15 +79,19 @@ async function getNewById(_id) {
     });
 }
 
-async function getNew() {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_newCol, {}, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+async function getNewsV2(searchOpt) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.info('[INFO] Search new with params', searchOpt);
+	const findNewsResp = await DB_NS.news.find(searchOpt, { raw: 1 });
+	if (findNewsResp.error) {
+		throw new Error(findNewsResp.message, { cause: findNewsResp });
+	}
+
+	const news = findNewsResp.data;
+	console.info('[INFO] Found', news.length, 'news.');
+	return(news);
 }
 
 async function getNewsByHarbourId(_harbour_id) {
@@ -144,7 +149,7 @@ async function getAdminById(_id) {
 }
 
 exports.handler = async (req, res) => {
-    var _new = await getNew();
+    var _new = await getNewsV2({});
     res.end(JSON.stringify(_new));
     return;
 }
@@ -329,19 +334,32 @@ exports.plugin =
             var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             var _newHtml = fs.readFileSync(path.join(__dirname, "news.html")).toString();
             var _News = [];
-            if (_role == "user") {
-                for (var i = 0; i < _harbour_id.length; i++) {
-                    _News = _News.concat(await getNewsByHarbourId(_harbour_id[i]));
-                }
-            }
-            else if (_role == "admin")
-                _News = await getNew();
+
+						try {
+							if (_role == "user") {
+								for (var i = 0; i < _harbour_id.length; i++) {
+									_News = _News.concat(await getNewsV2({ harbour_id: _harbour_id[i] }));
+								}
+							}
+							else if (_role == "admin") {
+								_News = await getNewsV2({});
+							}
+						} catch (error) {
+							console.error('[ERROR]', error);
+							res.setHeader("Content-Type", "text/html");
+							_indexHtml = _indexHtml
+								.replace('__NEWS__', '')
+								.replace('<div id="harbourError"></div>', '<div id="harbourError" class="alert alert-danger">Erreur lors de la récupération des actualités.</div>')
+							res.end(_indexHtml);
+							return;
+						}
+            
 
             var _newGen = "";
             for (var i = 0; i < _News.length; i++) {
-                if (_News[i].category == "news")
+                if (_News[i].category === "news")
                     _News[i].category = "actualité";
-                else if (_News[i].category == "event")
+                else if (_News[i].category === "event")
                     _News[i].category = "évennement";
 
                 var date = new Date(_News[i].date);
