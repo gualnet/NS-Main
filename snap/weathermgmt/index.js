@@ -496,7 +496,7 @@ exports.plugin =
 
             var _weatherGen = "";
             for (var i = 0; i < _weathers.length; i++) {
-                var date = new Date(_weathers[i].date);
+                var date = new Date(_weathers[i].created_at || _weathers[i].date);
                 var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
                 var currentHarbour = await STORE.harbourmgmt.getHarbourById(_weathers[i].harbour_id);
                 _weatherGen += _weatherHtml.replace(/__ID__/g, _weathers[i].id)
