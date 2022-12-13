@@ -68,17 +68,11 @@ function verifyPostReq(_req, _res) {
     return true;
 }
 
-async function getNewById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_newCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_news[]>}
+ */
 async function getNewsV2(searchOpt) {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
@@ -92,17 +86,6 @@ async function getNewsV2(searchOpt) {
 	const news = findNewsResp.data;
 	console.info('[INFO] Found', news.length, 'news.');
 	return(news);
-}
-
-async function getNewsByHarbourId(_harbour_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_newCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
 }
 
 async function delNew(_id) {
@@ -155,27 +138,23 @@ exports.handler = async (req, res) => {
 }
 
 async function getNewHandler(req, res) {
-    var _data = await getNewById(req.param.news_id);
-    if (typeof (_data) != "string") {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
-        UTILS.httpUtil.dataError(req, res, "Error", _data, "100", "1.0");
-        return;
-    }
+	try {
+		const news = await getNewsV2({ id: req.param.news_id });
+		UTILS.httpUtil.dataSuccess(req, res, "success", news[0], "1.0");
+		return;
+	} catch (error) {
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la recuperation des actualités", "100", "1.0");
+	}
 }
 
 async function getNewsByHarbourIdHandler(req, res) {
-    var _data = await getNewsByHarbourId(req.param.harbour_id);
-    if (typeof (_data) != "string") {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
-        UTILS.httpUtil.dataError(req, res, "Error", _data, "100", "1.0");
-        return;
-    }
+	try {
+		const news = await getNewsV2({ harbour_id: req.param.harbour_id });
+		UTILS.httpUtil.dataSuccess(req, res, "success", news, "1.0");
+		return;
+	} catch (error) {
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la recuperation des actualités", "100", "1.0");
+	}
 }
 
 exports.router =
@@ -234,8 +213,16 @@ exports.plugin =
 
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.new_id) {
+							/**@type {TYPES.T_news} */
+							let currentNew = {};
+							try {
+								const foundNews = await getNewsV2({ id: req.post.id });
+								currentNew = foundNews[0];
+							} catch (error) {
+								UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
+								return;
+							}
 
-                var currentNew = await getNewById(req.post.id);
                 if (currentNew.cloudinary_img_public_id) {
                     await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
                 }
@@ -244,15 +231,20 @@ exports.plugin =
                 }
                 await delNew(req.get.new_id);
             }
-            else if (req.get.new_id) {
-                await getNewById(req.get.new_id);
-            }
         }
         if (req.method == "POST") {
             if (req.post.id) {
                 if (verifyPostReq(req, res)) {
+									/**@type {TYPES.T_news} */
+									let currentNew = {};
+									try {
+										const foundNews = await getNewsV2({ id: req.post.id });
+										currentNew = foundNews[0];
+									} catch (error) {
+										UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
+										return;
+									}
 
-                    var currentNew = await getNewById(req.post.id);
                     var _FD = req.post;
 
                     _FD.date = Date.now();

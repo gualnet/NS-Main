@@ -146,6 +146,12 @@ async function getPartner() {
 		});
 	});
 }
+
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_partner[]>}
+ */
 async function getPartnerV2(searchOpt) {
 	
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
@@ -276,8 +282,7 @@ async function getPartnersByHarbourHandler(_req, _res) {
 }
 
 async function getActivePartnersCategoryHandler(_req, _res) {
-
-	var partners = await getPartnerByHarbourId(_req.param.harbour_id);
+	const partners = await getPartnerV2({ harbour_id: _req.param.harbour_id });
 	var data = { activeCategories: {}, activeSubCategories: {} };
 	for (var i = 0; i < partners.length; i++) {
 		switch (partners[i].category) {
@@ -698,7 +703,7 @@ exports.plugin =
 					}
 				} else if (_role == "admin") {
 					_partners = await getPartnerV2({});
-					_partners = _partners.slice(0, 100);
+					_partners = _partners.slice(0, 200);
 				}
 			} catch (error) {
 				console.error('[ERROR]', error);

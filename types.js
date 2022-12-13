@@ -368,6 +368,22 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  */
 
 /**
+ * @typedef T_news
+ * @property {Date} date
+ * @property {string} category
+ * @property {string} cloudinary_img_public_id
+ * @property {string} cloudinary_pj_public_id
+ * @property {string} content
+ * @property {string} description
+ * @property {string} harbour_id
+ * @property {string} id
+ * @property {string} img
+ * @property {string} pj
+ * @property {string} pjname
+ * @property {string} title
+ */
+
+/**
  * @typedef T_SCHEMA_ODM_MODEL
  * @property {object} link: [FDB],
  * @property {string} collection: 'qrcode',
