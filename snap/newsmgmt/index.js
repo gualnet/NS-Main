@@ -155,15 +155,13 @@ exports.handler = async (req, res) => {
 }
 
 async function getNewHandler(req, res) {
-    var _data = await getNewById(req.param.news_id);
-    if (typeof (_data) != "string") {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
-        UTILS.httpUtil.dataError(req, res, "Error", _data, "100", "1.0");
-        return;
-    }
+	try {
+		const news = await getNewsV2({ id: req.param.news_id});
+		UTILS.httpUtil.dataSuccess(req, res, "success", news[0], "1.0");
+		return;
+	} catch (error) {
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la recuperation des actualités", "100", "1.0");
+	}
 }
 
 async function getNewsByHarbourIdHandler(req, res) {
