@@ -1,6 +1,8 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
+const {errorHandler} = require('../lib-js/errorHandler');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -81,7 +83,21 @@ async function getEventById(_id) {
     });
 }
 
-async function getEvent() {
+const getEventv2 = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const findEventsResp = await DB_NS.events.find(searchOpt, { raw: 1 });
+	console.log('findEventsResp', findEventsResp);
+	if (findEventsResp.error) {
+		console.error(findEventsResp);
+		throw new Error(findEventsResp.message, { cause: findEventsResp });
+	}
+
+	return (findEventsResp.data);
+}
+
+async function getEvent(searchOpt) {
     return new Promise(resolve => {
         STORE.db.linkdb.Find(_eventCol, {}, null, function (_err, _data) {
             if (_data)
@@ -123,6 +139,59 @@ async function createEvent(_obj) {
         });
     });
 }
+
+const createEventV2 = async (obj) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const createEventResp = await DB_NS.events.create(obj);
+	if (createEventResp.error) {
+		throw new Error(createEventResp, { cause: createEventResp });
+	}
+	return createEventResp.data;
+};
+
+const createNewEventHandler = async (req, res) => {
+	console.log('===createNewEventHandler===');
+	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		// CHECK IF TITLE ALREADY EXISTS
+		const findEventsResp = await DB_NS.events.find({ title: req.post.title }, { raw: 1 });
+		if (findEventsResp.error) {
+			throw new Error(findEventsResp.message, { cause: {findEventsResp} });
+		} else if (findEventsResp.data?.length > 0) {
+			throw new Error("This event title already exists", { cause: { httpCode: "400" } });
+		}
+
+		/**@type {TYPES.T_event} */
+		const newEvent = {
+			title: req.post.title,
+			description: req.post.description,
+			content: req.post.content,
+			img: req.post.img,
+			harbour_id: req.post.harbour_id,
+			category: req.post.category,
+			cloudinary_img_public_id: req.post.cloudinary_img_public_id,
+			date_start: req.post.date_start,
+			date_end: req.post.date_end,
+			created_at: new Date(Date.now()).getTime(),
+			date: new Date(Date.now()).getTime(),
+		}
+
+		const createdEvent = await createEventV2(newEvent);
+		console.log('createdEvent',createdEvent);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			event: createdEvent,
+		}));
+	} catch (error) {
+		errorHandler(res, error);
+	}
+};
 
 async function updateEvent(_obj) {
     return new Promise(resolve => {
@@ -187,6 +256,11 @@ exports.router =
             handler: getEventsByHarbourIdHandler,
             method: "GET",
         },
+				{
+					method: "POST",
+					route: "/api/event",
+					handler: createNewEventHandler,
+				},
     ];
 
 exports.plugin =
@@ -340,8 +414,15 @@ exports.plugin =
                     _Events = _Events.concat(await getEventsByHarbourId(_harbour_id[i]));
                 }
             }
-            else if (_role == "admin")
-                _Events = await getEvent();
+            else if (_role == "admin") {
+							try {
+								_Events = await getEventv2({});
+							} catch (error) {
+								console.error(error);
+								UTILS.httpUtil.dataError(req, res, "Error", error, "1.0");
+								return;
+							}
+						}
 
 
             var _eventGen = "";

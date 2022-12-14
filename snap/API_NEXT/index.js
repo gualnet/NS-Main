@@ -661,17 +661,24 @@ const deleteZonesHandler = async (req, res) => {
 // EVENTS - events
 const getEventsHandler = async (req, res) => {
 	try {
-		console.log('getEventsHandler')
+		/// console.log('getEventsHandler')
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const searchOpt = { ...req.get };
-		// console.log('searchOpt', searchOpt)
 		/** @type {Array<TYPES.T_e>} */
-		const foundObj = await getElements(TABLES.EVENTS, searchOpt);
-		console.log('Found Events', foundObj)
+		const findEventsResp = await DB_NS.events.find(searchOpt);
+		console.log('findEventsResp', findEventsResp);
+		if (findEventsResp.error) {
+			console.error('findEventsResp', findEventsResp);
+			throw new Error(findEventsResp.message, { cause: findEventsResp });
+		}
+		const foundEvents = findEventsResp.data;
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			count: foundObj.length,
-			events: foundObj,
+			count: foundEvents.length,
+			events: foundEvents,
 		}));
 	} catch (error) {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
@@ -750,6 +757,8 @@ const updateEventsHandler = async (req, res) => {
 const deleteEventsHandler = async (req, res) => {
 	try {
 		console.log('deleteEventsHandler')
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
 		const searchObj = { ...req.get };
 
 		if (Object.keys(searchObj).length < 1) {
@@ -757,14 +766,19 @@ const deleteEventsHandler = async (req, res) => {
 		}
 
 		/**@type {Array<TYPES.T_event>} */
-		const deletedObj = await deleteElement(TABLES.EVENTS, searchObj);
-		console.log('Deleted events', deletedObj)
+		const deleteEventResp = await DB_NS.events.delete(searchObj);
+		if (deleteEventResp.error) {
+			console.error('deleteEventResp', deleteEventResp);
+			throw new Error(deleteEventResp.message, { cause: deleteEventResp });
+		}
+		const deletedEvent = deleteEventResp.data;
+		console.log('Deleted event', deletedEvent)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			count: deletedObj.length,
-			events: deletedObj,
+			count: deletedEvent.length,
+			events: deletedEvent,
 		}));
 	} catch (error) {
 		console.error(error);
