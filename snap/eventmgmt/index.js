@@ -140,16 +140,15 @@ async function createEvent(_obj) {
     });
 }
 
-const createEventNew = async (obj) => {
+const createEventV2 = async (obj) => {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	const createEventResp = await DB_NS.events.create(obj);
-	console.log(createEventResp);
 	if (createEventResp.error) {
-		console.error(createEventResp);
 		throw new Error(createEventResp, { cause: createEventResp });
 	}
+	return createEventResp.data;
 };
 
 const createNewEventHandler = async (req, res) => {
@@ -180,13 +179,8 @@ const createNewEventHandler = async (req, res) => {
 			created_at: new Date(Date.now()).getTime(),
 			date: new Date(Date.now()).getTime(),
 		}
-		console.log('newEvent', newEvent);
 
-		const createdEventResp = await DB_NS.events.create(newEvent);
-		if (createdEventResp.error) {
-			throw new Error(createdEventResp.message, { cause: {createdEventResp} });
-		}
-		const createdEvent = createdEventResp.data;
+		const createdEvent = await createEventV2(newEvent);
 		console.log('createdEvent',createdEvent);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
