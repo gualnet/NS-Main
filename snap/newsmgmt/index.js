@@ -176,6 +176,8 @@ exports.plugin =
     title: "Gestion des actualités",
     desc: "",
     handler: async (req, res) => {
+			console.log('NEWSMGMT HANDLER')
+			console.log('REQUEST METHOD: ', req.method);
 			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 			const DB_NS = SCHEMA.NAUTICSPOT;
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
@@ -212,13 +214,16 @@ exports.plugin =
 				}
 
         if (req.method == "GET") {
+					console.log('REQUEST GET PARAM: ', req.get);
             if (req.get.mode && req.get.mode == "delete" && req.get.new_id) {
 							/**@type {TYPES.T_news} */
 							let currentNew = {};
 							try {
-								const foundNews = await getNewsV2({ id: req.post.id });
+								const foundNews = await getNewsV2({ id: req.get.new_id });
+								console.log('foundNews',foundNews)
 								currentNew = foundNews[0];
 							} catch (error) {
+								console.log('[ERROR]', error);
 								UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
 								return;
 							}
@@ -233,7 +238,8 @@ exports.plugin =
             }
         }
         if (req.method == "POST") {
-            if (req.post.id) {
+					if (req.post.id) {
+							console.log('REQUEST POST ID: ', req.post.id);
                 if (verifyPostReq(req, res)) {
 									/**@type {TYPES.T_news} */
 									let currentNew = {};
@@ -241,6 +247,7 @@ exports.plugin =
 										const foundNews = await getNewsV2({ id: req.post.id });
 										currentNew = foundNews[0];
 									} catch (error) {
+										console.log('[ERROR]', error);
 										UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
 										return;
 									}
@@ -250,28 +257,54 @@ exports.plugin =
                     _FD.date = Date.now();
 
                     //img gesture
-                    if (_FD.img) {
-                        var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);;
-                        console.log(upload);
-                        _FD.img = upload.secure_url;
-                        _FD.cloudinary_img_public_id = upload.public_id;
-                        if (currentNew.cloudinary_img_public_id) {
-                            await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
-                        }
-
-                    }
+										if (_FD.img) {
+											console.log('Upload image on cloudinary')
+											try {
+												var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
+												if (upload.name === 'Error') {
+													throw new Error(upload.message, { cause: upload });
+												}
+												console.log('Upload image OK\n', upload);
+												_FD.img = upload.secure_url;
+												_FD.cloudinary_img_public_id = upload.public_id;
+												if (currentNew.cloudinary_img_public_id) {
+													await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
+												}
+											} catch (error) {
+												console.error('[ERROR]', error);
+												if (error.message.includes('File size too large')) {
+													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+													return;
+												}
+												UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+												return;
+											}
+										}
 
                     //pj gesture
-                    if (_FD.pj) {
-                        console.log(_FD.pj);
-                        var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
-                        console.log(upload);
-                        _FD.pj = upload.secure_url;
-                        _FD.cloudinary_pj_public_id = upload.public_id;
-                        if (currentNew.cloudinary_pj_public_id) {
-                            await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
-                        }
-                    }
+										if (_FD.pj) {
+											console.log('Upload attachment on cloudinary')
+											try {
+												var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
+												if (upload.name === 'Error') {
+													throw new Error(upload.message, { cause: upload });
+												}
+												console.log('Upload attachment OK\n', upload);
+												_FD.pj = upload.secure_url;
+												_FD.cloudinary_pj_public_id = upload.public_id;
+												if (currentNew.cloudinary_pj_public_id) {
+													await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
+												}
+											} catch (error) {
+												console.error('[ERROR]', error);
+												if (error.message.includes('File size too large')) {
+													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+													return;
+												}
+												UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+												return;
+											}
+										}
 
                     var news = await updateNew(_FD);
                     console.log(news);
@@ -285,6 +318,8 @@ exports.plugin =
                 }
             }
             else {
+							console.log('REQUEST POST BODY title: ', req.post.body?.title);
+							console.log('REQUEST POST BODY harbour_id: ', req.post.body?.harbour_id);
                 if (typeof req.body == "object" && req.multipart) {
                     if (verifyPostReq(req, res)) {
                         var _FD = req.post;
@@ -294,19 +329,46 @@ exports.plugin =
 
                         //img gesture
                         if (_FD.img) {
-                            var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-                            console.log(upload);
-                            _FD.img = upload.secure_url;
-                            _FD.cloudinary_img_public_id = upload.public_id;
+													console.log('Upload image on cloudinary')
+													try {
+														var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
+														if (upload.name === 'Error') {
+															throw new Error(upload.message, { cause: upload });
+														}
+														console.log('Upload image OK\n', upload);
+														_FD.img = upload.secure_url;
+														_FD.cloudinary_img_public_id = upload.public_id;
+													} catch (error) {
+														console.error('[ERROR]', error);
+														if (error.message.includes('File size too large')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+															return;
+														}
+														UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+														return;
+													}
                         }
 
                         //pj gesture
                         if (_FD.pj) {
-                            console.log(_FD.pj);
-                            var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
-                            console.log(upload);
-                            _FD.pj = upload.secure_url;
-                            _FD.cloudinary_pj_public_id = upload.public_id;
+													console.log('Upload attachment on cloudinary')
+													try {
+														var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
+														if (upload.name === 'Error') {
+															throw new Error(upload.message, { cause: upload });
+														}
+														console.log('Upload attachment OK\n', upload);
+														_FD.pj = upload.secure_url;
+														_FD.cloudinary_pj_public_id = upload.public_id;
+													} catch (error) {
+														console.error('[ERROR]', error);
+														if (error.message.includes('File size too large')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+															return;
+														}
+														UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+														return;
+													}
                         }
 
                         var news = await createNew(_FD);
