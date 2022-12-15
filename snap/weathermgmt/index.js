@@ -325,7 +325,7 @@ exports.handler = async (req, res) => {
 exports.router =
     [
 				{
-						route: "/api/weather/coord/",
+						route: "/api/weather/coord",
 						handler: getWeatherFromLatLonHandler,
 						method: "GET",
 				},
