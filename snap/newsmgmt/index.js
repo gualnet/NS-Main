@@ -220,21 +220,23 @@ exports.plugin =
 							let currentNew = {};
 							try {
 								const foundNews = await getNewsV2({ id: req.get.new_id });
-								console.log('foundNews',foundNews)
 								currentNew = foundNews[0];
+								if (currentNew) {
+									if (currentNew?.cloudinary_img_public_id) {
+										await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
+									}
+									if (currentNew?.cloudinary_pj_public_id) {
+											await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
+									}
+									await delNew(req.get.new_id);
+								}
 							} catch (error) {
 								console.log('[ERROR]', error);
 								UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
 								return;
 							}
 
-                if (currentNew.cloudinary_img_public_id) {
-                    await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
-                }
-                if (currentNew.cloudinary_pj_public_id) {
-                    await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
-                }
-                await delNew(req.get.new_id);
+                
             }
         }
         if (req.method == "POST") {
@@ -273,7 +275,10 @@ exports.plugin =
 											} catch (error) {
 												console.error('[ERROR]', error);
 												if (error.message.includes('File size too large')) {
-													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+													UTILS.httpUtil.dataError(req, res, "Error Image", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise. (Max 20Mo)", "1.0");
+													return;
+												} else if (error.message.includes('Invalid image file')) {
+													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'image\' est invalide.", "1.0");
 													return;
 												}
 												UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
@@ -298,7 +303,10 @@ exports.plugin =
 											} catch (error) {
 												console.error('[ERROR]', error);
 												if (error.message.includes('File size too large')) {
-													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+													UTILS.httpUtil.dataError(req, res, "Error Attachement", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise. (Max 20Mo)", "1.0");
+													return;
+												} else if (error.message.includes('Invalid image file')) {
+													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'Piece jointe\' est invalide.", "1.0");
 													return;
 												}
 												UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
@@ -341,7 +349,10 @@ exports.plugin =
 													} catch (error) {
 														console.error('[ERROR]', error);
 														if (error.message.includes('File size too large')) {
-															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de l'image dépasse la taille maximale permise.", "1.0");
+															return;
+														} else if (error.message.includes('Invalid image file')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'image\' est invalide.", "1.0");
 															return;
 														}
 														UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
@@ -364,6 +375,9 @@ exports.plugin =
 														console.error('[ERROR]', error);
 														if (error.message.includes('File size too large')) {
 															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+															return;
+														} else if (error.message.includes('Invalid image file')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'Piece jointe\' est invalide.", "1.0");
 															return;
 														}
 														UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
