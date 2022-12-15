@@ -295,7 +295,7 @@
 						const phoneIconEl = document.querySelector('#phoneIcon');
 						if (partner.prefixed_phone) {
 							const linkEl = phoneIconEl?.querySelector('a');
-							if (linkEl) linkEl.href = `tel:${partner.prefixed_phone}`;
+							if (linkEl) linkEl.href = `tel:${partner.prefixed_phone.replace("+", "00")}`;
 							else phoneIconEl.classList.add('btn-off');
 						} else {
 							phoneIconEl.classList.add('btn-off');
@@ -305,7 +305,7 @@
 						const mailIconEl = document.querySelector('#mailIcon');
 						if (partner.email) {
 							const linkEl = mailIconEl?.querySelector('a');
-							if (linkEl) linkEl.href = `mailto:${partner.email}`;
+							if (linkEl) linkEl.href = `mailto:${partner.email}?cc=&bcc=&subject=&body=`;
 							else mailIconEl.classList.add('btn-off');
 						} else {
 							mailIconEl.classList.add('btn-off');
