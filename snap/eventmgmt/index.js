@@ -87,12 +87,13 @@ const getEventv2 = async (searchOpt) => {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
+	console.log('Find events with searchOpt', searchOpt);
 	const findEventsResp = await DB_NS.events.find(searchOpt, { raw: 1 });
-	console.log('findEventsResp', findEventsResp);
 	if (findEventsResp.error) {
 		console.error(findEventsResp);
 		throw new Error(findEventsResp.message, { cause: findEventsResp });
 	}
+	console.log('Found events', findEventsResp.data.length);
 
 	return (findEventsResp.data);
 }
@@ -165,6 +166,15 @@ const createNewEventHandler = async (req, res) => {
 			throw new Error("This event title already exists", { cause: { httpCode: "400" } });
 		}
 
+		if (typeof req.post.date_start === "number") {
+			// transform en tring DD/MM/YYYY
+			req.post.date_start = new Date(req.post.date_start).getTime();
+		}
+		if (typeof req.post.date_end === "number") {
+			// transform en tring DD/MM/YYYY
+			req.post.date_end = new Date(req.post.date_end).getTime();
+		}
+
 		/**@type {TYPES.T_event} */
 		const newEvent = {
 			title: req.post.title,
@@ -220,8 +230,49 @@ exports.handler = async (req, res) => {
     return;
 }
 
+/**
+ * 
+ * @param {Object} searchOpt 
+ * @return {TYPES.T_event[]}
+ */
+const findEventsV2 = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Seach event by:', searchOpt);
+	const findEventsResp = await DB_NS.events.find(searchOpt);
+	if (findEventsResp.error) {
+		console.error('[ERROR]', findEventsResp.error);
+		throw new Error(findEventsResp.message, { cause: findEventsResp });
+	}
+	const events = findEventsResp.data;
+	console.log('Found ', events.length, 'events items.');
+	return events;
+};
+
+
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_event[]>}
+ */
+const deleteEventsV2 = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Delete event by:', searchOpt);
+	const deleteEventsResp = await DB_NS.events.delete(searchOpt, { raw: 1 });
+	if (deleteEventsResp.error) {
+		throw new Error(deleteEventsResp.message, { cause: deleteEventsResp });
+	}
+	const deletedEvents = deleteEventsResp.data;
+	console.log('deletedEvents',deletedEvents);
+	return deletedEvents;
+}
+
 async function getEventHandler(req, res) {
-    var _data = await getEventById(req.get.id);
+    // var _data = await getEventById(req.get.id);
+		const _data = await findEventsV2({ id: req.get.id });
     if (typeof (_data) != "string") {
         UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
         return;
@@ -233,7 +284,7 @@ async function getEventHandler(req, res) {
 }
 
 async function getEventsByHarbourIdHandler(req, res) {
-    var _data = await getEventsByHarbourId(req.param.harbour_id);
+		const _data = await findEventsV2({ harbour_id: req.param.harbour_id });
     if (typeof (_data) != "string") {
         UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
         return;
@@ -268,7 +319,6 @@ exports.plugin =
     title: "Gestion des événements",
     desc: "",
     handler: async (req, res) => {
-				// var admin = await getAdminById(req.userCookie.data.id);
 			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 			const DB_NS = SCHEMA.NAUTICSPOT;
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
@@ -304,19 +354,21 @@ exports.plugin =
 					return;
 				}
 
+				console.log('METHOD', req.method)
         if (req.method == "GET") {
+					console.log('req.get', req.get);
+					console.log('req.post', req.post);
+
             if (req.get.mode && req.get.mode == "delete" && req.get.event_id) {
-                var currentEvent = await getEventById(req.post.id);
-                if (currentEvent.cloudinary_img_public_id) {
+								const [currentEvent] = await findEventsV2({ id: req.get.event_id });
+                if (currentEvent?.cloudinary_img_public_id) {
                     await STORE.cloudinary.deleteFile(currentEvent.cloudinary_img_public_id);
                 }
-                if (currentEvent.cloudinary_pj_public_id) {
+                if (currentEvent?.cloudinary_pj_public_id) {
                     await STORE.cloudinary.deleteFile(currentEvent.cloudinary_pj_public_id);
                 }
-                await delEvent(req.get.event_id);
-            }
-            else if (req.get.event_id) {
-                await getEventById(req.get.event_id);
+                // await delEvent(req.get.event_id);
+                await deleteEventsV2({ id: req.get.event_id });
             }
         }
         if (req.method == "POST") {
@@ -411,12 +463,12 @@ exports.plugin =
             var _Events = [];
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _Events = _Events.concat(await getEventsByHarbourId(_harbour_id[i]));
+                    _Events = _Events.concat(await getEventv2({ harbour_id: _harbour_id[i] }));
                 }
             }
             else if (_role == "admin") {
 							try {
-								_Events = await getEventv2({});
+								_Events = await getEventv2();
 							} catch (error) {
 								console.error(error);
 								UTILS.httpUtil.dataError(req, res, "Error", error, "1.0");
