@@ -73,8 +73,12 @@
 			}
 		};
 
-		const displayOffer = (offer = []) => {
+		const displayOffer = (offer) => {
 			console.log('displayOffer', offer);
+			if (!offer) {
+				console.warn('No offer to display !')
+				return;
+			}
 			const titleEl = document.querySelector('#title');
 			if (titleEl) titleEl.innerHTML = offer.title;
 			const descriptionEl = document.querySelector('#description');
