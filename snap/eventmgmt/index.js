@@ -163,7 +163,7 @@ const createNewEventHandler = async (req, res) => {
 		if (findEventsResp.error) {
 			throw new Error(findEventsResp.message, { cause: {findEventsResp} });
 		} else if (findEventsResp.data?.length > 0) {
-			throw new Error("This event title already exists", { cause: { httpCode: "400" } });
+			throw new Error("This event title already exists", { cause: { httpCode: "409", publicMsg: "This event title already exists" } });
 		}
 
 		if (typeof req.post.date_start === "number") {
@@ -468,7 +468,7 @@ exports.plugin =
             }
             else if (_role == "admin") {
 							try {
-								_Events = await getEventv2();
+								_Events = await getEventv2({});
 							} catch (error) {
 								console.error(error);
 								UTILS.httpUtil.dataError(req, res, "Error", error, "1.0");

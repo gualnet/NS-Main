@@ -16,7 +16,7 @@ function logError(error, options) {
 
 	const msg = `- ERROR [${new Date().toLocaleString('fr-FR')}] [${options.module}]\n => [${error.stack || error}]\n\n`;
 	// fs.appendFileSync(FILE_PATH, msg);
-	fs.appendFileSync(FILE_PATH, msg, { flag: 'as'});
+	// fs.appendFileSync(FILE_PATH, msg, { flag: 'as'});
 };
 
 module.exports = {
