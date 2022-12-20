@@ -54,7 +54,8 @@
             var url = new URLSearchParams(window.location.search);
             fetch("/api/event/?id=" + url.get('id')).then(response => response.json()).then(_data => {
                 console.log(_data);
-                var event = _data.data;
+                var events = _data.data;
+                const event = events[0];
                 date = new Date(event.date_start);
                 var startDateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
                 date = new Date(event.date_end);
