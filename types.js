@@ -429,6 +429,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.absences
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.news
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.qrcode
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.offers
  * @property {object} fortpress
  * @property {T_SCHEMA_ODM_MODEL} fortpress.user
  */
