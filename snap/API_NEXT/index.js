@@ -964,7 +964,7 @@ const updateMeteoHandler = async (req, res) => {
 		if (updateMeteoResp.error) {
 			throw new Error(updateMeteoResp.message, { cause: updateMeteoResp });
 		}
-		const updatedItem = findMeteoResp.data;
+		const updatedItem = updateMeteoResp.data;
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
