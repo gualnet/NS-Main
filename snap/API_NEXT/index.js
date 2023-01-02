@@ -250,22 +250,26 @@ const getBoatsHandler = async (req, res) => {
 
 const createBoatsHandler = async (req, res) => {
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
 		console.log('createBoatsHandler')
-		// console.log('req.body', req.body);
+		console.log('req.body', req.body);
 		const { place_id, name, immatriculation,
-			is_resident, user, harbour } = req.body;
-		const newBoat = {
-			id: null,
-			place_id: place_id || null,
-			name: name || null,
-			immatriculation: immatriculation || null,
-			is_resident: is_resident || null,
-			user: user || null,
-			harbour: harbour || null,
-			created_at: Date.now(),
-		};
-		/**@type {TYPES.T_boat} */
-		const createdBoat = await createElement(TABLES.BOATS, newBoat);
+			is_resident, user_id, harbour_id } = req.body;
+
+		const createBoatResp = await DB_NS.boat.create({
+			place_id,
+			name,
+			immatriculation,
+			is_resident,
+			user_id,
+			harbour_id,
+		});
+		console.log('createBoatResp',createBoatResp)
+		if (createBoatResp.error) {
+			throw new Error(createBoatResp.message, { cause: createBoatResp });
+		}
+		const createdBoat = createBoatResp.data;
 		console.log('Created Boat', createdBoat);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -286,15 +290,22 @@ const createBoatsHandler = async (req, res) => {
 const updateBoatsHandler = async (req, res) => {
 	console.log('updateBoatsHandler')
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const searchObj = { ...req.get };
-		const updteObj = { ...req.body };
+		const updateObj = { ...req.body, updated_at: Date.now() };
 
 		if (Object.keys(searchObj).length < 1) {
 			throw new(Error('You must specify at least one search param'));
 		}
 
-		/**@type {Array<TYPES.T_boat>} */
-		const updatedBoats = await updateElement(TABLES.BOATS, searchObj, updteObj);
+		const updateBoatResp = await DB_NS.boat.update(searchObj, updateObj, { raw: 1 });
+		if (updateBoatResp.error) {
+			throw new Error(updateBoatResp.message, { cause: updateBoatResp });
+		}
+		const updatedBoats = updateBoatResp.data;
+		
 		console.log('Updated Boats', updatedBoats)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
