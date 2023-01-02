@@ -111,15 +111,8 @@ exports.plugin = {
 
 const getOfferByIdHandler = async (req, res) => {
 	try {
-		const userCookie = req.userCookie;
-		console.log('userCookie', userCookie);
-
-		console.log('req.param', req.param)
 		const offerId = req.param.offerId
-
-		let offer = await STORE.API_NEXT.getElements(ENUMS.TABLES.OFFERS, { id: offerId });
-		console.log('offer', offer);
-
+		const offer = await findOffers({ id: offerId });
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
@@ -138,17 +131,35 @@ const getOfferByIdHandler = async (req, res) => {
 	}
 };
 
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_offer[]>}
+ */
+const findOffers = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Find offers params', searchOpt);
+	const findOffersResp = await DB_NS.offers.find(searchOpt, { raw: 1 });
+	if (findOffersResp.error) {
+		throw new Error(findOffersResp.message, { cause: findOffersResp });
+	}
+
+	const offers = findOffersResp.data;
+	console.log(`Number of offers found: `, offers.length);
+	return offers;
+};
+
 const getOffersByHarbourIdHandler = async (req, res) => {
 	try {
-		const userCookie = req.userCookie;
-		// console.log('userCookie', userCookie);
+		console.log('=====getOffersByHarbourIdHandler=====')
 
-		// console.log('req.param', req.param)
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const harbourId = req.param.harbourId
-
-		let offers = await STORE.API_NEXT.getElements(ENUMS.TABLES.OFFERS, { harbour_id: harbourId });
-		// console.log('offers', offers);
-
+		const offers = await findOffers({ harbour_id: harbourId });
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,

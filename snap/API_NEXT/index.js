@@ -250,22 +250,26 @@ const getBoatsHandler = async (req, res) => {
 
 const createBoatsHandler = async (req, res) => {
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
 		console.log('createBoatsHandler')
-		// console.log('req.body', req.body);
+		console.log('req.body', req.body);
 		const { place_id, name, immatriculation,
-			is_resident, user, harbour } = req.body;
-		const newBoat = {
-			id: null,
-			place_id: place_id || null,
-			name: name || null,
-			immatriculation: immatriculation || null,
-			is_resident: is_resident || null,
-			user: user || null,
-			harbour: harbour || null,
-			created_at: Date.now(),
-		};
-		/**@type {TYPES.T_boat} */
-		const createdBoat = await createElement(TABLES.BOATS, newBoat);
+			is_resident, user_id, harbour_id } = req.body;
+
+		const createBoatResp = await DB_NS.boat.create({
+			place_id,
+			name,
+			immatriculation,
+			is_resident,
+			user_id,
+			harbour_id,
+		});
+		console.log('createBoatResp',createBoatResp)
+		if (createBoatResp.error) {
+			throw new Error(createBoatResp.message, { cause: createBoatResp });
+		}
+		const createdBoat = createBoatResp.data;
 		console.log('Created Boat', createdBoat);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -286,15 +290,22 @@ const createBoatsHandler = async (req, res) => {
 const updateBoatsHandler = async (req, res) => {
 	console.log('updateBoatsHandler')
 	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const searchObj = { ...req.get };
-		const updteObj = { ...req.body };
+		const updateObj = { ...req.body, updated_at: Date.now() };
 
 		if (Object.keys(searchObj).length < 1) {
 			throw new(Error('You must specify at least one search param'));
 		}
 
-		/**@type {Array<TYPES.T_boat>} */
-		const updatedBoats = await updateElement(TABLES.BOATS, searchObj, updteObj);
+		const updateBoatResp = await DB_NS.boat.update(searchObj, updateObj, { raw: 1 });
+		if (updateBoatResp.error) {
+			throw new Error(updateBoatResp.message, { cause: updateBoatResp });
+		}
+		const updatedBoats = updateBoatResp.data;
+		
 		console.log('Updated Boats', updatedBoats)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -661,17 +672,24 @@ const deleteZonesHandler = async (req, res) => {
 // EVENTS - events
 const getEventsHandler = async (req, res) => {
 	try {
-		console.log('getEventsHandler')
+		/// console.log('getEventsHandler')
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
 		const searchOpt = { ...req.get };
-		// console.log('searchOpt', searchOpt)
 		/** @type {Array<TYPES.T_e>} */
-		const foundObj = await getElements(TABLES.EVENTS, searchOpt);
-		console.log('Found Events', foundObj)
+		const findEventsResp = await DB_NS.events.find(searchOpt);
+		console.log('findEventsResp', findEventsResp);
+		if (findEventsResp.error) {
+			console.error('findEventsResp', findEventsResp);
+			throw new Error(findEventsResp.message, { cause: findEventsResp });
+		}
+		const foundEvents = findEventsResp.data;
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			count: foundObj.length,
-			events: foundObj,
+			count: foundEvents.length,
+			events: foundEvents,
 		}));
 	} catch (error) {
 		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
@@ -750,6 +768,8 @@ const updateEventsHandler = async (req, res) => {
 const deleteEventsHandler = async (req, res) => {
 	try {
 		console.log('deleteEventsHandler')
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
 		const searchObj = { ...req.get };
 
 		if (Object.keys(searchObj).length < 1) {
@@ -757,14 +777,19 @@ const deleteEventsHandler = async (req, res) => {
 		}
 
 		/**@type {Array<TYPES.T_event>} */
-		const deletedObj = await deleteElement(TABLES.EVENTS, searchObj);
-		console.log('Deleted events', deletedObj)
+		const deleteEventResp = await DB_NS.events.delete(searchObj);
+		if (deleteEventResp.error) {
+			console.error('deleteEventResp', deleteEventResp);
+			throw new Error(deleteEventResp.message, { cause: deleteEventResp });
+		}
+		const deletedEvent = deleteEventResp.data;
+		console.log('Deleted event', deletedEvent)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
 			success: true,
-			count: deletedObj.length,
-			events: deletedObj,
+			count: deletedEvent.length,
+			events: deletedEvent,
 		}));
 	} catch (error) {
 		console.error(error);
@@ -939,7 +964,7 @@ const updateMeteoHandler = async (req, res) => {
 		if (updateMeteoResp.error) {
 			throw new Error(updateMeteoResp.message, { cause: updateMeteoResp });
 		}
-		const updatedItem = findMeteoResp.data;
+		const updatedItem = updateMeteoResp.data;
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({

@@ -1,4 +1,5 @@
 
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
@@ -67,37 +68,24 @@ function verifyPostReq(_req, _res) {
     return true;
 }
 
-async function getNewById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_newCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_news[]>}
+ */
+async function getNewsV2(searchOpt) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 
-async function getNew() {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_newCol, {}, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+	console.info('[INFO] Search new with params', searchOpt);
+	const findNewsResp = await DB_NS.news.find(searchOpt, { raw: 1 });
+	if (findNewsResp.error) {
+		throw new Error(findNewsResp.message, { cause: findNewsResp });
+	}
 
-async function getNewsByHarbourId(_harbour_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_newCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+	const news = findNewsResp.data;
+	console.info('[INFO] Found', news.length, 'news.');
+	return(news);
 }
 
 async function delNew(_id) {
@@ -144,33 +132,29 @@ async function getAdminById(_id) {
 }
 
 exports.handler = async (req, res) => {
-    var _new = await getNew();
+    var _new = await getNewsV2({});
     res.end(JSON.stringify(_new));
     return;
 }
 
 async function getNewHandler(req, res) {
-    var _data = await getNewById(req.param.news_id);
-    if (typeof (_data) != "string") {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
-        UTILS.httpUtil.dataError(req, res, "Error", _data, "100", "1.0");
-        return;
-    }
+	try {
+		const news = await getNewsV2({ id: req.param.news_id });
+		UTILS.httpUtil.dataSuccess(req, res, "success", news[0], "1.0");
+		return;
+	} catch (error) {
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la recuperation des actualités", "100", "1.0");
+	}
 }
 
 async function getNewsByHarbourIdHandler(req, res) {
-    var _data = await getNewsByHarbourId(req.param.harbour_id);
-    if (typeof (_data) != "string") {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
-        UTILS.httpUtil.dataError(req, res, "Error", _data, "100", "1.0");
-        return;
-    }
+	try {
+		const news = await getNewsV2({ harbour_id: req.param.harbour_id });
+		UTILS.httpUtil.dataSuccess(req, res, "success", news, "1.0");
+		return;
+	} catch (error) {
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la recuperation des actualités", "100", "1.0");
+	}
 }
 
 exports.router =
@@ -192,6 +176,8 @@ exports.plugin =
     title: "Gestion des actualités",
     desc: "",
     handler: async (req, res) => {
+			console.log('NEWSMGMT HANDLER')
+			console.log('REQUEST METHOD: ', req.method);
 			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 			const DB_NS = SCHEMA.NAUTICSPOT;
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
@@ -228,53 +214,105 @@ exports.plugin =
 				}
 
         if (req.method == "GET") {
+					console.log('REQUEST GET PARAM: ', req.get);
             if (req.get.mode && req.get.mode == "delete" && req.get.new_id) {
+							/**@type {TYPES.T_news} */
+							let currentNew = {};
+							try {
+								const foundNews = await getNewsV2({ id: req.get.new_id });
+								currentNew = foundNews[0];
+								if (currentNew) {
+									if (currentNew?.cloudinary_img_public_id) {
+										await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
+									}
+									if (currentNew?.cloudinary_pj_public_id) {
+											await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
+									}
+									await delNew(req.get.new_id);
+								}
+							} catch (error) {
+								console.log('[ERROR]', error);
+								UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
+								return;
+							}
 
-                var currentNew = await getNewById(req.post.id);
-                if (currentNew.cloudinary_img_public_id) {
-                    await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
-                }
-                if (currentNew.cloudinary_pj_public_id) {
-                    await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
-                }
-                await delNew(req.get.new_id);
-            }
-            else if (req.get.new_id) {
-                await getNewById(req.get.new_id);
+                
             }
         }
         if (req.method == "POST") {
-            if (req.post.id) {
+					if (req.post.id) {
+							console.log('REQUEST POST ID: ', req.post.id);
                 if (verifyPostReq(req, res)) {
+									/**@type {TYPES.T_news} */
+									let currentNew = {};
+									try {
+										const foundNews = await getNewsV2({ id: req.post.id });
+										currentNew = foundNews[0];
+									} catch (error) {
+										console.log('[ERROR]', error);
+										UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
+										return;
+									}
 
-                    var currentNew = await getNewById(req.post.id);
                     var _FD = req.post;
 
                     _FD.date = Date.now();
 
                     //img gesture
-                    if (_FD.img) {
-                        var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);;
-                        console.log(upload);
-                        _FD.img = upload.secure_url;
-                        _FD.cloudinary_img_public_id = upload.public_id;
-                        if (currentNew.cloudinary_img_public_id) {
-                            await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
-                        }
-
-                    }
+										if (_FD.img) {
+											console.log('Upload image on cloudinary')
+											try {
+												var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
+												if (upload.name === 'Error') {
+													throw new Error(upload.message, { cause: upload });
+												}
+												console.log('Upload image OK\n', upload);
+												_FD.img = upload.secure_url;
+												_FD.cloudinary_img_public_id = upload.public_id;
+												if (currentNew.cloudinary_img_public_id) {
+													await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
+												}
+											} catch (error) {
+												console.error('[ERROR]', error);
+												if (error.message.includes('File size too large')) {
+													UTILS.httpUtil.dataError(req, res, "Error Image", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise. (Max 20Mo)", "1.0");
+													return;
+												} else if (error.message.includes('Invalid image file')) {
+													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'image\' est invalide.", "1.0");
+													return;
+												}
+												UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+												return;
+											}
+										}
 
                     //pj gesture
-                    if (_FD.pj) {
-                        console.log(_FD.pj);
-                        var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
-                        console.log(upload);
-                        _FD.pj = upload.secure_url;
-                        _FD.cloudinary_pj_public_id = upload.public_id;
-                        if (currentNew.cloudinary_pj_public_id) {
-                            await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
-                        }
-                    }
+										if (_FD.pj) {
+											console.log('Upload attachment on cloudinary')
+											try {
+												var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
+												if (upload.name === 'Error') {
+													throw new Error(upload.message, { cause: upload });
+												}
+												console.log('Upload attachment OK\n', upload);
+												_FD.pj = upload.secure_url;
+												_FD.cloudinary_pj_public_id = upload.public_id;
+												if (currentNew.cloudinary_pj_public_id) {
+													await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
+												}
+											} catch (error) {
+												console.error('[ERROR]', error);
+												if (error.message.includes('File size too large')) {
+													UTILS.httpUtil.dataError(req, res, "Error Attachement", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise. (Max 20Mo)", "1.0");
+													return;
+												} else if (error.message.includes('Invalid image file')) {
+													UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'Piece jointe\' est invalide.", "1.0");
+													return;
+												}
+												UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+												return;
+											}
+										}
 
                     var news = await updateNew(_FD);
                     console.log(news);
@@ -288,6 +326,8 @@ exports.plugin =
                 }
             }
             else {
+							console.log('REQUEST POST BODY title: ', req.post.body?.title);
+							console.log('REQUEST POST BODY harbour_id: ', req.post.body?.harbour_id);
                 if (typeof req.body == "object" && req.multipart) {
                     if (verifyPostReq(req, res)) {
                         var _FD = req.post;
@@ -297,19 +337,52 @@ exports.plugin =
 
                         //img gesture
                         if (_FD.img) {
-                            var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-                            console.log(upload);
-                            _FD.img = upload.secure_url;
-                            _FD.cloudinary_img_public_id = upload.public_id;
+													console.log('Upload image on cloudinary')
+													try {
+														var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
+														if (upload.name === 'Error') {
+															throw new Error(upload.message, { cause: upload });
+														}
+														console.log('Upload image OK\n', upload);
+														_FD.img = upload.secure_url;
+														_FD.cloudinary_img_public_id = upload.public_id;
+													} catch (error) {
+														console.error('[ERROR]', error);
+														if (error.message.includes('File size too large')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de l'image dépasse la taille maximale permise.", "1.0");
+															return;
+														} else if (error.message.includes('Invalid image file')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'image\' est invalide.", "1.0");
+															return;
+														}
+														UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+														return;
+													}
                         }
 
                         //pj gesture
                         if (_FD.pj) {
-                            console.log(_FD.pj);
-                            var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
-                            console.log(upload);
-                            _FD.pj = upload.secure_url;
-                            _FD.cloudinary_pj_public_id = upload.public_id;
+													console.log('Upload attachment on cloudinary')
+													try {
+														var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
+														if (upload.name === 'Error') {
+															throw new Error(upload.message, { cause: upload });
+														}
+														console.log('Upload attachment OK\n', upload);
+														_FD.pj = upload.secure_url;
+														_FD.cloudinary_pj_public_id = upload.public_id;
+													} catch (error) {
+														console.error('[ERROR]', error);
+														if (error.message.includes('File size too large')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: La taille de la pièce jointe dépasse la taille maximale permise.", "1.0");
+															return;
+														} else if (error.message.includes('Invalid image file')) {
+															UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Le type du fichier \'Piece jointe\' est invalide.", "1.0");
+															return;
+														}
+														UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "1.0");
+														return;
+													}
                         }
 
                         var news = await createNew(_FD);
@@ -329,19 +402,32 @@ exports.plugin =
             var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             var _newHtml = fs.readFileSync(path.join(__dirname, "news.html")).toString();
             var _News = [];
-            if (_role == "user") {
-                for (var i = 0; i < _harbour_id.length; i++) {
-                    _News = _News.concat(await getNewsByHarbourId(_harbour_id[i]));
-                }
-            }
-            else if (_role == "admin")
-                _News = await getNew();
+
+						try {
+							if (_role == "user") {
+								for (var i = 0; i < _harbour_id.length; i++) {
+									_News = _News.concat(await getNewsV2({ harbour_id: _harbour_id[i] }));
+								}
+							}
+							else if (_role == "admin") {
+								_News = await getNewsV2({});
+							}
+						} catch (error) {
+							console.error('[ERROR]', error);
+							res.setHeader("Content-Type", "text/html");
+							_indexHtml = _indexHtml
+								.replace('__NEWS__', '')
+								.replace('<div id="harbourError"></div>', '<div id="harbourError" class="alert alert-danger">Erreur lors de la récupération des actualités.</div>')
+							res.end(_indexHtml);
+							return;
+						}
+            
 
             var _newGen = "";
             for (var i = 0; i < _News.length; i++) {
-                if (_News[i].category == "news")
+                if (_News[i].category === "news")
                     _News[i].category = "actualité";
-                else if (_News[i].category == "event")
+                else if (_News[i].category === "event")
                     _News[i].category = "évennement";
 
                 var date = new Date(_News[i].date);

@@ -368,6 +368,22 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  */
 
 /**
+ * @typedef T_news
+ * @property {Date} date
+ * @property {string} category
+ * @property {string} cloudinary_img_public_id
+ * @property {string} cloudinary_pj_public_id
+ * @property {string} content
+ * @property {string} description
+ * @property {string} harbour_id
+ * @property {string} id
+ * @property {string} img
+ * @property {string} pj
+ * @property {string} pjname
+ * @property {string} title
+ */
+
+/**
  * @typedef T_SCHEMA_ODM_MODEL
  * @property {object} link: [FDB],
  * @property {string} collection: 'qrcode',
@@ -381,7 +397,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {() => Promise<Array>} deleteById: [Function (anonymous)],
  * @property {() => Promise<Array>} deleteMethod: [AsyncFunction (anonymous)],
  * @property {() => Promise<Array>} insert: [Function (anonymous)],
- * @property {() => Promise<Array>} create: [Function (anonymous)],
+ * @property {(query: Object, option: Object) => Promise<{error: boolean, data: array<>, message?: string}>} create: [Function (query: object, option: object)],
  * @property {() => Promise<Array>} update: [Function (anonymous)],
  * @property {() => Promise<Array>} updateById: [Function (anonymous)],
  * @property {() => Promise<Array>} putMethod: [AsyncFunction (anonymous)],
@@ -413,6 +429,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.absences
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.news
  * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.qrcode
+ * @property {T_SCHEMA_ODM_MODEL} NAUTICSPOT.offers
  * @property {object} fortpress
  * @property {T_SCHEMA_ODM_MODEL} fortpress.user
  */

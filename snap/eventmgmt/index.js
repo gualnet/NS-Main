@@ -1,6 +1,8 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
+const {errorHandler} = require('../lib-js/errorHandler');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -81,7 +83,22 @@ async function getEventById(_id) {
     });
 }
 
-async function getEvent() {
+const getEventv2 = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Find events with searchOpt', searchOpt);
+	const findEventsResp = await DB_NS.events.find(searchOpt, { raw: 1 });
+	if (findEventsResp.error) {
+		console.error(findEventsResp);
+		throw new Error(findEventsResp.message, { cause: findEventsResp });
+	}
+	console.log('Found events', findEventsResp.data.length);
+
+	return (findEventsResp.data);
+}
+
+async function getEvent(searchOpt) {
     return new Promise(resolve => {
         STORE.db.linkdb.Find(_eventCol, {}, null, function (_err, _data) {
             if (_data)
@@ -124,6 +141,68 @@ async function createEvent(_obj) {
     });
 }
 
+const createEventV2 = async (obj) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const createEventResp = await DB_NS.events.create(obj);
+	if (createEventResp.error) {
+		throw new Error(createEventResp, { cause: createEventResp });
+	}
+	return createEventResp.data;
+};
+
+const createNewEventHandler = async (req, res) => {
+	console.log('===createNewEventHandler===');
+	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		// CHECK IF TITLE ALREADY EXISTS
+		const findEventsResp = await DB_NS.events.find({ title: req.post.title }, { raw: 1 });
+		if (findEventsResp.error) {
+			throw new Error(findEventsResp.message, { cause: {findEventsResp} });
+		} else if (findEventsResp.data?.length > 0) {
+			throw new Error("This event title already exists", { cause: { httpCode: "409", publicMsg: "This event title already exists" } });
+		}
+
+		if (typeof req.post.date_start === "number") {
+			// transform en tring DD/MM/YYYY
+			req.post.date_start = new Date(req.post.date_start).getTime();
+		}
+		if (typeof req.post.date_end === "number") {
+			// transform en tring DD/MM/YYYY
+			req.post.date_end = new Date(req.post.date_end).getTime();
+		}
+
+		/**@type {TYPES.T_event} */
+		const newEvent = {
+			title: req.post.title,
+			description: req.post.description,
+			content: req.post.content,
+			img: req.post.img,
+			harbour_id: req.post.harbour_id,
+			category: req.post.category,
+			cloudinary_img_public_id: req.post.cloudinary_img_public_id,
+			date_start: req.post.date_start,
+			date_end: req.post.date_end,
+			created_at: new Date(Date.now()).getTime(),
+			date: new Date(Date.now()).getTime(),
+		}
+
+		const createdEvent = await createEventV2(newEvent);
+		console.log('createdEvent',createdEvent);
+
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			event: createdEvent,
+		}));
+	} catch (error) {
+		errorHandler(res, error);
+	}
+};
+
 async function updateEvent(_obj) {
     return new Promise(resolve => {
         STORE.db.linkdb.Update(_eventCol, { id: _obj.id }, _obj, function (_err, _data) {
@@ -151,8 +230,49 @@ exports.handler = async (req, res) => {
     return;
 }
 
+/**
+ * 
+ * @param {Object} searchOpt 
+ * @return {TYPES.T_event[]}
+ */
+const findEventsV2 = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Seach event by:', searchOpt);
+	const findEventsResp = await DB_NS.events.find(searchOpt);
+	if (findEventsResp.error) {
+		console.error('[ERROR]', findEventsResp.error);
+		throw new Error(findEventsResp.message, { cause: findEventsResp });
+	}
+	const events = findEventsResp.data;
+	console.log('Found ', events.length, 'events items.');
+	return events;
+};
+
+
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_event[]>}
+ */
+const deleteEventsV2 = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Delete event by:', searchOpt);
+	const deleteEventsResp = await DB_NS.events.delete(searchOpt, { raw: 1 });
+	if (deleteEventsResp.error) {
+		throw new Error(deleteEventsResp.message, { cause: deleteEventsResp });
+	}
+	const deletedEvents = deleteEventsResp.data;
+	console.log('deletedEvents',deletedEvents);
+	return deletedEvents;
+}
+
 async function getEventHandler(req, res) {
-    var _data = await getEventById(req.get.id);
+    // var _data = await getEventById(req.get.id);
+		const _data = await findEventsV2({ id: req.get.id });
     if (typeof (_data) != "string") {
         UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
         return;
@@ -164,7 +284,7 @@ async function getEventHandler(req, res) {
 }
 
 async function getEventsByHarbourIdHandler(req, res) {
-    var _data = await getEventsByHarbourId(req.param.harbour_id);
+		const _data = await findEventsV2({ harbour_id: req.param.harbour_id });
     if (typeof (_data) != "string") {
         UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
         return;
@@ -187,6 +307,11 @@ exports.router =
             handler: getEventsByHarbourIdHandler,
             method: "GET",
         },
+				{
+					method: "POST",
+					route: "/api/event",
+					handler: createNewEventHandler,
+				},
     ];
 
 exports.plugin =
@@ -194,7 +319,6 @@ exports.plugin =
     title: "Gestion des événements",
     desc: "",
     handler: async (req, res) => {
-				// var admin = await getAdminById(req.userCookie.data.id);
 			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 			const DB_NS = SCHEMA.NAUTICSPOT;
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
@@ -230,19 +354,21 @@ exports.plugin =
 					return;
 				}
 
+				console.log('METHOD', req.method)
         if (req.method == "GET") {
+					console.log('req.get', req.get);
+					console.log('req.post', req.post);
+
             if (req.get.mode && req.get.mode == "delete" && req.get.event_id) {
-                var currentEvent = await getEventById(req.post.id);
-                if (currentEvent.cloudinary_img_public_id) {
+								const [currentEvent] = await findEventsV2({ id: req.get.event_id });
+                if (currentEvent?.cloudinary_img_public_id) {
                     await STORE.cloudinary.deleteFile(currentEvent.cloudinary_img_public_id);
                 }
-                if (currentEvent.cloudinary_pj_public_id) {
+                if (currentEvent?.cloudinary_pj_public_id) {
                     await STORE.cloudinary.deleteFile(currentEvent.cloudinary_pj_public_id);
                 }
-                await delEvent(req.get.event_id);
-            }
-            else if (req.get.event_id) {
-                await getEventById(req.get.event_id);
+                // await delEvent(req.get.event_id);
+                await deleteEventsV2({ id: req.get.event_id });
             }
         }
         if (req.method == "POST") {
@@ -337,11 +463,18 @@ exports.plugin =
             var _Events = [];
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _Events = _Events.concat(await getEventsByHarbourId(_harbour_id[i]));
+                    _Events = _Events.concat(await getEventv2({ harbour_id: _harbour_id[i] }));
                 }
             }
-            else if (_role == "admin")
-                _Events = await getEvent();
+            else if (_role == "admin") {
+							try {
+								_Events = await getEventv2({});
+							} catch (error) {
+								console.error(error);
+								UTILS.httpUtil.dataError(req, res, "Error", error, "1.0");
+								return;
+							}
+						}
 
 
             var _eventGen = "";
