@@ -67,7 +67,6 @@
 				align-items: center;
 				display: flex;
 				flex-direction: column;
-				background-image: url("https://res.cloudinary.com/nauticspot/image/upload/v1648124858/qlhwypdmzp1hs0dxjhza.jpg");
 				background-position: center;
 				background-repeat: no-repeat;
 				background-size: cover;
@@ -725,11 +724,10 @@
 
 				if (harbour.email_concierge === ' ') delete harbour.email_concierge;
 
-				if (harbour.img) {
-					const topCtnEl = document.querySelector('#topCtn');
-					if (!topCtnEl) return;
-					topCtnEl.style.backgroundImage = `url(${harbour.img})`;
-				}
+				const topCtnEl = document.querySelector('#topCtn');
+				// DEFAULT LINK
+				let imgDefaultLink = "https://res.cloudinary.com/nauticspot/image/upload/v1672324077/GUERILLA%20-%20NAUTICSPOT/ports_corses/corse_image_mini_yvq7nw.jpg";
+				topCtnEl.style.backgroundImage = `url(${harbour.img || imgDefaultLink})`;
 
 				if (!harbour.email_concierge) {
 					document.getElementById('conciergerie_button').hidden = true//src = harbour.email_concierge;

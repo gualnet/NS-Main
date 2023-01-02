@@ -113,7 +113,7 @@
 		text-decoration: underline;
 	}
 	
-	.buttons-ctn #login-btn {
+	.buttons-ctn .login-btn {
 		align-items: center;
     align-self: center;
     background-color: rgb(40, 100, 240);
@@ -129,16 +129,16 @@
     font-size: 1.2rem;
     font-weight: bolder;
 	}
-	.buttons-ctn #login-btn.error {
+	.buttons-ctn .login-btn.error {
 		background-color: rgb(240, 40, 40);
 	}
-	.buttons-ctn #login-btn.success {
+	.buttons-ctn .login-btn.success {
 		background-color: rgb(40, 167, 69);
 	}
-	.buttons-ctn #loginText.hide {
+	.buttons-ctn .login-btn.hide {
 		display: none;
 	}
-	
+
 	.buttons-ctn > .register-ctn {
 		display: flex;
 		flex-direction: column;
@@ -224,7 +224,7 @@
 		});
 	
 		const addEventsListenersOnLoad = () => {
-			const connexionBtnEl = document.querySelector('#login-btn');
+			const connexionBtnEl = document.querySelector('#connect-btn');
 			if (connexionBtnEl) {
 				connexionBtnEl.addEventListener('click', clickOnConnexionBtnHandler);
 			}
@@ -251,14 +251,13 @@
 				const url = `/api/eresa/login/?login=${login}&password=${password}`
 				console.log('url', url)
 	
-				const loginTextEl = document.querySelector('#loginText');
-				loginTextEl.classList.add('hide');
+				const connectBtnEl = document.querySelector('#connect-btn');
+				connectBtnEl.classList.add('hide');
 	
-				const loginSpinnerEl = document.querySelector('#loginSpinner');
-				loginSpinnerEl.classList.remove('hide');
+				const spinnerBtnEl = document.querySelector('#spinner-btn');
+				spinnerBtnEl.classList.remove('hide');
 	
 				const res = await fetch(url);
-				console.log('res', res)
 				if (res.ok === false) {
 					throw new Error(res.statusText);
 				}
@@ -268,14 +267,10 @@
 					throw new Error('Error');
 				}
 	
-				console.log('XXXX')
-				const loginBtnEl = document.querySelector('#login-btn');
-				loginBtnEl.classList.add('success');
-				loginSpinnerEl.classList.add('hide');
-				loginTextEl.innerHTML = 'Success';
-				loginTextEl.classList.remove('hide');
-	
-	
+				const successBtnEl = document.querySelector('#success-btn');
+				spinnerBtnEl.classList.add('hide');
+				successBtnEl.classList.remove('hide');
+
 				console.log('jsonResp', jsonResp.data);
 				const magelanLogin = jsonResp.data.login;
 				const magelanToken = jsonResp.data.token;
@@ -288,13 +283,15 @@
 				}
 			} catch (error) {
 				console.error(error);
-				const loginBtnEl = document.querySelector('#login-btn');
-				const loginTextEl = document.querySelector('#loginText');
-				const loginSpinnerEl = document.querySelector('#loginSpinner');
-				loginBtnEl.classList.add('error');
-				loginTextEl.classList.remove('hide');
-				loginTextEl.innerHTML = 'Error';
-				loginSpinnerEl.classList.add('hide');
+				const connectBtnEl = document.querySelector('#connect-btn');
+				const spinnerBtnEl = document.querySelector('#spinner-btn');
+				const errorBtnEl = document.querySelector('#error-btn');
+				spinnerBtnEl.classList.add('hide');
+				errorBtnEl.classList.remove('hide');
+				setTimeout(() => {
+					errorBtnEl.classList.add('hide');
+					connectBtnEl.classList.remove('hide');
+				}, 2000);
 			}
 		};
 	
@@ -321,16 +318,25 @@
 					<div id="pwd-forget-btn">
 						<a href="https://www.resaportcorse.com/utilisateur/utilisateur/lostpassword" target="_blank">{{lang->magelan-login.pwd_forgot}}</a>
 					</div>
-					<div id="login-btn">
-						<div id="loginText">{{lang->magelan-login.title_btn_connection}}</div>
-						<div id="loginSpinner" class="lds-ellipsis hide">
+
+					<div class="login-btn connect" id="connect-btn">
+						<div>{{lang->magelan-login.title_btn_connection}}</div>
+					</div>
+					<div class="login-btn spinner hide" id="spinner-btn">
+						<div class="lds-ellipsis" >
 							<div></div>
 							<div></div>
 							<div></div>
 							<div></div>
 						</div>
-
 					</div>
+					<div class="login-btn success hide" id="success-btn">
+						<div>{{lang->magelan-login.title_btn_success}}</div>
+					</div>
+					<div class="login-btn error hide" id="error-btn">
+						<div>{{lang->magelan-login.title_btn_error}}</div>
+					</div>
+
 					<div class="register-ctn">
 						<div class="label">{{lang->magelan-login.msg_not_registered}}</div>
 						<a href="https://www.resaportcorse.com/utilisateur/inscription" target="_blank">

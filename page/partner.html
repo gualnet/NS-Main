@@ -9,6 +9,13 @@
 		flex-direction: column;
 		height: calc(100% - 56px);
 	}
+	#partnerImageContainer {
+		margin-top: 0;
+	}
+	#partnerImageContainer > {
+
+	}
+
 	#partnerDetailsContainer {
 		transform: translate(0px, -30px);
     background-color: white;
@@ -162,7 +169,7 @@
     <main class="flex-shrink-0">
         <!-- Fixed navbar -->
         {{element->navheader.html}}
-        <div class="product-image-top" style="background-color:white;">
+        <div class="product-image-top" id="partnerImageContainer" style="background-color:white;">
             <img id="partnerImg" class="background" style="height:auto;width:100%;" src="" alt="">
         </div>
         <!-- page content start -->
