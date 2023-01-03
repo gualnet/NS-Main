@@ -152,7 +152,6 @@
 			const rows = createOfferRows(offers, G_SelectedHarbourId);
 			displayOffers(rows);
 
-			console.log('addEventListener - LOAD')
 			const harboursSelectEl = document.querySelector('#harboursSelect');
 			harboursSelectEl.addEventListener('change', selectHarbourChangeHandler);
 		});
@@ -187,9 +186,7 @@
 		};
 
 		const reinitQuillAfterUpdate = () => {
-			console.log('reinitQuillAfterUpdate')
 			const descriptors = document.querySelectorAll('.row-description');
-			console.log('descriptors', descriptors)
 			for (item of descriptors) {
 				const itemId = item.id;
 				new Quill(`#${itemId}`, {
@@ -263,9 +260,9 @@
 						<td>
 							<div class="row-description" id="row_content_${offer.id}" style="width:400px;height:100px;">${offer.content}</div>
 						</td>
-						<td><input name="pjname" value="${offer.pjName || ''}"></td>
+						<td><input id="row_pj_name_${offer.id}" name="pjname" value="${offer.pjName || ''}"></td>
 						<td><a target="_blank" href="${offer.pj}">${offer.pj}</a></td>
-						<td><input type="file" class="form-control" name="pj"></td>
+						<td><input id="row_pj_${offer.id}" type="file" class="form-control" name="pj"></td>
 						<td><a target="_blank" href="${offer.img}">${offer.img}</a></td>
 						<td><input id="row_img_${offer.id}" type="file" accept="image/png, image/jpg" class="form-control" accept="image/png, image/jpg" name="img"></td>
 						<td>${offer.updated_at || offer.created_at}</td>
@@ -332,12 +329,20 @@
 				formData.append("date_end", document.querySelector(`#row_date_end_${id}`).value);
 
 				const imgEl = document.querySelector(`#row_img_${id}`);
-				console.log('files', imgEl.files)
-				const fileBlob = imgEl.files[0];
-				console.log('fileBlob', fileBlob)
-				if (fileBlob) {
-					formData.append("img", fileBlob);
+				const imgFileBlob = imgEl.files[0];
+				if (imgFileBlob) {
+					formData.append("img", imgFileBlob);
 				}
+
+				const pjEl = document.querySelector(`#row_pj_${id}`);
+				const pjfileBlob = pjEl.files[0];
+				if (pjfileBlob) {
+					formData.append("pj", pjfileBlob);
+				}
+
+				const pjNameEl = document.querySelector(`#row_pj_name_${id}`);
+				const pjName = pjNameEl.value || pjfileBlob?.name || 'unknown.file';
+				formData.append("pjName", pjName);
 
 				const url = `/api/offers/${id}`
 				const resp = await fetch(url, {

@@ -155,9 +155,6 @@ const getOffersByHarbourIdHandler = async (req, res) => {
 	try {
 		console.log('=====getOffersByHarbourIdHandler=====')
 
-		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-		const DB_NS = SCHEMA.NAUTICSPOT;
-
 		const harbourId = req.param.harbourId
 		const offers = await findOffers({ harbour_id: harbourId });
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -180,6 +177,7 @@ const getOffersByHarbourIdHandler = async (req, res) => {
 
 const CLOUDINARY_PATH = '/Nauticspot-Next/offers-attchements';
 const createOfferHandler = async (req, res) => {
+	console.log('===== OFFERS - createOfferHandler=====')
 	try {
 		// ! AUTH WILL COME ONE DAY
 		// console.log('req.headers', req.headers);
@@ -248,6 +246,7 @@ const createOfferHandler = async (req, res) => {
 };
 
 const updateOfferHandler = async (req, res) => {
+	console.log('===== OFFERS - updateOfferHandler=====')
 	try {
 		const { offerId } = req.param
 		const offer = {
@@ -259,7 +258,6 @@ const updateOfferHandler = async (req, res) => {
 			// img: req.body.img || null,
 			updated_at: new Date().toLocaleString(),
 		}
-
 		const opt = {
 			cloudinaryPath: CLOUDINARY_PATH,
 			isFileNameUsed: true,
@@ -274,6 +272,7 @@ const updateOfferHandler = async (req, res) => {
 		if (req.body.pjName) {
 			offer.pjName = req.body.pjName;
 		}
+
 		if (req.body.pj && !req.body.pj.includes('https://res.cloudinary.com')) {
 			const upload = await STORE.cloudinary.uploadFile(req.body.pj, offer.pjName, opt);
 			offer.pj = upload.secure_url;
@@ -300,6 +299,7 @@ const updateOfferHandler = async (req, res) => {
 };
 
 const deleteOfferHandler = async (req, res) => {
+	console.log('===== OFFERS - deleteOfferHandler=====')
 	try {
 		const { offerId } = req.param;
 
