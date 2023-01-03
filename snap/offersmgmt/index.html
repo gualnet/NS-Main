@@ -36,7 +36,7 @@
 								<h3 class="card-title">Gestion des offres</h3>
 							</div>
 							<div class="card-body">
-								<div id="harbourError"></div>
+								<div id="harbourError" style="background-color: lightcoral; padding: 10px; display: none; align-items: center;"></div>
 								<form method="POST" enctype="multipart/form-data" id="createForm">
 									<div class="row">
 										<div class="col-12">
@@ -344,20 +344,30 @@
 				const pjName = pjNameEl.value || pjfileBlob?.name || 'unknown.file';
 				formData.append("pjName", pjName);
 
-				const url = `/api/offers/${id}`
+				const url = `/api/offers/${id}`;
 				const resp = await fetch(url, {
           method: 'PUT',
 					body: formData,
 					headers: new Headers({ "Authorization": `Bearer ${localStorage['token']}` }),
 				});
-
 				const respJson = await resp.json();
+				if (respJson.success === false) {
+					console.error('error', respJson);
+					const errCtnEl = document.querySelector('#harbourError');
+					errCtnEl.style.display = 'flex';
+					errCtnEl.textContent = respJson.error;
+					alert(`Erreur: ${respJson.error}`);
+					setTimeout(() => {
+						errCtnEl.style.display = 'none';
+					}, 2000);
+					return;
+				}
 				const offers = await getofferByHarbour();
 				const rows = createOfferRows(offers);
 				displayOffers(rows);
 			} catch (error) {
 				console.error('error', error);
-				alert('ERROR !')
+				alert('Erreur !')
 			}
 		};
 
