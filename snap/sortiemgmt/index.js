@@ -222,7 +222,7 @@ const fetchOutigsDataFromIAS = async () => {
 	console.log('IAS_USER_TOKEN', IAS_USER_TOKEN);
 
 	const portId = '1';
-	const year = '2022';
+	const year = new Date().getFullYear();
 	const searchBy = 'boat';
 	const url = `https://api.nauticspot.io/fr/harbours/${portId}/activity-log-summaries?year=${year}&by=${searchBy}&`;
 	const headers = {
@@ -245,7 +245,7 @@ const fetchOutingsDetailsByBoatFromIAS = async (iasBoatId) => {
 	}
 
 	const portId = '1';
-	const year = '2022';
+	const year = new Date().getFullYear();
 	const url = `https://api.nauticspot.io/fr/harbours/${portId}/boats/${iasBoatId}/cavalaire-challenge-logs?year=${year}`;
 	const headers = {
 		'X-Auth-Token': IAS_USER_TOKEN,
@@ -371,12 +371,13 @@ async function getSortieUserHandler(req, res) {
 			/** @type {Array<TYPES.T_sortie>} */
 			const sorties = await STORE.API_NEXT.getElements('sorties', { boat_id: user.boat_id });
 			const validSorties = [];
+			const year = new Date().getFullYear()
 			sorties.map(sortie => {
 				const startDate = sortie.datetime_out;
-				const challengeStartDate = new Date('01/01/2022').getTime();
-				const challengeEndDate = new Date('04/15/2022').getTime();
-				const challengeStartDate2 = new Date('10/10/2022').getTime();
-				const challengeEndDate2 = new Date('12/31/2022').getTime();
+				const challengeStartDate = new Date(`01/01/${year}`).getTime();
+				const challengeEndDate = new Date(`04/15/${year}`).getTime();
+				const challengeStartDate2 = new Date(`10/10/${year}`).getTime();
+				const challengeEndDate2 = new Date(`12/31/${year}`).getTime();
 				if (challengeStartDate < startDate && challengeEndDate > startDate) {
 					validSorties.push(sortie);
 				}
