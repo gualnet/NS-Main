@@ -8,6 +8,11 @@
 {{element->navheader.html}}
 
 <style>
+	:root {
+		--vh: 1vh;
+		--main-blue: #0D5AA2
+	}
+
 	@font-face {
 		font-family: 'Poppins Regular';
 		font-style: normal;
@@ -19,14 +24,19 @@
 		height: -webkit-fill-available;
 	}
 
-	:root {
-		--vh: 1vh;
-	}
-
 	* {
 		margin: 0px;
 		padding: 0px;
 		box-sizing: border-box;
+	}
+
+	/* surcharge du theme par defaut */
+	.btn-outline-primary:not(:disabled):not(.disabled).active {
+		background-color: var(--main-blue);
+	}
+
+	.btn-outline-primary {
+		color: var(--main-blue);
 	}
 
 	body {
@@ -53,7 +63,7 @@
 	}
 
 	.main-button {
-		background-color: rgb(40, 100, 240);
+		background-color: var(--main-blue);
 		color: white;
 		font-weight: bold;
 		padding: 10px 40px;
@@ -333,6 +343,11 @@
 		display: none;
 	}
 
+	.stay-details-ctn .spinner-border {
+		height: 1em;
+		width: 1em;
+	}
+
 	.stay-details-ctn .popover-label {
 		background-color: rgb(194, 194, 194);
 		height: 1.5em;
@@ -388,6 +403,11 @@
 		padding: 0px;
 		height: fit-content;
 		margin-right: 4px;
+		outline: 1px solid rgba(0, 0, 0, 0.5);
+		outline-offset: -1;
+	}
+	.form-check-input.safari {
+		outline-offset: -2px;
 	}
 
 	.action-button-ctn {
@@ -568,8 +588,19 @@
 		displayBoatData();
 		initJqueryElements();
 		updateResaBtnStatus() // ! DEV
+		checkSafariExec();
 	});
 
+	const isSafari = () => {
+		return navigator.userAgent.toLowerCase().includes('safari')
+	}
+
+	const checkSafariExec = () => {
+		if (!isSafari()) return;
+
+		const checkboxEl = document.querySelector('.form-check-input');
+		checkboxEl.classList.add('safari');
+	};
 
 	// ========
 	// HANDLERS
@@ -814,9 +845,7 @@
 	const getCgvConsentStatus = () => {
 		console.log('=========getCgvConsentStatus==========');
 		const cgvCheckboxEl = document.querySelector('#cgvCheckbox');
-		console.log('cgvCheckboxEl', cgvCheckboxEl);
 		const isChecked = cgvCheckboxEl.checked;
-		console.log('isChecked', isChecked);
 		if (!isChecked) throw new Error('CGV not accepted');
 		return (isChecked);
 	};
@@ -1203,7 +1232,7 @@
 							</span>
 							<div class="spinner-ctn hide" id="priceSpinnerCtn">
 								<div class="spinner-border text-primary" id="totalPriceSpinner" role="status">
-									<span class="visually-hidden">{{lang->magelan-resa.msg_btn_loading}}</span>
+									<span class="visually-hidden"></span>
 								</div>
 							</div>
 							<input class="display-bubble" id="input-price-count" name="price-count" type="text"
