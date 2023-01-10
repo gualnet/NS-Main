@@ -8,6 +8,12 @@
 {{element->navheader.html}}
 
 <style>
+	:root {
+		--vh: 1vh;
+		--main-blue: #0D5AA2;
+		--form-blue: rgba(13, 89, 160, 0.01);
+	}
+
 	@font-face {
 		font-family: 'Poppins Regular';
 		font-style: normal;
@@ -19,14 +25,19 @@
 		height: -webkit-fill-available;
 	}
 
-	:root {
-		--vh: 1vh;
-	}
-
 	* {
 		margin: 0px;
 		padding: 0px;
 		box-sizing: border-box;
+	}
+
+	/* surcharge du theme par defaut */
+	.btn-outline-primary:not(:disabled):not(.disabled).active {
+		background-color: var(--main-blue);
+	}
+
+	.btn-outline-primary {
+		color: var(--main-blue);
 	}
 
 	body {
@@ -53,7 +64,7 @@
 	}
 
 	.main-button {
-		background-color: rgb(40, 100, 240);
+		background-color: var(--main-blue);
 		color: white;
 		font-weight: bold;
 		padding: 10px 40px;
@@ -69,7 +80,6 @@
 	}
 
 	.form-ctn {
-		background-color: rgba(255, 255, 255, 0.01);
 		border-radius: 20px;
 		box-shadow: 5px 0px 25px 0px #00000011;
 		display: flex;
@@ -83,6 +93,7 @@
 		border-radius: 20px 20px 0px 0px;
 		height: fit-content;
 		display: flex;
+		border: 1px solid rgba(128, 128, 128, 0.1);
 	}
 
 	.form-top>.form-selector {
@@ -104,11 +115,15 @@
 	}
 
 	.form-selector.active {
+		background-color: var(--form-blue);
 		border-bottom: 0px;
 	}
 
 	/* FORM CONTENT */
 	.form-ctn>.form-content {
+		border: 1px solid rgba(128, 128, 128, 0.1);
+		border-top: 0px;
+		background-color: var(--form-blue);
 		padding: 1.2rem;
 		font-size: .6rem;
 		display: flex;
@@ -241,13 +256,14 @@
 
 	.date-button-ctn>div>.label {
 		background-color: white;
+		border: 1px solid rgb(230, 230, 230);
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		font-size: 1rem;
-		padding: 10px 10px;
-		border-radius: 40px;
-		margin-bottom: 0px;
+		font-size: .8rem;
+		padding: 4px 10px;
+		margin-bottom: 5px;
+		border-radius: 10px;
 	}
 
 	.date-button-ctn>div>input {
@@ -264,6 +280,23 @@
 		height: auto;
 		flex-direction: column;
 		margin-bottom: .5rem;
+	}
+
+	.boat-details-ctn .first-ctn {
+		display: flex;
+		width: 100%;
+		justify-content: space-evenly;
+		align-items: baseline;
+	}
+	.boat-details-ctn .first-ctn > div:first-of-type {
+		display: flex;
+		flex-grow: 1;
+		padding: 4px 15px 4px 15px;
+	}
+	.boat-details-ctn .first-ctn > div:nth-of-type(2) {
+		display: flex;
+		width: fit-content;
+		justify-content: end;
 	}
 
 	.boat-details-ctn .size-ctn {
@@ -333,6 +366,11 @@
 		display: none;
 	}
 
+	.stay-details-ctn .spinner-border {
+		height: 1em;
+		width: 1em;
+	}
+
 	.stay-details-ctn .popover-label {
 		background-color: rgb(194, 194, 194);
 		height: 1.5em;
@@ -388,6 +426,11 @@
 		padding: 0px;
 		height: fit-content;
 		margin-right: 4px;
+		outline: 1px solid rgba(0, 0, 0, 0.5);
+		outline-offset: -1;
+	}
+	.form-check-input.safari {
+		outline-offset: -2px;
 	}
 
 	.action-button-ctn {
@@ -568,8 +611,19 @@
 		displayBoatData();
 		initJqueryElements();
 		updateResaBtnStatus() // ! DEV
+		checkSafariExec();
 	});
 
+	const isSafari = () => {
+		return navigator.userAgent.toLowerCase().includes('safari')
+	}
+
+	const checkSafariExec = () => {
+		if (!isSafari()) return;
+
+		const checkboxEl = document.querySelector('.form-check-input');
+		checkboxEl.classList.add('safari');
+	};
 
 	// ========
 	// HANDLERS
@@ -646,14 +700,21 @@
 	const formSelectorHandler = (ev) => {
 		const formContentNewEl = document.querySelector('#formNewResa');
 		const formContentListEl = document.querySelector('#formListResa');
+		const newResaBtnEl = document.querySelector('#newResaBtn');
+		const listResaBtnEl = document.querySelector('#listResaBtn');
+
 		const target = ev.target;
 		if (target.id === 'newResaBtn') {
 			formContentNewEl.classList.remove('hide');
 			formContentListEl.classList.add('hide');
+			newResaBtnEl.classList.add('active');
+			listResaBtnEl.classList.remove('active');
 		} else if (target.id === 'listResaBtn') {
 			getUserReservationList();
 			formContentNewEl.classList.add('hide');
 			formContentListEl.classList.remove('hide');
+			newResaBtnEl.classList.remove('active');
+			listResaBtnEl.classList.add('active');
 		}
 	};
 
@@ -681,10 +742,12 @@
 	const boatEditRowOnClickHandler = async (index) => {
 		G_selectedBoat = index;
 		const selectedBoat = G_boatList[G_selectedBoat];
+		console.log('selectedBoat',selectedBoat);
 
 		document.querySelector('#boatEditModal').style.display = 'none';
-		setFormBoatLongueur(selectedBoat.bateau_longueur)
-		setFormBoatLargeur(selectedBoat.bateau_largeur)
+		setFormBoatLongueur(selectedBoat.bateau_longueur);
+		setFormBoatLargeur(selectedBoat.bateau_largeur);
+		setFormBoatName(selectedBoat.bateau_nom);
 		await updateTotalPrice();
 		updateResaBtnStatus();
 	};
@@ -791,6 +854,10 @@
 		const largeurEl = document.querySelector('#input-boat-largeur');
 		largeurEl.value = value;
 	};
+	const setFormBoatName = (boatName) => {
+		const boatNameEl = document.querySelector('#boatName');
+		boatNameEl.innerText = `"${boatName}"`;
+	};
 
 	const getFormBoatType = () => {
 		const VoilierEl = document.querySelector('#boatTypeVoilierBtn');
@@ -814,9 +881,7 @@
 	const getCgvConsentStatus = () => {
 		console.log('=========getCgvConsentStatus==========');
 		const cgvCheckboxEl = document.querySelector('#cgvCheckbox');
-		console.log('cgvCheckboxEl', cgvCheckboxEl);
 		const isChecked = cgvCheckboxEl.checked;
-		console.log('isChecked', isChecked);
 		if (!isChecked) throw new Error('CGV not accepted');
 		return (isChecked);
 	};
@@ -1033,6 +1098,7 @@
 		boatLongueurEl.value = boat.bateau_longueur;
 		const boatLargeurEl = document.querySelector('#input-boat-largeur');
 		boatLargeurEl.value = boat.bateau_largeur;
+		setFormBoatName(boat.bateau_nom)
 	};
 
 	const fetchUserBoatList = async () => {
@@ -1159,10 +1225,13 @@
 						<i class="ship-ico"></i>
 						<div class="flex-row justify-space">
 							<div class="title">{{lang->magelan-resa.form_title_4}}</div>
-							<div class="" id="boatEditBtn">{{lang->magelan-resa.form_title_5}}</div>
 						</div>
 					</div>
 					<div class="boat-details-ctn">
+						<div class="flex-row first-ctn">
+							<div id="boatName"></div>
+							<div class="" id="boatEditBtn">{{lang->magelan-resa.form_title_5}}</div>
+						</div>
 						<div class="flex-row">
 							<div class="size-ctn flex-row">
 								<div class="label">L</div>
@@ -1203,7 +1272,7 @@
 							</span>
 							<div class="spinner-ctn hide" id="priceSpinnerCtn">
 								<div class="spinner-border text-primary" id="totalPriceSpinner" role="status">
-									<span class="visually-hidden">{{lang->magelan-resa.msg_btn_loading}}</span>
+									<span class="visually-hidden"></span>
 								</div>
 							</div>
 							<input class="display-bubble" id="input-price-count" name="price-count" type="text"
