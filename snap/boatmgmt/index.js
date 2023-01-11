@@ -84,59 +84,6 @@ function verifyFirstPostReq(_req, _res) {
 	return true;
 }
 
-//db functions <
-async function getBoatById(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.FindById(_boatCol, _id, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-async function getBoatByHarbourId(_harbour_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, { harbour: _harbour_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-async function getBoatByUserIdAndHarbourId(_user_id, _harbour_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, { user: _user_id, harbour: _harbour_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-async function getBoatByPlaceId(_place_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, { place_id: _place_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-async function getBoat() {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, {}, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
 
 /**
  * 
@@ -447,9 +394,6 @@ exports.plugin =
 			if (req.get.mode && req.get.mode == "delete" && req.get.boat_id) {
 				await delBoat(req.get.boat_id);
 			}
-			else if (req.get.boat_id) {
-				await getBoatById(req.get.boat_id);
-			}
 		}
 		if (req.method == "POST") {
 			if (req.post.id) {
@@ -535,8 +479,6 @@ exports.plugin =
 
 
 exports.store = {
-	getBoatById: getBoatById,
-	getBoatByUserIdAndHarbourId: getBoatByUserIdAndHarbourId,
-	getBoatByPlaceId: getBoatByPlaceId,
+	getBoat: getBoatsV2,
 	updateBoat: updateBoat
 }
