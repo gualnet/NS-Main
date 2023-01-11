@@ -138,6 +138,26 @@ async function getBoat() {
 	});
 }
 
+/**
+ * 
+ * @param {Object} where 
+ * @returns {Pomise<TYPES.T_boat[]>}
+ */
+const getBoatsV2 = async (where) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Search boats where: ', where);
+
+	const findBoatsResp = await DB_NS.boat.find(where, { raw: 1 });
+	if (findBoatsResp.error) {
+		throw new Error(findBoatsResp.message, { cause: findBoatsResp });
+	}
+	const boats = findBoatsResp.data;
+	console.log(`Found [${boats.length}] Boat(s)`);
+	return boats;
+}
+
 async function delBoat(_id) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Delete(_boatCol, { id: _id }, function (_err, _data) {
@@ -448,15 +468,22 @@ exports.plugin =
 			/**@type {Array<TYPES.T_boat>} */
 			var _boats = [];
 
-			//get boats from user role
-			if (_role == "user") {
-				for (var i = 0; i < _harbour_id.length; i++) {
-					_boats = _boats.concat(await STORE.API_NEXT.getElements('boat', { harbour_id: _harbour_id[i] }));
+			try {
+				//get boats from user role
+				if (_role == "user") {
+					for (var i = 0; i < _harbour_id.length; i++) {
+						_boats = _boats.concat(await getBoatsV2({ harbour_id: _harbour_id[i] }));
+					}
 				}
+				else if (_role == "admin") {
+					_boats = await getBoatsV2({});
+				}
+			} catch (error) {
+				console.error(error);
+				res.writeHead(500);
+				res.end('Internal Error');
 			}
-			else if (_role == "admin") {
-				_boats = await getBoat();
-			}
+			
 			//modify html dynamically <
 			var _boatGen = "";
 			let isPlaceAttributed;
