@@ -61,13 +61,19 @@
 			const pastMonthNum = monthNum === 0 ? 11 : monthNum - 1;
 			const oneMonthAgoTimestamp = new Date(new Date(new Date().setMonth(pastMonthNum)).toDateString()).getTime();
 			sortedEvents.map(event => {
+				const CONTENT_MAX_LEN = 80;
+				let textContent = event.description || event.content || '';
+				if (textContent.length > CONTENT_MAX_LEN) {
+					textContent = textContent.substring(0, CONTENT_MAX_LEN) + '..';
+				}
+
 				if (event.date_end <= refTimestamp && event.date_end > oneMonthAgoTimestamp) { // passedEvent of last month
 					let htmlEventRow = eventRow
 						.replace("__ID__", event.id)
 						.replace("__IMG__", event.img)
 						.replace("__D_END__", new Date(event.date_end).toDateString())
 						.replace("__TITLE__", event.title)
-						.replace("__CONTENT__", event.description || '...');
+						.replace("__CONTENT__", textContent);
 					pastEvents.push(htmlEventRow);
 				} else if (event.date_end > refTimestamp) { // futur event
 					let htmlEventRow = eventRow
@@ -75,7 +81,7 @@
 						.replace("__IMG__", event.img)
 						.replace("__D_END__", new Date(event.date_end).toDateString())
 						.replace("__TITLE__", event.title)
-						.replace("__CONTENT__", event.description || '...');
+						.replace("__CONTENT__", textContent);
 					incomingEvents.push(htmlEventRow);
 				}
 			});
