@@ -426,17 +426,14 @@
 		padding: 0px;
 		height: fit-content;
 		margin-right: 4px;
-		outline: 1px solid rgba(0, 0, 0, 0.5);
-		outline-offset: -1;
-	}
-	.form-check-input.safari {
-		outline-offset: -2px;
+		height: 10px;
 	}
 
 	.action-button-ctn {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		font-size: .5rem;
 	}
 
 	.action-button-ctn>.main-button {
@@ -611,19 +608,7 @@
 		displayBoatData();
 		initJqueryElements();
 		updateResaBtnStatus() // ! DEV
-		checkSafariExec();
 	});
-
-	const isSafari = () => {
-		return navigator.userAgent.toLowerCase().includes('safari')
-	}
-
-	const checkSafariExec = () => {
-		if (!isSafari()) return;
-
-		const checkboxEl = document.querySelector('.form-check-input');
-		checkboxEl.classList.add('safari');
-	};
 
 	// ========
 	// HANDLERS
