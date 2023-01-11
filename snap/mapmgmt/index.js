@@ -471,7 +471,7 @@ async function captorPlaceHandler(_req, _res) {
 								 // console.log(sortie);
 									if(!sortie[0]) {
 											console.log("test");
-										 let boat = await STORE.boatmgmt.getBoatByPlaceId(place.id);
+										 let boat = await STORE.boatmgmt.getBoat({ place_id: place.id });
 										 //console.log(boat);
 										 let boatId = [];
 											let userId = [];

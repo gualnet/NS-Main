@@ -84,58 +84,25 @@ function verifyFirstPostReq(_req, _res) {
 	return true;
 }
 
-//db functions <
-async function getBoatById(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.FindById(_boatCol, _id, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
 
-async function getBoatByHarbourId(_harbour_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, { harbour: _harbour_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
+/**
+ * 
+ * @param {Object} where 
+ * @returns {Pomise<TYPES.T_boat[]>}
+ */
+const getBoatsV2 = async (where) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 
-async function getBoatByUserIdAndHarbourId(_user_id, _harbour_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, { user: _user_id, harbour: _harbour_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-async function getBoatByPlaceId(_place_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, { place_id: _place_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-async function getBoat() {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_boatCol, {}, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
+	console.log('Search boats where: ', where);
+
+	const findBoatsResp = await DB_NS.boat.find(where, { raw: 1 });
+	if (findBoatsResp.error) {
+		throw new Error(findBoatsResp.message, { cause: findBoatsResp });
+	}
+	const boats = findBoatsResp.data;
+	console.log(`Found [${boats.length}] Boat(s)`);
+	return boats;
 }
 
 async function delBoat(_id) {
@@ -427,9 +394,6 @@ exports.plugin =
 			if (req.get.mode && req.get.mode == "delete" && req.get.boat_id) {
 				await delBoat(req.get.boat_id);
 			}
-			else if (req.get.boat_id) {
-				await getBoatById(req.get.boat_id);
-			}
 		}
 		if (req.method == "POST") {
 			if (req.post.id) {
@@ -448,15 +412,22 @@ exports.plugin =
 			/**@type {Array<TYPES.T_boat>} */
 			var _boats = [];
 
-			//get boats from user role
-			if (_role == "user") {
-				for (var i = 0; i < _harbour_id.length; i++) {
-					_boats = _boats.concat(await STORE.API_NEXT.getElements('boat', { harbour_id: _harbour_id[i] }));
+			try {
+				//get boats from user role
+				if (_role == "user") {
+					for (var i = 0; i < _harbour_id.length; i++) {
+						_boats = _boats.concat(await getBoatsV2({ harbour_id: _harbour_id[i] }));
+					}
 				}
+				else if (_role == "admin") {
+					_boats = await getBoatsV2({});
+				}
+			} catch (error) {
+				console.error(error);
+				res.writeHead(500);
+				res.end('Internal Error');
 			}
-			else if (_role == "admin") {
-				_boats = await getBoat();
-			}
+			
 			//modify html dynamically <
 			var _boatGen = "";
 			let isPlaceAttributed;
@@ -508,8 +479,6 @@ exports.plugin =
 
 
 exports.store = {
-	getBoatById: getBoatById,
-	getBoatByUserIdAndHarbourId: getBoatByUserIdAndHarbourId,
-	getBoatByPlaceId: getBoatByPlaceId,
+	getBoat: getBoatsV2,
 	updateBoat: updateBoat
 }
