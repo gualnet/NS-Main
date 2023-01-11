@@ -960,31 +960,33 @@
 			console.log(error);
 		})
 
-		var eventRow = '<div class="row">'
-			+ '<div class="col">'
-			+ '<div style="width:100%;" class="card product-card-large mb-3" onclick="window.location.href = (\'event?id=__ID__\');">'
-			+ '<div class="card-body p-0">'
-			+ '<div class="product-image-large">'
-			+ '<div class="background">'
-			+ '<img style="width:100%;height:auto;" src="__IMG__" alt="">'
-			+ '</div>'
-			+ '</div>'
-			+ '</div>'
-			+ '<div class="card-footer">'
-			+ '<div class="row">'
-			+ '<div class="col">'
-			+ '<h6 style="font-size: 13px;" ><strong>__TITLE__</strong></h6>'
-			+ '</div>'
-			+ '</div>'
-			+ '<div class="row">'
-			+ '<div class="col">'
-			+ '<div class="small text-muted">__CONTENT__</div>'
-			+ '</div>'
-			+ '</div>'
-			+ '</div>'
-			+ '</div>'
-			+ '</div>'
-			+ '</div>'
+		const eventRow = `
+			<div class="row">
+				<div class="col">
+					<div class="card product-card-small mb-3" onclick="window.location.href = (\'event?id=__ID__\');">
+						<div class="card-body" style="padding: 0px 0px!important;">
+							<div class="row">
+								<div class="col-auto p-1" style="margin-left:15px; padding: 0rem !important;">
+									<div class="product-image-small" style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+										<img src="__IMG__" alt="" style="height:100%;width:auto;">
+									</div>
+								</div>
+								<div class="col">
+									<div class="row">
+										<div class="col-12">
+											<h6 style="font-size: 13px; margin-top: 10px;"><strong>__TITLE__</strong></h6>
+										</div>
+										<div class="col-auto">
+											<div class="text-muted small">__CONTENT__</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		`;
 
 		fetch("/api/events/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
 			if (_data.data[0]) {
@@ -996,7 +998,11 @@
 				for (var i = 0; i < eventsLimit; i++) {
 					var date = new Date(events[i].date);
 					var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-');
-					var rowCurrent = eventRow.replace("__ID__", events[i].id).replace("__TITLE__", events[i].title).replace("__DATE__", dateFormated).replace("__CONTENT__", events[i].description);
+					var rowCurrent = eventRow
+						.replace("__ID__", events[i].id)
+						.replace("__TITLE__", events[i].title)
+						.replace("__DATE__", dateFormated)
+						.replace("__CONTENT__", events[i].description.substring(0, 70));
 
 					if (events[i].img) {
 						rowCurrent = rowCurrent.replace('__IMG__', events[i].img)
