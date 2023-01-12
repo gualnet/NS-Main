@@ -152,13 +152,13 @@ const getHarboursV2 = async (where = {}) => {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
-	console.info('[INFO] find harbours where:', where);
+	// console.info('[INFO] find harbours where:', where);
 	const findHarboursResp = await DB_NS.harbour.find(where, { raw: 1 });
 	if (findHarboursResp.error) {
 		throw new Error(findHarboursResp.message, { cause: findHarboursResp });
 	}
 	const harbours = findHarboursResp.data;
-	console.info(`Found ${harbours.length} Harbour(s)`);
+	// console.info(`Found ${harbours.length} Harbour(s)`);
 	return harbours;
 }
 
