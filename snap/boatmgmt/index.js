@@ -94,14 +94,14 @@ const getBoatsV2 = async (where) => {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
-	console.log('Search boats where: ', where);
+	// console.log('Search boats where: ', where);
 
 	const findBoatsResp = await DB_NS.boat.find(where, { raw: 1 });
 	if (findBoatsResp.error) {
 		throw new Error(findBoatsResp.message, { cause: findBoatsResp });
 	}
 	const boats = findBoatsResp.data;
-	console.log(`Found [${boats.length}] Boat(s)`);
+	// console.log(`Found [${boats.length}] Boat(s)`);
 	return boats;
 }
 
@@ -411,6 +411,8 @@ exports.plugin =
 			var _boatHtml = fs.readFileSync(path.join(__dirname, "boat.html")).toString();
 			/**@type {Array<TYPES.T_boat>} */
 			var _boats = [];
+			let harboursMapById = {};
+			let placesMapByHarbourId = {};
 
 			try {
 				//get boats from user role
@@ -421,21 +423,44 @@ exports.plugin =
 				}
 				else if (_role == "admin") {
 					_boats = await getBoatsV2({});
+					_boats = _boats.splice(0, 500);
 				}
+
+				// get harbours list
+				/**@type {TYPES.T_harbour[]} */
+				const harbours = await STORE.harbourmgmt.getHarbour();
+				const placesPromises = [];
+				harbours.map(async harbour => {
+					if (!harboursMapById[harbour.id]) {
+						harboursMapById[harbour.id] = harbour;
+						placesPromises.push(STORE.mapmgmt.getPlaceByHarbourId(harbour.id));
+					}
+				});
+
+				const placesList = await Promise.all(placesPromises);
+				placesList.map((places, idx) => {
+					if (places.length > 0) {
+						if (!placesMapByHarbourId[places[0].harbour_id]) {
+							placesMapByHarbourId[places[0].harbour_id] = places;
+						}
+					}
+				})
+
 			} catch (error) {
 				console.error(error);
 				res.writeHead(500);
 				res.end('Internal Error');
 			}
+
+			Object.values(placesMapByHarbourId).map(places => places = places.sort((a, b) => a.number < b.number ? -1 : 1));
 			
 			//modify html dynamically <
 			var _boatGen = "";
 			let isPlaceAttributed;
 			for (var i = 0; i < _boats.length; i++) {
 				isPlaceAttributed = false;
-				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_boats[i].harbour_id);
-				let places = await STORE.mapmgmt.getPlaceByHarbourId(_boats[i].harbour_id);
-				places = places.sort((a, b) => a.number < b.number ? -1 : 1);
+				const currentHarbour = harboursMapById[_boats[i].harbour_id];
+				let places = placesMapByHarbourId[_boats[i].harbour_id] || [];
 				// set places lists
 				var places_select = "";
 				for (var p = 0; p < places.length; p++) {
@@ -456,15 +481,15 @@ exports.plugin =
 
 				_boatGen += _boatHtml.replace(/__ID__/g, _boats[i].id)
 					.replace(/__FORMID__/g, _boats[i].id.replace(/\./g, "_"))
-					.replace(/__NAME__/g, _boats[i].name)
+					.replace(/__NAME__/g, _boats[i].name || 'NONE')
 					.replace(/__PLACE__/g, places_select)
 					.replace(/__USER__/g, _boats[i].user_id + "\\" + currentUser.first_name + " " + currentUser.last_name)
-					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-					.replace(/__HARBOUR_ID__/g, currentHarbour.id || 'NONE')
-					.replace(/__IMMATRICULATION__/g, _boats[i].immatriculation || '- -')
-					.replace(/__LONGUEUR__/g, _boats[i].longueur)
-					.replace(/__LARGEUR__/g, _boats[i].largeur)
-					.replace(/__TIRANT_EAU__/g, _boats[i].tirant_eau)
+					.replace(/__HARBOUR_NAME__/g, currentHarbour?.name || 'NONE')
+					.replace(/__HARBOUR_ID__/g, currentHarbour?.id || 'NONE')
+					.replace(/__IMMATRICULATION__/g, _boats[i].immatriculation || 'NONE')
+					.replace(/__LONGUEUR__/g, _boats[i].longueur || 'NONE')
+					.replace(/__LARGEUR__/g, _boats[i].largeur || 'NONE')
+					.replace(/__TIRANT_EAU__/g, _boats[i].tirant_eau || 'NONE')
 			}
 			_indexHtml = _indexHtml.replace("__BOATS__", _boatGen).replace(/undefined/g, '');
 			// >
