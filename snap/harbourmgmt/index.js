@@ -133,52 +133,37 @@ function verifyPostReq(_req, _res) {
     return true;
 }
 
-async function getEntityById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_enityCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-
 //bdd requests
 async function getHarbourById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_harbourCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+	return getHarboursV2({ id: _id });
 }
-
 /**
  * @returns {Promise<Array<TYPES.T_harbour>>}
  */
 async function getHarbour() {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_harbourCol, {}, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+	return getHarboursV2();
+};
+/**
+ * 
+ * @param {Object} where 
+ * @returns {Promise<TYPES.T_harbour[]>}
+ */
+const getHarboursV2 = async (where = {}) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.info('[INFO] find harbours where:', where);
+	const findHarboursResp = await DB_NS.harbour.find(where, { raw: 1 });
+	if (findHarboursResp.error) {
+		throw new Error(findHarboursResp.message, { cause: findHarboursResp });
+	}
+	const harbours = findHarboursResp.data;
+	console.info(`Found ${harbours.length} Harbour(s)`);
+	return harbours;
 }
 
 async function getHarbourByEntityId(_entity_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_harbourCol, { id_entity: _entity_id }, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
+	return getHarboursV2({ entity_id: _entity_id });
 }
 
 async function delHarbour(_id) {
@@ -225,20 +210,9 @@ async function updateHarbourWhere(updateFieds, whereFields) {
     });
 }
 
-async function getAdminById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-
 //routes handlers
 async function getHarbourList(req, res) {
-    var harbours = await getHarbourByEntityId(req.param.entity_id);
+		const harbours = await getHarboursV2({ entity_id: req.param.entity_id });
     var harboursSimplified = [];
     for (var i = 0; i < harbours.length; i++) {
         harboursSimplified[i] = { name: harbours[i].name, id: harbours[i].id, img: harbours[i].img };
@@ -248,7 +222,7 @@ async function getHarbourList(req, res) {
 }
 
 async function getHarbourInfos(req, res) {
-    var harbours = await getHarbourById(req.param.harbour_id);
+    var harbours = await getHarboursV2({ id: req.param.harbour_id });
     UTILS.httpUtil.dataSuccess(req, res, "success, harbour infos", harbours, "1.0");
     return;
 }
@@ -256,21 +230,7 @@ async function getHarbourInfos(req, res) {
 /* ---------------------- */
 /* NEW API HANDLERS START */
 /* ---------------------- */
-/**
- * 
- * @param {TYPES.T_harbour} options - Object containing valide filds from harbour type
- * @returns {Promise<Array<TYPES.T_harbour>>}
- */
-async function getHarboursWhere(options) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_harbourCol, options, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-};
+
 /**
  * 
  * @param {*} req 
@@ -279,7 +239,7 @@ async function getHarboursWhere(options) {
 async function getHarboursHandler(req, res) {
     console.log('get', req.get);
     try {
-        const ret = await getHarboursWhere(req.get);
+        const ret = await getHarboursV2(req.get);
         res.end(JSON.stringify({ results: ret }));
     } catch (error) {
 			console.error('[ERROR]', error);
@@ -324,7 +284,6 @@ exports.store =
     getHarbourByEntityId: getHarbourByEntityId,
     getHarbourById: getHarbourById,
     getHarbour: getHarbour,
-		getHarboursWhere,
 }
 exports.router = [
     {
@@ -364,8 +323,8 @@ exports.router = [
 
 
 exports.handler = async (req, res) => {
-    var _harbour = await getHarbour();
-    res.end(JSON.stringify(_harbour));
+		const harbours = await getHarboursV2();
+    res.end(JSON.stringify(harbours));
     return;
 }
 
@@ -413,7 +372,7 @@ exports.plugin =
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.harbour_id) {
                 //delete harbour
-                var currentHarbour = await getHarbourById(req.get.harbour_id);
+                var currentHarbour = await getHarboursV2({ id: req.get.harbour_id });
                 if (currentHarbour.cloudinary_img_public_id) {
                     await STORE.cloudinary.deleteFile(currentHarbour.cloudinary_img_public_id);
                 }
@@ -425,12 +384,8 @@ exports.plugin =
                 }
                 await delHarbour(req.get.harbour_id);
             }
-            else if (req.get.harbour_id) {
-                await getHarbourById(req.get.harbour_id);
-            }
             else if (req.get.harbourlist) {
-                var harbourlist = await getHarbour();
-
+                const harbourlist = await getHarboursV2();
                 UTILS.httpUtil.dataSuccess(req, res, harbourlist, "1.0");
                 return;
             }
@@ -468,7 +423,7 @@ exports.plugin =
             if (req.post.id) {
 								console.log('req.post',req.post);
 								//update harbour
-								var currentHarbour = await getHarbourById(req.post.id);
+								var currentHarbour = await getHarboursV2({ id: req.post.id });
                 if (verifyPostReq(req, res)) {
                     //img gesture
                     if (req.post.img) {
@@ -587,13 +542,13 @@ exports.plugin =
 
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _harbours[i] = await getHarbourById(_harbour_id[i]);
+                    _harbours[i] = await getHarboursV2({ id: _harbour_id[i] });
                 }
                 _indexHtml = fs.readFileSync(path.join(__dirname, "indexuser.html")).toString();
                 _harbourHtml = fs.readFileSync(path.join(__dirname, "harbouruser.html")).toString();
             }
             else if (_role == "admin") {
-                _harbours = await getHarbour();
+                _harbours = await getHarboursV2();
                 _harbourHtml = fs.readFileSync(path.join(__dirname, "harbour.html")).toString();
                 _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
             }
