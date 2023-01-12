@@ -828,6 +828,14 @@ exports.plugin =
 							_Coms = await getCom({});
 						}
 
+						/**@type {TYPES.T_harbour[]} */
+						const harbours = await STORE.harbourmgmt.getHarbour();
+						const harbousMapById = {};
+						harbours.map(harbour => {
+							if (!harbousMapById[harbour.id]) {
+								harbousMapById[harbour.id] = harbour;
+							}
+						});
 
             var _comGen = "";
             for (var i = 0; i < _Coms.length; i++) {
@@ -859,12 +867,12 @@ exports.plugin =
                 date = new Date(_Coms[i].date_end);
                 var endDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
 
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Coms[i].harbour_id);
+                const currentHarbour = harbousMapById[_Coms[i].harbour_id];
 
                 _comGen += _comHtml.replace(/__ID__/g, _Coms[i].id)
                     .replace(/__FORMID__/g, _Coms[i].id.replace(/\./g, "_"))
-                    .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-                    .replace(/__HARBOUR_ID__/g, currentHarbour.id)
+                    .replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
+                    .replace(/__HARBOUR_ID__/g, currentHarbour?.id)
                     .replace(/__CATEGORY__/g, _Coms[i].category)
                     .replace(/__USER_CATEGORY__/g, _Coms[i].user_category)
                     .replace(/__EDITOR_ID__/g, "editor_" + _Coms[i].id.replace(/\./g, "_"))
