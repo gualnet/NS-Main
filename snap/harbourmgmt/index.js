@@ -129,20 +129,22 @@ function verifyPostReq(_req, _res) {
             return false;
         }
     }
-
     return true;
 }
 
 //bdd requests
 async function getHarbourById(_id) {
-	return getHarboursV2({ id: _id });
-}
+	const harbours = await getHarboursV2({ id: _id });
+	return harbours[0];
+};
+
 /**
  * @returns {Promise<Array<TYPES.T_harbour>>}
  */
 async function getHarbour() {
 	return getHarboursV2();
 };
+
 /**
  * 
  * @param {Object} where 
