@@ -222,8 +222,10 @@ async function getHarbourList(req, res) {
 }
 
 async function getHarbourInfos(req, res) {
-    var harbours = await getHarboursV2({ id: req.param.harbour_id });
-    UTILS.httpUtil.dataSuccess(req, res, "success, harbour infos", harbours, "1.0");
+    const harbours = await getHarboursV2({ id: req.param.harbour_id });
+		let harbour = [];
+		if (harbours.length > 0) harbour = harbours[0];
+    UTILS.httpUtil.dataSuccess(req, res, "success, harbour infos", harbour, "1.0");
     return;
 }
 
