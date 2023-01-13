@@ -1115,6 +1115,8 @@
 
 	<script>
 		window.addEventListener('load', async () => {
+			checkUndefinedHarbourName();
+
 			const entity = await fetchEntityData();
 			const user = await fetchUserData();
 			const boat = await fetchBoatData();
@@ -1122,7 +1124,31 @@
 			displaySecurityBtn(entity, user, boat);
 			portsCorsesRedirection();
 			checkOffers();
+
 		});
+
+		const checkUndefinedHarbourName = async () => {
+			console.log('===checkUndefinedHarbourName===');
+			const currentName = localStorage['harbourname']
+			console.log('currentName',currentName);
+			if (currentName === 'undefined') {
+				const fetchHarbourResponse = await fetch(`/api/getharbour/${localStorage['harbour_id']}`, { method: 'GET' });
+				const jsonResp = await fetchHarbourResponse.json();
+				const harbour = jsonResp.data;
+				if (harbour.name) {
+					localStorage["harbourname"] = harbour.name;
+					window.location.href = ("/index");
+				} else {
+					// disconnect
+					localStorage.removeItem("harbour_id");
+					localStorage.removeItem("harbourname");
+					localStorage.removeItem("user");
+					localStorage.removeItem("token");
+					localStorage.removeItem('onesignal_userid');
+					window.location.href = ("/?entity=" + localStorage['entity_id']);
+				}
+			}
+		}
 
 		const checkOffers = async () => {
 			try {
