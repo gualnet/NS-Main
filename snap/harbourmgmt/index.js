@@ -163,7 +163,7 @@ const getHarboursV2 = async (where = {}) => {
 }
 
 async function getHarbourByEntityId(_entity_id) {
-	return getHarboursV2({ entity_id: _entity_id });
+	return getHarboursV2({ id_entity: _entity_id });
 }
 
 async function delHarbour(_id) {
@@ -212,7 +212,7 @@ async function updateHarbourWhere(updateFieds, whereFields) {
 
 //routes handlers
 async function getHarbourList(req, res) {
-		const harbours = await getHarboursV2({ entity_id: req.param.entity_id });
+		const harbours = await getHarboursV2({ id_entity: req.param.entity_id });
     var harboursSimplified = [];
     for (var i = 0; i < harbours.length; i++) {
         harboursSimplified[i] = { name: harbours[i].name, id: harbours[i].id, img: harbours[i].img };
