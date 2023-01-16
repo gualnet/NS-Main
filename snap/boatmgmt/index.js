@@ -504,6 +504,6 @@ exports.plugin =
 
 
 exports.store = {
-	getBoat: getBoatsV2,
+	getBoats: getBoatsV2,
 	updateBoat: updateBoat
 }

@@ -55,132 +55,110 @@ function verifyPostReq(_req, _res) {
 }
 
 //db functions <
-/**
- * 
- * @param {T_absence['id']} _id absence unique id
- * @returns {Promise<T_absence>}
- */
-async function getAbsenceById(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.FindById(_absenceCol, _id, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
+
 
 /**
- * Return all absences
- * @returns {Promise<Array<T_absence>>}
+ * @param {Pick<TYPES.T_absence, "id" | "harbour_id" | "user_id" | "boat_id">} where 
+ * @returns {Promise<TYPES.T_absence[]>}
  */
-async function getAbsence() {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_absenceCol, {}, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
+const getAbsencesV2 = async (where = {}) => {
+	console.log('====getAbsencesV2====');
+
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Search absences where: ', where);
+	const findAbsencesResp = await DB_NS.absences.find(where, { raw: 0 });
+	if (findAbsencesResp.error) {
+		throw new Error(findAbsencesResp.message, { cause: findAbsencesResp });
+	}
+	const absences = findAbsencesResp.data;
+	console.log(`Found ${absences.length} absence(s) items`);
+	return absences;
 }
 
 /**
  * 
- * @param {string} _harbour_id 
- * @returns {Promise<Array<T_absence>>}
+ * @param {TYPES.T_absence} absence 
+ * @returns 
  */
-async function getAbsencesByHarbourId(_harbour_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_absenceCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-};
+const createAbsenceV2 = async (absence) => {
+	console.log('====createAbsenceV2====');
 
-async function getAbsenceByUserIdAndHarbourId(_user_id, _harbour_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_absenceCol, { user_id: _user_id, harbour_id: _harbour_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-async function delAbsence(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Delete(_absenceCol, { id: _id }, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 
-async function createAbsence(_obj) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Create(_absenceCol, _obj, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
+	// console.log('Search absences where: ', where);
+	const createAbsenceResp = await DB_NS.absences.create(absence);
+	if (createAbsenceResp.error) {
+		throw new Error(createAbsenceResp.message, { cause: createAbsenceResp });
+	}
+	const absences = createAbsenceResp.data;
+	console.log(`Created ${absences.length} absence:\n`. absences);
+	return absences;
 }
 
 /**
  * 
- * @param {T_absence} _obj 
- * @returns {Promise<Array<T_absence>>}
+ * @param {Pick<TYPES.T_absence, "id">} where 
+ * @param {Partial<TYPES.T_absence>} updates 
+ * @returns {Promise<TYPES.T_absence[]>}
  */
-async function updateAbsence(_obj) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Update(_absenceCol, { id: _obj.id }, _obj, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-async function getAdminById(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
+const updateAbsenceV2 = async (where, updates) => {
+	console.log('====updateAbsenceV2====');
+
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	if (Object.keys(where).length !== 1 || !where.id) {
+		throw new Error('Wrong parameter: ' + where);
+	}
+
+	console.log('Update absences where: ', where);
+	console.log('Update absences with: ', updates);
+	const updateAbsenceResp = await DB_NS.absences.update(where, updates);
+	if (updateAbsenceResp.error) {
+		throw new Error(updateAbsenceResp.message, { cause: updateAbsenceResp });
+	}
+	const absences = updateAbsenceResp.data;
+	console.log(`${absences.length} absence(s) Updated`);
+	return absences;
 }
 
 /**
  * 
- * @param {string} _id 
- * @returns {Promise<Array<T_boat>>}
+ * @param {Pick<TYPES.T_absence, "id">} where 
+ * @returns {Promise<TYPES.T_absence[]>}
  */
-async function getBoatById(boatId) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.FindById(_boatCol, boatId, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
+const deleteAbsenceV2 = async (where = {}) => {
+	console.log('====deleteAbsenceV2====');
+
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	if (Object.keys(where).length !== 1 || !where.id) {
+		throw new Error('Wrong parameter: ' + where);
+	}
+
+	console.log('Delte absence where: ', where);
+	const deleteAbsencesResp = await DB_NS.absences.delete(where, { raw: 0 });
+	console.log('deleteAbsencesResp',deleteAbsencesResp)
+	if (deleteAbsencesResp.error) {
+		throw new Error(deleteAbsencesResp.message, { cause: deleteAbsencesResp });
+	}
+	const absences = deleteAbsencesResp.data;
+	console.log(`Deleted ${absences.length} absence(s) items`, absences);
+	return absences;
 };
 
 //handler that return absence by user id and harbour id
 async function getAbsenceHandler(req, res) {
 	console.log('[INFO] /api/get/absence')
 	try {
-		const data = await getAbsenceByUserIdAndHarbourId(req.get.user_id, req.get.harbour_id);
+		const data = await getAbsencesV2({
+			user_id: req.get.user_id,
+			harbour_id: req.get.harbour_id,
+		});
 		UTILS.httpUtil.dataSuccess(req, res, "success", data, "1.0");
 	} catch (error) {
 		myLogger.logError(error, { module: 'absencemgmt' })
@@ -207,14 +185,14 @@ async function createAbsenceHandler(req, res) {
 	newAbsence.updated_at = newAbsence.created_at;
 
 	/**@type {TYPES.T_harbour} */
-	var harbour = await STORE.harbourmgmt.getHarbourById(req.post.harbour_id);
+	var harbour = await STORE.harbourmgmt.getHarbour({ id: req.post.harbour_id });
 
 	if (harbour) {
-		var absence = await createAbsence(newAbsence);
+		const absence = await createAbsenceV2(newAbsence);
 		if (absence.id) {
 			//get data from db
 			var user = await STORE.usermgmt.getUserById(absence.user_id);
-			var boat = await STORE.boatmgmt.getBoatById(absence.boat_id);
+			var boat = await STORE.boatmgmt.getBoats({ id: absence.boat_id });
 			var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
 			//prepare mail
 			var subject = "Declaration d'absence";
@@ -227,7 +205,7 @@ async function createAbsenceHandler(req, res) {
 			`;
 			//send mail
 			const emailAddress = harbour.email_absence || harbour.email;
-			if (emailAddress.includes(';')) {
+			if (emailAddress?.includes(';')) {
 				emailAddress
 					.split(';')
 					?.map(async (mail) => {
@@ -250,10 +228,11 @@ async function createAbsenceHandler(req, res) {
 }
 
 async function updateAbsenceHandler(req, res) {
+	console.log('========updateAbsenceHandler=========')
 	const { absence_id, newStartDate, newEndDate } = req.body;
 
 	try {
-		const absence = await getAbsenceById(absence_id);
+		const [absence] = await getAbsencesV2({ id: absence_id });
 		const newAbsence = { ...absence };
 
 		newAbsence.previous_date_start = newAbsence.date_start;
@@ -261,9 +240,10 @@ async function updateAbsenceHandler(req, res) {
 		newAbsence.previous_date_end = newAbsence.date_end;
 		newAbsence.date_end = newEndDate;
 		newAbsence.updated_at = Date.now();
-		const [result] = await updateAbsence(newAbsence);
+		const [result] = await updateAbsenceV2({ id: newAbsence.id }, newAbsence);
 
-		const boat = await getBoatById(result.boat_id);
+		const boats = await STORE.boatmgmt.getBoats({ id: result.boat_id });
+		const boat = boats[0];
 		if (!boat) {
 			console.error('[ERROR] Boat is empty');
 			throw new Error('Sorry an error occured, please retry.');
@@ -321,9 +301,11 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 	try {
 		const apiAuthToken = req.headers['x-auth-token'];
 		const harbourId = req.get["harbour-id"];
+		console.log('harbourId',harbourId)
 
 		// validate api token
 		const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
+		console.log('erpUsers',erpUsers)
 		if (!erpUsers) {
 			throw new Error('Invalide API Token', { cause: { httpCode: 401 }});
 		}
@@ -334,7 +316,7 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 
 		// Get the absences
 		/** @type {Array<TYPES.T_absence>} */
-		const absences = await getAbsencesByHarbourId(harbourId);
+		const absences = await getAbsencesV2({ harbour_id: harbourId });
 		// ASBSENCE SORT BY DATE
 		absences.sort((A, B) => A.created_at > B.created_at ? 1 : -1);
 
@@ -368,7 +350,7 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 
 		// Get the needed data and Construct the response object
 		const boatsPromises = [];
-		absencesOfTheDay.map(absence => boatsPromises.push(getBoatById(absence.boat_id)));
+		absencesOfTheDay.map(absence => boatsPromises.push(STORE.boatmgmt.getBoats({ id: absence.boat_id })));
 		/**@type {Array<T_boat>} */
 		const boats = await Promise.all(boatsPromises);
 
@@ -399,7 +381,7 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		}
 
 		res.end(JSON.stringify({
-			results: eprAbsences
+			results: eprAbsences,
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
@@ -412,6 +394,70 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 		}));
 	}
 }
+
+const getHarbourByIdWithMemo = async (harbourId, harboursMapById) => {
+	// console.log('===getHarbourByIdWithMemo===', harbourId)
+	// console.log('harboursMapById', Object.keys(harboursMapById));
+	if (harboursMapById[harbourId]) {
+		// console.log('==> FOUND IN MEMO')
+		return [harboursMapById[harbourId], harboursMapById];
+	}
+	// console.log('==> NOT FOUND IN MEMO')
+	const foundHarbour = await STORE.harbourmgmt.getHarbourById(harbourId);
+	// console.log('==> FOUND FROM DB')
+
+	harboursMapById[foundHarbour.id] = foundHarbour;
+
+	return [foundHarbour, harboursMapById];
+};
+
+const getUserByIdWithMemo = async (userId, usersMapById) => {
+	// console.log('===getUserByIdWithMemo===', userId)
+	// console.log('usersMapById', Object.keys(usersMapById));
+	if (usersMapById[userId]) {
+		// console.log('==> FOUND IN MEMO')
+		return [usersMapById[userId], usersMapById];
+	}
+	// console.log('==> NOT FOUND IN MEMO')
+	const foundHarbour = await STORE.usermgmt.getUserById(userId);
+	// console.log('==> FOUND FROM DB')
+
+	usersMapById[foundHarbour.id] = foundHarbour;
+
+	return [foundHarbour, usersMapById];
+};
+
+const getBoatByIdWithMemo = async (boatId, boatsMapById) => {
+	// console.log('===getBoatByIdWithMemo===', boatId)
+	// console.log('boatsMapById', Object.keys(boatsMapById));
+	if (boatsMapById[boatId]) {
+		// console.log('==> FOUND IN MEMO')
+		return [boatsMapById[boatId], boatsMapById];
+	}
+	// console.log('==> NOT FOUND IN MEMO')
+	const foundHarbour = await STORE.boatmgmt.getBoats({ id: boatId });
+	// console.log('==> FOUND FROM DB')
+
+	boatsMapById[foundHarbour.id] = foundHarbour;
+
+	return [foundHarbour, boatsMapById];
+};
+
+const getPlaceByIdWithMemo = async (placeId, placesMapById) => {
+	// console.log('===getPlaceByIdWithMemo===', placeId)
+	// console.log('boatsMapById', Object.keys(placesMapById));
+	if (placesMapById[placeId]) {
+		// console.log('==> FOUND IN MEMO')
+		return [placesMapById[placeId], placesMapById];
+	}
+	// console.log('==> NOT FOUND IN MEMO')
+	const foundHarbour = await STORE.mapmgmt.getPlaceById(placeId);
+	// console.log('==> FOUND FROM DB')
+
+	placesMapById[foundHarbour.id] = foundHarbour;
+
+	return [foundHarbour, placesMapById];
+};
 
 exports.router = [
 	{
@@ -441,7 +487,7 @@ exports.router = [
 ];
 
 exports.handler = async (req, res) => {
-	var _absence = await getAbsence();
+	var _absence = await getAbsencesV2();
 	res.end(JSON.stringify(_absence));
 	return;
 }
@@ -451,14 +497,10 @@ exports.plugin =
 	title: "Gestion des absences",
 	desc: "",
 	handler: async (req, res) => {
-
-		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-		const DB_NS = SCHEMA.NAUTICSPOT;
 		/**@type {TYPES.T_SCHEMA['fortpress']} */
 		const DB_FP = SCHEMA.fortpress;
 
 			//get users from FORTPRESS db <
-		// var admin = await getAdminById(req.userCookie.data.id);
 		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
@@ -484,15 +526,15 @@ exports.plugin =
 		}
 
 		if (req.method == "GET") {
+			console.log('PLUGIN DELETE', req.get)
 			if (req.get.mode && req.get.mode == "delete" && req.get.absence_id) {
-				await delAbsence(req.get.absence_id);
-			}
-			else if (req.get.absence_id) {
-				await getAbsenceById(req.get.absence_id);
+				const absence = await deleteAbsenceV2({ id: req.get.absence_id });
+				console.log('DALETED', absence);
 			}
 		}
 		if (req.method == "POST") {
 			if (req.post.id) {
+				console.log('PLUGIN UPDATE')
 				if (!req.post.date_start) {
 					UTILS.httpUtil.dataError(req, res, "Error", "Date de début requise", "100", "1.0");
 					return;
@@ -501,11 +543,10 @@ exports.plugin =
 					UTILS.httpUtil.dataError(req, res, "Error", "Date de fin requis", "100", "1.0");
 					return;
 				}
-				var currentAbsence = await getAbsenceById(req.post.id);
 				var _FD = req.post;
 
 
-				var absence = await updateAbsence(_FD);
+				var absence = await updateAbsenceV2({ id: _FD.id }, _FD);
 				console.log(absence);
 				if (absence[0].id) {
 					UTILS.httpUtil.dataSuccess(req, res, "Success", "Absence mis à jour", "1.0");
@@ -516,6 +557,7 @@ exports.plugin =
 				}
 			}
 			else {
+				console.log('ELSE 001 ??');
 				if (typeof req.body == "object" && req.multipart) {
 					if (verifyPostReq(req, res)) {
 						var _FD = req.post;
@@ -523,8 +565,7 @@ exports.plugin =
 						_FD.category = 'absence';
 						_FD.date_start = Date.parse(_FD.date_start);
 						_FD.date_end = Date.parse(_FD.date_end);
-						var absence = await createAbsence(_FD);
-						console.log(absence);
+						const absence = await createAbsenceV2(_FD);
 						if (absence.id) {
 							UTILS.httpUtil.dataSuccess(req, res, "Success", "Absence créé", "1.0");
 							return;
@@ -534,7 +575,6 @@ exports.plugin =
 						}
 					}
 				}
-
 			}
 		}
 		else {
@@ -543,19 +583,28 @@ exports.plugin =
 			var _absenceHtml = fs.readFileSync(path.join(__dirname, "absence.html")).toString();
 
 			//get absences from user role
-			/** @type {TYPES.T_absence} */
+			/** @type {TYPES.T_absence[]} */
 			var _Absences = [];
 			if (_role == "user") {
 				for (var i = 0; i < _harbour_id.length; i++) {
-					_Absences = _Absences.concat(await getAbsencesByHarbourId(_harbour_id[i]));
+					_Absences = _Absences.concat(await getAbsencesV2({ harbour_id: _harbour_id[i] }));
 				}
 			}
 			else if (_role == "admin")
-				_Absences = await getAbsence();
+				_Absences = await getAbsencesV2({ user_id: "BxnZQU1ovXo"});
+
+
+			// ! DEV
+			_Absences = _Absences.splice(0, 10) // ! DEV
 
 			//modify html dynamically <
 			var _absenceGen = "";
+			let harboursMapById = {};
+			let usersMapById = {};
+			let boatsMapById = {};
+			let placesMapById = {};
 			for (var i = 0; i < _Absences.length; i++) {
+				console.log('I = ', i);
 				if (_Absences[i].category == "absence") {
 					_Absences[i].category = "événement";
 				}
@@ -573,16 +622,36 @@ exports.plugin =
 				var startDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
 				date = new Date(_Absences[i].date_end);
 				var endDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
-				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Absences[i].harbour_id);
-				var currentUser = await STORE.usermgmt.getUserById(_Absences[i].user_id);
-				var currentBoat = await STORE.boatmgmt.getBoatById(_Absences[i].boat_id);
-				var currentPlace = await STORE.mapmgmt.getPlaceById(currentBoat.place_id);
+				let currentHarbour;
+				if (_Absences[i].harbour_id) {
+					[currentHarbour, harboursMapById] = await getHarbourByIdWithMemo(_Absences[i].harbour_id, harboursMapById);
+				} else {
+					currentHarbour = undefined;
+				}
+				let currentUser;
+				if (_Absences[i].user_id) {
+					[currentUser, usersMapById] = await getUserByIdWithMemo(_Absences[i].user_id, usersMapById);
+				} else {
+					currentUser = undefined;
+				}
+				let currentBoat;
+				if (_Absences[i].user_id) {
+					[currentBoat, boatsMapById] = await getBoatByIdWithMemo(_Absences[i].boat_id, boatsMapById);
+				} else {
+					currentBoat = undefined;
+				}
+				let currentPlace;
+				if (_Absences[i].user_id) {
+					[currentPlace, placesMapById] = await getPlaceByIdWithMemo(currentBoat.place_id, placesMapById);
+				} else {
+					currentPlace = undefined;
+				}
 
 				_absenceGen += _absenceHtml.replace(/__ID__/g, _Absences[i].id)
 					.replace(/__FORMID__/g, _Absences[i].id.replace(/\./g, "_"))
-					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-					.replace(/__USER_NAME__/g, currentUser.id + "\\" + currentUser.first_name + " " + currentUser.last_name)
-					.replace(/__BOAT_NAME__/g, currentBoat.id + "\\" + currentBoat.name)
+					.replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
+					.replace(/__USER_NAME__/g, currentUser.id + "\\" + currentUser?.first_name + " " + currentUser?.last_name)
+					.replace(/__BOAT_NAME__/g, currentBoat.id + "\\" + currentBoat?.name || '')
 					.replace(/__PLACE_NUMBER__/g, currentPlace.number)
 					.replace(/__DATE_START__/g, startDateFormated)
 					.replace(/__DATE_END__/g, endDateFormated)
