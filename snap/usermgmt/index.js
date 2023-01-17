@@ -112,15 +112,10 @@ function verifyPostReq(_req, _res, isUpdate) {
 //bdd requests
 
 async function getUserByToken(_token) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_userCol, { token: _token }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
+	const users = await getUsersV2({ token: _token});
+	return users;
 }
+
 async function verifyIfExistInUsers(_email, _phone) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_userCol, { email: _email, phone: _phone }, null, function (_err, _data) {
@@ -212,7 +207,6 @@ async function addUserHandler(req, res) {
 		}
 		if (verifyPostReq(req, res, false)) {
 			var user = req.post;
-			// const resp = await DB_NS.user.find({ email: user.email }, { raw: 1 });
 			const users = await getUsersV2({ email: user.email });
 			if (users.length > 0) {
 				UTILS.httpUtil.dataError(req, res, "Error", "Email déjà enregistré", "1.0");
@@ -221,7 +215,6 @@ async function addUserHandler(req, res) {
 			let userByPhone = [];
 			if (user.phone) {
 				user.prefixed_phone = user.prefix + user.phone.replace(/^0/, '');
-				// const resp = await DB_NS.user.find({ phone: user.phone }, { raw: 1 });
 				const users = await getUsersV2({ phone: user.phone });
 				if (users.length > 0) {
 					UTILS.httpUtil.dataError(req, res, "Error", "Téléphone déjà enregistré", "1.0");
@@ -269,7 +262,7 @@ async function getUserInfos(_req, _res) {
 			} else {
 				throw new Error('Wrong parameter, please provide a \'user id\' or a \'user token\'.');
 			}
-			const findUserResp = await DB_NS.user.find(query, { raw: 0 });
+			const findUserResp = await DB_NS.user.find(query);
 			if (findUserResp.error) {
 				throw new Error('User not found', { cause: { httpCode: 404 }});
 			}
@@ -295,7 +288,7 @@ async function loginHandler(req, res) {
 	try {
 		console.log(`[INFO] User login attempt mail: [${req.post.email}] START`);
 
-		const findUserResp = await DB_NS.user.find({ email: req.post.email }, { raw: 0 });
+		const findUserResp = await DB_NS.user.find({ email: req.post.email });
 		if(findUserResp.error) {
 			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
 		} else if (findUserResp.data.length < 1) {
@@ -315,7 +308,7 @@ async function loginHandler(req, res) {
 		delete user.id;
 		delete user.email;
 
-		const updatedUserResp = await DB_NS.user.update({ id: userId }, user, { raw: true });
+		const updatedUserResp = await DB_NS.user.update({ id: userId }, user);
 		if(updatedUserResp.error) {
 			throw new Error(updatedUserResp.message, { cause: { httpCode: 500 }});
 		} else if (updatedUserResp.data.length < 1) {
@@ -518,7 +511,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 	try {
 		console.log(`[INFO] Reset password request for email [${req.get.email}]`);
 		// GET USER INFO
-		const findUserResp = await DB_NS.user.find({ email: req.get.email }, { raw: 1 });
+		const findUserResp = await DB_NS.user.find({ email: req.get.email });
 		if (findUserResp.error || findUserResp.data.length < 1) {
 			throw new Error('No User Found !', {
 				cause: {
@@ -540,7 +533,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 
 		const userId = user.id;
 		delete user.id;
-		const updateUserResp = await DB_NS.user.update({ id: userId }, user, { raw: 1 });
+		const updateUserResp = await DB_NS.user.update({ id: userId }, user);
 		if (updateUserResp.error || updateUserResp.data.length < 1) {
 			console.error('[ERROR]', updateUserResp);
 			throw new Error('Failed to update user !', {
@@ -587,7 +580,7 @@ const setNewPasswordHandler = async (req, res) => {
 		const token = req.post.recoveryToken;
 		const password = req.post.newPassword;
 
-		const findUserResp = await DB_NS.user.find({ resetPwdToken: token }, { raw: true });
+		const findUserResp = await DB_NS.user.find({ resetPwdToken: token });
 		if(findUserResp.error) {
 			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
 		} else if (findUserResp.data.length < 1) {
@@ -600,7 +593,7 @@ const setNewPasswordHandler = async (req, res) => {
 		user.resetPwdToken = null;
 		const userId = user.id;
 		delete user.id;
-		const updatedUser = await DB_NS.user.update({ id: userId}, user, { raw: true });
+		const updatedUser = await DB_NS.user.update({ id: userId}, user);
 		if(updatedUser.error) {
 			throw new Error(updatedUser.error, { cause: { httpCode: 500 }});
 		} else if (updatedUser.data.length < 1) {
@@ -702,18 +695,18 @@ async function getUserById(_id) {
  * @returns {Promise<TYPES.T_user[]>}
  */
 const getUsersV2 = async (where = {}) => {
-	console.log('====getUsersV2====');
+	// console.log('====getUsersV2====');
 
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
-	console.log('Search users where: ', where);
-	const findUsersResp = await DB_NS.user.find(where, { raw: 0 });
+	// console.log('Search users where: ', where);
+	const findUsersResp = await DB_NS.user.find(where);
 	if (findUsersResp.error) {
 		throw new Error(findUsersResp.message, { cause: findUsersResp });
 	}
 	const users = findUsersResp.data;
-	console.log(`Found ${users.length} user(s) items`);
+	// console.log(`Found ${users.length} user(s) items`);
 	return users;
 };
 
@@ -780,7 +773,7 @@ const deleteUserV2 = async (where = {}) => {
 	}
 
 	console.log('Delte user where: ', where);
-	const deleteUsersResp = await DB_NS.user.delete(where, { raw: 0 });
+	const deleteUsersResp = await DB_NS.user.delete(where);
 	console.log('deleteUsersResp',deleteUsersResp)
 	if (deleteUsersResp.error) {
 		throw new Error(deleteUsersResp.message, { cause: deleteUsersResp });
@@ -895,7 +888,7 @@ exports.plugin =
 		console.log('==== usermgmt handler ====')
 		console.log('req.get', req.get)
 		console.log('req.post', req.post)
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);
@@ -985,7 +978,7 @@ exports.plugin =
 					const usersArrays = await Promise.all(pendingPromises);
 					usersArrays.map(userList => _users.push(...userList));
 			} else if (_role === 'admin') {
-				const findHarbourResp = await DB_NS.harbour.find({}, { raw: 0 });
+				const findHarbourResp = await DB_NS.harbour.find({});
 				if (findHarbourResp.error) {
 					console.error(findUserResp.error);
 					res.writeHead(500);
@@ -1101,6 +1094,7 @@ exports.plugin =
 exports.store =
 {
 	getUsers: getUsersV2,
+	updateUsers: updateUsersV2,
 	getUserById: getUserById, // wrapper for getUsersV2
 	getUserByToken: getUserByToken,
 }

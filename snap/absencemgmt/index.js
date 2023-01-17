@@ -90,6 +90,7 @@ const createAbsenceV2 = async (absence) => {
 
 	// console.log('Search absences where: ', where);
 	const createAbsenceResp = await DB_NS.absences.create(absence);
+	console.log('createAbsenceResp',createAbsenceResp)
 	if (createAbsenceResp.error) {
 		throw new Error(createAbsenceResp.message, { cause: createAbsenceResp });
 	}
@@ -116,6 +117,7 @@ const updateAbsenceV2 = async (where, updates) => {
 
 	console.log('Update absences where: ', where);
 	console.log('Update absences with: ', updates);
+	updates.updated_at = new Date.now();
 	const updateAbsenceResp = await DB_NS.absences.update(where, updates);
 	if (updateAbsenceResp.error) {
 		throw new Error(updateAbsenceResp.message, { cause: updateAbsenceResp });
@@ -188,36 +190,49 @@ async function createAbsenceHandler(req, res) {
 	var harbour = await STORE.harbourmgmt.getHarbour({ id: req.post.harbour_id });
 
 	if (harbour) {
-		const absence = await createAbsenceV2(newAbsence);
-		if (absence.id) {
-			//get data from db
-			var user = await STORE.usermgmt.getUserById(absence.user_id);
-			var boat = await STORE.boatmgmt.getBoats({ id: absence.boat_id });
-			var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
-			//prepare mail
-			var subject = "Declaration d'absence";
-			var body = `
-				<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
-				<h1>Bonjour</h1>
-				<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} place n°${place.number} a déclaré une absence du ${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}.</p>
-				<p style="font-size: 10pt">À bientôt,</p>
-				<p style="font-size: 10pt">L'équipe Nauticspot</p>
-			`;
-			//send mail
-			const emailAddress = harbour.email_absence || harbour.email;
-			if (emailAddress?.includes(';')) {
-				emailAddress
-					.split(';')
-					?.map(async (mail) => {
-						await STORE.mailjet.sendHTML(harbour.id_entity, mail, harbour.name, subject, body);
-					})
-			} else {
-				await STORE.mailjet.sendHTML(harbour.id_entity, emailAddress, harbour.name, subject, body);
-			}
-			UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
+		let absence;
+		try {
+			absence = await createAbsenceV2(newAbsence);
+		} catch (error) {
+			console.error('[ERROR]', error);
+			UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la creation d'absence", "500", "1.0");
 			return;
 		}
-		else {
+
+		if (absence.id) {
+			try {
+				//get data from db
+				var user = await STORE.usermgmt.getUserById(absence.user_id);
+				var boat = await STORE.boatmgmt.getBoats({ id: absence.boat_id });
+				var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
+				//prepare mail
+				var subject = "Declaration d'absence";
+				var body = `
+					<img id="logo" src="https://api.nauticspot.io/images/logo.png" alt="Nauticspot logo" style="width: 30%;">
+					<h1>Bonjour</h1>
+					<p style="font-size: 12pt">Le plaisancier ${user.first_name} ${user.last_name}, propriétaire de ${boat.name} place n°${place.number} a déclaré une absence du ${FM.formatDate(absence.date_start)} au ${FM.formatDate(absence.date_end)}.</p>
+					<p style="font-size: 10pt">À bientôt,</p>
+					<p style="font-size: 10pt">L'équipe Nauticspot</p>
+				`;
+				//send mail
+				const emailAddress = harbour.email_absence || harbour.email;
+				if (emailAddress?.includes(';')) {
+					emailAddress
+						.split(';')
+						?.map(async (mail) => {
+							await STORE.mailjet.sendHTML(harbour.id_entity, mail, harbour.name, subject, body);
+						})
+				} else {
+					await STORE.mailjet.sendHTML(harbour.id_entity, emailAddress, harbour.name, subject, body);
+				}
+				UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
+				return;
+			} catch (error) {
+				console.error('[INTERNAL ERROR]', error);
+				UTILS.httpUtil.dataSuccess(req, res, "success", absence, "1.0");
+				// Error sending absence mail creation to capitainerie / do not send error to users
+			}
+		} else {
 			UTILS.httpUtil.dataError(req, res, "Error", "error", "100", "1.0");
 			return;
 		}
@@ -225,7 +240,7 @@ async function createAbsenceHandler(req, res) {
 		UTILS.httpUtil.dataError(req, res, "Error", "error", "100", "1.0");
 		return;
 	}
-}
+};
 
 async function updateAbsenceHandler(req, res) {
 	console.log('========updateAbsenceHandler=========')
@@ -395,22 +410,6 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 	}
 }
 
-const getHarbourByIdWithMemo = async (harbourId, harboursMapById) => {
-	// console.log('===getHarbourByIdWithMemo===', harbourId)
-	// console.log('harboursMapById', Object.keys(harboursMapById));
-	if (harboursMapById[harbourId]) {
-		// console.log('==> FOUND IN MEMO')
-		return [harboursMapById[harbourId], harboursMapById];
-	}
-	// console.log('==> NOT FOUND IN MEMO')
-	const foundHarbour = await STORE.harbourmgmt.getHarbourById(harbourId);
-	// console.log('==> FOUND FROM DB')
-
-	harboursMapById[foundHarbour.id] = foundHarbour;
-
-	return [foundHarbour, harboursMapById];
-};
-
 const getUserByIdWithMemo = async (userId, usersMapById) => {
 	// console.log('===getUserByIdWithMemo===', userId)
 	// console.log('usersMapById', Object.keys(usersMapById));
@@ -419,12 +418,12 @@ const getUserByIdWithMemo = async (userId, usersMapById) => {
 		return [usersMapById[userId], usersMapById];
 	}
 	// console.log('==> NOT FOUND IN MEMO')
-	const foundHarbour = await STORE.usermgmt.getUsers({ id: userId });
+	const foundUsers = await STORE.usermgmt.getUsers({ id: userId });
 	// console.log('==> FOUND FROM DB')
+	const user = foundUsers[0]
+	usersMapById[user.id] = user;
 
-	usersMapById[foundHarbour.id] = foundHarbour;
-
-	return [foundHarbour, usersMapById];
+	return [user, usersMapById];
 };
 
 const getBoatByIdWithMemo = async (boatId, boatsMapById) => {
@@ -435,12 +434,12 @@ const getBoatByIdWithMemo = async (boatId, boatsMapById) => {
 		return [boatsMapById[boatId], boatsMapById];
 	}
 	// console.log('==> NOT FOUND IN MEMO')
-	const foundHarbour = await STORE.boatmgmt.getBoats({ id: boatId });
+	const foundBoats = await STORE.boatmgmt.getBoats({ id: boatId });
 	// console.log('==> FOUND FROM DB')
+	const boat = foundBoats[0];
+	boatsMapById[boat.id] = boat;
 
-	boatsMapById[foundHarbour.id] = foundHarbour;
-
-	return [foundHarbour, boatsMapById];
+	return [boat, boatsMapById];
 };
 
 const getPlaceByIdWithMemo = async (placeId, placesMapById) => {
@@ -591,11 +590,9 @@ exports.plugin =
 				}
 			}
 			else if (_role == "admin")
-				_Absences = await getAbsencesV2({ user_id: "BxnZQU1ovXo"});
+				_Absences = await getAbsencesV2();
 
-
-			// ! DEV
-			_Absences = _Absences.splice(0, 10) // ! DEV
+			_Absences = _Absences.splice(0, 4);
 
 			//modify html dynamically <
 			var _absenceGen = "";
@@ -633,6 +630,9 @@ exports.plugin =
 				} else {
 					currentUser = undefined;
 				}
+				console.log('_Absences[i].user_id',_Absences[i].user_id);
+				console.log('currentUser',currentUser);
+
 				perfEnd = performance.now();
 				console.log(`Execution time 1: ${perfEnd - perfStart} ms`);
 				perfStart = performance.now();
@@ -677,7 +677,6 @@ exports.plugin =
 					+ '<label class="form-label">Séléction du port</label>'
 					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
 				for (var i = 0; i < _harbour_id.length; i++) {
-					// userHarbours[i] = await STORE.harbourmgmt.getHarbours({ id: _harbour_id[i] });
 					userHarbours[i] = harboursMapById[_harbour_id[i]];
 					harbour_select += '<option value="' + userHarbours[i]?.id + '">' + userHarbours[i]?.name + '</option>';
 				}
