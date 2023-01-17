@@ -95,15 +95,13 @@ const getBoatsV2 = async (where) => {
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	// console.log('Search boats where: ', where);
-
-	console.log('Search absences where: ', where);
 	const findBoatsResp = await DB_NS.boat.find(where, { raw: 0 });
 	if (findBoatsResp.error) {
 		console.error(findBoatsResp);
 		throw new Error(findBoatsResp.message, { cause: findBoatsResp });
 	}
 	const boats = findBoatsResp.data;
-	console.log(`Found ${boats.length} boat(s) items`);
+	// console.log(`Found ${boats.length} boat(s) items`);
 	return boats;
 };
 
@@ -113,14 +111,15 @@ const getBoatsV2 = async (where) => {
  * @returns 
  */
 const createBoatV2 = async (boat) => {
-	console.log('====createBoatV2====');
+	// console.log('====createBoatV2====');
 
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
-	console.log('Search boats where: ', where);
+	console.log('Create boats where: ', where);
 	const createBoatResp = await DB_NS.boat.create(boat);
 	if (createBoatResp.error) {
+		console.error('[ERROR]', createBoatResp);
 		throw new Error(createBoatResp.message, { cause: createBoatResp });
 	}
 	const boats = createBoatResp.data;
@@ -135,7 +134,7 @@ const createBoatV2 = async (boat) => {
  * @returns {Promise<TYPES.T_boat[]>}
  */
 const updateBoatV2 = async (where, updates) => {
-	console.log('====updateBoatV2====');
+	// console.log('====updateBoatV2====');
 
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
@@ -172,64 +171,14 @@ const deleteBoatV2 = async (where = {}) => {
 	}
 
 	const deleteBoatsResp = await DB_NS.boat.delete(where, { raw: 0 });
-	console.log('deleteBoatsResp',deleteBoatsResp)
 	if (deleteBoatsResp.error) {
+		console.error('[ERROR]',deleteBoatsResp)
 		throw new Error(deleteBoatsResp.message, { cause: deleteBoatsResp });
 	}
 	const boats = deleteBoatsResp.data;
 	console.log(`Deleted ${boats.length} boat(s) items`, boats);
 	return boats;
 };
-
-async function delBoat(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Delete(_boatCol, { id: _id }, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-async function createBoat(_obj) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Create(_boatCol, _obj, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-async function updateBoat(_obj) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Update(_boatCol, { id: _obj.id }, _obj, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-/**
- * 
- * @param {TYPES.T_userFP['id']} _id 
- * @returns {Promise<TYPES.T_userFP>}
- */
-async function getAdminById(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-// >
 
 //handler that save boat in db
 async function addBoatHandler(_req, _res) {
@@ -256,7 +205,7 @@ async function addBoatHandler(_req, _res) {
 		const createdBoat = creatBoatResp.data;
 
 		// UPDATE USER
-		const updateUserResp = await DB_NS.user.update({ id: createdBoat.user_id }, {boat_id: createdBoat.id }, { raw: 1 });
+		const updateUserResp = await DB_NS.user.update({ id: createdBoat.user_id }, {boat_id: createdBoat.id });
 		if (updateUserResp.error) {
 			throw new Error(updateUserResp.error, { cause: { httpCode: 500 } });
 		}
@@ -269,15 +218,13 @@ async function addBoatHandler(_req, _res) {
 
 //handler that delete boat in db
 async function deleteBoatHandler(_req, _res) {
-	console.log(_req.post);
-
 	//verify user
 	var user;
 	if (!_req.post.token || _req.post.token.length < 1) {
 		UTILS.httpUtil.dataError(_req, _res, "Error", "Utilisateur non connecté", "100", "1.0");
 		return;
 	} else {
-		user = await STORE.usermgmt.getUserByToken(_req.post.token);
+		user = await STORE.usermgmt.getUsers({ token: _req.post.token });
 		if (!user[0]) {
 			UTILS.httpUtil.dataError(_req, _res, "Error", "Utilisateur non connecté", "100", "1.0");
 			return;
@@ -286,8 +233,7 @@ async function deleteBoatHandler(_req, _res) {
 
 	if (_req.post.id) {
 		delete _req.post.token;
-		var boat = await delBoat(_req.post.id);
-		console.log(boat);
+		const boat = await deleteBoatV2({ id: _req.post.id });
 		UTILS.httpUtil.dataSuccess(_req, _res, "Bateau supprimé", "1.0")
 		return;
 	} else {
@@ -612,5 +558,5 @@ exports.plugin =
 
 exports.store = {
 	getBoats: getBoatsV2,
-	updateBoat: updateBoat
+	deleteBoats: deleteBoatV2,
 }

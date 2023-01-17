@@ -111,11 +111,6 @@ function verifyPostReq(_req, _res, isUpdate) {
 
 //bdd requests
 
-async function getUserByToken(_token) {
-	const users = await getUsersV2({ token: _token});
-	return users;
-}
-
 async function verifyIfExistInUsers(_email, _phone) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Find(_userCol, { email: _email, phone: _phone }, null, function (_err, _data) {
@@ -278,6 +273,7 @@ async function getUserInfos(_req, _res) {
 		return;
 	} catch (error) {
 		errorHandler(_res, error);
+		return;
 	}
 }
 
@@ -354,7 +350,6 @@ async function userSessionHandler(_req, _res) {
 }
 
 async function updateUserHandler(_req, _res) {
-	console.log(_req.post);
 	if (_req.post.prefix) {
 		_req.post.prefix = completePhonePrefix(_req.post.prefix);
 	}
@@ -633,9 +628,9 @@ const autoDeleteUserAccount = async (req, res) => {
 		}
 
 		/** @type {Array<TYPES.T_boat>} */
-		const deletedBoats = await STORE.API_NEXT.deleteElement('boat', { user_id: user.id });
+		const deletedBoats = await STORE.boatmgmt.deleteBoats({ user_id: user.id });
 		/** @type {Array<TYPES.T_absence>} */
-		const deletedAbsences = await STORE.absencemgmt.deleteAbsence({ user_id: user.id });
+		const deletedAbsences = await STORE.absencemgmt.deleteAbsences({ user_id: user.id });
 		/** @type {Array<TYPES.T_user>} */
 		const deletedUser = await deleteUserV2({ id: user.id });
 
@@ -684,10 +679,6 @@ const getUserSecure = async (req, res) => {
 		}));
 	}
 };
-
-async function getUserById(_id) {
-	return getUsersV2({ id: _id });
-}
 
 /**
  * 
@@ -1095,6 +1086,4 @@ exports.store =
 {
 	getUsers: getUsersV2,
 	updateUsers: updateUsersV2,
-	getUserById: getUserById, // wrapper for getUsersV2
-	getUserByToken: getUserByToken,
 }

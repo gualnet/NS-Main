@@ -197,7 +197,7 @@ async function createSecuriteHandler(req, res) {
 
         /**@type {import('../../types').T_harbour} */
         var harbour = await STORE.harbourmgmt.getHarbourById(securite.harbour_id);
-        var user = await STORE.usermgmt.getUserById(securite.user_id);
+        var user = await STORE.usermgmt.getUsers({ id: securite.user_id });
         var zone = await STORE.mapmgmt.getZoneById(securite.zone);
 
         var subject = `Declaration d'incident le ${dateFormated}`;
@@ -474,7 +474,7 @@ exports.plugin =
                 date = new Date(_Securites[i].date_end);
                 var endDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
                 var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Securites[i].harbour_id);
-                var currentUser = await STORE.usermgmt.getUserById(_Securites[i].user_id);
+                var currentUser = await STORE.usermgmt.getUsers({ id: _Securites[i].user_id });
                 var currentZone = await STORE.mapmgmt.getZoneById(_Securites[i].zone);
 
                 if (_Securites[i].status == "open") {

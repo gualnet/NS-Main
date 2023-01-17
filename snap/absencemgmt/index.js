@@ -202,7 +202,7 @@ async function createAbsenceHandler(req, res) {
 		if (absence.id) {
 			try {
 				//get data from db
-				var user = await STORE.usermgmt.getUserById(absence.user_id);
+				var user = await STORE.usermgmt.getUsers({ id: absence.user_id });
 				var boat = await STORE.boatmgmt.getBoats({ id: absence.boat_id });
 				var place = await STORE.mapmgmt.getPlaceById(boat.place_id);
 				//prepare mail
@@ -705,7 +705,7 @@ exports.plugin =
 }
 exports.store = {
 	getAbsences: getAbsencesV2,
-	createAbsence: createAbsenceV2,
-	updateAbsence: updateAbsenceV2,
-	deleteAbsence: deleteAbsenceV2,
+	createAbsences: createAbsenceV2,
+	updateAbsences: updateAbsenceV2,
+	deleteAbsences: deleteAbsenceV2,
 }
