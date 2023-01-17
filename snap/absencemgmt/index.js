@@ -135,12 +135,12 @@ const deleteAbsenceV2 = async (where = {}) => {
 
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
-
-	if (Object.keys(where).length !== 1 || !where.id) {
-		throw new Error('Wrong parameter: ' + where);
+	
+	console.log('Delte absence where: ', where);
+	if (Object.keys(where).length === 0) {
+		throw new Error('Wrong parameter: ', where);
 	}
 
-	console.log('Delte absence where: ', where);
 	const deleteAbsencesResp = await DB_NS.absences.delete(where, { raw: 0 });
 	console.log('deleteAbsencesResp',deleteAbsencesResp)
 	if (deleteAbsencesResp.error) {
@@ -419,7 +419,7 @@ const getUserByIdWithMemo = async (userId, usersMapById) => {
 		return [usersMapById[userId], usersMapById];
 	}
 	// console.log('==> NOT FOUND IN MEMO')
-	const foundHarbour = await STORE.usermgmt.getUserById(userId);
+	const foundHarbour = await STORE.usermgmt.getUsers({ id: userId });
 	// console.log('==> FOUND FROM DB')
 
 	usersMapById[foundHarbour.id] = foundHarbour;
@@ -599,7 +599,7 @@ exports.plugin =
 
 			//modify html dynamically <
 			var _absenceGen = "";
-			let harboursMapById = {};
+			let harboursMapById = await STORE.harbourmgmt.getAllHarboursMappedById();
 			let usersMapById = {};
 			let boatsMapById = {};
 			let placesMapById = {};
@@ -622,41 +622,48 @@ exports.plugin =
 				var startDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
 				date = new Date(_Absences[i].date_end);
 				var endDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
-				let currentHarbour;
-				if (_Absences[i].harbour_id) {
-					[currentHarbour, harboursMapById] = await getHarbourByIdWithMemo(_Absences[i].harbour_id, harboursMapById);
-				} else {
-					currentHarbour = undefined;
-				}
+
+				const harbourId = _Absences[i].harbour_id;
+				let currentHarbour = (harbourId) ? harboursMapById[harbourId] : undefined;
+				let perfStart, perfEnd;
+				perfStart = performance.now();
 				let currentUser;
 				if (_Absences[i].user_id) {
 					[currentUser, usersMapById] = await getUserByIdWithMemo(_Absences[i].user_id, usersMapById);
 				} else {
 					currentUser = undefined;
 				}
+				perfEnd = performance.now();
+				console.log(`Execution time 1: ${perfEnd - perfStart} ms`);
+				perfStart = performance.now();
 				let currentBoat;
 				if (_Absences[i].user_id) {
 					[currentBoat, boatsMapById] = await getBoatByIdWithMemo(_Absences[i].boat_id, boatsMapById);
 				} else {
 					currentBoat = undefined;
 				}
+				perfEnd = performance.now();
+				console.log(`Execution time 2: ${perfEnd - perfStart} ms`);
+				perfStart = performance.now();
 				let currentPlace;
 				if (_Absences[i].user_id) {
 					[currentPlace, placesMapById] = await getPlaceByIdWithMemo(currentBoat.place_id, placesMapById);
 				} else {
 					currentPlace = undefined;
 				}
+				perfEnd = performance.now();
+				console.log(`Execution time 3: ${perfEnd - perfStart} ms`);
 
 				_absenceGen += _absenceHtml.replace(/__ID__/g, _Absences[i].id)
 					.replace(/__FORMID__/g, _Absences[i].id.replace(/\./g, "_"))
 					.replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
-					.replace(/__USER_NAME__/g, currentUser.id + "\\" + currentUser?.first_name + " " + currentUser?.last_name)
-					.replace(/__BOAT_NAME__/g, currentBoat.id + "\\" + currentBoat?.name || '')
-					.replace(/__PLACE_NUMBER__/g, currentPlace.number)
+					.replace(/__USER_NAME__/g, currentUser?.id + "\\" + currentUser?.first_name + " " + currentUser?.last_name)
+					.replace(/__BOAT_NAME__/g, currentBoat?.id + "\\" + currentBoat?.name || '')
+					.replace(/__PLACE_NUMBER__/g, currentPlace?.number)
 					.replace(/__DATE_START__/g, startDateFormated)
 					.replace(/__DATE_END__/g, endDateFormated)
 					.replace(/__DATE__/g, formatedDate)
-					.replace(/__DATETIMEORDER__/g, _Absences[i].date)
+					.replace(/__DATETIMEORDER__/g, _Absences[i]?.date)
 			}
 			_indexHtml = _indexHtml.replace("__ABSENCES__", _absenceGen).replace(/undefined/g, '');
 			// >
@@ -670,8 +677,9 @@ exports.plugin =
 					+ '<label class="form-label">Séléction du port</label>'
 					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
 				for (var i = 0; i < _harbour_id.length; i++) {
-					userHarbours[i] = await STORE.harbourmgmt.getHarbourById(_harbour_id[i]);
-					harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
+					// userHarbours[i] = await STORE.harbourmgmt.getHarbours({ id: _harbour_id[i] });
+					userHarbours[i] = harboursMapById[_harbour_id[i]];
+					harbour_select += '<option value="' + userHarbours[i]?.id + '">' + userHarbours[i]?.name + '</option>';
 				}
 				harbour_select += '</select></div></div>';
 			} else if (_role == "admin") {
@@ -679,8 +687,8 @@ exports.plugin =
 					+ '<div class= "form-group" >'
 					+ '<label class="form-label">Séléction du port</label>'
 					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
-				userHarbours = await STORE.harbourmgmt.getHarbour();
-
+					
+				userHarbours = await STORE.harbourmgmt.getHarbours();
 				for (var i = 0; i < userHarbours.length; i++) {
 					harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
 				}
@@ -695,4 +703,10 @@ exports.plugin =
 			return;
 		}
 	}
+}
+exports.store = {
+	getAbsences: getAbsencesV2,
+	createAbsence: createAbsenceV2,
+	updateAbsence: updateAbsenceV2,
+	deleteAbsence: deleteAbsenceV2,
 }

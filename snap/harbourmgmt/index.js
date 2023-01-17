@@ -155,7 +155,8 @@ const getHarboursV2 = async (where = {}) => {
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	// console.info('[INFO] find harbours where:', where);
-	const findHarboursResp = await DB_NS.harbour.find(where, { raw: 1 });
+	// const findHarboursResp = await DB_NS.harbour.find(where, { raw: 1 });
+	const findHarboursResp = await DB_NS.harbour.find(where);
 	if (findHarboursResp.error) {
 		throw new Error(findHarboursResp.message, { cause: findHarboursResp });
 	}
@@ -210,6 +211,16 @@ async function updateHarbourWhere(updateFieds, whereFields) {
                 resolve(_err);
         });
     });
+}
+
+const getAllHarboursMappedById = async () => {
+	/**@type {TYPES.T_harbour[]} */
+	const harbours = await STORE.harbourmgmt.getHarbours();
+	const harboursMapById = {};
+	harbours.map(harbour => {
+		harboursMapById[harbour.id] = harbour;
+	})
+	return harboursMapById;
 }
 
 //routes handlers
@@ -283,11 +294,14 @@ async function updateHarboursHandler(req, res) {
 /* NEW API HANDLERS END */
 /* -------------------- */
 
+
 exports.store =
 {
-    getHarbourByEntityId: getHarbourByEntityId,
-    getHarbourById: getHarbourById,
-    getHarbour: getHarbour,
+	getHarbour: getHarbour, // historic
+	getHarbours: getHarboursV2,
+	getHarbourByEntityId: getHarbourByEntityId,
+	getHarbourById: getHarbourById,
+	getAllHarboursMappedById,
 }
 exports.router = [
     {
