@@ -94,14 +94,14 @@ const getBoatsV2 = async (where) => {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
-	// console.log('Search boats where: ', where);
-	const findBoatsResp = await DB_NS.boat.find(where, { raw: 0 });
+	console.log('Search boats where: ', where);
+	const findBoatsResp = await DB_NS.boat.find(where);
 	if (findBoatsResp.error) {
 		console.error(findBoatsResp);
 		throw new Error(findBoatsResp.message, { cause: findBoatsResp });
 	}
 	const boats = findBoatsResp.data;
-	// console.log(`Found ${boats.length} boat(s) items`);
+	console.log(`Found ${boats.length} boat(s) items`);
 	return boats;
 };
 
@@ -170,7 +170,7 @@ const deleteBoatV2 = async (where = {}) => {
 		throw new Error('Wrong parameter: ', where);
 	}
 
-	const deleteBoatsResp = await DB_NS.boat.delete(where, { raw: 0 });
+	const deleteBoatsResp = await DB_NS.boat.delete(where);
 	if (deleteBoatsResp.error) {
 		console.error('[ERROR]',deleteBoatsResp)
 		throw new Error(deleteBoatsResp.message, { cause: deleteBoatsResp });
@@ -396,7 +396,7 @@ exports.plugin =
 		/**@type {TYPES.T_SCHEMA['fortpress']} */
 		const DB_FP = SCHEMA.fortpress;
 
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);
