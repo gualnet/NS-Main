@@ -767,11 +767,9 @@ exports.plugin =
 
 			var _partnerGen = "";
 
-			let perfStart, perfEnd;
-			let totalPerfStart, totalPerfEnd;
 			totalPerfStart = performance.now();
 			for (var i = 0; i < _partners.length; i++) {
-				var currentHarbour = await STORE.harbourmgmt.getHarbours({ id: _partners[i].harbour_id });
+				const currentHarbour = await STORE.harbourmgmt.getHarbours({ id: _partners[i].harbour_id });
 
 				let formatedDate = '-';
 				if (_partners[i].created_at || _partners[i].date) {
@@ -802,8 +800,6 @@ exports.plugin =
 					.replace(/__DATE_CREATION__/g, formatedDate)
 					.replace(/__SPOTYRIDE_LINK__/g, _partners[i].spotyrideLink || '');
 			}
-			totalPerfEnd = performance.now();
-			console.log('PERF ==>', totalPerfEnd - totalPerfStart);
 			_indexHtml = _indexHtml.replace("__PARTNERS__", _partnerGen).replace(/undefined/g, '');
 
 			res.setHeader("Content-Type", "text/html");
