@@ -70,6 +70,7 @@ const getAbsencesV2 = async (where = {}) => {
 	console.log('Search absences where: ', where);
 	const findAbsencesResp = await DB_NS.absences.find(where, { raw: 0 });
 	if (findAbsencesResp.error) {
+		console.error('[Error]', findAbsencesResp)
 		throw new Error(findAbsencesResp.message, { cause: findAbsencesResp });
 	}
 	const absences = findAbsencesResp.data;
@@ -90,8 +91,8 @@ const createAbsenceV2 = async (absence) => {
 
 	// console.log('Search absences where: ', where);
 	const createAbsenceResp = await DB_NS.absences.create(absence);
-	console.log('createAbsenceResp',createAbsenceResp)
 	if (createAbsenceResp.error) {
+		console.error('[Error]', createAbsenceResp)
 		throw new Error(createAbsenceResp.message, { cause: createAbsenceResp });
 	}
 	const absences = createAbsenceResp.data;
@@ -120,6 +121,7 @@ const updateAbsenceV2 = async (where, updates) => {
 	updates.updated_at = new Date.now();
 	const updateAbsenceResp = await DB_NS.absences.update(where, updates);
 	if (updateAbsenceResp.error) {
+		console.error('[Error]', updateAbsenceResp)
 		throw new Error(updateAbsenceResp.message, { cause: updateAbsenceResp });
 	}
 	const absences = updateAbsenceResp.data;
@@ -144,8 +146,8 @@ const deleteAbsenceV2 = async (where = {}) => {
 	}
 
 	const deleteAbsencesResp = await DB_NS.absences.delete(where, { raw: 0 });
-	console.log('deleteAbsencesResp',deleteAbsencesResp)
 	if (deleteAbsencesResp.error) {
+		console.error('[Error]', deleteAbsencesResp)
 		throw new Error(deleteAbsencesResp.message, { cause: deleteAbsencesResp });
 	}
 	const absences = deleteAbsencesResp.data;
@@ -243,7 +245,6 @@ async function createAbsenceHandler(req, res) {
 };
 
 async function updateAbsenceHandler(req, res) {
-	console.log('========updateAbsenceHandler=========')
 	const { absence_id, newStartDate, newEndDate } = req.body;
 
 	try {
@@ -622,7 +623,6 @@ exports.plugin =
 
 				const harbourId = _Absences[i].harbour_id;
 				let currentHarbour = (harbourId) ? harboursMapById[harbourId] : undefined;
-				let perfStart, perfEnd;
 				perfStart = performance.now();
 				let currentUser;
 				if (_Absences[i].user_id) {
@@ -630,29 +630,20 @@ exports.plugin =
 				} else {
 					currentUser = undefined;
 				}
-				console.log('_Absences[i].user_id',_Absences[i].user_id);
-				console.log('currentUser',currentUser);
 
-				perfEnd = performance.now();
-				console.log(`Execution time 1: ${perfEnd - perfStart} ms`);
-				perfStart = performance.now();
 				let currentBoat;
 				if (_Absences[i].user_id) {
 					[currentBoat, boatsMapById] = await getBoatByIdWithMemo(_Absences[i].boat_id, boatsMapById);
 				} else {
 					currentBoat = undefined;
 				}
-				perfEnd = performance.now();
-				console.log(`Execution time 2: ${perfEnd - perfStart} ms`);
-				perfStart = performance.now();
+
 				let currentPlace;
 				if (_Absences[i].user_id) {
 					[currentPlace, placesMapById] = await getPlaceByIdWithMemo(currentBoat.place_id, placesMapById);
 				} else {
 					currentPlace = undefined;
 				}
-				perfEnd = performance.now();
-				console.log(`Execution time 3: ${perfEnd - perfStart} ms`);
 
 				_absenceGen += _absenceHtml.replace(/__ID__/g, _Absences[i].id)
 					.replace(/__FORMID__/g, _Absences[i].id.replace(/\./g, "_"))

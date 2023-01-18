@@ -426,7 +426,6 @@ exports.plugin =
 		}
 
 		if (req.method == "GET") {
-			console.log('PLUGIN DELETE BOAT');
 			if (req.get.mode && req.get.mode == "delete" && req.get.boat_id) {
 				try {
 					await deleteBoatV2({ id: req.get.boat_id });
@@ -439,7 +438,6 @@ exports.plugin =
 			}
 		}
 		if (req.method == "POST") {
-			console.log('PLUGIN UPDATE BOAT', req.post);
 			if (req.post.id) {
 				try {
 					if (!verifyPostReq(req, res)) {
@@ -476,6 +474,7 @@ exports.plugin =
 				}
 				else if (_role == "admin") {
 					_boats = await getBoatsV2({});
+					console.log('[INFO] Limit boats to display 500 elements.');
 					_boats = _boats.splice(0, 500);
 				}
 
