@@ -13,10 +13,6 @@ const AUTHORIZED_ROLES = [
 	ROLES.AGENT_CAPITAINERIE,
 ];
 
-var _eventCol = "events";
-var _userCol = "user";
-
-
 function addProtocolToUrl(url) {
     var patternProtocol = new RegExp('^(https?:\\/\\/)') // protocol
     console.log(url);
@@ -72,25 +68,22 @@ function verifyPostReq(_req, _res) {
     return true;
 }
 
-async function getEventById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_eventCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+// * ************** *
+// * DB HANDLERS V2 *
 
-const getEventv2 = async (searchOpt) => {
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_event[]>}
+ */
+const getEventsV2 = async (searchOpt) => {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	console.log('Find events with searchOpt', searchOpt);
-	const findEventsResp = await DB_NS.events.find(searchOpt, { raw: 1 });
+	const findEventsResp = await DB_NS.events.find(searchOpt);
 	if (findEventsResp.error) {
-		console.error(findEventsResp);
+		console.error('[ERROR]', findEventsResp);
 		throw new Error(findEventsResp.message, { cause: findEventsResp });
 	}
 	console.log('Found events', findEventsResp.data.length);
@@ -98,49 +91,11 @@ const getEventv2 = async (searchOpt) => {
 	return (findEventsResp.data);
 }
 
-async function getEvent(searchOpt) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_eventCol, {}, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-async function getEventsByHarbourId(_harbour_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_eventCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-
-async function delEvent(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Delete(_eventCol, { id: _id }, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-
-async function createEvent(_obj) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Create(_eventCol, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-
+/**
+ * 
+ * @param {TYPES.T_event} obj 
+ * @returns {Promise<TYPES.T_event>}
+ */
 const createEventV2 = async (obj) => {
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
@@ -149,7 +104,80 @@ const createEventV2 = async (obj) => {
 	if (createEventResp.error) {
 		throw new Error(createEventResp, { cause: createEventResp });
 	}
+	console.log('createEventResp.data',createEventResp.data)
 	return createEventResp.data;
+};
+
+/**
+ * 
+ * @param {Pick<TYPES.T_event, "id">} where 
+ * @param {Partial<TYPES.T_event>} updates 
+ * @returns {Promise<TYPES.T_event[]>}
+ */
+const updateEventsV2 = async (where, updates) => {
+	console.log('====updateEventsV2====');
+
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	if (Object.keys(where).length !== 1 || !where.id) {
+		throw new Error('Wrong parameter: ' + where);
+	}
+
+	console.log('Update events where: ', where);
+	console.log('Update events with: ', updates);
+	const updateEventsResp = await DB_NS.events.update(where, updates);
+	if (updateEventsResp.error) {
+		throw new Error(updateEventsResp.message, { cause: updateEventsResp });
+	}
+	const events = updateEventsResp.data;
+	console.log(`${events.length} event(s) Updated`);
+	return events;
+};
+
+/**
+ * 
+ * @param {*} searchOpt 
+ * @returns {Promise<TYPES.T_event[]>}
+ */
+const deleteEventsV2 = async (searchOpt) => {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Delete event by:', searchOpt);
+	const deleteEventsResp = await DB_NS.events.delete(searchOpt);
+	if (deleteEventsResp.error) {
+		throw new Error(deleteEventsResp.message, { cause: deleteEventsResp });
+	}
+	const deletedEvents = deleteEventsResp.data;
+	console.log('deletedEvents',deletedEvents);
+	return deletedEvents;
+}
+
+// * DB HANDLERS V2 *
+// * ************** *
+
+// * ************ *
+// * API HANDLERS *
+
+async function getEventHandler(req, res) {
+	try {
+		const events = await getEventsV2({ id: req.get.id });
+		UTILS.httpUtil.dataSuccess(req, res, "success", events, "1.0");
+	} catch (error) {
+		console.log('[ERROR]', error);
+		UTILS.httpUtil.dataError(req, res, "Error", error.toString(), "500", "1.0");
+	}
+};
+
+async function getEventsByHarbourIdHandler(req, res) {
+	try {
+		const events = await getEventsV2({ harbour_id: req.param.harbour_id });
+		UTILS.httpUtil.dataSuccess(req, res, "success", events, "1.0");
+	} catch (error) {
+		console.log('[ERROR]', error);
+		UTILS.httpUtil.dataError(req, res, "Error", error, "500", "1.0");
+	}
 };
 
 const createNewEventHandler = async (req, res) => {
@@ -159,10 +187,8 @@ const createNewEventHandler = async (req, res) => {
 		const DB_NS = SCHEMA.NAUTICSPOT;
 
 		// CHECK IF TITLE ALREADY EXISTS
-		const findEventsResp = await DB_NS.events.find({ title: req.post.title }, { raw: 1 });
-		if (findEventsResp.error) {
-			throw new Error(findEventsResp.message, { cause: {findEventsResp} });
-		} else if (findEventsResp.data?.length > 0) {
+		const events = await getEventsV2({ title: req.post.title });
+		if (events?.length > 0) {
 			throw new Error("This event title already exists", { cause: { httpCode: "409", publicMsg: "This event title already exists" } });
 		}
 
@@ -203,96 +229,139 @@ const createNewEventHandler = async (req, res) => {
 	}
 };
 
-async function updateEvent(_obj) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Update(_eventCol, { id: _obj.id }, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-async function getAdminById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+// * API HANDLERS *
+// * ************ *
 
-exports.handler = async (req, res) => {
-    var _event = await getEvent();
-    res.end(JSON.stringify(_event));
-    return;
-}
+// * *************** *
+// * PLUGIN HANDLERS *
 
-/**
- * 
- * @param {Object} searchOpt 
- * @return {TYPES.T_event[]}
- */
-const findEventsV2 = async (searchOpt) => {
-	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-	const DB_NS = SCHEMA.NAUTICSPOT;
+const pluginPostUpdateHandler = async (req, res) => {
+	try {
+		const eventId = req.post.id;
+		const events = await getEventsV2({ id: eventId });
+		const currentEvent = events[0];
+		if (!currentEvent) {
+			throw new Error('Event to update not found');
+		}
 
-	console.log('Seach event by:', searchOpt);
-	const findEventsResp = await DB_NS.events.find(searchOpt);
-	if (findEventsResp.error) {
-		console.error('[ERROR]', findEventsResp.error);
-		throw new Error(findEventsResp.message, { cause: findEventsResp });
+		const newEvent = req.post;
+		delete newEvent.id;
+		newEvent.updated_at = Date.now();
+
+		newEvent.date_start = Date.parse(newEvent.date_start);
+		newEvent.date_end = Date.parse(newEvent.date_end);
+
+		//img gesture
+		if (newEvent.img) {
+			const upload = await STORE.cloudinary.uploadFile(newEvent.img, req.field["img"].filename);
+			newEvent.img = upload.secure_url;
+			newEvent.cloudinary_img_public_id = upload.public_id;
+			if (currentEvent.cloudinary_img_public_id) {
+				await STORE.cloudinary.deleteFile(currentEvent.cloudinary_img_public_id);
+			}
+
+		}
+
+		//pj gesture
+		if (newEvent.pj) {
+			const upload = await STORE.cloudinary.uploadFile(newEvent.pj, req.field["pj"].filename, "slug");;
+			newEvent.pj = upload.secure_url;
+			newEvent.cloudinary_pj_public_id = upload.public_id;
+			if (currentEvent.cloudinary_pj_public_id) {
+				await STORE.cloudinary.deleteFile(currentEvent.cloudinary_pj_public_id);
+			}
+		}
+
+		// const updatedEvent = await updateEvent(newEvent);
+		const updatedEvent = await updateEventsV2({ id: eventId }, newEvent);
+		console.log('updatedEvent', updatedEvent);
+		if (updatedEvent[0].id) {
+			UTILS.httpUtil.dataSuccess(req, res, "Success", "événement mis à jour", "1.0");
+			return;
+		} else {
+			UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'événement", "1.0");
+			return;
+		}
+	} catch (error) {
+		console.error('[ERROR]', error);
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'événement", "1.0");
 	}
-	const events = findEventsResp.data;
-	console.log('Found ', events.length, 'events items.');
-	return events;
+		
 };
 
+const pluginPostCreateHandler = async (req, res) => {
+	console.log('\n====pluginPostCreateHandler====');
+	try {
+		if (typeof req.body == "object" && req.multipart) {
+			if (!verifyPostReq(req, res)) {
+				return;
+			}
+			// const newEvent = req.post;
+			/**@type {Omit<TYPES.T_event, "id">} */
+			const newEvent = {
+				category: 'event' || null,
+				cloudinary_img_public_id: null,
+				content: req.post.content || null,
+				date: Date.now() || null,
+				date_end: Date.parse(req.post.date_end) || null,
+				date_start: Date.parse(req.post.date_start) || null,
+				description: req.post.description || null,
+				harbour_id: req.post.harbour_id || null,
+				img: null,
+				pj: null,
+				title: req.post.title || null,
+			};
 
-/**
- * 
- * @param {*} searchOpt 
- * @returns {Promise<TYPES.T_event[]>}
- */
-const deleteEventsV2 = async (searchOpt) => {
-	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-	const DB_NS = SCHEMA.NAUTICSPOT;
+			//img gesture
+			if (newEvent.img) {
+				var upload = await STORE.cloudinary.uploadFile(newEvent.img, req.field["img"].filename);
+				console.log(upload);
+				newEvent.img = upload.secure_url;
+				newEvent.cloudinary_img_public_id = upload.public_id;
+			}
 
-	console.log('Delete event by:', searchOpt);
-	const deleteEventsResp = await DB_NS.events.delete(searchOpt, { raw: 1 });
-	if (deleteEventsResp.error) {
-		throw new Error(deleteEventsResp.message, { cause: deleteEventsResp });
+			//pj gesture
+			if (newEvent.pj) {
+				var upload = await STORE.cloudinary.uploadFile(newEvent.pj, req.field["pj"].filename, "slug");
+				console.log(upload);
+				newEvent.pj = upload.secure_url;
+				newEvent.cloudinary_pj_public_id = upload.public_id;
+			}
+
+			const createdEvent = await createEventV2(newEvent);
+			console.log('createdEvent', createdEvent);
+			if (createdEvent.id) {
+				UTILS.httpUtil.dataSuccess(req, res, "Success", "Event créé", "1.0");
+				return;
+			} else {
+				throw new Error("Erreur lors de la création de l'événement");
+			}
+		}
+	} catch (error) {
+		console.error('[ERROR]', error);
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la création de l'événement", "500", "1.0");
 	}
-	const deletedEvents = deleteEventsResp.data;
-	console.log('deletedEvents',deletedEvents);
-	return deletedEvents;
+};
+
+const pluginGetDeleteHandler = async (req) => {
+	const [currentEvent] = await getEventsV2({ id: req.get.event_id });
+	if (currentEvent?.cloudinary_img_public_id) {
+			await STORE.cloudinary.deleteFile(currentEvent.cloudinary_img_public_id);
+	}
+	if (currentEvent?.cloudinary_pj_public_id) {
+			await STORE.cloudinary.deleteFile(currentEvent.cloudinary_pj_public_id);
+	}
+	await deleteEventsV2({ id: req.get.event_id });	
 }
 
-async function getEventHandler(req, res) {
-    // var _data = await getEventById(req.get.id);
-		const _data = await findEventsV2({ id: req.get.id });
-    if (typeof (_data) != "string") {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
-        UTILS.httpUtil.dataError(req, res, "Error", _data, "100", "1.0");
-        return;
-    }
-}
+// * PLUGIN HANDLERS *
+// * *************** *
 
-async function getEventsByHarbourIdHandler(req, res) {
-		const _data = await findEventsV2({ harbour_id: req.param.harbour_id });
-    if (typeof (_data) != "string") {
-        UTILS.httpUtil.dataSuccess(req, res, "success", _data, "1.0");
-        return;
-    }
-    else {
-        UTILS.httpUtil.dataError(req, res, "Error", _data, "100", "1.0");
-        return;
-    }
+
+exports.handler = async (req, res) => {
+    const _event = await getEventsV2();
+    res.end(JSON.stringify(_event));
+    return;
 }
 
 exports.router =
@@ -324,7 +393,7 @@ exports.plugin =
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
 			const DB_FP = SCHEMA.fortpress;
 
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 			if (findAdminResp.error) {
 				console.error(findAdminResp.error);
 				res.writeHead(500);
@@ -354,107 +423,24 @@ exports.plugin =
 					return;
 				}
 
-				console.log('METHOD', req.method)
+				console.log('PLUGIN EVENT METHOD', req.method)
         if (req.method == "GET") {
-					console.log('req.get', req.get);
-					console.log('req.post', req.post);
-
-            if (req.get.mode && req.get.mode == "delete" && req.get.event_id) {
-								const [currentEvent] = await findEventsV2({ id: req.get.event_id });
-                if (currentEvent?.cloudinary_img_public_id) {
-                    await STORE.cloudinary.deleteFile(currentEvent.cloudinary_img_public_id);
-                }
-                if (currentEvent?.cloudinary_pj_public_id) {
-                    await STORE.cloudinary.deleteFile(currentEvent.cloudinary_pj_public_id);
-                }
-                // await delEvent(req.get.event_id);
-                await deleteEventsV2({ id: req.get.event_id });
-            }
+					if (req.get.mode && req.get.mode == "delete" && req.get.event_id) {
+						try {
+							await pluginGetDeleteHandler(req);
+						} catch (error) {
+							console.error('[ERROR]', error);
+							UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la suppression de l'événement", "500", "1.0");
+							return;
+						}
+					}
         }
         if (req.method == "POST") {
-            if (req.post.id) {
-                if (verifyPostReq(req, res)) {
-                    var currentEvent = await getEventById(req.post.id);
-                    var _FD = req.post;
-                    _FD.date = Date.now();
-
-                    _FD.date_start = Date.parse(_FD.date_start);
-                    _FD.date_end = Date.parse(_FD.date_end);
-
-                    //img gesture
-                    if (_FD.img) {
-                        var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-                        console.log(upload);
-                        _FD.img = upload.secure_url;
-                        _FD.cloudinary_img_public_id = upload.public_id;
-                        if (currentEvent.cloudinary_img_public_id) {
-                            await STORE.cloudinary.deleteFile(currentEvent.cloudinary_img_public_id);
-                        }
-
-                    }
-
-                    //pj gesture
-                    if (_FD.pj) {
-                        console.log(_FD.pj);
-                        var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");;
-                        console.log(upload);
-                        _FD.pj = upload.secure_url;
-                        _FD.cloudinary_pj_public_id = upload.public_id;
-                        if (currentEvent.cloudinary_pj_public_id) {
-                            await STORE.cloudinary.deleteFile(currentEvent.cloudinary_pj_public_id);
-                        }
-                    }
-
-                    var event = await updateEvent(_FD);
-                    console.log(event);
-                    if (event[0].id) {
-                        UTILS.httpUtil.dataSuccess(req, res, "Success", "événement mis à jour", "1.0");
-                        return;
-                    } else {
-                        UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'événement", "1.0");
-                        return;
-                    }
-                }
-            }
-            else {
-                if (typeof req.body == "object" && req.multipart) {
-                    if (verifyPostReq(req, res)) {
-                        var _FD = req.post;
-
-                        _FD.date = Date.now();
-                        _FD.category = 'event';
-                        _FD.date_start = Date.parse(_FD.date_start);
-                        _FD.date_end = Date.parse(_FD.date_end);
-
-                        //img gesture
-                        if (_FD.img) {
-                            var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-                            console.log(upload);
-                            _FD.img = upload.secure_url;
-                            _FD.cloudinary_img_public_id = upload.public_id;
-                        }
-
-                        //pj gesture
-                        if (_FD.pj) {
-                            var upload = await STORE.cloudinary.uploadFile(_FD.pj, req.field["pj"].filename, "slug");
-                            console.log(upload);
-                            _FD.pj = upload.secure_url;
-                            _FD.cloudinary_pj_public_id = upload.public_id;
-                        }
-
-                        var event = await createEvent(_FD);
-                        console.log(event);
-                        if (event.id) {
-                            UTILS.httpUtil.dataSuccess(req, res, "Success", "Event créé", "1.0");
-                            return;
-                        } else {
-                            UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la création de l'événement", "1.0");
-                            return;
-                        }
-                    }
-                }
-
-            }
+					if (req.post.id && verifyPostReq(req, res)) {
+						await pluginPostUpdateHandler(req, res);
+					} else {
+						await pluginPostCreateHandler(req, res);
+					}
         }
         else {
             var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
@@ -463,20 +449,21 @@ exports.plugin =
             var _Events = [];
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _Events = _Events.concat(await getEventv2({ harbour_id: _harbour_id[i] }));
+                    _Events = _Events.concat(await getEventsV2({ harbour_id: _harbour_id[i] }));
                 }
             }
             else if (_role == "admin") {
 							try {
-								_Events = await getEventv2({});
+								_Events = await getEventsV2({});
 							} catch (error) {
 								console.error(error);
 								UTILS.httpUtil.dataError(req, res, "Error", error, "1.0");
 								return;
 							}
+							_Events = _Events.splice(0, 500);
 						}
 
-
+						const harboursMapById = await STORE.harbourmgmt.getAllHarboursMappedById();
             var _eventGen = "";
             for (var i = 0; i < _Events.length; i++) {
                 if (_Events[i].category == "event") {
@@ -496,12 +483,12 @@ exports.plugin =
                 var startDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
                 date = new Date(_Events[i].date_end);
                 var endDateFormated = [date.getFullYear(), ("0" + (date.getMonth() + 1)).slice(-2), ("0" + (date.getDate())).slice(-2)].join('-');
-                var currentHarbour = await STORE.harbourmgmt.getHarbourById(_Events[i].harbour_id);
+								const currentHarbour = harboursMapById[_Events[i].harbour_id] || undefined;
 
                 _eventGen += _eventHtml.replace(/__ID__/g, _Events[i].id)
                     .replace(/__FORMID__/g, _Events[i].id.replace(/\./g, "_"))
-                    .replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-                    .replace(/__HARBOUR_ID__/g, currentHarbour.id)
+                    .replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
+                    .replace(/__HARBOUR_ID__/g, currentHarbour?.id)
                     .replace(/__CATEGORY__/g, _Events[i].category)
                     .replace(/__EDITOR_DESC_ID__/g, "editor_desc_" + _Events[i].id.replace(/\./g, "_"))
                     .replace(/__DESCRIPTION__/g, _Events[i].description)
@@ -526,11 +513,10 @@ exports.plugin =
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
 
-                const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
-                const userHarbours = await Promise.all(getHarbourPromises);
-                userHarbours.map(userHarbour => {
-                    harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
-                });
+								_harbour_id.map(harbourId => {
+									const harbour = harboursMapById[harbourId];
+									harbour_select += '<option value="' + harbour.id + '">' + harbour.name + '</option>';
+								})
 
                 harbour_select += '</select></div></div>';
             } else if (_role == "admin") {
@@ -538,7 +524,7 @@ exports.plugin =
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" style="width:250px;" name="harbour_id">';
-                userHarbours = await STORE.harbourmgmt.getHarbour();
+                userHarbours = await STORE.harbourmgmt.getHarbours();
                 userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
                 for (var i = 0; i < userHarbours.length; i++) {
