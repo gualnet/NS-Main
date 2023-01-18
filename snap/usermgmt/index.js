@@ -704,7 +704,7 @@ const getUsersV2 = async (where = {}) => {
 /**
  * 
  * @param {TYPES.T_user} user 
- * @returns {}
+ * @returns {Promise<TYPES.T_user>}
  */
 const createUserV2 = async (user = {}) => {
 	console.log('====createUserV2====');

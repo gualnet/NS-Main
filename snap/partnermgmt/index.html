@@ -185,7 +185,7 @@
                             searchPlaceholder: 'Votre recherche'
                         },
                         paging: false,
-                        "order": [[12, "desc"]], // date de creation
+                        "order": [[13, "desc"]], // date de creation
                         "info": false,
                     });
             });
@@ -236,7 +236,6 @@
                     document.getElementbyId('editor_' + ids[i].replace(/\./g, "_")).innerHTML = "";
                 }
             }
-            console.log("preuve : " + e.target.value);
             require(['datatables', 'jquery'], function (datatable, $) {
                 fetch("/api/partners/?harbour_id=" + e.target.value).then(response => response.json()).then(_data => {
                     if (_data.success) {
