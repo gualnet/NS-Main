@@ -90,7 +90,7 @@ const getNewsV2 = async (searchOpt) => {
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	console.info('[INFO] Search new with params', searchOpt);
-	const findNewsResp = await DB_NS.news.find(searchOpt, { raw: 1 });
+	const findNewsResp = await DB_NS.news.find(searchOpt);
 	if (findNewsResp.error) {
 		throw new Error(findNewsResp.message, { cause: findNewsResp });
 	}
@@ -367,7 +367,7 @@ exports.plugin =
 		/**@type {TYPES.T_SCHEMA['fortpress']} */
 		const DB_FP = SCHEMA.fortpress;
 
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);

@@ -68,7 +68,7 @@ const getAbsencesV2 = async (where = {}) => {
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	console.log('Search absences where: ', where);
-	const findAbsencesResp = await DB_NS.absences.find(where, { raw: 0 });
+	const findAbsencesResp = await DB_NS.absences.find(where);
 	if (findAbsencesResp.error) {
 		console.error('[Error]', findAbsencesResp)
 		throw new Error(findAbsencesResp.message, { cause: findAbsencesResp });
@@ -145,7 +145,7 @@ const deleteAbsenceV2 = async (where = {}) => {
 		throw new Error('Wrong parameter: ', where);
 	}
 
-	const deleteAbsencesResp = await DB_NS.absences.delete(where, { raw: 0 });
+	const deleteAbsencesResp = await DB_NS.absences.delete(where);
 	if (deleteAbsencesResp.error) {
 		console.error('[Error]', deleteAbsencesResp)
 		throw new Error(deleteAbsencesResp.message, { cause: deleteAbsencesResp });
@@ -501,7 +501,7 @@ exports.plugin =
 		const DB_FP = SCHEMA.fortpress;
 
 		//get users from FORTPRESS db <
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);
