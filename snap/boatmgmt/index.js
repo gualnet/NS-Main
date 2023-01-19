@@ -1,7 +1,7 @@
 const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
-const {errorHandler} = require('../lib-js/errorHandler');
+const { errorHandler } = require('../lib-js/errorHandler');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -123,7 +123,7 @@ const createBoatV2 = async (boat) => {
 		throw new Error(createBoatResp.message, { cause: createBoatResp });
 	}
 	const boats = createBoatResp.data;
-	console.log(`Created ${boats.length} boat:\n`. boats);
+	console.log(`Created ${boats.length} boat:\n`.boats);
 	return boats;
 };
 
@@ -164,7 +164,7 @@ const deleteBoatV2 = async (where = {}) => {
 
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
-	
+
 	console.log('Delte boat where: ', where);
 	if (Object.keys(where).length === 0) {
 		throw new Error('Wrong parameter: ', where);
@@ -172,7 +172,7 @@ const deleteBoatV2 = async (where = {}) => {
 
 	const deleteBoatsResp = await DB_NS.boat.delete(where);
 	if (deleteBoatsResp.error) {
-		console.error('[ERROR]',deleteBoatsResp)
+		console.error('[ERROR]', deleteBoatsResp)
 		throw new Error(deleteBoatsResp.message, { cause: deleteBoatsResp });
 	}
 	const boats = deleteBoatsResp.data;
@@ -205,7 +205,7 @@ async function addBoatHandler(_req, _res) {
 		const createdBoat = creatBoatResp.data;
 
 		// UPDATE USER
-		const updateUserResp = await DB_NS.user.update({ id: createdBoat.user_id }, {boat_id: createdBoat.id });
+		const updateUserResp = await DB_NS.user.update({ id: createdBoat.user_id }, { boat_id: createdBoat.id });
 		if (updateUserResp.error) {
 			throw new Error(updateUserResp.error, { cause: { httpCode: 500 } });
 		}
@@ -307,7 +307,7 @@ async function updateBoatHandler(_req, _res) {
 
 			const createdBoat = await createBoatV2(_req.post);
 
-			const upadtedUser = await STORE.usermgmt.updateUsers({ id: user.id }, { boat_id: createdBoat})
+			const upadtedUser = await STORE.usermgmt.updateUsers({ id: user.id }, { boat_id: createdBoat })
 
 			UTILS.httpUtil.dataSuccess(_req, _res, "Bateau créer", "1.0")
 			return;
@@ -413,7 +413,7 @@ exports.plugin =
 		var _role = admin.role;
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
-	
+
 		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('No access rights');

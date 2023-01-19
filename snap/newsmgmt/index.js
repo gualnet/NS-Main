@@ -14,53 +14,53 @@ const AUTHORIZED_ROLES = [
 ];
 
 function addProtocolToUrl(url) {
-    var patternProtocol = new RegExp('^(https?:\\/\\/)') // protocol
-    console.log(url);
-    console.log(patternProtocol.test(url));
-    if (patternProtocol.test(url)) {
-        console.log(url);
-        return url;
-    } else {
-        console.log(url);
-        return ("https://" + url);
-    }
+	var patternProtocol = new RegExp('^(https?:\\/\\/)') // protocol
+	console.log(url);
+	console.log(patternProtocol.test(url));
+	if (patternProtocol.test(url)) {
+		console.log(url);
+		return url;
+	} else {
+		console.log(url);
+		return ("https://" + url);
+	}
 }
 
 function verifyPostReq(_req, _res) {
-    if (!_req.post.title || _req.post.title.length < 1) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Titre requis", "100", "1.0");
-        return false;
-    }
-    if (!_req.post.content || _req.post.content.length < 1) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Contenu requis", "100", "1.0");
-        return false;
-    }
-    if (!_req.post.description || _req.post.description.length < 1) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Description requise", "100", "1.0");
-        return false;
-    }
-    if (_req.post.description.length > 255) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "La description ne doit pas dépasser 255 caractères", "100", "1.0");
-        return false;
-    }
-    if (!_req.post.harbour_id || _req.post.harbour_id.length < 1) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Id du port requis", "100", "1.0");
-        return false;
-    }
-    /*
-    if (!_req.post.category == "news" || !_req.post.category == "event") {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Catégorie invalide", "100", "1.0");
-        return false;
-    }*/
-    if (_req.post.pj) {
-        if (!_req.post.pjname || _req.post.pjname.length < 1) {
-            UTILS.httpUtil.dataError(_req, _res, "Error", "Nom de la pièce jointe requise", "100", "1.0");
-            return false;
+	if (!_req.post.title || _req.post.title.length < 1) {
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Titre requis", "100", "1.0");
+		return false;
+	}
+	if (!_req.post.content || _req.post.content.length < 1) {
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Contenu requis", "100", "1.0");
+		return false;
+	}
+	if (!_req.post.description || _req.post.description.length < 1) {
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Description requise", "100", "1.0");
+		return false;
+	}
+	if (_req.post.description.length > 255) {
+		UTILS.httpUtil.dataError(_req, _res, "Error", "La description ne doit pas dépasser 255 caractères", "100", "1.0");
+		return false;
+	}
+	if (!_req.post.harbour_id || _req.post.harbour_id.length < 1) {
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Id du port requis", "100", "1.0");
+		return false;
+	}
+	/*
+	if (!_req.post.category == "news" || !_req.post.category == "event") {
+			UTILS.httpUtil.dataError(_req, _res, "Error", "Catégorie invalide", "100", "1.0");
+			return false;
+	}*/
+	if (_req.post.pj) {
+		if (!_req.post.pjname || _req.post.pjname.length < 1) {
+			UTILS.httpUtil.dataError(_req, _res, "Error", "Nom de la pièce jointe requise", "100", "1.0");
+			return false;
 
-        }
-    }
-		console.log('END')
-    return true;
+		}
+	}
+	console.log('END')
+	return true;
 };
 
 const uploadFileWrapper = async (fileRaw, FileName, cloudinaryPath) => {
@@ -97,7 +97,7 @@ const getNewsV2 = async (searchOpt) => {
 
 	const news = findNewsResp.data;
 	console.info('[INFO] Found', news.length, 'news.');
-	return(news);
+	return (news);
 }
 
 /**
@@ -162,7 +162,7 @@ const deleteNewsV2 = async (where = {}) => {
 	console.log('Delte news where: ', where);
 	const deleteNewsResp = await DB_NS.news.delete(where);
 	if (deleteNewsResp.error) {
-		console.error('deleteNewsResp',deleteNewsResp)
+		console.error('deleteNewsResp', deleteNewsResp)
 		throw new Error(deleteNewsResp.message, { cause: deleteNewsResp });
 	}
 	const news = deleteNewsResp.data;
@@ -336,199 +336,199 @@ const pluginPostUpdateNewsHandler = async (req, res) => {
 /* *************** */
 
 exports.handler = async (req, res) => {
-    var _new = await getNewsV2({});
-    res.end(JSON.stringify(_new));
-    return;
+	var _new = await getNewsV2({});
+	res.end(JSON.stringify(_new));
+	return;
 }
 
 exports.router =
-    [
-        {
-            route: "/api/new/:news_id",
-            handler: getNewHandler,
-            method: "GET",
-        },
-        {
-            route: "/api/news/:harbour_id",
-            handler: getNewsByHarbourIdHandler,
-            method: "GET",
-        },
-    ];
+	[
+		{
+			route: "/api/new/:news_id",
+			handler: getNewHandler,
+			method: "GET",
+		},
+		{
+			route: "/api/news/:harbour_id",
+			handler: getNewsByHarbourIdHandler,
+			method: "GET",
+		},
+	];
 
 exports.plugin =
 {
-    title: "Gestion des actualités",
-    desc: "",
-    handler: async (req, res) => {
-			console.log('NEWSMGMT HANDLER')
-			console.log('REQUEST METHOD: ', req.method);
-			/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-			const DB_NS = SCHEMA.NAUTICSPOT;
-			/**@type {TYPES.T_SCHEMA['fortpress']} */
-			const DB_FP = SCHEMA.fortpress;
+	title: "Gestion des actualités",
+	desc: "",
+	handler: async (req, res) => {
+		console.log('NEWSMGMT HANDLER')
+		console.log('REQUEST METHOD: ', req.method);
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
 
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
-			if (findAdminResp.error) {
-				console.error(findAdminResp.error);
-				res.writeHead(500);
-				res.end('Internal Error');
-				return;
-			} else if (findAdminResp.data.length < 1) {
-				console.error('No dashboard user found');
-				res.writeHead(401);
-				res.end('Accès non autorisé');
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		if (findAdminResp.error) {
+			console.error(findAdminResp.error);
+			res.writeHead(500);
+			res.end('Internal Error');
+			return;
+		} else if (findAdminResp.data.length < 1) {
+			console.error('No dashboard user found');
+			res.writeHead(401);
+			res.end('Accès non autorisé');
+			return;
+		}
+		const admin = findAdminResp.data[0];
+
+		var _role = admin.role;
+		var _type = admin.data.type;
+		var _entity_id = admin.data.entity_id;
+		var _harbour_id = admin.data.harbour_id;
+
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
+			res.writeHead(401);
+			res.end('Accès non autorisé');
+			return;
+		}
+		if (_entity_id === 'SlEgXL3EGoi') { // No Access for Marigot users
+			res.writeHead(401);
+			res.end('Accès non autorisé');
+			return;
+		}
+
+		if (req.method == "GET") {
+			console.log('REQUEST GET PARAM: ', req.get);
+			if (req.get.mode && req.get.mode == "delete" && req.get.new_id) {
+				/**@type {TYPES.T_news} */
+				let currentNew = {};
+				try {
+					const foundNews = await getNewsV2({ id: req.get.new_id });
+					currentNew = foundNews[0];
+					if (currentNew) {
+						if (currentNew?.cloudinary_img_public_id) {
+							await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
+						}
+						if (currentNew?.cloudinary_pj_public_id) {
+							await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
+						}
+						await deleteNewsV2({ id: req.get.new_id });
+					}
+				} catch (error) {
+					console.log('[ERROR]', error);
+					UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
+					return;
+				}
+
+
+			}
+		}
+		if (req.method == "POST") {
+			if (req.post.id) {
+				await pluginPostUpdateNewsHandler(req, res);
+			}
+			else {
+				await pluginPostCreateNewsHandler(req, res);
+			}
+		}
+		else {
+			var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
+			var _newHtml = fs.readFileSync(path.join(__dirname, "news.html")).toString();
+			var _News = [];
+
+			try {
+				if (_role == "user") {
+					for (var i = 0; i < _harbour_id.length; i++) {
+						_News = _News.concat(await getNewsV2({ harbour_id: _harbour_id[i] }));
+					}
+				}
+				else if (_role == "admin") {
+					_News = await getNewsV2({});
+				}
+			} catch (error) {
+				console.error('[ERROR]', error);
+				res.setHeader("Content-Type", "text/html");
+				_indexHtml = _indexHtml
+					.replace('__NEWS__', '')
+					.replace('<div id="harbourError"></div>', '<div id="harbourError" class="alert alert-danger">Erreur lors de la récupération des actualités.</div>')
+				res.end(_indexHtml);
 				return;
 			}
-			const admin = findAdminResp.data[0];
 
-        var _role = admin.role;
-        var _type = admin.data.type;
-        var _entity_id = admin.data.entity_id;
-        var _harbour_id = admin.data.harbour_id;
 
-				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
-					res.writeHead(401);
-					res.end('Accès non autorisé');
-					return;
+			let _newGen = "";
+			for (var i = 0; i < _News.length; i++) {
+				if (_News[i].category === "news")
+					_News[i].category = "actualité";
+				else if (_News[i].category === "event")
+					_News[i].category = "évennement";
+
+				const [currentHarbour] = await STORE.harbourmgmt.getHarbours({ id: _News[i].harbour_id });
+				console.log('NEWS NAME', _News[i].title, _News[i].id, _News[i].harbour_id)
+				console.log('currentHarbour', currentHarbour.id)
+
+				let formatedDate = '-';
+				if (_News[i].created_at || _News[i].date) {
+					const dateObj = new Date(_News[i].created_at || _News[i].date)
+					const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
+					const date = splited[0];
+					const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
+					formatedDate = `${date} à ${heure}`;
 				}
-				if (_entity_id === 'SlEgXL3EGoi') { // No Access for Marigot users
-					res.writeHead(401);
-					res.end('Accès non autorisé');
-					return;
+
+				_newGen += _newHtml.replace(/__ID__/g, _News[i].id)
+					.replace(/__FORMID__/g, _News[i].id.replace(/\./g, "_"))
+					.replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
+					.replace(/__HARBOUR_ID__/g, currentHarbour?.id)
+					.replace(/__CATEGORY__/g, _News[i].category)
+					.replace(/__EDITOR_DESC_ID__/g, "editor_desc_" + _News[i].id.replace(/\./g, "_"))
+					.replace(/__DESCRIPTION__/g, _News[i].description)
+					.replace(/__EDITOR_ID__/g, "editor_" + _News[i].id.replace(/\./g, "_"))
+					.replace(/__CONTENT__/g, _News[i].content)
+					.replace(/__TITLE__/g, _News[i].title)
+					.replace(/__PJNAME__/g, _News[i].pjname)
+					.replace(/__PJ__/g, _News[i].pj)
+					.replace(/__IMG__/g, _News[i].img)
+					.replace(/__DATE__/g, formatedDate)
+					.replace(/__DATETIMEORDER__/g, _News[i].date)
+			}
+			_indexHtml = _indexHtml.replace("__NEWS__", _newGen).replace(/undefined/g, '');
+
+			var userHarbours = [];
+			var harbour_select;
+			if (_role == "user") {
+				harbour_select = '<div class="col-12">'
+					+ '<div class= "form-group" >'
+					+ '<label class="form-label">Sélection du port</label>'
+					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
+
+				const getHarbourPromises = await _harbour_id.map(harbourId => STORE.harbourmgmt.getHarbours({ id: harbourId }));
+				let userHarbours = await Promise.all(getHarbourPromises);
+				userHarbours = userHarbours.flat()
+				userHarbours.map(userHarbour => {
+					harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
+				});
+
+				harbour_select += '</select></div></div>';
+			} else if (_role == "admin") {
+				harbour_select = '<div class="col-12">'
+					+ '<div class= "form-group" >'
+					+ '<label class="form-label">Sélection du port</label>'
+					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
+				userHarbours = await STORE.harbourmgmt.getHarbours({});
+				userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
+
+				for (var i = 0; i < userHarbours.length; i++) {
+					harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
 				}
-
-        if (req.method == "GET") {
-					console.log('REQUEST GET PARAM: ', req.get);
-            if (req.get.mode && req.get.mode == "delete" && req.get.new_id) {
-							/**@type {TYPES.T_news} */
-							let currentNew = {};
-							try {
-								const foundNews = await getNewsV2({ id: req.get.new_id });
-								currentNew = foundNews[0];
-								if (currentNew) {
-									if (currentNew?.cloudinary_img_public_id) {
-										await STORE.cloudinary.deleteFile(currentNew.cloudinary_img_public_id);
-									}
-									if (currentNew?.cloudinary_pj_public_id) {
-											await STORE.cloudinary.deleteFile(currentNew.cloudinary_pj_public_id);
-									}
-									await deleteNewsV2({ id: req.get.new_id });
-								}
-							} catch (error) {
-								console.log('[ERROR]', error);
-								UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour de l'actualité", "1.0");
-								return;
-							}
-
-                
-            }
-        }
-        if (req.method == "POST") {
-					if (req.post.id) {
-							await pluginPostUpdateNewsHandler(req, res);
-            }
-            else {
-							await pluginPostCreateNewsHandler(req, res);
-            }
-        }
-        else {
-            var _indexHtml = fs.readFileSync(path.join(__dirname, "index.html")).toString();
-            var _newHtml = fs.readFileSync(path.join(__dirname, "news.html")).toString();
-            var _News = [];
-
-						try {
-							if (_role == "user") {
-								for (var i = 0; i < _harbour_id.length; i++) {
-									_News = _News.concat(await getNewsV2({ harbour_id: _harbour_id[i] }));
-								}
-							}
-							else if (_role == "admin") {
-								_News = await getNewsV2({});
-							}
-						} catch (error) {
-							console.error('[ERROR]', error);
-							res.setHeader("Content-Type", "text/html");
-							_indexHtml = _indexHtml
-								.replace('__NEWS__', '')
-								.replace('<div id="harbourError"></div>', '<div id="harbourError" class="alert alert-danger">Erreur lors de la récupération des actualités.</div>')
-							res.end(_indexHtml);
-							return;
-						}
-            
-
-            let _newGen = "";
-            for (var i = 0; i < _News.length; i++) {
-                if (_News[i].category === "news")
-                    _News[i].category = "actualité";
-                else if (_News[i].category === "event")
-                    _News[i].category = "évennement";
-
-								const [currentHarbour] = await STORE.harbourmgmt.getHarbours({ id: _News[i].harbour_id });
-								console.log('NEWS NAME', _News[i].title,_News[i].id, _News[i].harbour_id)
-								console.log('currentHarbour',currentHarbour.id)
-
-								let formatedDate = '-';
-								if (_News[i].created_at || _News[i].date) {
-									const dateObj = new Date(_News[i].created_at || _News[i].date)
-									const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
-									const date = splited[0];
-									const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
-									formatedDate = `${date} à ${heure}`;
-								}
-
-                _newGen += _newHtml.replace(/__ID__/g, _News[i].id)
-                    .replace(/__FORMID__/g, _News[i].id.replace(/\./g, "_"))
-                    .replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
-                    .replace(/__HARBOUR_ID__/g, currentHarbour?.id)
-                    .replace(/__CATEGORY__/g, _News[i].category)
-                    .replace(/__EDITOR_DESC_ID__/g, "editor_desc_" + _News[i].id.replace(/\./g, "_"))
-                    .replace(/__DESCRIPTION__/g, _News[i].description)
-                    .replace(/__EDITOR_ID__/g, "editor_" + _News[i].id.replace(/\./g, "_"))
-                    .replace(/__CONTENT__/g, _News[i].content)
-                    .replace(/__TITLE__/g, _News[i].title)
-                    .replace(/__PJNAME__/g, _News[i].pjname)
-                    .replace(/__PJ__/g, _News[i].pj)
-                    .replace(/__IMG__/g, _News[i].img)
-                    .replace(/__DATE__/g, formatedDate)
-                    .replace(/__DATETIMEORDER__/g, _News[i].date)
-            }
-            _indexHtml = _indexHtml.replace("__NEWS__", _newGen).replace(/undefined/g, '');
-
-            var userHarbours = [];
-            var harbour_select;
-            if (_role == "user") {
-                harbour_select = '<div class="col-12">'
-                    + '<div class= "form-group" >'
-                    + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
-
-                const getHarbourPromises = await _harbour_id.map(harbourId => STORE.harbourmgmt.getHarbours({ id: harbourId }));
-                let userHarbours = await Promise.all(getHarbourPromises);
-								userHarbours = userHarbours.flat()
-                userHarbours.map(userHarbour => {
-                    harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
-                });
-
-                harbour_select += '</select></div></div>';
-            } else if (_role == "admin") {
-                harbour_select = '<div class="col-12">'
-                    + '<div class= "form-group" >'
-                    + '<label class="form-label">Sélection du port</label>'
-                    + '<select class="form-control" style="width:250px;" name="harbour_id">';
-                userHarbours = await STORE.harbourmgmt.getHarbours({});
-                userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
-
-                for (var i = 0; i < userHarbours.length; i++) {
-                    harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';
-                }
-                harbour_select += '</select></div></div>';
-            }
-            _indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
+				harbour_select += '</select></div></div>';
+			}
+			_indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
 
 
-            res.setHeader("Content-Type", "text/html");
-            res.end(_indexHtml);
-            return;
-        }
-    }
+			res.setHeader("Content-Type", "text/html");
+			res.end(_indexHtml);
+			return;
+		}
+	}
 }

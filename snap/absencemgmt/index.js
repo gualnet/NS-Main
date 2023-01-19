@@ -96,7 +96,7 @@ const createAbsenceV2 = async (absence) => {
 		throw new Error(createAbsenceResp.message, { cause: createAbsenceResp });
 	}
 	const absences = createAbsenceResp.data;
-	console.log(`Created ${absences.length} absence:\n`. absences);
+	console.log(`Created ${absences.length} absence:\n`.absences);
 	return absences;
 }
 
@@ -139,7 +139,7 @@ const deleteAbsenceV2 = async (where = {}) => {
 
 	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 	const DB_NS = SCHEMA.NAUTICSPOT;
-	
+
 	console.log('Delte absence where: ', where);
 	if (Object.keys(where).length === 0) {
 		throw new Error('Wrong parameter: ', where);
@@ -317,17 +317,17 @@ async function getAbsenceOfTheDayByHarbour(req, res) {
 	try {
 		const apiAuthToken = req.headers['x-auth-token'];
 		const harbourId = req.get["harbour-id"];
-		console.log('harbourId',harbourId)
+		console.log('harbourId', harbourId)
 
 		// validate api token
 		const [erpUsers] = await erpUsersServices.getErpUserWhere({ apiToken: apiAuthToken });
-		console.log('erpUsers',erpUsers)
+		console.log('erpUsers', erpUsers)
 		if (!erpUsers) {
-			throw new Error('Invalide API Token', { cause: { httpCode: 401 }});
+			throw new Error('Invalide API Token', { cause: { httpCode: 401 } });
 		}
 		// verify if ERP can access to the requested port absences
 		if (!harbourId || !erpUsers.harbourIds.includes(harbourId)) {
-			throw new Error('Invalid \'harbour-id\' parameter.', { cause: { httpCode: 401 }});
+			throw new Error('Invalid \'harbour-id\' parameter.', { cause: { httpCode: 401 } });
 		}
 
 		// Get the absences
@@ -500,7 +500,7 @@ exports.plugin =
 		/**@type {TYPES.T_SCHEMA['fortpress']} */
 		const DB_FP = SCHEMA.fortpress;
 
-			//get users from FORTPRESS db <
+		//get users from FORTPRESS db <
 		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
@@ -677,7 +677,7 @@ exports.plugin =
 					+ '<div class= "form-group" >'
 					+ '<label class="form-label">Séléction du port</label>'
 					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
-					
+
 				userHarbours = await STORE.harbourmgmt.getHarbours();
 				for (var i = 0; i < userHarbours.length; i++) {
 					harbour_select += '<option value="' + userHarbours[i].id + '">' + userHarbours[i].name + '</option>';

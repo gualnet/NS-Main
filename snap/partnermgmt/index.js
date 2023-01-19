@@ -192,101 +192,101 @@ async function getPartnersByHarbourHandler(_req, _res) {
 async function getActivePartnersCategoryHandler(_req, _res) {
 	try {
 		const partners = await getPartnersV2({ harbour_id: _req.param.harbour_id });
-	var data = { activeCategories: {}, activeSubCategories: {} };
-	for (var i = 0; i < partners.length; i++) {
-		switch (partners[i].category) {
-			case "harbourlife":
-				data.activeCategories.harbourlife = true;
-				break;
-			case "experience":
-				data.activeCategories.experience = true;
-				break;
-			case "discovery":
-				data.activeCategories.discovery = true;
-				break;
-		}
+		var data = { activeCategories: {}, activeSubCategories: {} };
+		for (var i = 0; i < partners.length; i++) {
+			switch (partners[i].category) {
+				case "harbourlife":
+					data.activeCategories.harbourlife = true;
+					break;
+				case "experience":
+					data.activeCategories.experience = true;
+					break;
+				case "discovery":
+					data.activeCategories.discovery = true;
+					break;
+			}
 
-		//discovery 	divertissement
-		switch (partners[i].subcategory) {
-			case "sos":
-				data.activeSubCategories.sos = true;
-				break;
-			case "maintenance":
-				data.activeSubCategories.maintenance = true;
-				break;
-			case "accastillage":
-				data.activeSubCategories.accastillage = true;
-				break;
-			case "sante":
-				data.activeSubCategories.sante = true;
-				break;
-			case "annonce":
-				data.activeSubCategories.annonce = true;
-				break;
-			case "laverie":
-				data.activeSubCategories.laverie = true;
-				break;
-			case "transport":
-				data.activeSubCategories.transport = true;
-				break;
-			case "boutique":
-				data.activeSubCategories.boutique = true;
-				break;
-			case "alimentation":
-				data.activeSubCategories.alimentation = true;
-				break;
-			case "vieportautre":
-				data.activeSubCategories.vieportautre = true;
-				break;
-			case "nautic":
-				data.activeSubCategories.nautic = true;
-				break;
-			case "terrestres":
-				data.activeSubCategories.terrestres = true;
-				break;
-			case "association":
-				data.activeSubCategories.association = true;
-				break;
-			case "equipbourse":
-				data.activeSubCategories.equipbourse = true;
-				break;
-			case "experienceautre":
-				data.activeSubCategories.experienceautre = true;
-				break;
-			case "restaurant":
-				data.activeSubCategories.restaurant = true;
-				break;
-			case "bar":
-				data.activeSubCategories.bar = true;
-				break;
-			case "culture":
-				data.activeSubCategories.culture = true;
-				break;
-			case "divertissement":
-				data.activeSubCategories.divertissement = true;
-				break;
-			case "detente":
-				data.activeSubCategories.detente = true;
-				break;
-			case "decouverteautre":
-				data.activeSubCategories.decouverteautre = true;
-				break;
-			case 'vendeurLoueurHl':
-				data.activeSubCategories.vendeurLoueurHl = true;
-				break;
-			case 'vendeurLoueurEx':
-				data.activeSubCategories.vendeurLoueurEx = true;
-				break;
-			case 'patrimoine':
-				data.activeSubCategories.patrimoine = true;
-				break;
-			case 'mouillages':
-				data.activeSubCategories.mouillages = true;
-				break;
+			//discovery 	divertissement
+			switch (partners[i].subcategory) {
+				case "sos":
+					data.activeSubCategories.sos = true;
+					break;
+				case "maintenance":
+					data.activeSubCategories.maintenance = true;
+					break;
+				case "accastillage":
+					data.activeSubCategories.accastillage = true;
+					break;
+				case "sante":
+					data.activeSubCategories.sante = true;
+					break;
+				case "annonce":
+					data.activeSubCategories.annonce = true;
+					break;
+				case "laverie":
+					data.activeSubCategories.laverie = true;
+					break;
+				case "transport":
+					data.activeSubCategories.transport = true;
+					break;
+				case "boutique":
+					data.activeSubCategories.boutique = true;
+					break;
+				case "alimentation":
+					data.activeSubCategories.alimentation = true;
+					break;
+				case "vieportautre":
+					data.activeSubCategories.vieportautre = true;
+					break;
+				case "nautic":
+					data.activeSubCategories.nautic = true;
+					break;
+				case "terrestres":
+					data.activeSubCategories.terrestres = true;
+					break;
+				case "association":
+					data.activeSubCategories.association = true;
+					break;
+				case "equipbourse":
+					data.activeSubCategories.equipbourse = true;
+					break;
+				case "experienceautre":
+					data.activeSubCategories.experienceautre = true;
+					break;
+				case "restaurant":
+					data.activeSubCategories.restaurant = true;
+					break;
+				case "bar":
+					data.activeSubCategories.bar = true;
+					break;
+				case "culture":
+					data.activeSubCategories.culture = true;
+					break;
+				case "divertissement":
+					data.activeSubCategories.divertissement = true;
+					break;
+				case "detente":
+					data.activeSubCategories.detente = true;
+					break;
+				case "decouverteautre":
+					data.activeSubCategories.decouverteautre = true;
+					break;
+				case 'vendeurLoueurHl':
+					data.activeSubCategories.vendeurLoueurHl = true;
+					break;
+				case 'vendeurLoueurEx':
+					data.activeSubCategories.vendeurLoueurEx = true;
+					break;
+				case 'patrimoine':
+					data.activeSubCategories.patrimoine = true;
+					break;
+				case 'mouillages':
+					data.activeSubCategories.mouillages = true;
+					break;
+			}
 		}
-	}
-	UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
-	return;
+		UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
+		return;
 	} catch (error) {
 		console.error(error);
 		UTILS.httpUtil.dataError(_req, _res, "Error", "Error", "500", "1.0");
@@ -303,10 +303,10 @@ const checkApiAuth = async (authorization) => {
 	const adminUser = await getAdminByIdV2({ id: 'admin' });
 	if (adminUser?.data?.token !== token) {
 		console.log('CHECK API NEXT AUTH FAILED\n')
-		return(false);
+		return (false);
 	}
 	console.log('CHECK API NEXT AUTH SUCCESS\n')
-	return(true);
+	return (true);
 }
 
 async function getPartnerHandler(req, res) {
@@ -315,22 +315,22 @@ async function getPartnerHandler(req, res) {
 		if (!checkApiAuth(authorization)) {
 			res.writeHead(401);
 			res.end({
-					code: 401,
-					message: 'Not autorized',
-					description: 'MUUUUUUUAHAHAHAHAH !!!',
+				code: 401,
+				message: 'Not autorized',
+				description: 'MUUUUUUUAHAHAHAHAH !!!',
 			});
 		}
 
-			const ret = await getPartnersV2(req.get);
-			res.end(JSON.stringify({ results: ret }));
+		const ret = await getPartnersV2(req.get);
+		res.end(JSON.stringify({ results: ret }));
 	} catch (error) {
-			console.error('[ERROR]', error);
-			res.writeHead(500);
-			res.end({
-					code: 500,
-					message: 'Internal error.',
-					description: '',
-			});
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end({
+			code: 500,
+			message: 'Internal error.',
+			description: '',
+		});
 	}
 };
 
@@ -340,9 +340,9 @@ const updatePartnerHandler = async (req, res) => {
 		if (!checkApiAuth(authorization)) {
 			res.writeHead(401);
 			res.end({
-					code: 401,
-					message: 'Not autorized',
-					description: 'MUUUUUUUAHAHAHAHAH !!!',
+				code: 401,
+				message: 'Not autorized',
+				description: 'MUUUUUUUAHAHAHAHAH !!!',
 			});
 		}
 
@@ -449,7 +449,7 @@ const deletePartnerV2 = async (where = {}) => {
 
 	console.log('Delte partner where: ', where);
 	const deletePartnersResp = await DB_NS.partner.delete(where);
-	console.log('deletePartnersResp',deletePartnersResp)
+	console.log('deletePartnersResp', deletePartnersResp)
 	if (deletePartnersResp.error) {
 		throw new Error(deletePartnersResp.message, { cause: deletePartnersResp });
 	}
@@ -647,7 +647,7 @@ exports.plugin =
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
 
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('Accès non autorisé');
 			return;

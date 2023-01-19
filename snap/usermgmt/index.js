@@ -2,7 +2,7 @@ const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
-const {errorHandler} = require('../lib-js/errorHandler');
+const { errorHandler } = require('../lib-js/errorHandler');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
@@ -222,7 +222,7 @@ async function addUserHandler(req, res) {
 			user.created_at = Date.now();
 			user.token = UTILS.Crypto.createSHA512(user.id + user.created_at + user.first_name);
 			const createdUser = await createUserV2(user);
-			console.log('createdUser',createdUser);
+			console.log('createdUser', createdUser);
 			if (createdUser) {
 				UTILS.httpUtil.dataSuccess(req, res, "success, user registered", { id: createdUser.id, harbour_id: createdUser.harbour_id, token: createdUser.token }, "1.0");
 				return;
@@ -238,7 +238,7 @@ async function addUserHandler(req, res) {
 		} else {
 			UTILS.httpUtil.dataError(req, res, "Error", "Internal server error", "1.0");
 		}
-		
+
 	}
 }
 
@@ -259,7 +259,7 @@ async function getUserInfos(_req, _res) {
 			}
 			const findUserResp = await DB_NS.user.find(query);
 			if (findUserResp.error) {
-				throw new Error('User not found', { cause: { httpCode: 404 }});
+				throw new Error('User not found', { cause: { httpCode: 404 } });
 			}
 			const users = findUserResp.data;
 			if (users[0]) {
@@ -285,16 +285,16 @@ async function loginHandler(req, res) {
 		console.log(`[INFO] User login attempt mail: [${req.post.email}] START`);
 
 		const findUserResp = await DB_NS.user.find({ email: req.post.email });
-		if(findUserResp.error) {
-			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
+		if (findUserResp.error) {
+			throw new Error(findUserResp.error, { cause: { httpCode: 500 } });
 		} else if (findUserResp.data.length < 1) {
-			throw new Error('Email ou mot de pass invalide - 1', { cause: { httpCode: 404 }});
+			throw new Error('Email ou mot de pass invalide - 1', { cause: { httpCode: 404 } });
 		}
 		/**@type {TYPES.T_user} */
 		const user = findUserResp.data[0];
 		const passHash = UTILS.Crypto.createSHA512(user.id + req.post.password);
 		if (user.password !== passHash) {
-			throw new Error('Email ou mot de pass invalide - 2', { cause: { httpCode: 404 }});
+			throw new Error('Email ou mot de pass invalide - 2', { cause: { httpCode: 404 } });
 		}
 
 		user.token = UTILS.Crypto.createSHA512(user.id + new Date() + user.first_name);
@@ -305,10 +305,10 @@ async function loginHandler(req, res) {
 		delete user.email;
 
 		const updatedUserResp = await DB_NS.user.update({ id: userId }, user);
-		if(updatedUserResp.error) {
-			throw new Error(updatedUserResp.message, { cause: { httpCode: 500 }});
+		if (updatedUserResp.error) {
+			throw new Error(updatedUserResp.message, { cause: { httpCode: 500 } });
 		} else if (updatedUserResp.data.length < 1) {
-			throw new Error('Failed to update reset token', { cause: { httpCode: 404 }});
+			throw new Error('Failed to update reset token', { cause: { httpCode: 404 } });
 		}
 		const updatedUser = updatedUserResp.data[0];
 		console.log(`[INFO] User login attempt mail: [${req.post.email}] SUCCEEDED`);
@@ -576,10 +576,10 @@ const setNewPasswordHandler = async (req, res) => {
 		const password = req.post.newPassword;
 
 		const findUserResp = await DB_NS.user.find({ resetPwdToken: token });
-		if(findUserResp.error) {
-			throw new Error(findUserResp.error, { cause: { httpCode: 500 }});
+		if (findUserResp.error) {
+			throw new Error(findUserResp.error, { cause: { httpCode: 500 } });
 		} else if (findUserResp.data.length < 1) {
-			throw new Error('Invalid token', { cause: { httpCode: 404 }});
+			throw new Error('Invalid token', { cause: { httpCode: 404 } });
 		}
 		const user = findUserResp.data[0];
 		const newPasswordHash = UTILS.Crypto.createSHA512(user.id + password);
@@ -588,11 +588,11 @@ const setNewPasswordHandler = async (req, res) => {
 		user.resetPwdToken = null;
 		const userId = user.id;
 		delete user.id;
-		const updatedUser = await DB_NS.user.update({ id: userId}, user);
-		if(updatedUser.error) {
-			throw new Error(updatedUser.error, { cause: { httpCode: 500 }});
+		const updatedUser = await DB_NS.user.update({ id: userId }, user);
+		if (updatedUser.error) {
+			throw new Error(updatedUser.error, { cause: { httpCode: 500 } });
 		} else if (updatedUser.data.length < 1) {
-			throw new Error('No user updated', { cause: { httpCode: 404 }});
+			throw new Error('No user updated', { cause: { httpCode: 404 } });
 		}
 		console.log(`[INFO] Set new password request for reset token [${req.post.recoveryToken}] SUCEEDED`);
 		res.end(JSON.stringify({
@@ -660,7 +660,7 @@ const getUserSecure = async (req, res) => {
 		console.log('userToken', userToken);
 		const harbourId = req.get.harbour_id
 		console.log('harbourId', harbourId);
-		
+
 		const users = await getUsersV2({ harbour_id: harbourId });
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -717,7 +717,7 @@ const createUserV2 = async (user = {}) => {
 		throw new Error(createUserResp.message, { cause: createUserResp });
 	}
 	const users = createUserResp.data;
-	console.log(`Created ${users.length} user:\n`. users);
+	console.log(`Created ${users.length} user:\n`.users);
 	return users;
 };
 
@@ -765,7 +765,7 @@ const deleteUserV2 = async (where = {}) => {
 
 	console.log('Delte user where: ', where);
 	const deleteUsersResp = await DB_NS.user.delete(where);
-	console.log('deleteUsersResp',deleteUsersResp)
+	console.log('deleteUsersResp', deleteUsersResp)
 	if (deleteUsersResp.error) {
 		throw new Error(deleteUsersResp.message, { cause: deleteUsersResp });
 	}
@@ -927,7 +927,7 @@ exports.plugin =
 					const userUpdates = { ...req.post };
 					delete userUpdates.id;
 					const updatedUser = await updateUsersV2({ id: req.post.id }, userUpdates);
-					console.log('updatedUser',updatedUser);
+					console.log('updatedUser', updatedUser);
 					UTILS.httpUtil.dataSuccess(req, res, "Mail mis à jour", "1.0");
 					return;
 				} catch (error) {
@@ -962,12 +962,12 @@ exports.plugin =
 			/**@type {Array<TYPES.T_harbour>} */
 			let adminAllHarbours = [];
 			if (_role === 'user') {
-					const pendingPromises = [];
-					_harbour_id.map(harbourId => {
-						pendingPromises.push(getUsersV2({ harbour_id: harbourId }));
-					});
-					const usersArrays = await Promise.all(pendingPromises);
-					usersArrays.map(userList => _users.push(...userList));
+				const pendingPromises = [];
+				_harbour_id.map(harbourId => {
+					pendingPromises.push(getUsersV2({ harbour_id: harbourId }));
+				});
+				const usersArrays = await Promise.all(pendingPromises);
+				usersArrays.map(userList => _users.push(...userList));
 			} else if (_role === 'admin') {
 				const findHarbourResp = await DB_NS.harbour.find({});
 				if (findHarbourResp.error) {
@@ -1005,20 +1005,20 @@ exports.plugin =
 						formatedDate = `${date} à ${heure}`;
 					}
 					_userGen += _userHtml.replace(/__ID__/g, _users[i]?.id)
-					.replace(/__FORMID__/g, _users[i]?.id.replace(/\./g, "_"))
-					.replace(/__CATEGORY__/g, _users[i]?.category)
-					.replace(/__ROLE_OPTIONS__/g, optionsStr)
-					.replace(/__FIRST_NAME__/g, _users[i]?.first_name)
-					.replace(/__LAST_NAME__/g, _users[i]?.last_name)
-					.replace(/__EMAIL__/g, _users[i]?.email)
-					.replace(/__PASSWORD__/g, '')
-					.replace(/__PHONE__/g, _users[i]?.prefixed_phone)
-					.replace(/__DATETIMEORDER__/g, _users[i]?.created_at)
-					.replace(/__DATE__/g, formatedDate)
-					.replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
-					.replace(/__HARBOUR_ID__/g, currentHarbour?.id)
-					.replace(/__CONTRACT_NUMBER__/g, _users[i]?.contract_number)
-					.replace(/__IS_RESIDENT__/g, _users[i]?.is_resident)
+						.replace(/__FORMID__/g, _users[i]?.id.replace(/\./g, "_"))
+						.replace(/__CATEGORY__/g, _users[i]?.category)
+						.replace(/__ROLE_OPTIONS__/g, optionsStr)
+						.replace(/__FIRST_NAME__/g, _users[i]?.first_name)
+						.replace(/__LAST_NAME__/g, _users[i]?.last_name)
+						.replace(/__EMAIL__/g, _users[i]?.email)
+						.replace(/__PASSWORD__/g, '')
+						.replace(/__PHONE__/g, _users[i]?.prefixed_phone)
+						.replace(/__DATETIMEORDER__/g, _users[i]?.created_at)
+						.replace(/__DATE__/g, formatedDate)
+						.replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
+						.replace(/__HARBOUR_ID__/g, currentHarbour?.id)
+						.replace(/__CONTRACT_NUMBER__/g, _users[i]?.contract_number)
+						.replace(/__IS_RESIDENT__/g, _users[i]?.is_resident)
 				}
 			}
 			var _mails = [];
@@ -1050,7 +1050,7 @@ exports.plugin =
 
 			var userHarbours = [];
 			var harbour_select;
-			console.log('_harbour_id',_harbour_id)
+			console.log('_harbour_id', _harbour_id)
 			if (_role == "user") {
 				harbour_select = '<div class="col-12">'
 					+ '<div class= "form-group" >'
@@ -1058,7 +1058,7 @@ exports.plugin =
 					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
 				for (var i = 0; i < _harbour_id.length; i++) {
 					const currentHarbour = (_harbour_id[i]) ? harboursMapById[_harbour_id[i]] : undefined;
-					console.log('currentHarbour',currentHarbour)
+					console.log('currentHarbour', currentHarbour)
 					harbour_select += '<option value="' + currentHarbour?.id + '">' + currentHarbour?.name + '</option>';
 				}
 				harbour_select += '</select></div></div>';
