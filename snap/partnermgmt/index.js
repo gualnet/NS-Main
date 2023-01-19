@@ -363,8 +363,8 @@ const updatePartnerHandler = async (req, res) => {
 	}
 }
 
-// * ************** *
-// * DB HANDLERS V2 *
+/* ************** */
+/* DB HANDLERS V2 */
 
 /**
  * 
@@ -465,7 +465,6 @@ const deletePartnerV2 = async (where = {}) => {
 // * PLUGIN HANDLERS *
 
 const pluginPostCreateHandler = async (req, res) => {
-	console.log('====pluginPostCreateHandler====')
 	try {
 		if (req.post.website) {
 			req.post.website = addProtocolToUrl(req.post.website);
@@ -669,7 +668,7 @@ exports.plugin =
 			}
 		}
 		if (req.method == "POST") {
-			if (req.post.id) {
+			if (req.post.id && typeof req.body == "object" && req.multipart) {
 				await pluginPostUpdateHandler(req, res);
 			} else {
 				await pluginPostCreateHandler(req, res);
