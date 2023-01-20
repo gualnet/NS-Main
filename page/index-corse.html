@@ -667,6 +667,17 @@
 			displayResaButton();
 		});
 
+		function isAndroidPhone() {
+			return navigator.userAgent.toLowerCase().search("android") >= 0;
+		};
+
+		const openExternalLink = (url) => {
+			if (isAndroidPhone) { // works on android devices only 
+				url += '?gbOpenExternal=1';
+			}
+			window.open(url, '_blank');
+		};
+
 		const attributeFaqLink = () => {
 			const currentHarbourId = localStorage["harbour_id"];
 			const faqBtnEL = document.querySelector('#faq_button');
@@ -745,19 +756,27 @@
 				if (mapPdfEl) {
 					let mapLink;
 					if (harbour.google_map_link) {
-						mapLink = harbour.google_map_link; // embed external google my map link used by ios
-						if (!isIos) {
-							mapLink = mapLink.split('/maps').join('?gbOpenExternal=1maps'); // used by android
-						}
+						// mapLink = harbour.google_map_link; // embed external google my map link used by ios
+						mapLink = 'https://www.google.com/maps/d/u/0/embed?mid=1OhZ-H3zwNIArBTQjqSoI_iX-_m-P-x0&ehbc=2E312F'; // embed external google my map link used by ios
+						// if (!isIos) {
+						// 	mapLink = mapLink.split('/maps').join('?gbOpenExternal=1maps'); // used by android
+						// }
+						mapLink.replace()
+						mapPdfEl.addEventListener('click', () => {
+							openExternalLink(mapLink)
+						});
 					} else if (harbour.address) {
 						mapLink = `https://www.google.com/maps/?q=${harbour.address}`; // default map link
 						if (isIos) {
 							mapLink = `https://maps.apple.com/?q=${harbour.address}` // map link iphone
 						}
+						mapPdfEl.addEventListener('click', () => {
+							openExternalLink(mapLink)
+						});
 					} else {
 						mapPdfEl.hidden = true;
 					}
-					mapPdfEl.addEventListener('click', () => window.location.href = mapLink);
+					// mapPdfEl.addEventListener('click', () => window.location.href = mapLink);
 				}
 			}).catch((error) => {
 				console.log(error);
