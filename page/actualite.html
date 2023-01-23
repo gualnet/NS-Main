@@ -36,7 +36,12 @@
                             </p>
                         </div>
                     </div>
-                    <div class="row" id="pj"></div>
+                    <div class="row" id="pj">
+											<div class="border-top border-color col pt-2">
+												<i class="bi bi-paperclip" style="font-size: 20px; color: #1D68D5"></i>
+												<span class="small" style="font-size: .8rem; color: #1D68D5"></span>
+											</div>
+										</div>
                 </div>
                 <div class="card-body border-top border-color">
                     <p class="small text-secondary" id="content" style="text-align: justify;">
@@ -46,27 +51,57 @@
         </div>
 
         <script>
+					window.addEventListener('load', async () => {
+						const actualite = await fetchActualite();
+						addEventListenersToDomElements(actualite);
+					});
+
+					const isAndroidPhone = () => {
+						return navigator.userAgent.toLowerCase().search("android") >= 0;
+					};
+
+					const openExternalLink = (url) => {
+						if (isAndroidPhone) { // works on android devices only 
+							url += '?gbOpenExternal=1';
+						}
+						window.open(url, '_blank');
+					};
+
+					const fetchActualite = async () => {
+						const urlParams = new URLSearchParams(window.location.search);
+						const actualiteId = urlParams.get('id');
+						const url = `/api/new/${actualiteId}`;
+						const resp = await fetch(url);
+						const respJson = await resp.json()
+						if (respJson.success === false) {
+							return undefined;
+						}
+						return respJson.data;
+					};
+
+					const addEventListenersToDomElements = (actualite) => {
+						const pjBtn = document.querySelector('#pj');
+						if (actualite.pj) {
+							pjBtn.addEventListener('click', () => {
+								openExternalLink(actualite.pj);
+							});
+							const spanEl = pjBtn.querySelector('span');
+							spanEl.innerHTML = actualite.pjname || 'Piece Jointe';
+						} else {
+							pjBtn.style.display = 'none';
+						}
+					};
+
             var url = new URLSearchParams(window.location.search);
             fetch("/api/new/" + url.get('id')).then(response => response.json()).then(_data => {
-                console.log(_data);
                 var actualite = _data.data;
-                //if (communication.category == "news")
-                //    communication.category = "Article";
                 document.getElementById("title").innerHTML = '<strong>' + actualite.title + '</strong>';
-                //document.getElementById("category").innerHTML = communication.category;
                 document.getElementById("content").innerHTML = actualite.content;
                 document.getElementById("description").innerHTML = actualite.description;
                 if (actualite.img) {
                     document.getElementById("img").src = actualite.img;
                 } else {
                     document.getElementById("img").src = localStorage['entity_logo'];
-                }
-
-                if (actualite.pj) {
-                    document.getElementById("pj").innerHTML = '<div class="border-top border-color col pt-2"><a target="_blank" href="' + actualite.pj + '"><i class="bi bi-paperclip" style="font-size:20px;"></i><span class="small">' + actualite.pjname + '</span></a></div>'
-
-                    document.getElementById("container").innerHTML = document.getElementById("container").innerHTML.replace(/undefined/g, " ");
-
                 }
             }).catch((error) => {
                 console.log(error);
@@ -78,98 +113,6 @@
         </div>
 
     </main>
-    <div class="sidebar-right">
-        <div class="selectoption">
-            <input type="checkbox" id="darklayout" name="darkmode">
-            <label for="darklayout">Dark</label>
-        </div>
-        <div class="selectoption mb-0">
-            <input type="checkbox" id="rtllayout" name="layoutrtl">
-            <label for="rtllayout">RTL</label>
-        </div>
-        <hr>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
-            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
-            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
-            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
-            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
-            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
-            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
-            <label for="templatecolor8" class="bg-red" data-title="red"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
-            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
-            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
-            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
-            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
-            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
-            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
-            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-        </div>
-
-    </div>
-
-
-
-    <!-- Required jquery and libraries -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-    <!-- cookie js -->
-    <script src="js/jquery.cookie.js"></script>
-
-    <!-- Swiper slider  js-->
-    <script src="vendor/swiper/js/swiper.min.js"></script>
-
-    <!-- Masonry js -->
-    <script src="vendor/masonry/masonry.pkgd.min.js"></script>
-
-    <!-- nouislider js -->
-    <script src="vendor/nouislider/nouislider.min.js"></script>
-
-    <!-- Customized jquery file  -->
-    <script src="js/main.js"></script>
-    <script src="js/color-scheme-demo.js"></script>
-
     <!-- page level custom script -->
     <script>
         "use strict"

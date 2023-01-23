@@ -1116,16 +1116,26 @@
 	<script>
 		window.addEventListener('load', async () => {
 			checkUndefinedHarbourName();
+			portsCorsesRedirection();
 
 			const entity = await fetchEntityData();
 			const user = await fetchUserData();
 			const boat = await fetchBoatData();
 			displayCameraBtn();
 			displaySecurityBtn(entity, user, boat);
-			portsCorsesRedirection();
 			checkOffers();
-
 		});
+
+		function isAndroidPhone() {
+			return navigator.userAgent.toLowerCase().search("android") >= 0;
+		};
+
+		const openExternalLink = (url) => {
+			if (isAndroidPhone) { // works on android devices only 
+				url += '?gbOpenExternal=1';
+			}
+			window.open(url, '_blank');
+		};
 
 		const checkUndefinedHarbourName = async () => {
 			console.log('===checkUndefinedHarbourName===');
@@ -1247,13 +1257,15 @@
 			const entity = respJson.data;
 			return(entity);
 		};
+
 		const fetchHarbourData = async () => {
 			const url = `/api/getharbour/${localStorage["harbour_id"]}`;
 			const resp = await fetch(url, { method: 'GET' });
 			const respJson = await resp.json();
 			const harbour = respJson.data;
 			return(harbour);
-		}
+		};
+
 		const fetchBoatData = async () => {
 			const url = `/api/get/userboats?user_id=${localStorage["user"]}&harbour_id=${localStorage["harbour_id"]}`;
 			const resp = await fetch(url, { method: 'GET' });
@@ -1265,6 +1277,7 @@
 			const boat = respJson.data[0];
 			return(boat);
 		};
+
 		const fetchUserData = async () => {
 			const url = `/api/getuser`;
 			const resp = await fetch(url, {
@@ -1291,7 +1304,9 @@
 				if (!entity.marees_module) {
 					document.getElementById("marees").hidden = true;
 				} else if (entity.maree_id) {
-					document.getElementById("marees").onclick = function () { window.open('https://maree.info/' + entity.maree_id, '_blank'); }
+					document.getElementById("marees").onclick = function () {
+						openExternalLink('https://maree.info/' + entity.maree_id);
+					}
 				}
 				if (!entity.challenges_module) {
 					document.getElementById("challenges").hidden = true;
@@ -1315,7 +1330,9 @@
 				}
 				
 				if (harbour.harbour_map) {
-					document.getElementById("map_pdf").onclick = function () { window.open(harbour.harbour_map) }
+					document.getElementById("map_pdf").onclick = function () {
+						openExternalLink(harbour.harbour_map)
+					}
 				} else {
 					document.getElementById("map_pdf").hidden = true;
 				}
@@ -1327,7 +1344,7 @@
 				if (!harbour.erp_link || !localStorage['token']) {
 					document.getElementById('erp_link').hidden = true;
 				} else {
-					document.getElementById('erp_link').onclick = () => window.open(harbour.erp_link);
+					document.getElementById('erp_link').onclick = () => openExternalLink(harbour.erp_link);
 				}
 
 				fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
@@ -1347,8 +1364,6 @@
 					var rainHeavy = "https://res.cloudinary.com/nauticspot/image/upload/v1623337765/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-rain_kztbgd.png"
 					var sunshineClearsky = "https://res.cloudinary.com/nauticspot/image/upload/v1623337766/GUERILLA%20-%20NAUTICSPOT/M%C3%A9t%C3%A9o/meteo-background-sunshine_rzbzqh.png"
 
-					// console.log('weatherCode', weather[0].hourly[hour].weatherCode);
-					//case WeatherCode	Condition	DayIcon	NightIcon
 					switch (weather[0].hourly[hour].weatherCode) {
 						case '395':	//Moderate or heavy snow in area with thunder
 							document.getElementById("weather_card").setAttribute("style", "background-image: url('" + rainHeavy + "');background-position: center;background-size: 100% auto;");
