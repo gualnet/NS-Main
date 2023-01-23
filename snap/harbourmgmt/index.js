@@ -560,7 +560,8 @@ exports.plugin =
 
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _harbours[i] = await getHarboursV2({ id: _harbour_id[i] });
+									const harbours = await getHarboursV2({ id: _harbour_id[i] });
+									_harbours[i] = harbours[0];
                 }
                 _indexHtml = fs.readFileSync(path.join(__dirname, "indexuser.html")).toString();
                 _harbourHtml = fs.readFileSync(path.join(__dirname, "harbouruser.html")).toString();
@@ -572,7 +573,7 @@ exports.plugin =
             }
             var _harbourGen = "";
             for (var i = 0; i < _harbours.length; i++) {
-                let formatedDate = '-';
+							  let formatedDate = '-';
                 if (_harbours[i].date) {
                     const dateObj = new Date(_harbours[i].date)
                     const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
