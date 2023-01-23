@@ -262,7 +262,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} id
  * @property {string} title
  * @property {string} user_category ['visitor', 'yachtsman', 'all'],
- * @property {string} notification_link
+ * @property {string} notification_link - not used for notifications via goodbarber
  * @property {string} img
  * @property {string} pjname
  * @property {string} pj
