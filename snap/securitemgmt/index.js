@@ -221,13 +221,13 @@ async function createSecuriteHandler(req, res) {
 					<p style="font-size: 12pt">L'équipe Nauticspot</p>
 					`;
 
-			// const sendTo = harbour.email_incident || harbour.email;
-			// if (sendTo.includes(';')) {
-			// 		const emails = sendTo.split(';');
-			// 		emails.map(async (email) => await STORE.mailjet.sendHTML(harbour.id_entity, email, harbour.name, subject, body))
-			// } else {
-			// 		await STORE.mailjet.sendHTML(harbour.id_entity, sendTo, harbour.name, subject, body);
-			// }
+			const sendTo = harbour.email_incident || harbour.email;
+			if (sendTo.includes(';')) {
+					const emails = sendTo.split(';');
+					emails.map(async (email) => await STORE.mailjet.sendHTML(harbour.id_entity, email, harbour.name, subject, body))
+			} else {
+					await STORE.mailjet.sendHTML(harbour.id_entity, sendTo, harbour.name, subject, body);
+			}
 			UTILS.httpUtil.dataSuccess(req, res, "success", createdIncident, "1.0");
 			return;
 		}
@@ -293,7 +293,6 @@ const pluginPostCreateHandler = async (req, res) => {
 		/**@type {Omit<TYPES.T_incident, "id">} */
 		const newIncident = {
 			created_at: req.post.created_at || Date.now(),
-			date: req.post.date || Date.now(),
 			date_end: Date.parse(req.post.date_end) || null,
 			date_start: Date.parse(req.post.date_start) || null,
 			description: req.post.description || null,
@@ -348,7 +347,7 @@ const pluginPostUpdateHandler = async (req, res, admin) => {
 			status: req.post.status || currentIncident.status,
 			token: req.post.token || currentIncident.token,
 			type: req.post.type || currentIncident.type,
-			updated_at: req.post.updated_at || currentIncident.updated_at,
+			updated_at: req.post.updated_at || Date.now(),
 			user_id: req.post.user_id || currentIncident.user_id,
 			zone: req.post.zone || currentIncident.zone,
 		};
@@ -522,9 +521,7 @@ exports.plugin =
 
 				if (_Securites[i].status == "open") {
 					statusoptions = '<option value="open" selected>ouvert</option><option value="closed">clôturé</option>'
-				}
-				else {
-
+				} else {
 					statusoptions = '<option value="open">ouvert</option><option value="closed" selected>clôturé</option selected>'
 				}
 				_securiteGen += _securiteHtml.replace(/__ID__/g, _Securites[i].id)
@@ -566,7 +563,6 @@ exports.plugin =
 				harbour_select += '</select></div></div>';
 			}
 			_indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
-
 
 			res.setHeader("Content-Type", "text/html");
 			res.end(_indexHtml);

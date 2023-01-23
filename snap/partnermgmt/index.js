@@ -12,9 +12,6 @@ const AUTHORIZED_ROLES = [
 	ROLES.AGENT_CAPITAINERIE,
 ];
 
-var _partnerCol = "partner";
-var _userCol = "user";
-
 var path_to_img = path.resolve(path.join(CONF.instance.static, "img", "partner"));
 
 function makeid(length) {

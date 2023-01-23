@@ -111,19 +111,6 @@ function verifyPostReq(_req, _res, isUpdate) {
 
 //bdd requests
 
-async function verifyIfExistInUsers(_email, _phone) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_userCol, { email: _email, phone: _phone }, null, function (_err, _data) {
-			console.log(_data);
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-
 async function createMail(_obj) {
 	return new Promise(resolve => {
 		STORE.db.linkdb.Create(_mailCol, _obj, function (_err, _data) {
