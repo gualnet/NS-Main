@@ -12,9 +12,6 @@ const AUTHORIZED_ROLES = [
 	ROLES.AGENT_CAPITAINERIE,
 ];
 
-var _partnerCol = "partner";
-var _userCol = "user";
-
 var path_to_img = path.resolve(path.join(CONF.instance.static, "img", "partner"));
 
 function makeid(length) {
@@ -111,273 +108,186 @@ function verifyPostReq(_req, _res) {
 	// 		return false;
 	// 	}
 	// }
-	if (_req.post.website) {
-		if (validateUrl(_req.post.website) != true) {
-			UTILS.httpUtil.dataError(_req, _res, "Error", "URL incorrect", "100", "1.0");
-			return false;
-		}
-	}
+	// if (_req.post.website) {
+	// 	if (validateUrl(_req.post.website) != true) {
+	// 		UTILS.httpUtil.dataError(_req, _res, "Error", "URL incorrect", "100", "1.0");
+	// 		return false;
+	// 	}
+	// }
 	return true;
 }
 
-async function getPartnerById(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.FindById(_partnerCol, _id, null, function (_err, _data) {
-			if (_data) {
-				resolve(_data);
-			}
-			else
-				resolve(_err);
-		});
-	});
-}
+async function getAdminByIdV2(_id) {
+	/**@type {TYPES.T_SCHEMA['fortpress']} */
+	const DB_FP = SCHEMA.fortpress;
 
-/**
- * 
- * @returns {Promise<Array<T_partner>>}
- */
-async function getPartner() {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_partnerCol, {}, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-/**
- * 
- * @param {*} searchOpt 
- * @returns {Promise<TYPES.T_partner[]>}
- */
-async function getPartnerV2(searchOpt) {
-	
-	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-	const DB_NS = SCHEMA.NAUTICSPOT;
-
-	const findPartnersResp = await DB_NS.partner.find(searchOpt, { raw: 1 });
-	if (findPartnersResp.error) {
-		console.error('[ERROR]', findPartnersResp);
-		throw new Error(findPartnersResp.message, { cause: findPartnersResp });
+	const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
+	if (findAdminResp.error) {
+		console.error(findAdminResp);
+		throw new Error(findAdminResp.error, { cause: findAdminResp });
 	}
+	const admin = findAdminResp.data[0];
+	return admin;
+};
 
-	const partners = findPartnersResp.data;
-	return partners;
-}
-
-async function getPartnerByHarbourId(_harbour_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_partnerCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-/**
- * 
- * @param {*} _search 
- * @returns {Promise<Array<T_partner>>}
- */
-async function getPartnerBySearch(_search) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Find(_partnerCol, _search, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-
-async function delPartner(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Delete(_partnerCol, { id: _id }, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-async function createPartner(_obj) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Create(_partnerCol, _obj, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-
-/**
- * 
- * @param {T_partner} _obj 
- * @returns 
- */
-async function updatePartner(_obj) {
-	return new Promise(resolve => {
-		STORE.db.linkdb.Update(_partnerCol, { id: _obj.id }, _obj, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
-async function getAdminById(_id) {
-	return new Promise(resolve => {
-		STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-			if (_data)
-				resolve(_data);
-			else
-				resolve(_err);
-		});
-	});
-}
 //route handlers
 async function getPartnerBySearchHandler(_req, _res) {
-	var partner = await getPartnerBySearch({ harbour_id: _req.param.harbour_id, category: _req.param.category, subcategory: _req.param.subcategory })
-	if (partner) {
-		UTILS.httpUtil.dataSuccess(_req, _res, "success", partner, "1.0");
-		return;
-	} else {
-		UTILS.httpUtil.dataError(_req, _res, "error", "no partner found", "1.0")
-		return;
+	try {
+		const partners = await getPartnersV2({ harbour_id: _req.param.harbour_id, category: _req.param.category, subcategory: _req.param.subcategory })
+		if (partners?.length < 1) {
+			UTILS.httpUtil.dataSuccess(_req, _res, "error", "No partner found", "200", "1.0")
+			return;
+		}
+		UTILS.httpUtil.dataSuccess(_req, _res, "success", partners, "1.0");
+	} catch (error) {
+		console.error(error);
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Error", "500", "1.0")
 	}
 }
 
 async function getPartnerByIdHandler(_req, _res) {
-	var partner = await getPartnerById(_req.param.id);
-	if (partner.id) {
-		UTILS.httpUtil.dataSuccess(_req, _res, "success", partner, "1.0");
-		return;
-	} else {
-		UTILS.httpUtil.dataError(_req, _res, "error", "no partner found", "1.0")
-		return;
+	try {
+		const partners = await getPartnersV2({ id: _req.param.id });
+		if (partners?.length < 1) {
+			UTILS.httpUtil.dataError(_req, _res, "error", "No partner found", "200", 1.0);
+			return;
+		}
+		UTILS.httpUtil.dataSuccess(_req, _res, "success", partners[0], "1.0");
+	} catch (error) {
+		console.error(error);
+		UTILS.httpUtil.dataError(_req, _res, "error", "Error", "500", "1.0")
 	}
 }
 
 async function getPartnersByHarbourHandler(_req, _res) {
-
-	if (_req.get.harbour_id) {
-		var _partners = await getPartnerByHarbourId(_req.get.harbour_id);
-
-		if (_partners[0]) {
-			var _harbour = await STORE.harbourmgmt.getHarbourById(_req.get.harbour_id);
-			var _partnerHtml = fs.readFileSync(path.join(__dirname, "partner.html")).toString();
-			UTILS.httpUtil.dataSuccess(_req, _res, "success", { html: _partnerHtml, partners: _partners, harbour: _harbour }, "1.0");
+	try {
+		if (!_req.get.harbour_id) {
+			UTILS.httpUtil.dataError(_req, _res, "error", "Wrong harbour id", "400", "1.0")
 			return;
-		} else {
-			UTILS.httpUtil.dataError(_req, _res, "error", "no partner found", "1.0")
 		}
-	} else UTILS.httpUtil.dataError(_req, _res, "error", "no harbour id", "1.0")
+		const partners = await getPartnersV2({ harbour_id: _req.get.harbour_id });
+		if (partners?.length < 1) {
+			UTILS.httpUtil.dataSuccess(_req, _res, "error", "No partner found", "200", "1.0")
+			return;
+		}
+		const harbours = await STORE.harbourmgmt.getHarbours({ id: _req.get.harbour_id });
+		const harbour = harbours[0];
+		if (!harbour) {
+			UTILS.httpUtil.dataError(_req, _res, "error", "Wrong harbour id", "400", "1.0")
+			return;
+		}
+		const _partnerHtml = fs.readFileSync(path.join(__dirname, "partner.html")).toString();
+
+		UTILS.httpUtil.dataSuccess(_req, _res, "success", { html: _partnerHtml, partners: partners, harbour: harbour }, "1.0");
+		return;
+	} catch (error) {
+		console.error(error);
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Error", "500", "1.0")
+	}
 }
 
 async function getActivePartnersCategoryHandler(_req, _res) {
-	const partners = await getPartnerV2({ harbour_id: _req.param.harbour_id });
-	var data = { activeCategories: {}, activeSubCategories: {} };
-	for (var i = 0; i < partners.length; i++) {
-		switch (partners[i].category) {
-			case "harbourlife":
-				data.activeCategories.harbourlife = true;
-				break;
-			case "experience":
-				data.activeCategories.experience = true;
-				break;
-			case "discovery":
-				data.activeCategories.discovery = true;
-				break;
-		}
+	try {
+		const partners = await getPartnersV2({ harbour_id: _req.param.harbour_id });
+		var data = { activeCategories: {}, activeSubCategories: {} };
+		for (var i = 0; i < partners.length; i++) {
+			switch (partners[i].category) {
+				case "harbourlife":
+					data.activeCategories.harbourlife = true;
+					break;
+				case "experience":
+					data.activeCategories.experience = true;
+					break;
+				case "discovery":
+					data.activeCategories.discovery = true;
+					break;
+			}
 
-		//discovery 	divertissement
-		switch (partners[i].subcategory) {
-			case "sos":
-				data.activeSubCategories.sos = true;
-				break;
-			case "maintenance":
-				data.activeSubCategories.maintenance = true;
-				break;
-			case "accastillage":
-				data.activeSubCategories.accastillage = true;
-				break;
-			case "sante":
-				data.activeSubCategories.sante = true;
-				break;
-			case "annonce":
-				data.activeSubCategories.annonce = true;
-				break;
-			case "laverie":
-				data.activeSubCategories.laverie = true;
-				break;
-			case "transport":
-				data.activeSubCategories.transport = true;
-				break;
-			case "boutique":
-				data.activeSubCategories.boutique = true;
-				break;
-			case "alimentation":
-				data.activeSubCategories.alimentation = true;
-				break;
-			case "vieportautre":
-				data.activeSubCategories.vieportautre = true;
-				break;
-			case "nautic":
-				data.activeSubCategories.nautic = true;
-				break;
-			case "terrestres":
-				data.activeSubCategories.terrestres = true;
-				break;
-			case "association":
-				data.activeSubCategories.association = true;
-				break;
-			case "equipbourse":
-				data.activeSubCategories.equipbourse = true;
-				break;
-			case "experienceautre":
-				data.activeSubCategories.experienceautre = true;
-				break;
-			case "restaurant":
-				data.activeSubCategories.restaurant = true;
-				break;
-			case "bar":
-				data.activeSubCategories.bar = true;
-				break;
-			case "culture":
-				data.activeSubCategories.culture = true;
-				break;
-			case "divertissement":
-				data.activeSubCategories.divertissement = true;
-				break;
-			case "detente":
-				data.activeSubCategories.detente = true;
-				break;
-			case "decouverteautre":
-				data.activeSubCategories.decouverteautre = true;
-				break;
-			case 'vendeurLoueurHl':
-				data.activeSubCategories.vendeurLoueurHl = true;
-				break;
-			case 'vendeurLoueurEx':
-				data.activeSubCategories.vendeurLoueurEx = true;
-				break;
-			case 'patrimoine':
-				data.activeSubCategories.patrimoine = true;
-				break;
-			case 'mouillages':
-				data.activeSubCategories.mouillages = true;
-				break;
+			//discovery 	divertissement
+			switch (partners[i].subcategory) {
+				case "sos":
+					data.activeSubCategories.sos = true;
+					break;
+				case "maintenance":
+					data.activeSubCategories.maintenance = true;
+					break;
+				case "accastillage":
+					data.activeSubCategories.accastillage = true;
+					break;
+				case "sante":
+					data.activeSubCategories.sante = true;
+					break;
+				case "annonce":
+					data.activeSubCategories.annonce = true;
+					break;
+				case "laverie":
+					data.activeSubCategories.laverie = true;
+					break;
+				case "transport":
+					data.activeSubCategories.transport = true;
+					break;
+				case "boutique":
+					data.activeSubCategories.boutique = true;
+					break;
+				case "alimentation":
+					data.activeSubCategories.alimentation = true;
+					break;
+				case "vieportautre":
+					data.activeSubCategories.vieportautre = true;
+					break;
+				case "nautic":
+					data.activeSubCategories.nautic = true;
+					break;
+				case "terrestres":
+					data.activeSubCategories.terrestres = true;
+					break;
+				case "association":
+					data.activeSubCategories.association = true;
+					break;
+				case "equipbourse":
+					data.activeSubCategories.equipbourse = true;
+					break;
+				case "experienceautre":
+					data.activeSubCategories.experienceautre = true;
+					break;
+				case "restaurant":
+					data.activeSubCategories.restaurant = true;
+					break;
+				case "bar":
+					data.activeSubCategories.bar = true;
+					break;
+				case "culture":
+					data.activeSubCategories.culture = true;
+					break;
+				case "divertissement":
+					data.activeSubCategories.divertissement = true;
+					break;
+				case "detente":
+					data.activeSubCategories.detente = true;
+					break;
+				case "decouverteautre":
+					data.activeSubCategories.decouverteautre = true;
+					break;
+				case 'vendeurLoueurHl':
+					data.activeSubCategories.vendeurLoueurHl = true;
+					break;
+				case 'vendeurLoueurEx':
+					data.activeSubCategories.vendeurLoueurEx = true;
+					break;
+				case 'patrimoine':
+					data.activeSubCategories.patrimoine = true;
+					break;
+				case 'mouillages':
+					data.activeSubCategories.mouillages = true;
+					break;
+			}
 		}
+		UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
+		return;
+	} catch (error) {
+		console.error(error);
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Error", "500", "1.0");
 	}
-	UTILS.httpUtil.dataSuccess(_req, _res, "success", data, "1.0");
-	return;
 }
 
 /* ---------------------- */
@@ -387,29 +297,14 @@ async function getActivePartnersCategoryHandler(_req, _res) {
 const checkApiAuth = async (authorization) => {
 	console.log('CHECK API NEXT AUTH', authorization)
 	const token = authorization.split(' ')[1];
-	const adminUser = await getAdminById('admin')
+	const adminUser = await getAdminByIdV2({ id: 'admin' });
 	if (adminUser?.data?.token !== token) {
 		console.log('CHECK API NEXT AUTH FAILED\n')
-		return(false);
+		return (false);
 	}
 	console.log('CHECK API NEXT AUTH SUCCESS\n')
-	return(true);
+	return (true);
 }
-
-/**
- * @param {TYPES.T_partner} options - Object containing valide filds from harbour type
- * @returns {Promise<Array<TYPES.T_harbour>>}
- */
- async function getPartnersWhere(options) {
-	return new Promise(resolve => {
-			STORE.db.linkdb.Find(_partnerCol, options, null, function (_err, _data) {
-					if (_data)
-							resolve(_data);
-					else
-							resolve(_err);
-			});
-	});
-};
 
 async function getPartnerHandler(req, res) {
 	try {
@@ -417,41 +312,24 @@ async function getPartnerHandler(req, res) {
 		if (!checkApiAuth(authorization)) {
 			res.writeHead(401);
 			res.end({
-					code: 401,
-					message: 'Not autorized',
-					description: 'MUUUUUUUAHAHAHAHAH !!!',
+				code: 401,
+				message: 'Not autorized',
+				description: 'MUUUUUUUAHAHAHAHAH !!!',
 			});
 		}
 
-			const ret = await getPartnersWhere(req.get);
-			res.end(JSON.stringify({ results: ret }));
+		const ret = await getPartnersV2(req.get);
+		res.end(JSON.stringify({ results: ret }));
 	} catch (error) {
-			console.error('[ERROR]', error);
-			res.writeHead(500);
-			res.end({
-					code: 500,
-					message: 'Internal error.',
-					description: '',
-			});
+		console.error('[ERROR]', error);
+		res.writeHead(500);
+		res.end({
+			code: 500,
+			message: 'Internal error.',
+			description: '',
+		});
 	}
 };
-
-/**
- * 
- * @param {*} updateFieds 
- * @param {*} whereFields 
- * @returns {Promise<Array<TYPES.T_partner>>}
- */
-async function updatePartnerWhere(updateFieds, whereFields) {
-	return new Promise(resolve => {
-			STORE.db.linkdb.Update(_partnerCol, whereFields, updateFieds, function (_err, _data) {
-					if (_data)
-							resolve(_data);
-					else
-							resolve(_err);
-			});
-	});
-}
 
 const updatePartnerHandler = async (req, res) => {
 	try {
@@ -459,16 +337,16 @@ const updatePartnerHandler = async (req, res) => {
 		if (!checkApiAuth(authorization)) {
 			res.writeHead(401);
 			res.end({
-					code: 401,
-					message: 'Not autorized',
-					description: 'MUUUUUUUAHAHAHAHAH !!!',
+				code: 401,
+				message: 'Not autorized',
+				description: 'MUUUUUUUAHAHAHAHAH !!!',
 			});
 		}
 
 		const harbourUpdate = { ...req.body };
 		const whereFields = { ...req.get };
 
-		const result = await updatePartnerWhere(harbourUpdate, whereFields);
+		const result = await updatePartnersV2(whereFields, harbourUpdate);
 		res.end(JSON.stringify({ results: result }));
 	} catch (error) {
 		console.error('[ERROR]', error);
@@ -481,6 +359,202 @@ const updatePartnerHandler = async (req, res) => {
 		}));
 	}
 }
+
+/* ************** */
+/* DB HANDLERS V2 */
+
+/**
+ * 
+ * @param {*} where 
+ * @returns {Promise<TYPES.T_partner[]>}
+ */
+async function getPartnersV2(where) {
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	console.log('Find partners where', where);
+	const findPartnersResp = await DB_NS.partner.find(where);
+	if (findPartnersResp.error) {
+		console.error('[ERROR]', findPartnersResp);
+		throw new Error(findPartnersResp.message, { cause: findPartnersResp });
+	}
+	const partners = findPartnersResp.data;
+	console.log(`Found ${partners.length} partner(s) items`);
+	return partners;
+};
+
+/**
+ * 
+ * @param {Omit<TYPES.T_partner, "id">} partner 
+ * @returns {Promise<TYPES.T_partner>}
+ */
+const createPartnersV2 = async (partner = {}) => {
+	console.log('====createPartnersV2====');
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	const createPartnerResp = await DB_NS.partner.create(partner);
+	if (createPartnerResp.error) {
+		throw new Error(createPartnerResp.message, { cause: createPartnerResp });
+	}
+	const partners = createPartnerResp.data;
+	console.log(`Created partner:`, partners);
+	return partners;
+};
+
+/**
+ * 
+ * @param {Pick<TYPES.T_partner, "id"|"name"|"category"|"subcategory">} where 
+ * @param {Partial<TYPES.T_partner>} updates 
+ * @returns {Promise<TYPES.T_partner[]>}
+ */
+const updatePartnersV2 = async (where, updates) => {
+	console.log('====updatePartnersV2====');
+
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	if (Object.keys(where).length !== 1 || !where.id) {
+		throw new Error('Wrong parameter: ' + where);
+	}
+
+	console.log('Update partners where: ', where);
+	console.log('Update partners with: ', updates);
+	const updatePartnersResp = await DB_NS.partner.update(where, updates);
+	if (updatePartnersResp.error) {
+		throw new Error(updatePartnersResp.message, { cause: updatePartnersResp });
+	}
+	const partners = updatePartnersResp.data;
+	console.log(`${partners.length} partner(s) Updated`);
+	return partners;
+};
+
+/**
+ * 
+ * @param {Pick<TYPES.T_partner, "id">} where 
+ * @returns {Promise<TYPES.T_partner[]>}
+ */
+const deletePartnerV2 = async (where = {}) => {
+	console.log('====deletePartnerV2====');
+
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	if (Object.keys(where).length !== 1 || !where.id) {
+		throw new Error('Wrong parameter: ' + where);
+	}
+
+	console.log('Delte partner where: ', where);
+	const deletePartnersResp = await DB_NS.partner.delete(where);
+	console.log('deletePartnersResp', deletePartnersResp)
+	if (deletePartnersResp.error) {
+		throw new Error(deletePartnersResp.message, { cause: deletePartnersResp });
+	}
+	const partners = deletePartnersResp.data;
+	console.log(`Deleted ${partners.length} partner(s) items`, partners);
+	return partners;
+};
+
+// * DB HANDLERS V2 *
+// * ************** *
+
+// * *************** *
+// * PLUGIN HANDLERS *
+
+const pluginPostCreateHandler = async (req, res) => {
+	try {
+		if (req.post.website) {
+			req.post.website = addProtocolToUrl(req.post.website);
+		}
+		if (!verifyPostReq(req, res)) {
+			return;
+		}
+
+		/**@type {Omit<TYPES.T_partner, "id">} */
+		const newPartner = {
+			address: req.post.address || null,
+			category: req.post.category || null,
+			cloudinary_img_public_id: null,
+			date: Date.now() || null,
+			description: req.post.description || null,
+			harbour_id: req.post.harbour_id || null,
+			img: null,
+			name: req.post.name || null,
+			phone: req.post.phone || null,
+			prefix: req.post.prefix || null,
+			prefixed_phone: req.post.prefixed_phone || null,
+			spotyrideLink: req.post.spotyrideLink || null,
+			subcategory: req.post.subcategory || null,
+		};
+
+		if (newPartner.prefix && newPartner.phone) {
+			newPartner.prefix = completePhonePrefix(newPartner.prefix);
+			newPartner.prefixed_phone = newPartner.prefix + newPartner.phone.replace(/^0/, '');
+		}
+
+		//img gesture
+		if (newPartner.img) {
+			console.log('ENTER IMG', newPartner.img)
+			const upload = await STORE.cloudinary.uploadFile(newPartner.img, req.field["img"].filename);
+			newPartner.img = upload.secure_url;
+			newPartner.cloudinary_img_public_id = upload.public_id;
+		}
+
+		const partner = await createPartnersV2(newPartner);
+		console.log('created partner', partner);
+		if (!partner?.id) {
+			throw new Error('Erreur lors de la création du partenaire');
+		}
+		UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire créé", "1.0");
+	} catch (error) {
+		console.error('[ERROR]', error);
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la création du partenaire", "500", "1.0");
+	}
+};
+
+const pluginPostUpdateHandler = async (req, res) => {
+	try {
+		if (req.post.website) {
+			req.post.website = addProtocolToUrl(req.post.website);
+		}
+		if (!verifyPostReq(req, res)) {
+			return
+		}
+		/**@type {Partial<Omit<TYPES.T_partner, "id">>} */
+		const partnerId = req.post.id;
+		const partnerUpdates = req.post;
+		delete partnerUpdates.id;
+		const partners = await getPartnersV2({ id: partnerId });
+		const currentPartner = partners[0];
+
+		if (partnerUpdates.prefix && partnerUpdates.phone) {
+			partnerUpdates.prefix = completePhonePrefix(partnerUpdates.prefix);
+			partnerUpdates.prefixed_phone = partnerUpdates.prefix + partnerUpdates.phone.replace(/^0/, '');
+		}
+
+		//img gesture
+		if (partnerUpdates.img) {
+			var upload = await STORE.cloudinary.uploadFile(partnerUpdates.img, req.field["img"].filename);
+			partnerUpdates.img = upload.secure_url;
+			partnerUpdates.cloudinary_img_public_id = upload.public_id;
+			if (currentPartner.cloudinary_img_public_id) {
+				await STORE.cloudinary.deleteFile(currentPartner.cloudinary_img_public_id);
+			}
+		}
+
+		const updatedPartners = await updatePartnersV2({}, partnerUpdates);
+		if (updatedPartners.length < 1) {
+			throw new Error('Erreur lors de la mise à jour du partenaire');
+		}
+		UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire mis à jour", "1.0");
+	} catch (error) {
+		console.error('[ERROR]', error);
+		UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour du partenaire", "500", "1.0");
+	}
+};
+
+// * PLUGIN HANDLERS *
+// * *************** *
 
 exports.router = [
 	{
@@ -508,7 +582,7 @@ exports.router = [
 		method: "GET"
 	},
 
-	// * API NEXT GEN
+	// * API NEXT GEN --- DEPREC
 	{
 		on: true,
 		route: "/api/next/partners",
@@ -530,13 +604,13 @@ exports.router = [
 	{
 		on: false,
 		route: "/api/next/partners",
-		// handler: ((req, res) => res.writeHead(401); res.end()),
+		handler: ((req, res) => { res.writeHead(401); res.end() }),
 		method: "DELETE"
 	},
 ];
 
 exports.handler = async (req, res) => {
-	var _partner = await getPartner();
+	var _partner = await getPartnersV2();
 	res.end(JSON.stringify(_partner));
 	return;
 }
@@ -546,13 +620,12 @@ exports.plugin =
 	title: "Gestion des partenaires",
 	desc: "",
 	handler: async (req, res) => {
-			// var admin = await getAdminById(req.userCookie.data.id);
 		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 		const DB_NS = SCHEMA.NAUTICSPOT;
 		/**@type {TYPES.T_SCHEMA['fortpress']} */
 		const DB_FP = SCHEMA.fortpress;
 
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);
@@ -571,7 +644,7 @@ exports.plugin =
 		var _entity_id = admin.data.entity_id;
 		var _harbour_id = admin.data.harbour_id;
 
-		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
+		if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
 			res.writeHead(401);
 			res.end('Accès non autorisé');
 			return;
@@ -584,80 +657,18 @@ exports.plugin =
 
 		if (req.method == "GET") {
 			if (req.get.mode && req.get.mode == "delete" && req.get.partner_id) {
-				var currentPartner = await getPartnerById(req.get.id);
+				const currentPartner = await getPartnersV2({ id: req.get.id });
 				if (currentPartner.cloudinary_img_public_id) {
 					await STORE.cloudinary.deleteFile(currentPartner.cloudinary_img_public_id);
 				}
-				await delPartner(req.get.partner_id);
-			}
-			else if (req.get.partner_id) {
-				await getPartnerById(req.get.partner_id);
+				await deletePartnerV2({ id: req.get.partner_id });
 			}
 		}
 		if (req.method == "POST") {
-			console.info('[INFO] Partner plugin req.post', req.post);
-			if (req.post.id) {
-				if (req.post.website)
-					req.post.website = addProtocolToUrl(req.post.website);
-				if (verifyPostReq(req, res)) {
-					var _FD = req.post;
-
-					var currentPartner = await getPartnerById(req.post.id);
-
-					if (_FD.prefix && _FD.phone) {
-						_FD.prefix = completePhonePrefix(_FD.prefix);
-						_FD.prefixed_phone = _FD.prefix + _FD.phone.replace(/^0/, '');
-					}
-
-					//img gesture
-					if (_FD.img) {
-						var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-						_FD.img = upload.secure_url;
-						_FD.cloudinary_img_public_id = upload.public_id;
-						if (currentPartner.cloudinary_img_public_id) {
-							await STORE.cloudinary.deleteFile(currentPartner.cloudinary_img_public_id);
-						}
-					}
-
-					var partner = await updatePartner(_FD);
-					if (partner[0].id) {
-						UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire mis à jour", "1.0");
-						return;
-					} else {
-						UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la mise à jour du partenaire", "1.0");
-						return;
-					}
-				}
-			}
-			else {
-				if (req.post.website)
-					req.post.website = addProtocolToUrl(req.post.website);
-				if (verifyPostReq(req, res)) {
-					var _FD = req.post;
-					_FD.date = Date.now();
-
-					if (_FD.prefix && _FD.phone) {
-						_FD.prefix = completePhonePrefix(_FD.prefix);
-						_FD.prefixed_phone = _FD.prefix + _FD.phone.replace(/^0/, '');
-					}
-
-					//img gesture
-					if (_FD.img) {
-						var upload = await STORE.cloudinary.uploadFile(_FD.img, req.field["img"].filename);
-						console.log(upload);
-						_FD.img = upload.secure_url;
-						_FD.cloudinary_img_public_id = upload.public_id;
-					}
-
-					var partner = await createPartner(_FD);
-					if (partner.id) {
-						UTILS.httpUtil.dataSuccess(req, res, "Success", "Partenaire créé", "1.0");
-						return;
-					} else {
-						UTILS.httpUtil.dataError(req, res, "Error", "Erreur lors de la création du partenaire", "1.0");
-						return;
-					}
-				}
+			if (req.post.id && typeof req.body == "object" && req.multipart) {
+				await pluginPostUpdateHandler(req, res);
+			} else {
+				await pluginPostCreateHandler(req, res);
 			}
 		}
 		else {
@@ -686,7 +697,7 @@ exports.plugin =
 					+ '<div class= "form-group" >'
 					+ '<label class="form-label">Sélection du port</label>'
 					+ '<select class="form-control" id="harbour_id" style="width:250px;" name="harbour_id">';
-				userHarbours = await STORE.harbourmgmt.getHarbour();
+				userHarbours = await STORE.harbourmgmt.getHarbours();
 				userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
 				for (var i = 0; i < userHarbours.length; i++) {
@@ -699,11 +710,11 @@ exports.plugin =
 			try {
 				if (_role == "user") {
 					for (var i = 0; i < _harbour_id.length; i++) {
-						_partners = await getPartnerV2({ harbour_id: _harbour_id[i] });
+						_partners = await getPartnersV2({ harbour_id: _harbour_id[i] });
 					}
 				} else if (_role == "admin") {
-					_partners = await getPartnerV2({});
-					_partners = _partners.slice(0, 200);
+					_partners = await getPartnersV2({});
+					_partners = _partners.slice(0, 100);
 				}
 			} catch (error) {
 				console.error('[ERROR]', error);
@@ -751,8 +762,10 @@ exports.plugin =
 			};
 
 			var _partnerGen = "";
+
+			totalPerfStart = performance.now();
 			for (var i = 0; i < _partners.length; i++) {
-				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_partners[i].harbour_id);
+				const currentHarbour = await STORE.harbourmgmt.getHarbours({ id: _partners[i].harbour_id });
 
 				let formatedDate = '-';
 				if (_partners[i].created_at || _partners[i].date) {
@@ -765,8 +778,8 @@ exports.plugin =
 
 				_partnerGen += _partnerHtml.replace(/__ID__/g, _partners[i].id)
 					.replace(/__FORMID__/g, _partners[i].id.replace(/\./g, "_"))
-					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
-					.replace(/__HARBOUR_ID__/g, currentHarbour.id)
+					.replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
+					.replace(/__HARBOUR_ID__/g, currentHarbour?.id)
 					.replace(/__CATEGORY__/g, categories)
 					.replace(`option value="${_partners[i].category}"`, `option value=${_partners[i].category} selected`)
 					.replace(/__SUBCATEGORY__/g, subcategories[_partners[i].category])

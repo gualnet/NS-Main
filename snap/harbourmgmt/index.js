@@ -155,7 +155,7 @@ const getHarboursV2 = async (where = {}) => {
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	// console.info('[INFO] find harbours where:', where);
-	const findHarboursResp = await DB_NS.harbour.find(where, { raw: 1 });
+	const findHarboursResp = await DB_NS.harbour.find(where);
 	if (findHarboursResp.error) {
 		throw new Error(findHarboursResp.message, { cause: findHarboursResp });
 	}
@@ -210,6 +210,16 @@ async function updateHarbourWhere(updateFieds, whereFields) {
                 resolve(_err);
         });
     });
+}
+
+const getAllHarboursMappedById = async () => {
+	/**@type {TYPES.T_harbour[]} */
+	const harbours = await STORE.harbourmgmt.getHarbours();
+	const harboursMapById = {};
+	harbours.map(harbour => {
+		harboursMapById[harbour.id] = harbour;
+	})
+	return harboursMapById;
 }
 
 //routes handlers
@@ -283,11 +293,14 @@ async function updateHarboursHandler(req, res) {
 /* NEW API HANDLERS END */
 /* -------------------- */
 
+
 exports.store =
 {
-    getHarbourByEntityId: getHarbourByEntityId,
-    getHarbourById: getHarbourById,
-    getHarbour: getHarbour,
+	getHarbour: getHarbour, // historic
+	getHarbours: getHarboursV2,
+	getHarbourByEntityId: getHarbourByEntityId,
+	getHarbourById: getHarbourById,
+	getAllHarboursMappedById,
 }
 exports.router = [
     {
@@ -343,7 +356,7 @@ exports.plugin =
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
 			const DB_FP = SCHEMA.fortpress;
 
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 			if (findAdminResp.error) {
 				console.error(findAdminResp.error);
 				res.writeHead(500);
@@ -546,7 +559,8 @@ exports.plugin =
 
             if (_role == "user") {
                 for (var i = 0; i < _harbour_id.length; i++) {
-                    _harbours[i] = await getHarboursV2({ id: _harbour_id[i] });
+									const harbours = await getHarboursV2({ id: _harbour_id[i] });
+									_harbours[i] = harbours[0];
                 }
                 _indexHtml = fs.readFileSync(path.join(__dirname, "indexuser.html")).toString();
                 _harbourHtml = fs.readFileSync(path.join(__dirname, "harbouruser.html")).toString();
@@ -558,7 +572,7 @@ exports.plugin =
             }
             var _harbourGen = "";
             for (var i = 0; i < _harbours.length; i++) {
-                let formatedDate = '-';
+							  let formatedDate = '-';
                 if (_harbours[i].date) {
                     const dateObj = new Date(_harbours[i].date)
                     const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]

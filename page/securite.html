@@ -64,89 +64,6 @@
             {{element->navbar.html}}
         </div>
     </main>
-    <!-- color settings style switcher    <button type="button" class="btn btn-info colorsettings">
-        <span class="text-white">
-            <svg xmlns='http://www.w3.org/2000/svg' class="icon-size-24" viewBox='0 0 512 512'>
-                <title>ionicons-v5-m</title>
-                <path d='M430.11,347.9c-6.6-6.1-16.3-7.6-24.6-9-11.5-1.9-15.9-4-22.6-10-14.3-12.7-14.3-31.1,0-43.8l30.3-26.9c46.4-41,46.4-108.2,0-149.2-34.2-30.1-80.1-45-127.8-45-55.7,0-113.9,20.3-158.8,60.1-83.5,73.8-83.5,194.7,0,268.5,41.5,36.7,97.5,55,152.9,55.4h1.7c55.4,0,110-17.9,148.8-52.4C444.41,382.9,442,359,430.11,347.9Z' style='fill:none;stroke:#000;stroke-miterlimit:10;stroke-width:32px' />
-                <circle cx='144' cy='208' r='32' />
-                <circle cx='152' cy='311' r='32' />
-                <circle cx='224' cy='144' r='32' />
-                <circle cx='256' cy='367' r='48' />
-                <circle cx='328' cy='144' r='32' />
-            </svg>
-        </span>
-    </button>
-         -->
-
-    <div class="sidebar-right">
-        <div class="selectoption">
-            <input type="checkbox" id="darklayout" name="darkmode">
-            <label for="darklayout">Dark</label>
-        </div>
-        <div class="selectoption mb-0">
-            <input type="checkbox" id="rtllayout" name="layoutrtl">
-            <label for="rtllayout">RTL</label>
-        </div>
-        <hr>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor1" name="sidebarcolorselect">
-            <label for="templatecolor1" class="bg-dark-blue" data-title="dark-blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor2" name="sidebarcolorselect">
-            <label for="templatecolor2" class="bg-dark-purple" data-title="dark-purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor4" name="sidebarcolorselect">
-            <label for="templatecolor4" class="bg-dark-gray" data-title="dark-gray"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor6" name="sidebarcolorselect">
-            <label for="templatecolor6" class="bg-dark-brown" data-title="dark-brown"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor3" name="sidebarcolorselect">
-            <label for="templatecolor3" class="bg-maroon" data-title="maroon"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor5" name="sidebarcolorselect">
-            <label for="templatecolor5" class="bg-dark-pink" data-title="dark-pink"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor8" name="sidebarcolorselect">
-            <label for="templatecolor8" class="bg-red" data-title="red"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor13" name="sidebarcolorselect">
-            <label for="templatecolor13" class="bg-amber" data-title="amber"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor7" name="sidebarcolorselect">
-            <label for="templatecolor7" class="bg-dark-green" data-title="dark-green"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor11" name="sidebarcolorselect">
-            <label for="templatecolor11" class="bg-teal" data-title="teal"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor12" name="sidebarcolorselect">
-            <label for="templatecolor12" class="bg-skyblue" data-title="skyblue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor10" name="sidebarcolorselect">
-            <label for="templatecolor10" class="bg-blue" data-title="blue"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor9" name="sidebarcolorselect">
-            <label for="templatecolor9" class="bg-purple" data-title="purple"></label>
-        </div>
-        <div class="colorselect">
-            <input type="radio" id="templatecolor14" name="sidebarcolorselect">
-            <label for="templatecolor14" class="bg-gray" data-title="gray"></label>
-        </div>
-
-    </div>
 
 
     <!-- Required jquery and libraries -->
@@ -212,11 +129,10 @@
             return(incidentTypes);
         }
         async function fetchHarbourInfo() {
-            const response = await fetch(`/api/next/harbours?id=${localStorage['harbour_id']}`, { method: 'GET' });
-            const decodedResponse = await response.json();
-            const [harbourInfo] = decodedResponse.results;
-            // console.log('harbourInfo',harbourInfo)
-            return(harbourInfo);
+					const response = await fetch(`/api/getharbour/${localStorage['harbour_id']}`, { method: 'GET' });
+					const decodedResponse = await response.json();
+					const harbourInfo = decodedResponse.data;
+					return(harbourInfo);
         }
 
         async function createIncidentTypesDropdown() {
@@ -268,17 +184,13 @@
         function updateTicketList() {
             fetch("/api/get/securite?user_id=" + localStorage["user"] + "&harbour_id=" + localStorage["harbour_id"], { method: "get" }).then(response => response.json()).then(_data => {
                 var securites = _data.data.sort(dynamicSort("date")).reverse();
-                console.log(securites);
-
                 document.getElementById("tickets").innerHTML = "";
-
-                if (securites[0].id) {
+                if (securites.length > 0) {
                     for (var i = 0; i < securites.length; i++) {
                         if (securites[i].status == "open") {
-                            statusoptions = 'ouvert'
-                        }
-                        else {
-                            statusoptions = 'clôturé'
+													statusoptions = 'ouvert'
+                        } else {
+													statusoptions = 'clôturé'
                         }
 
                         var date_start = new Date(securites[i].date_start);
@@ -354,7 +266,6 @@
             formData.append("harbour_id", localStorage["harbour_id"])
             formData.append("user_id", localStorage["user"])
             fetch("/api/create/securite", { method: "post", body: formData }).then(response => response.json()).then(_data => {
-                console.log(_data);
                 if (_data.success) {
                     console.log(_data);
                     updateTicketList()
@@ -372,5 +283,4 @@
     <!-- __TPL_FOOTER_APP__ -->
     {{element->footer_app.html}}
 </body>
-<!-- Mirrored from maxartkiller.com/website/Nauticspot/setting.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 31 Aug 2020 16:49:14 GMT -->
 </html>

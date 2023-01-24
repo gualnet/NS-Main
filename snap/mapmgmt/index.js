@@ -471,7 +471,7 @@ async function captorPlaceHandler(_req, _res) {
 								 // console.log(sortie);
 									if(!sortie[0]) {
 											console.log("test");
-										 let boat = await STORE.boatmgmt.getBoat({ place_id: place.id });
+										 let boat = await STORE.boatmgmt.getBoats({ place_id: place.id });
 										 //console.log(boat);
 										 let boatId = [];
 											let userId = [];
@@ -875,7 +875,7 @@ exports.plugin =
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
 			const DB_FP = SCHEMA.fortpress;
 
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 			if (findAdminResp.error) {
 				console.error(findAdminResp.error);
 				res.writeHead(500);

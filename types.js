@@ -175,20 +175,21 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 
 /**
  * @typedef T_incident
- * @property {EpochTimeStamp} date - deprec
  * @property {EpochTimeStamp} created_at
- * @property {EpochTimeStamp} updated_at
- * @property {EpochTimeStamp} date_start
+ * @property {EpochTimeStamp} date - deprec
  * @property {EpochTimeStamp} date_end
+ * @property {EpochTimeStamp} date_start
+ * @property {EpochTimeStamp} updated_at
  * @property {string} description
  * @property {string} harbour_id
  * @property {string} id
+ * @property {string} resolution
  * @property {string} status
  * @property {string} token
+ * @property {string} type - one of incidentsTypes enum
  * @property {string} user_id
  * @property {string} zone
- * @property {string} type - one of incidentsTypes enum
- */
+*/
 
 /**
  * @typedef T_erpUser
@@ -261,7 +262,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} id
  * @property {string} title
  * @property {string} user_category ['visitor', 'yachtsman', 'all'],
- * @property {string} notification_link
+ * @property {string} notification_link - not used for notifications via goodbarber
  * @property {string} img
  * @property {string} pjname
  * @property {string} pj
@@ -336,7 +337,6 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 /**
  * @typedef T_event
  * @property {EpochTimeStamp} date - deprec
- * @property {EpochTimeStamp} created_at - deprec
  * @property {EpochTimeStamp} date_end
  * @property {EpochTimeStamp} date_start
  * @property {string} category
@@ -346,6 +346,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} harbour_id
  * @property {string} id
  * @property {string} img
+ * @property {string} pj
  * @property {string} title
  */
 
@@ -381,6 +382,17 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} pj
  * @property {string} pjname
  * @property {string} title
+ */
+
+/**
+ * @typedef T_camera
+ * @property {EpochTimeStamp} created_at
+ * @property {EpochTimeStamp} date - deprec - still used in older objects
+ * @property {EpochTimeStamp} updated_at
+ * @property {string} harbour_id
+ * @property {string} id
+ * @property {string} title
+ * @property {string} url
  */
 
 /**
