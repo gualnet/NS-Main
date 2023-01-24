@@ -385,6 +385,17 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  */
 
 /**
+ * @typedef T_camera
+ * @property {EpochTimeStamp} created_at
+ * @property {EpochTimeStamp} date - deprec - still used in older objects
+ * @property {EpochTimeStamp} updated_at
+ * @property {string} harbour_id
+ * @property {string} id
+ * @property {string} title
+ * @property {string} url
+ */
+
+/**
  * @typedef T_SCHEMA_ODM_MODEL
  * @property {object} link: [FDB],
  * @property {string} collection: 'qrcode',

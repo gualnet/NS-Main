@@ -1,165 +1,215 @@
 const ENUM = require('../lib-js/enums');
+const TYPES = require('../../types');
 const { verifyRoleAccess } = require('../lib-js/verify');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [ROLES.SUPER_ADMIN];
 
-//gestions des cameras
-
-
-//set datatable cols
-var _cameraCol = "camera";
-var _userCol = "user";
-
-
-// set path for img storage
-var path_to_img = path.resolve(path.join(CONF.instance.static, "img"));
-
 //function to sort array
 var dynamicSort = function (property) {
-    var sortOrder = 1;
-    if (property[0] === "-") {
-        sortOrder = -1;
-        property = property.substr(1);
-    }
-    return function (a, b) {
-        /* next line works with strings and numbers,
-         * and you may want to customize it to your needs
-         */
-        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
-        return result * sortOrder;
-    }
-}
-
-//generate id
-function makeid(length) {
-    var result = '';
-    var characters = 'abcdefghijklmnopqrstuvwxyz';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
+	var sortOrder = 1;
+	if (property[0] === "-") {
+		sortOrder = -1;
+		property = property.substr(1);
+	}
+	return function (a, b) {
+		/* next line works with strings and numbers,
+		 * and you may want to customize it to your needs
+		 */
+		var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+		return result * sortOrder;
+	}
 }
 
 function verifyPostReq(_req, _res) {
-    if (!_req.post.title || _req.post.title.length < 1) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Titre requis", "100", "1.0");
-        return false;
-    }
-    if (!_req.post.harbour_id || _req.post.harbour_id.length < 1) {
-        UTILS.httpUtil.dataError(_req, _res, "Error", "Id du port requis", "100", "1.0");
-        return false;
-    }
-    return true;
+	if (!_req.post.title || _req.post.title.length < 1) {
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Titre requis", "100", "1.0");
+		return false;
+	}
+	if (!_req.post.harbour_id || _req.post.harbour_id.length < 1) {
+		UTILS.httpUtil.dataError(_req, _res, "Error", "Id du port requis", "100", "1.0");
+		return false;
+	}
+	return true;
 }
 
-//db functions <
-async function getCameraById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.FindById(_cameraCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+/* ************** */
+/* DB HANDLERS V2 */
 
-async function getCamera() {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_cameraCol, {}, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+/**
+ * 
+ * @param {Partial<TYPES.T_camera>} where 
+ * @returns {Promise<TYPES.T_camera[]>}
+ */
+const getCamerasV2 = async (where) => {
+	console.log('===getCamerasV2===');
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 
-async function getCameraByHarbourId(_harbour_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Find(_cameraCol, { harbour_id: _harbour_id }, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+	console.log('Search cameras where: ', where);
+	const getCamerasV2Resp = await DB_NS.camera.find(where);
+	if (getCamerasV2Resp.error) {
+		throw new Error(getCamerasV2Resp.message, { cause: getCamerasV2Resp });
+	}
 
-async function delCamera(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Delete(_cameraCol, { id: _id }, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+	const cameras = getCamerasV2Resp.data;
+	console.log(`Found ${cameras.length} camera(s) items`);
+	return cameras;
+};
 
-async function createCamera(_obj) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Create(_cameraCol, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
+/**
+ * 
+ * @param {Omit<TYPES.T_camera, "id">} updates 
+ * @returns {Promise<TYPES.T_camera>}
+ */
+const createCamerasV2 = async (updates = {}) => {
+	console.log('====createCamerasV2====');
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
 
-async function updateCamera(_obj) {
-    return new Promise(resolve => {
-        STORE.db.linkdb.Update(_cameraCol, { id: _obj.id }, _obj, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-async function getAdminById(_id) {
-    return new Promise(resolve => {
-        STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-            if (_data)
-                resolve(_data);
-            else
-                resolve(_err);
-        });
-    });
-}
-// >
+	const createCameraResp = await DB_NS.camera.create(updates);
+	if (createCameraResp.error) {
+		console.error(createCameraResp);
+		throw new Error(createCameraResp.message, { cause: createCameraResp });
+	}
+	const createdCamera = createCameraResp.data;
+	console.log(`Created camera:`, createdCamera);
+	return createdCamera;
+};
+
+/**
+ * 
+ * @param {Pick<TYPES.T_camera, "id"|"category"|"harbour_id"|"title">} where 
+ * @param {Partial<TYPES.T_camera>} updates 
+ * @returns {Promise<TYPES.T_camera[]>}
+ */
+const updateCamerasV2 = async (where, updates) => {
+	console.log('====updateCameraV2====');
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+	console.log('Update cameras where: ', where);
+	if (Object.keys(where).length !== 1 || !where.id) {
+		throw new Error('Wrong parameter: ');
+	}
+
+	console.log('Update cameras with: ', updates);
+	const updateCameraResp = await DB_NS.camera.update(where, updates);
+	if (updateCameraResp.error) {
+		throw new Error(updateCameraResp.message, { cause: updateCameraResp });
+	}
+	const cameras = updateCameraResp.data;
+	console.log(`${cameras.length} camera(s) Updated`);
+	return cameras;
+};
+
+/**
+ * 
+ * @param {Pick<TYPES.T_camera, "id"|"category"|"harbour_id"|"title">} where 
+ * @returns {Promise<TYPES.T_camera[]>}
+ */
+const deleteCamerasV2 = async (where = {}) => {
+	console.log('====deleteCamerasV2====');
+
+	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+	const DB_NS = SCHEMA.NAUTICSPOT;
+
+	if (Object.keys(where).length !== 1 || !where.id) {
+		throw new Error('Wrong parameter: ' + where);
+	}
+
+	console.log('Delte camera where: ', where);
+	const deleteCameraResp = await DB_NS.camera.delete(where);
+	if (deleteCameraResp.error) {
+		console.error(deleteCameraResp);
+		throw new Error(deleteCameraResp.message, { cause: deleteCameraResp });
+	}
+	const deletedCamera = deleteCameraResp.data;
+	console.log(`Deleted ${deletedCamera.length} camera(s) items`, deletedCamera);
+	return deletedCamera;
+};
+
+/* DB HANDLERS V2 */
+/* ************** */
+
+/* ************** */
+/* API HANDLERS */
 
 async function getCameraFromHarbourHandler(_req, _res) {
-    var camera = await getCameraByHarbourId(_req.param.harbour_id)
-    camera = camera.sort(dynamicSort("date")).reverse();
-    UTILS.httpUtil.dataSuccess(_req, _res, "success", camera);
-    return;
-}
+	let camera = await getCamerasV2({ harbour_id: _req.param.harbour_id });
+	camera = camera.sort(dynamicSort("date")).reverse();
+	UTILS.httpUtil.dataSuccess(_req, _res, "success", camera);
+	return;
+};
 
+/* API HANDLERS */
+/* ************** */
 
-exports.router =
-    [
-        {
-            route: "/api/camera/:harbour_id",
-            handler: getCameraFromHarbourHandler,
-            method: "GET",
-        },
-    ];
+/* *************** */
+/* PLUGIN HANDLERS */
+
+const pluginPostCreateHandler = async (req, res) => {
+	try {
+		if (!verifyPostReq(req, res)) {
+			return;
+		}
+
+		/**@type {Omit<TYPES.T_camera, "id">} */
+		const newCamera = {
+			created_at: req.post.created_at || Date.now(),
+			harbour_id: req.post.harbour_id || null,
+			title: req.post.title || null,
+			updated_at: req.post.updated_at || null,
+			url: req.post.url || null,
+		};
+		const createdCamera = await createCamerasV2(newCamera);
+		console.log('createdCamera',createdCamera);
+		UTILS.httpUtil.dataSuccess(req, res, "Camera créé", "1.0");
+	} catch (error) {
+		console.error(error);
+		UTILS.httpUtil.dataError(req, res, "Erreur", "Internal Server Error", "500", "1.0");
+	}
+};
+
+const pluginPostUpdateHandler = async (req, res) => {
+	console.log('===pluginPostUpdateHandler===')
+	try {
+		if (!verifyPostReq(req, res)) {
+			return;
+		}
+		const camera = await getCamerasV2({ id: req.post.id });
+		/**@type {Omit<TYPES.T_camera, "id">} */
+		const cameraUpdates = { ...req.post };
+		delete cameraUpdates.id;
+		const updatedCamera = await updateCamerasV2({ id: req.post.id }, cameraUpdates);
+		console.log('updatedCamera',updatedCamera)
+		UTILS.httpUtil.dataSuccess(req, res, "Camera mis à jour", "1.0");
+	} catch (error) {
+		console.error(error)
+		UTILS.httpUtil.dataError(req, res, "Erreur", "Erreur lors de la mise a jour de la camera", "500", "1.0");
+	}
+};
+
+/* PLUGIN HANDLERS */
+/* *************** */
+
+exports.router = [
+	{
+		route: "/api/camera/:harbour_id",
+		handler: getCameraFromHarbourHandler,
+		method: "GET",
+	},
+];
 
 exports.plugin = {
 	title: "Gestion des caméras",
 	desc: "",
 	handler: async (req, res) => {
-		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-		const DB_NS = SCHEMA.NAUTICSPOT;
+		console.log('CAMERA PLUGIN HANDLER')
+		console.log('req.post',req.post)
 		/**@type {TYPES.T_SCHEMA['fortpress']} */
 		const DB_FP = SCHEMA.fortpress;
-		
+
 		//get user from FORTPRESS db <
-		// var admin = await getAdminById(req.userCookie.data.id);
 		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
@@ -173,7 +223,6 @@ exports.plugin = {
 			return;
 		}
 		const admin = findAdminResp.data[0];
-
 
 		var _type = admin.data.type;
 		var _role = admin.role;
@@ -194,28 +243,20 @@ exports.plugin = {
 
 		if (req.method == "GET") {
 			if (req.get.mode && req.get.mode == "delete" && req.get.camera_id) {
-				var promise = await delCamera(req.get.camera_id);
-			}
-			else if (req.get.camera_id) {
-				await getCameraById(req.get.camera_id);
+				try {
+					await deleteCamerasV2({ id: req.get.camera_id });
+				} catch (error) {
+					UTILS.httpUtil.dataError(req, res, "Erreur", "Erreur lors de la suppression de la camera", "1.0");
+					return;
+				}
 			}
 		}
 		if (req.method == "POST") {
 			if (req.post.id) {
-
-				if (verifyPostReq(req, res)) {
-					if (typeof (await updateCamera(req.post)) != "string") {
-						UTILS.httpUtil.dataSuccess(req, res, "Camera mis à jour", "1.0");
-						return;
-					}
-				}
+				await pluginPostUpdateHandler(req, res);
 			}
 			else {
-				req.post.date = Date.now();
-				if (typeof (await createCamera(req.post)) != "string") {
-					UTILS.httpUtil.dataSuccess(req, res, "Camera créé", "1.0");
-					return;
-				}
+				await pluginPostCreateHandler(req, res);
 			}
 		}
 		else {
@@ -227,17 +268,17 @@ exports.plugin = {
 			var _cameras = [];
 			if (_role == "user") {
 				for (var i = 0; i < _harbour_id.length; i++) {
-					_cameras = _cameras.concat(await getCameraByHarbourId(_harbour_id[i]));
+					_cameras = _cameras.concat(await getCamerasV2({ id: _harbour_id[i] }));
 				}
 			}
 			else if (_role == "admin")
-				_cameras = await getCamera();
+				_cameras = await getCamerasV2({});
 
 
 			//modify html dynamically <
 			var _cameraGen = "";
 			for (var i = 0; i < _cameras.length; i++) {
-				var currentHarbour = await STORE.harbourmgmt.getHarbourById(_cameras[i].harbour_id);
+				const [currentHarbour] = await STORE.harbourmgmt.getHarbours({ id: _cameras[i].harbour_id });
 				_cameraGen += _cameraHtml.replace(/__ID__/g, _cameras[i].id)
 					.replace(/__FORMID__/g, _cameras[i].id.replace(/\./g, "_"))
 					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
@@ -256,7 +297,7 @@ exports.plugin = {
 					+ '<label class="form-label">Sélection du port</label>'
 					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
 
-				const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
+				const getHarbourPromises = await _harbour_id.map(harbourId => STORE.harbourmgmt.getHarbours({ id: harbourId }));
 				const userHarbours = await Promise.all(getHarbourPromises);
 				userHarbours.map(userHarbour => {
 					harbour_select += '<option value="' + userHarbour.id + '">' + userHarbour.name + '</option>';
@@ -268,7 +309,7 @@ exports.plugin = {
 					+ '<div class= "form-group" >'
 					+ '<label class="form-label">Sélection du port</label>'
 					+ '<select class="form-control" style="width:250px;" name="harbour_id">';
-				userHarbours = await STORE.harbourmgmt.getHarbour();
+				userHarbours = await STORE.harbourmgmt.getHarbours({});
 				userHarbours.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
 
 				for (var i = 0; i < userHarbours.length; i++) {
@@ -277,7 +318,6 @@ exports.plugin = {
 				harbour_select += '</select></div></div>';
 			}
 			_indexHtml = _indexHtml.replace('__HARBOUR_ID_INPUT__', harbour_select);
-			//>
 
 			//send plugin html page
 			res.setHeader("Content-Type", "text/html");
