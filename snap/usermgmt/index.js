@@ -515,6 +515,8 @@ const resetPasswordRequestHandler = async (req, res) => {
 
 		const userId = user.id;
 		delete user.id;
+		const userEmail = user.email;
+		delete user.email;
 		const updateUserResp = await DB_NS.user.update({ id: userId }, user);
 		if (updateUserResp.error || updateUserResp.data.length < 1) {
 			console.error('[ERROR]', updateUserResp);
@@ -535,7 +537,7 @@ const resetPasswordRequestHandler = async (req, res) => {
 			.replace('__HREF_LINK__', `${OPTION.HOST_BASE_URL}/pwd-recover/?token=${user.resetPwdToken}`)
 		const mailerResponse = STORE.mailjet.sendMailRaw(
 			{ email: OPTION.MAILJET_SENDER_EMAIL, name: 'Nauticspot' },
-			{ email: user.email, name: user.first_name },
+			{ email: userEmail, name: user.first_name },
 			{ subject: 'Récupération du mot de passe', HTMLPart: emailTemplate }
 		);
 
@@ -575,6 +577,7 @@ const setNewPasswordHandler = async (req, res) => {
 		user.resetPwdToken = null;
 		const userId = user.id;
 		delete user.id;
+		delete user.email;
 		const updatedUser = await DB_NS.user.update({ id: userId }, user);
 		if (updatedUser.error) {
 			throw new Error(updatedUser.error, { cause: { httpCode: 500 } });
