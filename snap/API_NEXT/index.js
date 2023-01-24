@@ -84,7 +84,7 @@ const getUsersHandler = async (req, res) => {
 
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
-		const findUserResp = await DB_NS.user.find(searchOpt, { raw: 1 });
+		const findUserResp = await DB_NS.user.find(searchOpt);
 		if (findUserResp.error) {
 			throw new Error(findUserResp.error);
 		}
@@ -190,7 +190,7 @@ const deleteUsersHandler = async (req, res) => {
 
 		const searchObj = { ...req.get };
 
-		const deleteUserResp = await DB_NS.user.delete(searchObj, { raw: 1 });
+		const deleteUserResp = await DB_NS.user.delete(searchObj);
 		if (deleteUserResp.error) {
 			throw new Error(deleteUserResp.error);
 		}
@@ -225,7 +225,7 @@ const getBoatsHandler = async (req, res) => {
 		// /** @type {Array<TYPES.T_user>} */
 		// const boats = await getElements(TABLES.BOATS, searchOpt);
 
-		const findBoatResp = await DB_NS.boat.find(searchOpt, { raw: 1 });
+		const findBoatResp = await DB_NS.boat.find(searchOpt);
 		console.log('findBoatResp',findBoatResp)
 		if (findBoatResp.error) {
 			throw new Error(findBoatResp.error);
@@ -300,7 +300,7 @@ const updateBoatsHandler = async (req, res) => {
 			throw new(Error('You must specify at least one search param'));
 		}
 
-		const updateBoatResp = await DB_NS.boat.update(searchObj, updateObj, { raw: 1 });
+		const updateBoatResp = await DB_NS.boat.update(searchObj, updateObj);
 		if (updateBoatResp.error) {
 			throw new Error(updateBoatResp.message, { cause: updateBoatResp });
 		}
@@ -335,7 +335,7 @@ const deleteBoatsHandler = async (req, res) => {
 		// /**@type {Array<TYPES.T_boat>} */
 		// const deletedObj = await deleteElement(TABLES.BOATS, searchObj);
 
-		const deleteUserResp = await DB_NS.boat.delete(searchObj, { raw: 1 });
+		const deleteUserResp = await DB_NS.boat.delete(searchObj);
 		if (deleteUserResp.error) {
 			throw new Error(deleteUserResp.error);
 		}
@@ -927,7 +927,7 @@ const getMeteoHandler = async (req, res) => {
 		const DB_NS = SCHEMA.NAUTICSPOT;
 
 		const item = req.get;
-		const findMeteoResp = await DB_NS.weather.find(item, { raw: 1 });
+		const findMeteoResp = await DB_NS.weather.find(item);
 		console.log('findMeteoResp', findMeteoResp);
 		if (findMeteoResp.error) {
 			throw new Error(findMeteoResp.message, { cause: findMeteoResp });
@@ -959,7 +959,7 @@ const updateMeteoHandler = async (req, res) => {
 		const updateObj = { ...req.body };
 
 		/**@type {TYPES.T_offer} */
-		const updateMeteoResp = await DB_NS.weather.update(searchObj, updateObj, { raw: 1 });
+		const updateMeteoResp = await DB_NS.weather.update(searchObj, updateObj);
 		console.log('updateMeteoResp', updateMeteoResp);
 		if (updateMeteoResp.error) {
 			throw new Error(updateMeteoResp.message, { cause: updateMeteoResp });

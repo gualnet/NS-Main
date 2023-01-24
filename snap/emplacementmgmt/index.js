@@ -333,7 +333,7 @@ exports.plugin =
 			const DB_FP = SCHEMA.fortpress;
 
 			// var admin = await getAdminById(req.userCookie.data.id);
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 			if (findAdminResp.error) {
 				console.error(findAdminResp.error);
 				res.writeHead(500);

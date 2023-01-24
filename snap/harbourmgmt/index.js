@@ -155,7 +155,6 @@ const getHarboursV2 = async (where = {}) => {
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	// console.info('[INFO] find harbours where:', where);
-	// const findHarboursResp = await DB_NS.harbour.find(where, { raw: 1 });
 	const findHarboursResp = await DB_NS.harbour.find(where);
 	if (findHarboursResp.error) {
 		throw new Error(findHarboursResp.message, { cause: findHarboursResp });
@@ -357,7 +356,7 @@ exports.plugin =
 			/**@type {TYPES.T_SCHEMA['fortpress']} */
 			const DB_FP = SCHEMA.fortpress;
 
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: true });
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
 			if (findAdminResp.error) {
 				console.error(findAdminResp.error);
 				res.writeHead(500);
