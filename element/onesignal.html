@@ -43,26 +43,26 @@
         }).catch((e) => console.error(e))
     }
     
-    if(osid != "") {
-        if (localStorage['user']) {
-            fetch("/api/register/onesignal/userid?userid=" + localStorage['user'] + "&onesignal_userid=" + osid + "&harbourid=" + localStorage["harbourid"]).then(response => response.json()).then(data => {
-                console.log(data);
-                if (data.data[0].onesignal_userid) {
-                    localStorage['onesignal_userid'] = osid;
-                    localStorage['user'] = data.data[0].id;
-                }
-            }).catch((error) => {console.log(error);});
-        }
-        else {
-            fetch("/api/register/onesignal/userid?onesignal_userid=" + osid + "&harbourid=" + localStorage["harbourid"]).then(response => response.json()).then(data => {
-                console.log(data);
-                if (data.data[0].onesignal_userid) {
-                    localStorage['onesignal_userid'] = osid;
-                    localStorage['user'] = data.data[0].id;
-                }
-            }).catch((error) => {console.log(error);});
-        }
-    }
+    // if(osid != "") {
+    //     if (localStorage['user']) {
+    //         fetch("/api/register/onesignal/userid?userid=" + localStorage['user'] + "&onesignal_userid=" + osid + "&harbourid=" + localStorage["harbourid"]).then(response => response.json()).then(data => {
+    //             console.log(data);
+    //             if (data.data[0].onesignal_userid) {
+    //                 localStorage['onesignal_userid'] = osid;
+    //                 localStorage['user'] = data.data[0].id;
+    //             }
+    //         }).catch((error) => {console.log(error);});
+    //     }
+    //     else {
+    //         fetch("/api/register/onesignal/userid?onesignal_userid=" + osid + "&harbourid=" + localStorage["harbourid"]).then(response => response.json()).then(data => {
+    //             console.log(data);
+    //             if (data.data[0].onesignal_userid) {
+    //                 localStorage['onesignal_userid'] = osid;
+    //                 localStorage['user'] = data.data[0].id;
+    //             }
+    //         }).catch((error) => {console.log(error);});
+    //     }
+    // }
                 /*});
 });
 */
