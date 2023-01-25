@@ -625,7 +625,7 @@
 
         fetch("/api/getharbour/" + localStorage['harbour_id']).then(response => response.json()).then(_data => {
             fetch("/api/weather/coord?latitude=" + _data.data.latitude + "&longitude=" + _data.data.longitude).then(response => response.json()).then(_data => {
-                _data = JSON.parse(_data.data.data);
+							_data = JSON.parse(_data.data.data);
                 var weather = _data.data.weather;
                 console.log(weather);
                 var date = new Date();
@@ -813,9 +813,6 @@
                 }
                 document.getElementById("weather_card").setAttribute("style", "background-image: url('" + selectedImg + "');background-position: center;background-size: auto 100%;");
 
-
-
-                //document.getElementById("meteo_desc").innerHTML = (weather[0].hourly[hour].lang_fr[0].value);
                 var moonPhase;
                 var moonPhaseImg;
                 switch (weather[0].astronomy[0].moon_phase) {
@@ -853,9 +850,7 @@
                         break;
                 }
                 var tide_data = weather[0].tides[0].tide_data;
-                console.log(tide_data);
                 for (var i = 0; i < tide_data.length; i++) {
-                    console.log(tide_data[i]);
                     if (tide_data[i].tide_type == "LOW") tide_data[i].tide_type = 'Marée B';
                     else tide_data[i].tide_type = 'Marée H';
 
@@ -912,18 +907,26 @@
                 document.getElementById("hour_three_speed").innerHTML = Math.trunc(hourThreeSpeed);
                 document.getElementById("hour_three_max_speed").innerHTML = windSpeeds[2];
 
-                document.getElementById("tide_hone").innerHTML = tide_data[0].tideDateTime;
-                document.getElementById("tide_type_hone").innerHTML = tide_data[0].tide_type;
-                document.getElementById("tide_height_hone").innerHTML = tide_data[0].tideHeight_mt;
-                document.getElementById("tide_bone").innerHTML = tide_data[1].tideDateTime;
-                document.getElementById("tide_type_bone").innerHTML = tide_data[1].tide_type;
-                document.getElementById("tide_height_bone").innerHTML = tide_data[1].tideHeight_mt;
-                document.getElementById("tide_htwo").innerHTML = tide_data[2].tideDateTime;
-                document.getElementById("tide_type_htwo").innerHTML = tide_data[2].tide_type;
-                document.getElementById("tide_height_htwo").innerHTML = tide_data[2].tideHeight_mt;
-                document.getElementById("tide_btwo").innerHTML = tide_data[3].tideDateTime;
-                document.getElementById("tide_type_btwo").innerHTML = tide_data[3].tide_type;
-                document.getElementById("tide_height_btwo").innerHTML = tide_data[3].tideHeight_mt;
+                document.getElementById("tide_hone").innerHTML = tide_data[0]?.tideDateTime || '-';
+                document.getElementById("tide_type_hone").innerHTML = tide_data[0]?.tide_type || '-';
+                document.getElementById("tide_height_hone").innerHTML = tide_data[0]?.tideHeight_mt || '-';
+
+                document.getElementById("tide_bone").innerHTML = tide_data[1]?.tideDateTime || '-';
+                document.getElementById("tide_type_bone").innerHTML = tide_data[1]?.tide_type || '-';
+                document.getElementById("tide_height_bone").innerHTML = tide_data[1]?.tideHeight_mt || '-';
+
+                document.getElementById("tide_htwo").innerHTML = tide_data[2]?.tideDateTime || '-';
+                document.getElementById("tide_type_htwo").innerHTML = tide_data[2]?.tide_type || '-';
+                document.getElementById("tide_height_htwo").innerHTML = tide_data[2]?.tideHeight_mt || '-';
+
+								if (tide_data[3]) {
+									document.getElementById("tide_btwo").innerHTML = tide_data[3]?.tideDateTime || '-';
+									document.getElementById("tide_type_btwo").innerHTML = tide_data[3]?.tide_type || '-';
+									document.getElementById("tide_height_btwo").innerHTML = tide_data[3]?.tideHeight_mt;
+								} else {
+									console.warn('document.getElementById("tide_height_btwo").parentNode',document.getElementById("tide_height_btwo").parentNode)
+									document.getElementById("tide_height_btwo").parentNode.innerHTML = '-';
+								}
                 document.getElementById("moon_img").src = moonPhaseImg;
                 document.getElementById("moon_state").innerHTML = moonPhase;
                 document.getElementById("wave_height").innerHTML = (weather[0].hourly[hour].swellHeight_m);
