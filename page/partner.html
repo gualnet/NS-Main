@@ -256,17 +256,6 @@
 						window.open(url, '_blank');
 					};
 
-					const openWebsiteOnClickHandler = () => {
-						let url = G_PARTNER_WEBSITE_URL;
-						openExternalLink(url);
-					};
-
-					const openAdresseBtnOnClickHandler = () => {
-						let url = G_PARTNER_WEBSITE_URL;
-						openExternalLink(url);
-					};
-					// ! DEV ----------------------------------------------
-
 					const getPartnerImgLink = (subcategory) => {
 						const mapImgToSubcategory = {
 							sos: 'https://res.cloudinary.com/nauticspot/image/upload/v1652953549/Nauticspot-Next/partenaires/SOS_jrboxy.png',
@@ -327,7 +316,7 @@
 							else phoneIconEl.classList.add('btn-off');
 						} else {
 							phoneIconEl.classList.add('btn-off');
-							phoneIconEl.addEventListener('click', (ev) => ev.preventDefault());
+							// phoneIconEl.addEventListener('click', (ev) => ev.preventDefault());
 						}
 
 						const mailIconEl = document.querySelector('#mailIcon');
@@ -337,15 +326,15 @@
 							else mailIconEl.classList.add('btn-off');
 						} else {
 							mailIconEl.classList.add('btn-off');
-							mailIconEl.addEventListener('click', (ev) => ev.preventDefault());
+							// mailIconEl.addEventListener('click', (ev) => ev.preventDefault());
 						}
 						
 						const websiteIconEl = document.querySelector('#websiteIcon');
 						if (partner.website) {
-							openExternalLink(partner.website);
+							websiteIconEl.addEventListener('click', () => openExternalLink(partner.website));
+							;
 						} else {
 							websiteIconEl.classList.add('btn-off');
-							websiteIconEl.addEventListener('click', (ev) => ev.preventDefault());
 						}
 
 						const addressIconEl = document.querySelector('#addressIcon');
