@@ -341,9 +341,9 @@ async function updateUserHandler(_req, _res) {
 		_req.post.prefix = completePhonePrefix(_req.post.prefix);
 	}
 	if (_req.post.token) {
-		const user = await getUsersV2({ token: _req.post.token });
-		if (user[0]) {
-			user = user[0];
+		const users = await getUsersV2({ token: _req.post.token });
+		if (users[0]) {
+			const user = users[0];
 			var update = _req.post;
 			update.prefixed_phone = user.prefix || '';
 			if (user.phone) {
