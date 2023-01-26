@@ -564,10 +564,9 @@ exports.plugin =
 					const resp = await Promise.all(promises);
 					_weathers = resp.flat();
 				} else if (_role == "admin") {
-					_weathers = await getWeathersV2({ harbour_id: 'EefRmEIKrY' });
+					_weathers = await getWeathersV2({});
 				}
-				// ! DEV
-				_weathers = _weathers.splice(0, 50)// ! DEV
+				_weathers = _weathers.splice(0, 500) // limit to speed up the front but should never reach that limit if we keep only the few last days of weather forecasts
 			} catch (error) {
 				console.error(error);
 				res.setHeader("Content-Type", "text/html");
@@ -580,7 +579,6 @@ exports.plugin =
 				var date = new Date(_weathers[i].created_at || _weathers[i].date);
 				var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
 				const [currentHarbour] = await STORE.harbourmgmt.getHarbours({ id: _weathers[i].harbour_id });
-				console.log('currentHarbour',currentHarbour.id)
 				_weatherGen += _weatherHtml.replace(/__ID__/g, _weathers[i].id)
 					.replace(/__FORMID__/g, _weathers[i].id.replace(/\./g, "_"))
 					.replace(/__HARBOUR_NAME__/g, currentHarbour.name)
@@ -637,4 +635,6 @@ exports.plugin =
 	}
 }
 
-exports.store = {};
+exports.store = {
+	create: createWeathersV2,
+};
