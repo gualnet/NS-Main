@@ -12,9 +12,10 @@ let connexion;
 const connectionOnReadyHandler = async () => {
 	console.log('CONNEXION EVENT READY');
 	try {
+		console.log('connection opened successfully');
 		const mailbox = await openBox('INBOX');
 		console.log('mailbox', mailbox);
-		// await fetchMessage('*');
+		await fetchMessage('1:*');
 	} catch (error) {
 		console.log('[ERROR - 00]', error);
 	}
@@ -35,7 +36,7 @@ const connectionOnAlertHandler = (message) => {
  * @param {number} numNewMsgs 
  */
 const connectionOnMailHandler = (numNewMsgs) => {
-	console.log('CONNEXION EVENT ALERT');
+	console.log('CONNEXION EVENT ON MAIL');
 	console.log('numNewMsgs', numNewMsgs);
 }
 
@@ -44,7 +45,7 @@ const connectionOnMailHandler = (numNewMsgs) => {
  * @param {Error} err 
  */
 const connectionOnErrorHandler = (err) => {
-	console.log('CONNEXION EVENT UPDATE');
+	console.log('CONNEXION EVENT ERROR');
 	console.log('Error');
 }
 
@@ -259,21 +260,14 @@ const initialiseImapConnection = () => {
 
 	// init connection
 	console.log('try open connection');
-	imap.connect()
-	console.log('connection opened');
+	const conection = imap.connect()
 	return (imap);
 }
 
 const weatherAutoLoader = async (req, res) => {
 	console.log('ENDPOINT [/api/weather/loader] => weatherAutoLoader');
 	try {
-	    console.log('001')
-		await fetchMessage('1:*');
-		console.log('002')
-
-		// const boxes = await getBoxes();
-		// console.log('BOXES', boxes);
-		// console.log('INBOX', boxes['INBOX'].children);
+		connexion = initialiseImapConnection();
 		res.writeHead(200);
 		res.end(JSON.stringify({ success: true }));
 	} catch (err) {
@@ -281,19 +275,6 @@ const weatherAutoLoader = async (req, res) => {
 		res.writeHead(500);
 		res.end(JSON.stringify(err));
 	}
-};
-
-const createWeatherEntryInDatabase = async (weatherObject) => {
-	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-	const DB_NS = SCHEMA.NAUTICSPOT;
-
-	const createWeatherResp = await DB_NS.weather.create(weatherObject);
-	if (createWeatherResp.error) {
-		throw new Error(createWeatherResp.message, { cause: createWeatherResp });
-	}
-
-	const createdWeather = createWeatherResp.data;
-	return createdWeather;
 };
 
 const HEADER_TABLE = [ // From
@@ -350,7 +331,7 @@ const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHe
 				created_at: Date.now(),
 				updated_at: Date.now(),
 			};
-			promises.push(createWeatherEntryInDatabase(newWeatherObj));
+			promises.push(STORE.weathermgmt.create(newWeatherObj));
 		});
 		const results = await Promise.all(promises);
 		console.log('Weather object created:',results);
@@ -361,19 +342,16 @@ const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHe
 
 exports.onLoad = () => {
 	console.log('SNAP LOADED');
-	connexion = initialiseImapConnection();
 }
 exports.onExit = () => {
 	console.log('SNAP WILL EXIT');
-	console.log('[INFO] Close IMAP connection')
-	connexion.end();
 }
 
 exports.setup = {
 	on: true,
 	title: 'Auto Load Weather Forecast',
 	description: 'Check the weather forcast mail box and upload the forecast for the targeted harbour',
-	version: '0.0.0.a',
+	version: '1.0.0',
 	api: true,
 }
 
