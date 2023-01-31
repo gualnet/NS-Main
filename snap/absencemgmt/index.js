@@ -501,7 +501,7 @@ exports.plugin =
 		const DB_FP = SCHEMA.fortpress;
 
 		//get users from FORTPRESS db <
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: 1 });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);
