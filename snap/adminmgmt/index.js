@@ -390,7 +390,7 @@ exports.plugin =
 		var _harbour_id;
 		let roleBackOffice = ENUM.rolesBackOffice.VISITEUR;
 		if (req.userCookie.data.id) {
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
+			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: 1 });
 			if (findAdminResp.error) {
 				console.error(findAdminResp.error);
 				res.writeHead(500);
@@ -471,7 +471,7 @@ exports.plugin =
 				if (verifyPostReq(req, res)) {
 
 					// verify if login already used
-					const findAdminUserResp = await DB_FP.user.find({ login: req.post.login });
+					const findAdminUserResp = await DB_FP.user.find({ login: req.post.login }, { raw: 1 });
 					if (findAdminUserResp.error) {
 						console.error(findAdminUserResp.error);
 						res.writeHead(500);

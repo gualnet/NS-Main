@@ -361,7 +361,7 @@ const serveIndexPageHandler = async (req, res) => {
 		/**@type {TYPES.T_SCHEMA['fortpress']} */
 		const DB_FP = SCHEMA.fortpress;
 
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: 1 });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);
