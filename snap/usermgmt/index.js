@@ -869,7 +869,7 @@ exports.plugin =
 		console.log('==== usermgmt handler ====')
 		console.log('req.get', req.get)
 		console.log('req.post', req.post)
-		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id });
+		const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: 1 });
 		if (findAdminResp.error) {
 			console.error(findAdminResp.error);
 			res.writeHead(500);
