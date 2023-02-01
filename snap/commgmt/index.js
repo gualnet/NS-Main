@@ -40,62 +40,55 @@ function verifyPostReq(_req, _res) {
  * @param {TYPES.T_communication} notification 
  */
 const sendGoodbarberPushNotification = async (notification) => {
-	try {
-		const harbour = await STORE.harbourmgmt.getHarbours({ id: notification.harbour_id });
-		const entity = await STORE.enititymgmt.getEntityById(harbour.id_entity);
-		if (!entity.gbbAppId || !entity.gbbApiKey) {
-			throw (new Error('Missing Goodbarber auth informations'))
+	const [harbour] = await STORE.harbourmgmt.getHarbours({ id: notification.harbour_id });
+	const entity = await STORE.enititymgmt.getEntityById(harbour.id_entity);
+	if (!entity.gbbAppId || !entity.gbbApiKey) {
+		throw (new Error('Missing Goodbarber auth informations'))
+	}
+
+	// limit text to the first 200 chars.
+	const text = notification?.title?.length > 200 ? `${notification?.title.slice(0, 200)}...` : notification.title;
+	let msg = '';
+
+	// is there many harbours within the entity and adapt the notification message accordingly
+	const entityHarbours = await STORE.harbourmgmt.getHarbours({ id_entity: entity.id });
+	if (entityHarbours.length > 1) {
+		msg = `${harbour.name}: ${text}`;
+	} else {
+		const TRANSLATE_EVENT_TYPE = {
+			"other": "Autre",
+			"weather": "Météo",
+			"event": "Événement",
+			"maintenance": "Travaux",
+			"security": "Sécurité",
 		}
-
-		// limit text to the first 200 chars.
-		const text = notification?.title?.length > 200 ? `${notification?.title.slice(0, 200)}...` : notification.title;
-		let msg = '';
-
-		// is there many harbours within the entity and adapt the notification message accordingly
-		const entityHarbours = await STORE.API_NEXT.getElements(ENUM.TABLES.HARBOURS, { id_entity: entity.id });
-		if (entityHarbours.length > 1) {
-			msg = `${harbour.name}: ${text}`;
-		} else {
-			const TRANSLATE_EVENT_TYPE = {
-				"other": "Autre",
-				"weather": "Météo",
-				"event": "Événement",
-				"maintenance": "Travaux",
-				"security": "Sécurité",
-			}
-			const eventType = TRANSLATE_EVENT_TYPE[notification.category.toLocaleLowerCase()];
-			msg = `${eventType}: ${text}`;
+		const eventType = TRANSLATE_EVENT_TYPE[notification.category.toLocaleLowerCase()];
+		msg = `${eventType}: ${text}`;
+	}
+	const response = await fetch(
+		`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
+		{
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json',
+				token: entity.gbbApiKey,
+			},
+			body: JSON.stringify({
+				platform: 'all',
+				message: msg,
+			}),
 		}
+	);
 
-		const response = await fetch(
-			`https://classic.goodbarber.dev/publicapi/v1/general/push/${entity.gbbAppId}/`,
-			{
-				method: 'POST',
-				headers: {
-					'content-type': 'application/json',
-					token: entity.gbbApiKey,
-				},
-				body: JSON.stringify({
-					platform: 'all',
-					message: msg,
-				}),
-			}
-		);
-
-		if (response.ok) {
-			const resp = await response.json();
-			console.log('resp', resp)
-			return (true);
-		} else {
-			console.error('Err ', response)
-			const resp = await response?.json();
-			console.error('Err resp', resp)
-			throw (new Error(response.error_description));
-		}
-	} catch (error) {
-		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'commgmt' })
-		throw error;
+	if (response.ok) {
+		const resp = await response.json();
+		console.log('resp', resp)
+		return (true);
+	} else {
+		console.error('Err ', response)
+		const resp = await response?.json();
+		console.error('Err resp', resp)
+		throw (new Error(response.error_description));
 	}
 };
 
@@ -350,11 +343,7 @@ const pluginPostCreateHandler = async (req, res) => {
 			newCom.cloudinary_pj_public_id = upload.public_id;
 		}
 
-		const isPushSent = await sendGoodbarberPushNotification(newCom).catch((err) => {
-			console.error('[ERROR]', err)
-			UTILS.httpUtil.dataError(req, res, "erreur lors de l'envoi de la notification", "1.0");
-			return;
-		})
+		const isPushSent = await sendGoodbarberPushNotification(newCom);
 		if (!isPushSent) {
 			throw new Error('Push Notification not sent !');
 		}
@@ -553,7 +542,7 @@ exports.plugin =
 			else if (_role == "admin") {
 				_Coms = await getComsV2({});
 				// ! DEV
-				_Coms = _Coms.splice(0, 50); // ! DEV
+				_Coms = _Coms.splice(0, 100); // ! DEV
 			}
 
 			const harbousMapById = await STORE.harbourmgmt.getAllHarboursMappedById();
@@ -590,7 +579,7 @@ exports.plugin =
 					.replace(/__HARBOUR_NAME__/g, currentHarbour?.name)
 					.replace(/__HARBOUR_ID__/g, currentHarbour?.id)
 					.replace(/__CATEGORY__/g, _Coms[i].category)
-					.replace(/__USER_CATEGORY__/g, _Coms[i].user_category)
+					.replace(/__USER_CATEGORY__/g, _Coms[i].user_category || '')
 					.replace(/__EDITOR_ID__/g, "editor_" + _Coms[i].id.replace(/\./g, "_"))
 					.replace(/__MESSAGE__/g, _Coms[i].message)
 					.replace(/__LINK_NAME__/g, _Coms[i].link_name)
