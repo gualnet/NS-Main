@@ -112,6 +112,7 @@ const createNewsV2 = async (obj) => {
 
 	const createNewsResp = await DB_NS.news.create(obj);
 	if (createNewsResp.error) {
+		console.error(createNewsResp);
 		throw new Error(createNewsResp, { cause: createNewsResp });
 	}
 	const news = createNewsResp.data;
