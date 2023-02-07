@@ -19,7 +19,7 @@
 				<div class="col-auto px-0">
 				</div>
 				<div class="text-left col align-self-center">
-					<h5>Profil</h5>
+					<h5>{{lang->setting.page_title}}</h5>
 				</div>
 				<div class="ml-auto col-auto align-self-center">
 
@@ -31,56 +31,56 @@
 
 
 		<div class="container mt-4" id="profil_setting">
-			<h6>Bateau</h6>
+			<h6>{{lang->setting.form_title_1}}</h6>
 			<form id="boat_form" method="post" autocomplete="off">
 				<div class="card mt-3 mb-4">
 					<div class="card-body">
 						<div class="form-group floating-form-group">
 							<div class="form-group floating-form-group">
-								<label class="text-muted" for="category-select">Ponton</label>
+								<label class="text-muted" for="category-select">{{lang->setting.form_field_ponton}}</label>
 								<select name="ponton_id" class="form-control" id="ponton-select">
 								</select>
 							</div>
 							<div class="form-group floating-form-group">
-								<label class="text-muted" for="category-select">Numéro de place</label>
+								<label class="text-muted" for="category-select">{{lang->setting.place_number}}</label>
 								<select name="place_id" class="form-control" id="place-select">
 								</select>
 							</div>
 						</div>
 						<div class="form-group floating-form-group active">
 							<input id="name" name="name" type="text" class="form-control floating-input" required>
-							<label class="floating-label">Nom du bateau</label>
+							<label class="floating-label">{{lang->setting.form_boat_name</label>
 						</div>
 						<div class="form-group floating-form-group active">
 							<input id="immatriculation" name="immatriculation" type="text" class="form-control floating-input"
 								required>
-							<label class="floating-label">Immatriculation</label>
+							<label class="floating-label">{{lang->setting.form_ammat}}</label>
 						</div>
 						<div class="form-group floating-form-group active">
 							<input id="longueur" name="longueur" type="number" class="form-control floating-input" required>
-							<label class="floating-label">Longueur (en m)</label>
+							<label class="floating-label">{{lang->setting.form_length}}</label>
 						</div>
 						<div class="form-group floating-form-group active">
 							<input id="largeur" name="largeur" type="number" class="form-control floating-input" required>
-							<label class="floating-label">Largeur (en m)</label>
+							<label class="floating-label">{{lang->setting.form_width}}</label>
 						</div>
 						<div class="form-group floating-form-group active">
 							<input id="tirant_eau" name="tirant_eau" type="number" class="form-control floating-input" required>
-							<label class="floating-label">Tirant d'eau (en m)</label>
+							<label class="floating-label">{{lang->setting.form_draught}}</label>
 						</div>
 						<input name="id" id="boat_id" type="text" class="form-control floating-input" required hidden>
 						<div id="updateBoatError"> </div>
-						<button type="button" class="btn btn-block btn-info btn-lg" onclick="sendBoatForm();">enregistrer</button>
+						<button type="button" class="btn btn-block btn-info btn-lg" onclick="sendBoatForm();">{{lang->setting.action_btn_save}}</button>
 						<button id="delboatbutton" type="button" class="btn btn-block btn-danger btn-lg"
-							onclick="deleteBoatForm();">supprimer</button>
+							onclick="deleteBoatForm();">{{lang->setting.action_btn_delete</button>
 					</div>
 				</div>
 			</form>
 
 			<button id="add_boat_button" type="button" class="btn btn-block btn-info btn-lg mb-4"
-				onclick="activateBoatForm();" hidden>ajouter un bateau</button>
+				onclick="activateBoatForm();" hidden>{{lang->setting.action_btn_add}}</button>
 
-			<h6>Informations utilisateur</h6>
+			<h6>{{lang->setting.form_title_2}}</h6>
 			<form id="profil_form" method="post" autocomplete="off">
 				<div class="card mt-3 mb-4" id="account_info">
 					<div class="card-body">
@@ -88,7 +88,7 @@
 							<div class="col-12 col-md-6">
 								<div class="form-group floating-form-group active">
 									<input id="first_name" name="first_name" type="text" class="form-control floating-input" value="">
-									<label class="floating-label">Prénom</label>
+									<label class="floating-label">{{lang->setting.form_first_name}}</label>
 								</div>
 							</div>
 						</div>
@@ -96,7 +96,7 @@
 							<div class="col-12 col-md-6">
 								<div class="form-group floating-form-group active">
 									<input id="last_name" name="last_name" type="text" class="form-control floating-input" value="">
-									<label class="floating-label">Nom</label>
+									<label class="floating-label">{{lang->setting.form_last_name}}</label>
 								</div>
 							</div>
 						</div>
@@ -105,7 +105,7 @@
 								<div class="form-group floating-form-group active">
 									<input id="email" name="email" type="email" class="form-control floating-input" value=""
 										autocomplete="off">
-									<label class="floating-label">Email</label>
+									<label class="floating-label">{{lang->setting.form_email}}</label>
 								</div>
 							</div>
 						</div>
@@ -116,13 +116,13 @@
 										<div class="form-group floating-form-group active">
 											<input id="prefix" name="prefix" type="text" class="form-control floating-input" value=""
 												required>
-											<label class="floating-label">Préfixe</label>
+											<label class="floating-label">{{lang->setting.form_prefix_phone}}</label>
 										</div>
 									</div>
 									<div class="col-9">
 										<div class="form-group floating-form-group active">
 											<input id="phone" name="phone" type="tel" class="form-control floating-input" value="" required>
-											<label class="floating-label">Téléphone mobile</label>
+											<label class="floating-label">{{lang->setting.form_phone_num}}</label>
 										</div>
 									</div>
 								</div>
@@ -167,7 +167,7 @@
                     </div>
                 </div> -->
 
-				<h6 class="mt-3">Changer mot de passe</h6>
+				<h6 class="mt-3">{{lang->setting.form_title_3}}</h6>
 				<div class="card mt-3 mb-4" id="change-pwd-container">
 					<div class="card-body">
 						<div class="row ">
@@ -175,20 +175,20 @@
 								<div class="form-group floating-form-group">
 									<input id="current_password" name="current_password" type="password"
 										class="form-control floating-input" value="">
-									<label class="floating-label">Mot de passe actuel</label>
+									<label class="floating-label">{{lang->setting.form_pwd_current}}</label>
 								</div>
 							</div>
 							<div class="col-12 col-md-6">
 								<div class="form-group floating-form-group">
 									<input id="password" name="password" type="password" class="form-control floating-input" value="">
-									<label class="floating-label">Nouveau mot de passe</label>
+									<label class="floating-label">{{lang->setting.form_pwd_new}}</label>
 								</div>
 							</div>
 							<div class="col-12 col-md-6">
 								<div class="form-group floating-form-group mb-0">
 									<input id="password_confirm" name="password_confirm" type="password"
 										class="form-control floating-input" value="">
-									<label class="floating-label">Confirmer nouveau mot de passe</label>
+									<label class="floating-label">{{lang->setting.form_pwd_confirm}}</label>
 								</div>
 							</div>
 						</div>
@@ -196,14 +196,13 @@
 				</div>
 				<div id="updateError"> </div>
 				<button type="button" class="btn btn-block btn-info btn-lg" id="submit-btn"
-					onclick="sendForm();">valider</button>
+					onclick="sendForm();">{{lang->setting.action_btn_3}}</button>
 			</form>
 			<button id="validate_button" type="button" class="btn btn-block btn-danger btn-lg"
-				onclick="disconnect();">Déconnexion</button>
+				onclick="disconnect();">{{lang->setting.action_btn_4}}</button>
 			<div id="AccountDeletionCtn">
 				<div></div>
-				<button id="deleteBtn" type="button" class="btn btn-block btn-lg" onclick="displayAccountDeletionModal();">Supprimer mon
-					compte</button>
+				<button id="deleteBtn" type="button" class="btn btn-block btn-lg" onclick="displayAccountDeletionModal();">{{lang->setting.action_btn_5}}</button>
 			</div>
 
 		</div>
@@ -218,11 +217,11 @@
 	<div class="myModal hide" id="deleteAccountModal">
 		<div class="cardModal">
 			<div id="modal-text">
-				En cliquant sur le bouton 'Supprimer', votre compte sera supprimé de façon définitive de nos serveurs.
+				{{lang->setting.msg_account_delete_warn}}
 			</div>
 			<div id="modal-btn-ctn">
-				<div id="cancelBtn" onclick="hideAccountDeletionModal()">Annuler</div>
-				<div id="delBtn" onclick="deleteMyAccount()">Supprimer</div>
+				<div id="cancelBtn" onclick="hideAccountDeletionModal()">{{lang->setting.action_btn_6}}</div>
+				<div id="delBtn" onclick="deleteMyAccount()">{{lang->setting.action_btn_7}}</div>
 				<button id="spinnerBtn" class="btn btn-primary hide" type="button">
 					<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
 				</button>
