@@ -133,7 +133,9 @@ const fetchOnMessageHandler = (msg, seqno) => {
 
 		attachments.map(attachment => {
 			if (!attachment.params?.name?.toLowerCase().includes('anglais')
-			&& !attachment.params?.name?.toLowerCase().includes('italien')) {
+			&& !attachment.params?.name?.toLowerCase().includes('italien')
+			&& !attachment.params?.name?.toLowerCase().includes('espagnol')
+			&& !attachment.params?.name?.toLowerCase().includes('allemand')) {
 				console.log(prefix + 'Fetching attachment %s', attachment.params.name);
 				const f = connexion.fetch(attribute.uid, {
 					bodies: [attachment.partID],
