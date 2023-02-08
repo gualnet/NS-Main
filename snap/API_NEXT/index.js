@@ -1041,6 +1041,131 @@ const deleteMeteoHandler = async (req, res) => {
 	}
 };
 
+// ADMIN
+const getAdminHandler = async (req, res) => {
+	try {
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
+
+		const where = req.get;
+		const findAdminsResp = await DB_FP.user.find(where);
+		console.log('findAdminsResp', findAdminsResp);
+		if (findAdminsResp.error) {
+			console.error('findAdminsResp',findAdminsResp)
+			throw new Error(findAdminsResp.message, { cause: findAdminsResp });
+		}
+
+		const admins = findAdminsResp.data;
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: admins.length,
+			admins: admins,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const createAdminHandler = async (req, res) => {
+	try {
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
+
+
+		const query = req.body;
+		console.log('query', query);
+		const createAdminResp = await DB_FP.user.create(query);
+		console.log('createAdminResp', createAdminResp);
+		if (createAdminResp.error) {
+			console.error('createAdminResp',createAdminResp)
+			throw new Error(createAdminResp.message, { cause: createAdminResp });
+		}
+
+		const createdAdmin = createAdminResp.data;
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			createdAdmin,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const updateAdminHandler = async (req, res) => {
+	try {
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
+
+		const where = req.get;
+		console.log('where', where);
+		const updates = req.body;
+		console.log('updates', updates);
+
+		const updateAdminResp = await DB_FP.user.update(where, updates);
+		console.log('updateAdminResp',updateAdminResp);
+		if (updateAdminResp.error) {
+			console.error('updateAdminResp',updateAdminResp);
+			throw new Error(updateAdminResp.message, { cause: updateAdminResp });
+		}
+
+		const updatedAdmins = updateAdminResp.data;
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: updatedAdmins.length,
+			admins: updatedAdmins,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const deleteAdminHandler = async (req, res) => {
+	try {
+		/**@type {TYPES.T_SCHEMA['fortpress']} */
+		const DB_FP = SCHEMA.fortpress;
+
+		const where = req.get;
+		const deleteAdminResp = await DB_FP.user.delete(where);
+		console.log('deleteAdminResp', deleteAdminResp);
+		if (deleteAdminResp.error) {
+			console.error('deleteAdminResp', deleteAdminResp);
+			throw new Error(deleteAdminResp.message, { cause: deleteAdminResp });
+		}
+		const deletedAdmins = deleteAdminResp.data;
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: deletedAdmins.length,
+			admins: deletedAdmins,
+		}));
+	} catch (error) {
+		console.error(error);
+		res.writeHead(500, 'Error', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+}
+
 exports.router = [
 	// USERS
 	{
@@ -1234,6 +1359,31 @@ exports.router = [
 		on: true,
 		route: "/api/next/weathers",
 		handler: deleteMeteoHandler,
+		method: "DELETE",
+	},
+	// ADMINS
+	{
+		on: true,
+		route: "/api/next/admins",
+		handler: getAdminHandler,
+		method: "GET",
+	},
+	{
+		on: true,
+		route: "/api/next/admins",
+		handler: createAdminHandler,
+		method: "POST",
+	},
+	{
+		on: true,
+		route: "/api/next/admins",
+		handler: updateAdminHandler,
+		method: "PUT",
+	},
+	{
+		on: true,
+		route: "/api/next/admins",
+		handler: deleteAdminHandler,
 		method: "DELETE",
 	},
 ];
