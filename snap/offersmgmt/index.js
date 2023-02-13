@@ -73,6 +73,7 @@ const createOffersV2 = async (obj) => {
 
 	const createOffersResp = await DB_NS.offers.create(obj);
 	if (createOffersResp.error) {
+		console.error(createOffersResp);
 		throw new Error(createOffersResp, { cause: createOffersResp });
 	}
 	const offers = createOffersResp.data;
@@ -213,7 +214,7 @@ const updateOfferHandler = async (req, res) => {
 		const DB_NS = SCHEMA.NAUTICSPOT;
 
 		const { offerId } = req.param
-		const offer = {
+		const newOffer = {
 			title: req.body.title || null,
 			description: req.body.description || null,
 			content: req.body.content || null,
@@ -229,8 +230,8 @@ const updateOfferHandler = async (req, res) => {
 			const imgData = req.body.img;
 			const imgFilename = req.field["img"].filename;
 			const uploadDetails = await uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
-			offer.img = uploadDetails.secure_url;
-			offer.cloudinary_img_public_id = uploadDetails.public_id;
+			newOffer.img = uploadDetails.secure_url;
+			newOffer.cloudinary_img_public_id = uploadDetails.public_id;
 		}
 
 		if (req.body.pj && !req.body.pj.includes('https://res.cloudinary.com')) {
@@ -239,11 +240,11 @@ const updateOfferHandler = async (req, res) => {
 			const imgFilename = req.field["img"].filename;
 			if (!newOffer.pjName) newOffer.pjName = imgFilename;
 			const uploadDetails = await uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
-			offer.pj = uploadDetails.secure_url;
-			offer.cloudinary_pj_public_id = uploadDetails.public_id;
+			newOffer.pj = uploadDetails.secure_url;
+			newOffer.cloudinary_pj_public_id = uploadDetails.public_id;
 		}
 
-		const updatedOffers = await updateOffersV2({ id: offerId }, offer);
+		const updatedOffers = await updateOffersV2({ id: offerId }, newOffer);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
