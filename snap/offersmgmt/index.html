@@ -300,6 +300,19 @@
 					body: formData,
 					headers: new Headers({ "Authorization": `Bearer ${localStorage['token']}` }),
 				});
+				const respJson = await resp.json();
+				if (respJson.success === false) {
+					console.error('error', respJson);
+					const errCtnEl = document.querySelector('#harbourError');
+					errCtnEl.style.display = 'flex';
+					errCtnEl.textContent = respJson.error;
+					alert(`Erreur: ${respJson.error}`);
+					setTimeout(() => {
+						errCtnEl.style.display = 'none';
+					}, 2000);
+					return;
+				}
+
 				const offers = await getofferByHarbour()
 				const rows = createOfferRows(offers)
 				displayOffers(rows)
