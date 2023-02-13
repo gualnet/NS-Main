@@ -73,6 +73,7 @@ const createOffersV2 = async (obj) => {
 
 	const createOffersResp = await DB_NS.offers.create(obj);
 	if (createOffersResp.error) {
+		console.error(createOffersResp);
 		throw new Error(createOffersResp, { cause: createOffersResp });
 	}
 	const offers = createOffersResp.data;
@@ -167,12 +168,12 @@ const createOfferHandler = async (req, res) => {
 			newOffer.cloudinary_img_public_id = uploadDetails.public_id;
 		}
 
-		if (newOffer.pj) {
+		if (req.post.pj) {
 			const cloudinaryPath = `Nauticspot-Next/${newOffer.harbour_id}/offers-attachment/`;
-			const imgData = req.post.img;
-			const imgFilename = req.field["img"].filename;
-			if (!newOffer.pjName) newOffer.pjName = imgFilename;
-			const uploadDetails = await uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
+			const pjData = req.body.pj;
+			const pjFilename = req.field["pj"].filename;
+			if (!newOffer.pjName) newOffer.pjName = pjFilename;
+			const uploadDetails = await uploadFileWrapper(pjData, pjFilename, cloudinaryPath);
 			newOffer.pj = uploadDetails.secure_url;
 			newOffer.cloudinary_pj_public_id = uploadDetails.public_id;
 		}
@@ -196,7 +197,6 @@ const createOfferHandler = async (req, res) => {
 		}));
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'offersmgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
 		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -212,38 +212,38 @@ const updateOfferHandler = async (req, res) => {
 		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
 		const DB_NS = SCHEMA.NAUTICSPOT;
 
-		const { offerId } = req.param
-		const offer = {
+		const { offerId } = req.param;
+		/**@type {Omit<TYPES.T_offer, "id">} */
+		const newOffer = {
 			title: req.body.title || null,
 			description: req.body.description || null,
 			content: req.body.content || null,
 			date_start: req.body.date_start || null,
 			date_end: req.body.date_end || null,
-			// img: req.body.img || null,
 			updated_at: new Date().toLocaleString(),
+			pjName: req.body.pjName,
 		}
-
 
 		if (req.body.img && !req.body.img.includes('https://res.cloudinary.com')) {
 			const cloudinaryPath = `Nauticspot-Next/${newOffer.harbour_id}/offers-images/`;
 			const imgData = req.body.img;
 			const imgFilename = req.field["img"].filename;
 			const uploadDetails = await uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
-			offer.img = uploadDetails.secure_url;
-			offer.cloudinary_img_public_id = uploadDetails.public_id;
+			newOffer.img = uploadDetails.secure_url;
+			newOffer.cloudinary_img_public_id = uploadDetails.public_id;
 		}
 
 		if (req.body.pj && !req.body.pj.includes('https://res.cloudinary.com')) {
 			const cloudinaryPath = `Nauticspot-Next/${newOffer.harbour_id}/offers-attachment/`;
-			const imgData = req.body.img;
-			const imgFilename = req.field["img"].filename;
-			if (!newOffer.pjName) newOffer.pjName = imgFilename;
-			const uploadDetails = await uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
-			offer.pj = uploadDetails.secure_url;
-			offer.cloudinary_pj_public_id = uploadDetails.public_id;
+			const pjData = req.body.pj;
+			const pjFilename = req.field["pj"].filename;
+			if (!newOffer.pjName) newOffer.pjName = pjFilename;
+			const uploadDetails = await uploadFileWrapper(pjData, pjFilename, cloudinaryPath);
+			newOffer.pj = uploadDetails.secure_url;
+			newOffer.cloudinary_pj_public_id = uploadDetails.public_id;
 		}
 
-		const updatedOffers = await updateOffersV2({ id: offerId }, offer);
+		const updatedOffers = await updateOffersV2({ id: offerId }, newOffer);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
