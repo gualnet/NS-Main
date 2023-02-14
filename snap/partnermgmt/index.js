@@ -415,7 +415,7 @@ const updatePartnersV2 = async (where, updates) => {
 	const DB_NS = SCHEMA.NAUTICSPOT;
 
 	if (Object.keys(where).length !== 1 || !where.id) {
-		throw new Error('Wrong parameter: ' + where);
+		throw new Error('Wrong parameter: ', { cause: where });
 	}
 
 	console.log('Update partners where: ', where);
@@ -518,7 +518,7 @@ const pluginPostUpdateHandler = async (req, res) => {
 			req.post.website = addProtocolToUrl(req.post.website);
 		}
 		if (!verifyPostReq(req, res)) {
-			return
+			return;
 		}
 		/**@type {Partial<Omit<TYPES.T_partner, "id">>} */
 		const partnerId = req.post.id;
@@ -542,7 +542,7 @@ const pluginPostUpdateHandler = async (req, res) => {
 			}
 		}
 
-		const updatedPartners = await updatePartnersV2({}, partnerUpdates);
+		const updatedPartners = await updatePartnersV2({ id: partnerId }, partnerUpdates);
 		if (updatedPartners.length < 1) {
 			throw new Error('Erreur lors de la mise à jour du partenaire');
 		}
