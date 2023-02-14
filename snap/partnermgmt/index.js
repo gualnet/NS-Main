@@ -536,7 +536,10 @@ const pluginPostUpdateHandler = async (req, res) => {
 
 		//img gesture
 		if (partnerUpdates.img) {
-			var upload = await STORE.cloudinary.uploadFile(partnerUpdates.img, req.field["img"].filename);
+			const cloudinaryPath = `Nauticspot-Next/${currentPartner.harbour_id}/partners/`;
+			const imgData = partnerUpdates.img;
+			const imgFilename = req.field["img"].filename;
+			const upload = await STORE.cloudinary.uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
 			partnerUpdates.img = upload.secure_url;
 			partnerUpdates.cloudinary_img_public_id = upload.public_id;
 			if (currentPartner.cloudinary_img_public_id) {
@@ -659,9 +662,9 @@ exports.plugin =
 
 		if (req.method == "GET") {
 			if (req.get.mode && req.get.mode == "delete" && req.get.partner_id) {
-				const currentPartner = await getPartnersV2({ id: req.get.id });
-				if (currentPartner.cloudinary_img_public_id) {
-					await STORE.cloudinary.deleteFile(currentPartner.cloudinary_img_public_id);
+				const currentPartner = await getPartnersV2({ id: req.get.partner_id });
+				if (currentPartner[0]?.cloudinary_img_public_id) {
+					const deleteRes = await STORE.cloudinary.deleteFile(currentPartner[0].cloudinary_img_public_id);
 				}
 				await deletePartnerV2({ id: req.get.partner_id });
 			}
