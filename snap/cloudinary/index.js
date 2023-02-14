@@ -89,6 +89,20 @@ var deleteFile = async function (_public_id) {
     });
 }
 
+const uploadFileWrapper = async (fileRaw, FileName, cloudinaryPath) => {
+	console.log('Upload attachment on cloudinary');
+	const option = {
+		isFileNameUsed: true,
+		cloudinaryPath,
+	}
+	const upload = await STORE.cloudinary.uploadFile(fileRaw, FileName, "slug", option);
+	if (upload.name === 'Error') {
+		throw new Error(upload.message, { cause: upload });
+	}
+	console.log('Upload attachment OK\n', upload);
+	return upload;
+};
+
 
 function convertToSlug(Text) {
     return Text
@@ -113,5 +127,6 @@ function makeid(length) {
 exports.store =
 {
     uploadFile: uploadFile,
-    deleteFile: deleteFile
+    deleteFile: deleteFile,
+    uploadFileWrapper,
 }
