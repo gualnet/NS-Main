@@ -7,8 +7,8 @@ var path_to_pj = path.resolve();
 //setup cloudinary conf
 cloudinary.config({
     cloud_name: 'nauticspot',
-    api_key: '773372379715883',
-    api_secret: 'L8yt5FsFMTjEU70ktf8emGvwenU',
+    api_key: OPTION.CLOUDINARY_API_KEY,
+    api_secret: OPTION.CLOUDINARY_API_SECRET,
     secure: true
 });
 
