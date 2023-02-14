@@ -12,28 +12,28 @@ const AUTHORIZED_ROLES = [
 	ROLES.AGENT_CAPITAINERIE,
 ];
 
-var path_to_img = path.resolve(path.join(CONF.instance.static, "img", "partner"));
+// var path_to_img = path.resolve(path.join(CONF.instance.static, "img", "partner"));
 
-function makeid(length) {
-	var result = '';
-	var characters = 'abcdefghijklmnopqrstuvwxyz';
-	var charactersLength = characters.length;
-	for (var i = 0; i < length; i++) {
-		result += characters.charAt(Math.floor(Math.random() * charactersLength));
-	}
-	// console.log(result);
-	return result;
-}
+// function makeid(length) {
+// 	var result = '';
+// 	var characters = 'abcdefghijklmnopqrstuvwxyz';
+// 	var charactersLength = characters.length;
+// 	for (var i = 0; i < length; i++) {
+// 		result += characters.charAt(Math.floor(Math.random() * charactersLength));
+// 	}
+// 	// console.log(result);
+// 	return result;
+// }
 
-function validateEmail(email) {
-	const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	return re.test(String(email).toLowerCase());
-}
+// function validateEmail(email) {
+// 	const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+// 	return re.test(String(email).toLowerCase());
+// }
 
-function validatePhone(phone) {
-	const re = /^\d{10}$|^\d{9}$/;
-	return re.test(String(phone).toLowerCase());
-}
+// function validatePhone(phone) {
+// 	const re = /^\d{10}$|^\d{9}$/;
+// 	return re.test(String(phone).toLowerCase());
+// }
 
 function addProtocolToUrl(url) {
 	var patternProtocol = new RegExp('^(https?:\\/\\/)') // protocol
@@ -44,15 +44,15 @@ function addProtocolToUrl(url) {
 	}
 }
 
-function validateUrl(value) {
-	var pattern = new RegExp('^(https?:\\/\\/)' + // protocol
-		'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-		'((\\d{1,3}\\.){3}\\d{1,3}))' + // ip (v4) address
-		'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + //port
-		'(\\?[;&amp;a-z\\d%_.~+=-]*)?' + // query string
-		'(\\#[-a-z\\d_]*)?$', 'i');
-	return pattern.test(value);
-}
+// function validateUrl(value) {
+// 	var pattern = new RegExp('^(https?:\\/\\/)' + // protocol
+// 		'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+// 		'((\\d{1,3}\\.){3}\\d{1,3}))' + // ip (v4) address
+// 		'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + //port
+// 		'(\\?[;&amp;a-z\\d%_.~+=-]*)?' + // query string
+// 		'(\\#[-a-z\\d_]*)?$', 'i');
+// 	return pattern.test(value);
+// }
 
 function completePhonePrefix(prefix) {
 	var patternPrefix = new RegExp(/^\+/)
@@ -493,9 +493,11 @@ const pluginPostCreateHandler = async (req, res) => {
 		}
 
 		//img gesture
-		if (newPartner.img) {
-			console.log('ENTER IMG', newPartner.img)
-			const upload = await STORE.cloudinary.uploadFile(newPartner.img, req.field["img"].filename);
+		if (req.post.img) {
+			const cloudinaryPath = `Nauticspot-Next/${newPartner.harbour_id}/partners/`;
+			const imgData = req.post.img;
+			const imgFilename = req.field["img"].filename;
+			const upload = await STORE.cloudinary.uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
 			newPartner.img = upload.secure_url;
 			newPartner.cloudinary_img_public_id = upload.public_id;
 		}
