@@ -293,7 +293,8 @@ const HEADER_TABLE = [ // From
 	[ 'CAPITAINERIE DE SANTA LUCIA<meteo@nauticspot.fr>', ['Ng.zE6KrNt'] ],
 	[ 'PORT DE PALAVAS LES FLOTS<meteo@nauticspot.fr>', ['NxfYN1MNNY'] ],
 	[ 'PORTS DE THEOULE - FIGUEIRETTE', ['Bl3Zhaqrc7o', 'SxpZalOr9mi'] ],
-// 	[ '', [''] ],
+	[ 'CAPITAINERIE DU CAP D\'AIL', ["BeqfYD1u45"] ],
+	// [ '', [''] ],
 ];
 
 const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHeaders) => {
