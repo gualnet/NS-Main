@@ -118,7 +118,7 @@ const updateAbsenceV2 = async (where, updates) => {
 
 	console.log('Update absences where: ', where);
 	console.log('Update absences with: ', updates);
-	updates.updated_at = new Date.now();
+	updates.updated_at = Date.now();
 	const updateAbsenceResp = await DB_NS.absences.update(where, updates);
 	if (updateAbsenceResp.error) {
 		console.error('[Error]', updateAbsenceResp)
@@ -180,13 +180,24 @@ async function createAbsenceHandler(req, res) {
 		return;
 	}
 
-	const newAbsence = { ...req.post };
+	/**@type {TYPES.T_absence} */
+	const newAbsence = {
+		user_id: req.post.user_id,
+		created_at: req.post.created_at || Date.now(),
+		updated_at: req.post.updated_at || Date.now(),
+		previous_date_end: req.post.previous_date_end || null,
+		previous_date_start: req.post.previous_date_start || null,
+		date_end: req.post.date_end,
+		date_start: req.post.date_start,
+		harbour_id: req.post.harbour_id,
+		boat_id: req.post.boat_id,
+	};
 
-	// newAbsence.date = Date.now();
-	newAbsence.previous_date_start = null;
-	newAbsence.previous_date_end = null;
-	newAbsence.created_at = Date.now();
-	newAbsence.updated_at = newAbsence.created_at;
+	if (!newAbsence.harbour_id) return UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Harbour id missing", "400", "1.0");
+	if (!newAbsence.user_id) return UTILS.httpUtil.dataError(req, res, "Error", "Erreur: User id missing", "400", "1.0");
+	if (!newAbsence.boat_id) return UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Boat id missing", "400", "1.0");
+	if (!newAbsence.date_start) return UTILS.httpUtil.dataError(req, res, "Error", "Erreur: Start date missing", "400", "1.0");
+	if (!newAbsence.date_end) return UTILS.httpUtil.dataError(req, res, "Error", "Erreur: End date missing", "400", "1.0");
 
 	/**@type {TYPES.T_harbour} */
 	var harbour = await STORE.harbourmgmt.getHarbour({ id: req.post.harbour_id });
@@ -249,14 +260,21 @@ async function updateAbsenceHandler(req, res) {
 
 	try {
 		const [absence] = await getAbsencesV2({ id: absence_id });
-		const newAbsence = { ...absence };
+		/**@type {TYPES.T_absence} */
+		const newAbsence = {
+			user_id: req.post.user_id || absence.user_id,
+			created_at: req.post.created_at || absence.created_at,
+			updated_at: Date.now(),
+			previous_date_end: absence.date_end || null,
+			previous_date_start: absence.date_start || null,
+			date_end: newEndDate,
+			date_start: newStartDate,
+			harbour_id: req.post.harbour_id || absence.harbour_id,
+			boat_id: req.post.boat_id || absence.boat_id,
+			// token: req.post.token || ,
+		};
 
-		newAbsence.previous_date_start = newAbsence.date_start;
-		newAbsence.date_start = newStartDate;
-		newAbsence.previous_date_end = newAbsence.date_end;
-		newAbsence.date_end = newEndDate;
-		newAbsence.updated_at = Date.now();
-		const [result] = await updateAbsenceV2({ id: newAbsence.id }, newAbsence);
+		const [result] = await updateAbsenceV2({ id: absence_id }, newAbsence);
 
 		const boats = await STORE.boatmgmt.getBoats({ id: result.boat_id });
 		const boat = boats[0];
@@ -435,10 +453,14 @@ const getBoatByIdWithMemo = async (boatId, boatsMapById) => {
 		return [boatsMapById[boatId], boatsMapById];
 	}
 	// console.log('==> NOT FOUND IN MEMO')
+	/**@type {TYPES.T_boat[]} */
 	const foundBoats = await STORE.boatmgmt.getBoats({ id: boatId });
-	// console.log('==> FOUND FROM DB')
+	// console.log('==> FOUND FROM DB', foundBoats)
 	const boat = foundBoats[0];
-	boatsMapById[boat.id] = boat;
+	if (!boat) {
+		console.error('[ERRROR] BOAT NOT FOUND - an absence is attributed to a boat that does not exists!')
+	}
+	boatsMapById[boatId] = boat;
 
 	return [boat, boatsMapById];
 };
@@ -590,10 +612,11 @@ exports.plugin =
 					_Absences = _Absences.concat(await getAbsencesV2({ harbour_id: _harbour_id[i] }));
 				}
 			}
-			else if (_role == "admin")
-				_Absences = await getAbsencesV2();
+			else if (_role == "admin") {
+				_Absences = await getAbsencesV2({ harbour_id: "4e2cd2p6mt" });
+				// _Absences = _Absences.splice(0, 4);
+			}
 
-			_Absences = _Absences.splice(0, 4);
 
 			//modify html dynamically <
 			var _absenceGen = "";
@@ -630,7 +653,6 @@ exports.plugin =
 				} else {
 					currentUser = undefined;
 				}
-
 				let currentBoat;
 				if (_Absences[i].user_id) {
 					[currentBoat, boatsMapById] = await getBoatByIdWithMemo(_Absences[i].boat_id, boatsMapById);
@@ -639,7 +661,7 @@ exports.plugin =
 				}
 
 				let currentPlace;
-				if (_Absences[i].user_id) {
+				if (_Absences[i].user_id && currentBoat) {
 					[currentPlace, placesMapById] = await getPlaceByIdWithMemo(currentBoat.place_id, placesMapById);
 				} else {
 					currentPlace = undefined;
@@ -657,7 +679,6 @@ exports.plugin =
 					.replace(/__DATETIMEORDER__/g, _Absences[i]?.date)
 			}
 			_indexHtml = _indexHtml.replace("__ABSENCES__", _absenceGen).replace(/undefined/g, '');
-			// >
 
 			//set harbour lists from user role <
 			var userHarbours = [];
