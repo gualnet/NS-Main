@@ -296,13 +296,14 @@ const pluginPostCreateHandler = async (req, res) => {
 			if (!verifyPostReq(req, res)) {
 				return;
 			}
-			// const newEvent = req.post;
+			
 			/**@type {Omit<TYPES.T_event, "id">} */
 			const newEvent = {
 				category: 'event' || null,
 				cloudinary_img_public_id: null,
 				content: req.post.content || null,
-				date: Date.now() || null,
+				created_at: Date.now(),
+				updated_at: Date.now(),
 				date_end: Date.parse(req.post.date_end) || null,
 				date_start: Date.parse(req.post.date_start) || null,
 				description: req.post.description || null,
@@ -310,22 +311,28 @@ const pluginPostCreateHandler = async (req, res) => {
 				img: null,
 				pj: null,
 				title: req.post.title || null,
+				pjName: req.post.pjname || null,
 			};
 
 			//img gesture
-			if (newEvent.img) {
-				var upload = await STORE.cloudinary.uploadFile(newEvent.img, req.field["img"].filename);
-				console.log(upload);
-				newEvent.img = upload.secure_url;
-				newEvent.cloudinary_img_public_id = upload.public_id;
+			if (req.post.img) {
+				const cloudinaryPath = `Nauticspot-Next/${newEvent.harbour_id}/events-images/`;
+				const imgData = req.post.img;
+				const imgFilename = req.field["img"].filename;
+				const uploadDetails = await STORE.cloudinary.uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
+				newEvent.img = uploadDetails.secure_url;
+				newEvent.cloudinary_img_public_id = uploadDetails.public_id;
 			}
 
 			//pj gesture
-			if (newEvent.pj) {
-				var upload = await STORE.cloudinary.uploadFile(newEvent.pj, req.field["pj"].filename, "slug");
-				console.log(upload);
-				newEvent.pj = upload.secure_url;
-				newEvent.cloudinary_pj_public_id = upload.public_id;
+			if (req.post.pj) {
+				const cloudinaryPath = `Nauticspot-Next/${newEvent.harbour_id}/events-attachment/`;
+				const pjData = req.body.pj;
+				const pjFilename = req.field["pj"].filename;
+				if (!newEvent.pjName) newEvent.pjName = pjFilename;
+				const uploadDetails = await STORE.cloudinary.uploadFileWrapper(pjData, pjFilename, cloudinaryPath);
+				newEvent.pj = uploadDetails.secure_url;
+				newEvent.cloudinary_pj_public_id = uploadDetails.public_id;
 			}
 
 			const createdEvent = await createEventV2(newEvent);
@@ -460,7 +467,7 @@ exports.plugin =
 					UTILS.httpUtil.dataError(req, res, "Error", error, "1.0");
 					return;
 				}
-				_Events = _Events.splice(0, 500);
+				// _Events = _Events.splice(0, 500);
 			}
 
 			const harboursMapById = await STORE.harbourmgmt.getAllHarboursMappedById();
@@ -471,8 +478,8 @@ exports.plugin =
 				}
 
 				let formatedDate = '-';
-				if (_Events[i].date) {
-					const dateObj = new Date(_Events[i].date)
+				if (_Events[i].updated_at || _Events[i].date) {
+					const dateObj = new Date(_Events[i].updated_at || _Events[i].date)
 					const splited = dateObj.toISOString().split('T'); // => [2022-03-22]T[09:47:51.062Z]
 					const date = splited[0];
 					const heure = splited[1].split('.')[0]; // => [09:47:51].[062Z]
@@ -501,7 +508,7 @@ exports.plugin =
 					.replace(/__PJ__/g, _Events[i].pj)
 					.replace(/__IMG__/g, _Events[i].img)
 					.replace(/__DATE__/g, formatedDate)
-					.replace(/__DATETIMEORDER__/g, _Events[i].date)
+					.replace(/__DATETIMEORDER__/g, _Events[i].updated_at || _Events[i].date)
 			}
 			_indexHtml = _indexHtml.replace("__EVENTS__", _eventGen).replace(/undefined/g, '');
 

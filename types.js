@@ -337,6 +337,8 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
 /**
  * @typedef T_event
  * @property {EpochTimeStamp} date - deprec
+ * @property {EpochTimeStamp} created_at
+ * @property {EpochTimeStamp} updated_at
  * @property {EpochTimeStamp} date_end
  * @property {EpochTimeStamp} date_start
  * @property {string} category
@@ -348,6 +350,7 @@ const incidentsTypes = require('./snap/lib-js/enums').incidentsTypes;
  * @property {string} img
  * @property {string} pj
  * @property {string} title
+ * @property {string} pjName
  */
 
 /**
