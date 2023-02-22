@@ -284,7 +284,7 @@ const pluginPostUpdateNewsHandler = async (req, res) => {
 		//img gesture
 		if (newsUpdates.img) {
 			console.log('Upload image on cloudinary');
-			const cloudinaryPath = `Nauticspot-Next/${newNews.harbour_id}/news-images/`;
+			const cloudinaryPath = `Nauticspot-Next/${newsUpdates.harbour_id}/news-images/`;
 			const imgData = req.post.img;
 			const imgFilename = req.field["img"].filename;
 			const uploadDetails = await uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
@@ -299,7 +299,7 @@ const pluginPostUpdateNewsHandler = async (req, res) => {
 		//pj gesture
 		if (newsUpdates.pj) {
 			console.log('Upload attachment on cloudinary');
-			const cloudinaryPath = `Nauticspot-Next/${newNews.harbour_id}/news-pj/`;
+			const cloudinaryPath = `Nauticspot-Next/${newsUpdates.harbour_id}/news-pj/`;
 			const imgData = req.post.pj;
 			const imgFilename = req.field["pj"].filename;
 			const uploadDetails = await uploadFileWrapper(imgData, imgFilename, cloudinaryPath);
@@ -465,8 +465,6 @@ exports.plugin =
 					_News[i].category = "évennement";
 
 				const [currentHarbour] = await STORE.harbourmgmt.getHarbours({ id: _News[i].harbour_id });
-				console.log('NEWS NAME', _News[i].title, _News[i].id, _News[i].harbour_id)
-				console.log('currentHarbour', currentHarbour.id)
 
 				let formatedDate = '-';
 				if (_News[i].created_at || _News[i].date) {
