@@ -134,10 +134,6 @@ async function getAdminByIdV2(_id) {
 async function getPartnerBySearchHandler(_req, _res) {
 	try {
 		const partners = await getPartnersV2({ harbour_id: _req.param.harbour_id, category: _req.param.category, subcategory: _req.param.subcategory })
-		if (partners?.length < 1) {
-			UTILS.httpUtil.dataSuccess(_req, _res, "error", "No partner found", "200", "1.0")
-			return;
-		}
 		UTILS.httpUtil.dataSuccess(_req, _res, "success", partners, "1.0");
 	} catch (error) {
 		console.error(error);
@@ -148,10 +144,6 @@ async function getPartnerBySearchHandler(_req, _res) {
 async function getPartnerByIdHandler(_req, _res) {
 	try {
 		const partners = await getPartnersV2({ id: _req.param.id });
-		if (partners?.length < 1) {
-			UTILS.httpUtil.dataError(_req, _res, "error", "No partner found", "200", 1.0);
-			return;
-		}
 		UTILS.httpUtil.dataSuccess(_req, _res, "success", partners[0], "1.0");
 	} catch (error) {
 		console.error(error);
@@ -166,10 +158,6 @@ async function getPartnersByHarbourHandler(_req, _res) {
 			return;
 		}
 		const partners = await getPartnersV2({ harbour_id: _req.get.harbour_id });
-		if (partners?.length < 1) {
-			UTILS.httpUtil.dataSuccess(_req, _res, "error", "No partner found", "200", "1.0")
-			return;
-		}
 		const harbours = await STORE.harbourmgmt.getHarbours({ id: _req.get.harbour_id });
 		const harbour = harbours[0];
 		if (!harbour) {
@@ -475,7 +463,8 @@ const pluginPostCreateHandler = async (req, res) => {
 			address: req.post.address || null,
 			category: req.post.category || null,
 			cloudinary_img_public_id: null,
-			date: Date.now() || null,
+			created_at: Date.now(),
+			updated_at: Date.now(),
 			description: req.post.description || null,
 			harbour_id: req.post.harbour_id || null,
 			img: null,
@@ -485,6 +474,8 @@ const pluginPostCreateHandler = async (req, res) => {
 			prefixed_phone: req.post.prefixed_phone || null,
 			spotyrideLink: req.post.spotyrideLink || null,
 			subcategory: req.post.subcategory || null,
+			email: req.post.email,
+			website: req.post.website,
 		};
 
 		if (newPartner.prefix && newPartner.phone) {
