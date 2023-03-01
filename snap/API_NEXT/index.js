@@ -9,11 +9,11 @@ const ENUMS = require('../lib-js/enums')
 const TABLES = ENUMS.TABLES;
 
 exports.setup = {
-  on: true,
-  title: 'API NEXT',
-  description: 'some next level endpoints',
-  version: '1.2.0',
-  api: true,
+	on: true,
+	title: 'API NEXT',
+	description: 'some next level endpoints',
+	version: '1.2.0',
+	api: true,
 }
 
 exports.handler = async (req, res) => {
@@ -56,7 +56,7 @@ async function updateElement(tableName, searchObj, updateObj) {
 // DELETE
 async function deleteElement(tableName, searchObj) {
 	if (Object.keys(searchObj).length < 1) {
-		throw(new Error('Must specify at least 1 search value'));
+		throw (new Error('Must specify at least 1 search value'));
 	}
 	return new Promise((resolve, reject) => {
 		STORE.db.linkdb.Delete(tableName, searchObj, function (_err, _data) {
@@ -222,11 +222,8 @@ const getBoatsHandler = async (req, res) => {
 
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
-		// /** @type {Array<TYPES.T_user>} */
-		// const boats = await getElements(TABLES.BOATS, searchOpt);
-
 		const findBoatResp = await DB_NS.boat.find(searchOpt);
-		console.log('findBoatResp',findBoatResp)
+		console.log('findBoatResp', findBoatResp)
 		if (findBoatResp.error) {
 			throw new Error(findBoatResp.error);
 		}
@@ -265,7 +262,7 @@ const createBoatsHandler = async (req, res) => {
 			user_id,
 			harbour_id,
 		});
-		console.log('createBoatResp',createBoatResp)
+		console.log('createBoatResp', createBoatResp)
 		if (createBoatResp.error) {
 			throw new Error(createBoatResp.message, { cause: createBoatResp });
 		}
@@ -297,7 +294,7 @@ const updateBoatsHandler = async (req, res) => {
 		const updateObj = { ...req.body, updated_at: Date.now() };
 
 		if (Object.keys(searchObj).length < 1) {
-			throw new(Error('You must specify at least one search param'));
+			throw new (Error('You must specify at least one search param'));
 		}
 
 		const updateBoatResp = await DB_NS.boat.update(searchObj, updateObj);
@@ -305,7 +302,7 @@ const updateBoatsHandler = async (req, res) => {
 			throw new Error(updateBoatResp.message, { cause: updateBoatResp });
 		}
 		const updatedBoats = updateBoatResp.data;
-		
+
 		console.log('Updated Boats', updatedBoats)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -391,9 +388,9 @@ const createAbsencesHandler = async (req, res) => {
 		// console.log('req.body', req.body);
 		const { date_end, date_start, boat_id,
 			harbour_id, user_id } = req.body;
-		if (! boat_id) throw(new Error('boat id is missing'));
-		if (! date_start) throw(new Error('date_start is missing'));
-		if (! date_end) throw(new Error('date_end is missing'));
+		if (!boat_id) throw (new Error('boat id is missing'));
+		if (!date_start) throw (new Error('date_start is missing'));
+		if (!date_end) throw (new Error('date_end is missing'));
 		const newAbsence = {
 			boat_id: boat_id || null,
 			created_at: Date.now(),
@@ -501,9 +498,9 @@ const createSortiesHandler = async (req, res) => {
 	try {
 		const { place_id, boat_id, harbour_id, datetime_out,
 			datetime_in, duration, is_notification_sent } = req.body;
-		if (! boat_id) throw(new Error('boat id is missing'));
-		if (! date_start) throw(new Error('date_start is missing'));
-		if (! date_end) throw(new Error('date_end is missing'));
+		if (!boat_id) throw (new Error('boat id is missing'));
+		if (!date_start) throw (new Error('date_start is missing'));
+		if (!date_end) throw (new Error('date_end is missing'));
 		const newOuting = {
 			place_id: place_id || null,
 			boat_id: boat_id || null,
@@ -587,9 +584,9 @@ const createZonesHandler = async (req, res) => {
 		// console.log('req.body', req.body);
 		const { harbour_id, name, type } = req.body;
 		// Validation
-		if (!harbour_id) throw(new Error('harbour_id is missing'));
-		if (!name) throw(new Error('name is missing'));
-		if (!type) throw(new Error('type is missing'));
+		if (!harbour_id) throw (new Error('harbour_id is missing'));
+		if (!name) throw (new Error('name is missing'));
+		if (!type) throw (new Error('type is missing'));
 		const newZone = {
 			id: null,
 			harbour_id: req.body.harbour_id || null,
@@ -620,7 +617,7 @@ const updateZonesHandler = async (req, res) => {
 		// console.log('req.body', req.body);
 		const searchObj = { ...req.get };
 		const updateObj = { ...req.body };
-		
+
 		if (Object.keys(searchObj).length < 1) {
 			throw new Error('You must specify at least one search param');
 		}
@@ -1000,7 +997,7 @@ const deleteMeteoHandler = async (req, res) => {
 		if (id.charAt(0) !== '[') {
 			idArr.push(id);
 		} else if (id.charAt(0) === '[') {
-			idArr = Array.from(id.slice(1,id.length - 1))
+			idArr = Array.from(id.slice(1, id.length - 1))
 				.join('')
 				.split(',');
 		}
@@ -1051,7 +1048,7 @@ const getAdminHandler = async (req, res) => {
 		const findAdminsResp = await DB_FP.user.find(where);
 		console.log('findAdminsResp', findAdminsResp);
 		if (findAdminsResp.error) {
-			console.error('findAdminsResp',findAdminsResp)
+			console.error('findAdminsResp', findAdminsResp)
 			throw new Error(findAdminsResp.message, { cause: findAdminsResp });
 		}
 
@@ -1083,7 +1080,7 @@ const createAdminHandler = async (req, res) => {
 		const createAdminResp = await DB_FP.user.create(query);
 		console.log('createAdminResp', createAdminResp);
 		if (createAdminResp.error) {
-			console.error('createAdminResp',createAdminResp)
+			console.error('createAdminResp', createAdminResp)
 			throw new Error(createAdminResp.message, { cause: createAdminResp });
 		}
 
@@ -1114,9 +1111,9 @@ const updateAdminHandler = async (req, res) => {
 		console.log('updates', updates);
 
 		const updateAdminResp = await DB_FP.user.update(where, updates);
-		console.log('updateAdminResp',updateAdminResp);
+		console.log('updateAdminResp', updateAdminResp);
 		if (updateAdminResp.error) {
-			console.error('updateAdminResp',updateAdminResp);
+			console.error('updateAdminResp', updateAdminResp);
 			throw new Error(updateAdminResp.message, { cause: updateAdminResp });
 		}
 
@@ -1165,6 +1162,99 @@ const deleteAdminHandler = async (req, res) => {
 		}));
 	}
 }
+
+// EMPLACEMENT
+
+const getPlacesHandler = async (req, res) => {
+	console.log('====getPlacesHandler====')
+	try {
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		const where = req.get;
+		console.log('Find places params', where);
+		const places = await STORE.emplacementmgmt.getPlaces(where);
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			count: places.length,
+			places: places,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const updatePlacesHandler = async (req, res) => {
+	console.log('====updatePlacesHandler====')
+	try {
+		const x = 0;
+		const where = {
+			id: req.post.id,
+			number: req.post.number,
+			captorNumber: req.post.captorNumber,
+		};
+		/**@type {TYPES.T_place} */
+		const updates = {
+			captorNumber: req.post.captorNumber || undefined,
+			harbour_id: req.post.harbour_id || undefined,
+			largeur: req.post.largeur || undefined,
+			longueur: req.post.longueur || undefined,
+			maxSeuil: req.post.maxSeuil || undefined,
+			minSeuil: req.post.minSeuil || undefined,
+			nbTramesDepart: req.post.nbTramesDepart || undefined,
+			nbTramesRetour: req.post.nbTramesRetour || undefined,
+			number: req.post.number || undefined,
+			occupation: req.post.occupation || undefined,
+			pontonId: req.post.pontonId || undefined,
+			status: req.post.status || undefined,
+			tirantDeau: req.post.tirantDeau || undefined,
+			type: req.post.type || undefined,
+
+		};
+
+		const updatedPlace = await STORE.emplacementmgmt.updatePlaces(where, updates);
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			places: updatedPlace,
+		}));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
+
+const deletePlaceByHandler = async (req, res) => {
+	try {
+		const where = { ...req.get };
+		if (Object.entries(where).length === 0) { // isObjectEmpty
+			throw new Error('Where options empty');
+		}
+		const places = await deletePlaceWhere(where);
+		res.end(JSON.stringify({ success: true, payload: places }));
+	} catch (error) {
+		console.error('[ERROR]', error);
+		myLogger.logError(error, { module: 'mapmgmt' })
+		const errorHttpCode = error.cause?.httpCode || 500;
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: false,
+			error: error.toString(),
+		}));
+	}
+};
 
 exports.router = [
 	// USERS
@@ -1385,5 +1475,19 @@ exports.router = [
 		route: "/api/next/admins",
 		handler: deleteAdminHandler,
 		method: "DELETE",
+	},
+	// EMPLACEMENT
+	{
+		method: "GET",
+		route: "/api/next/places",
+		handler: getPlacesHandler,
+	}, {
+		method: "POST",
+		route: "/api/next/places",
+		handler: updatePlacesHandler,
+	}, {
+		method: "DELETE",
+		route: "/api/next/places",
+		handler: deletePlaceByHandler,
 	},
 ];

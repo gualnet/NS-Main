@@ -5,7 +5,7 @@ const TYPES = require('../../types');
 
 const ROLES = ENUM.rolesBackOffice;
 const AUTHORIZED_ROLES = [
-	ROLES.SUPER_ADMIN,
+    ROLES.SUPER_ADMIN,
 ];
 
 var _userCol = "user";
@@ -328,34 +328,34 @@ exports.plugin =
     title: "Gestion des emplacements",
     desc: "",
     handler: async (req, res) => {
-			console.log('EMPLACEMENT HANDLER');
-			/**@type {TYPES.T_SCHEMA['fortpress']} */
-			const DB_FP = SCHEMA.fortpress;
+        console.log('EMPLACEMENT HANDLER');
+        /**@type {TYPES.T_SCHEMA['fortpress']} */
+        const DB_FP = SCHEMA.fortpress;
 
-			// var admin = await getAdminById(req.userCookie.data.id);
-			const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: 1 });
-			if (findAdminResp.error) {
-				console.error(findAdminResp.error);
-				res.writeHead(500);
-				res.end('Internal Error');
-				return;
-			} else if (findAdminResp.data.length < 1) {
-				console.error('No dashboard user found');
-				res.writeHead(401);
-				res.end('Accès non autorisé');
-				return;
-			}
-			const admin = findAdminResp.data[0];
+        // var admin = await getAdminById(req.userCookie.data.id);
+        const findAdminResp = await DB_FP.user.find({ id: req.userCookie.data.id }, { raw: 1 });
+        if (findAdminResp.error) {
+            console.error(findAdminResp.error);
+            res.writeHead(500);
+            res.end('Internal Error');
+            return;
+        } else if (findAdminResp.data.length < 1) {
+            console.error('No dashboard user found');
+            res.writeHead(401);
+            res.end('Accès non autorisé');
+            return;
+        }
+        const admin = findAdminResp.data[0];
         var _type = admin.data.type;
         var _role = admin.role;
         var _entity_id = admin.data.entity_id;
         var _harbour_id = admin.data.harbour_id;
 
-				if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)){
-					res.writeHead(401);
-					res.end('No access rights');
-					return;
-				}
+        if (!verifyRoleAccess(admin?.data?.roleBackOffice, AUTHORIZED_ROLES)) {
+            res.writeHead(401);
+            res.end('No access rights');
+            return;
+        }
         if (req.method == "GET") {
             if (req.get.mode && req.get.mode == "delete" && req.get.zone_id) {
                 await delZone(req.get.zone_id);
@@ -445,7 +445,7 @@ exports.plugin =
                     + '<div class= "form-group" >'
                     + '<label class="form-label">Sélection du port</label>'
                     + '<select class="form-control" id="harbour_id" style="width:250px;" name="harbour_id">';
-        
+
                 const getHarbourPromises = await _harbour_id.map(harbour => STORE.harbourmgmt.getHarbourById(harbour))
                 userHarbours = await Promise.all(getHarbourPromises);
                 userHarbours.map(userHarbour => {
@@ -510,3 +510,185 @@ exports.plugin =
         }
     }
 }
+
+/* ******** */
+/* SERVICES */
+/* SERVICES */
+/* ******** */
+
+
+/* ************** */
+/* DB HANDLERS V2 */
+
+
+/**
+ * 
+ * @param {} searchOpt 
+ * @returns {Promise<TYPES.T_place[]>}
+ */
+const getPlacesV2 = async (searchOpt) => {
+    /**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+    const DB_NS = SCHEMA.NAUTICSPOT;
+
+    console.log('Find places params', searchOpt);
+    const getPlacesV2Resp = await DB_NS.place.find(searchOpt);
+    if (getPlacesV2Resp.error) {
+        throw new Error(getPlacesV2Resp.message, { cause: getPlacesV2Resp });
+    }
+
+    const places = getPlacesV2Resp.data;
+    console.log(`Number of places found: `, places.length);
+    return places;
+};
+
+/**
+ * 
+ * @param {Pick<TYPES.T_place, 'id'|'captorNumber'|'number'>} where 
+ * @param {*} updates 
+ * @returns {Promise<TYPES.T_place[]>}
+ */
+const updatePlacesV2 = async (where, updates) => {
+    console.log('=====updatePlacesV2=====');
+    /**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+    const DB_NS = SCHEMA.NAUTICSPOT;
+
+    if (Object.keys(where).length < 1) {
+        throw new Error('Wrong parameter: ' + where);
+    }
+
+    console.log('Update places where: ', where);
+    console.log('Update places with: ', updates);
+    const updatePlacesResp = await DB_NS.place.update(where, updates);
+    if (updatePlacesResp.error) {
+        console.error(updatePlacesResp.error);
+        throw new Error(updatePlacesResp.message, { cause: updatePlacesResp });
+    }
+    const places = updatePlacesResp.data;
+    console.log(`${places.length} place(s) Updated`);
+    return places;
+};
+
+/* DB HANDLERS V2 */
+/* ************** */
+
+// /* ************** */
+// /* API HANDLERS */
+
+/**
+ * This function is used to sync the captor numbers from IAS to Fortpress
+ * @param {*} req 
+ * @param {*} res 
+ */
+const updatePlaceCaptorFromIasHandler = async (req, res) => {
+    console.log('====updatePlacesHandler====')
+    try {
+        const bearerToken = req.headers["authorization"];
+        const token = bearerToken?.split(' ')[1];
+        if (token !== OPTION.IAS_REQUEST_TOKEN) {
+            throw new Error('User not autorized', { cause: { httpCode: 401 } });
+        }
+        if (!req.get.captor_number || req.get.captor_number?.trim().length === 0) {
+            throw new Error('A captor number value must be provided', { cause: { httpCode: 400 } });
+        }
+
+        const where = {
+            harbour_id: harbourIdMapper[req.get.harbor_id].fp_id,
+            number: req.get.number,
+        };
+        const captorNumber = (req.get.captor_number === 'null') ? null : req.get.captor_number?.trim();
+
+        const updatedPlace = await updatePlacesV2(where, {captorNumber});
+        res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+            success: true,
+            places: updatedPlace,
+        }));
+    } catch (error) {
+        console.error('[ERROR]', error);
+        const errorHttpCode = error.cause?.httpCode || 500;
+        res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+            success: false,
+            error: error.toString(),
+        }));
+    }
+};
+
+// /* API HANDLERS */
+// /* ************** */
+
+const harbourIdMapper = {
+    '1': { name: 'Port Heraclea',fp_id: '4e.mx_85wK', ias_id: 1 },
+    '4': { name: 'Gruissan',fp_id: '4e2cd2p6mt', ias_id: 4 },
+    '5': { name: 'Palavas-Les-Flots',fp_id: 'NxfYN1MNNY', ias_id: 5 },
+    '6': { name: 'Cap omega',fp_id: '', ias_id: 6 },
+    '8': { name: 'Menton Garavan',fp_id: 'Nxs1tMY37Y', ias_id: 8 },
+    '9': { name: 'Menton Vieux Port',fp_id: 'EgiqgIFh7K', ias_id: 9 },
+    '10': { name: 'Leucate',fp_id: 'EgDGCtXVVK', ias_id: 10 },
+    '12': { name: 'Port Carnon',fp_id: 'Nx6KHMP2mY', ias_id: 12 },
+    '16': { name: 'Saint-Laurent ', fp_id: '4eG9_R4jHNF', ias_id: 16 },
+    '19': { name: 'La Grande Motte ',fp_id: 'VetjeuxdVF', ias_id: 19 },
+    '22': { name: 'Marina de Valencia',fp_id: 'Sld0Hl_BN5', ias_id: 22 },
+    '24': { name: 'Beaulieu Plaisance',fp_id: '.xMO33Io', ias_id: 24 },
+    '27': { name: 'Villefranche-sur-Mer',fp_id: 'VlKMiFWkNK', ias_id: 27 },
+    '28': { name: 'Bonifacio Marina',fp_id: 'BxqaMWYBqc', ias_id: 28 },
+    '29': { name: 'Ajaccio -  C. Ornano',fp_id: 'SlUyrmPHE9', ias_id: 29 },
+    '30': { name: 'Porto-Vecchio',fp_id: 'HgfhlHtaq9', ias_id: 30 },
+    '31': { name: 'La Napoule',fp_id: 'ElFV4x2R7Y', ias_id: 31 },
+    '39': { name: 'Port-Ilon',fp_id: 'Sg4flgVeic', ias_id: 39 },
+    '47': { name: 'Vieux Port',fp_id: 'NxbBL5Fr4K', ias_id: 47 },
+    '48': { name: 'Santa Lucia',fp_id: 'Ng.zE6KrNt', ias_id: 48 },
+    '51': { name: 'Saint-Tropez ',fp_id: 'NxGjeYPrNF', ias_id: 51 },
+    '55': { name: 'Frontignan',fp_id: '4lzFJgcBVK', ias_id: 55 },
+    '69': { name: 'Port  des Sablons',fp_id: 'NxcV6UaA7K', ias_id: 69 },
+    '76': { name: 'Port la Vie ',fp_id: 'NlYh25kyNt', ias_id: 76 },
+    '77': { name: 'Port la Forêt ',fp_id: '4xH6xtaIVt', ias_id: 77 },
+    '82': { name: 'Marina de Deauville',fp_id: 'NxBCJUZP4F', ias_id: 82 },
+    '91': { name: 'Port de Loctudy',fp_id: 'HxI0GnvrE5', ias_id: 91 },
+    '99': { name: 'Port de Trébeurden',fp_id: 'Sg.FwnQxo5', ias_id: 99 },
+    '102': { name: 'Marines de Cogolin',fp_id: 'NgrXhh0LNF', ias_id: 102 },
+    '104': { name: "Port du Cap d'Ail",fp_id: 'BeqfYD1u45', ias_id: 104 },
+    '105': { name: 'Rouen',fp_id: 'Sg4JETgai5', ias_id: 105 },
+    '107': { name: 'Port Isle Adam', fp_id: 'rxzXyyZ6jq', ias_id: 107 },
+    '108': { name: 'Port Cergy',fp_id: 'BlEflCXgi9', ias_id: 108 },
+    '111': { name: 'Port Anse Aubran',fp_id: 'SlU1xbW6sc', ias_id: 111 },
+    '154': { name: 'Saint Mandrier',fp_id: '4xv7h9R_yt', ias_id: 154 },
+    '157': { name: 'La Seyne-sur-Mer', fp_id: 'Vgwd9iCOkK', ias_id: 157 },
+    '158': { name: 'Toulon Vieille Darse', fp_id: 'VetL7I3G1F', ias_id: 158 },
+    '159': { name: 'Toulon Darse Nord', fp_id: 'VgtmdRozJK', ias_id: 159 },
+    '161': { name: 'Le Niel',fp_id: 'Veb_53BFSF', ias_id: 161 },
+    '174': { name: 'Port les Issambres',fp_id: 'BxZUZXmxiq', ias_id: 174 },
+    '178': { name: "Port d'Agay",fp_id: 'EgWks9ogWq', ias_id: 178 },
+    '179': { name: 'Port de la Figueirette',fp_id: 'Bl3Zhaqrc7o', ias_id: 179 },
+    '180': { name: 'Port de Théoule',fp_id: 'SxpZalOr9mi', ias_id: 180 },
+    '195': { name: 'Macinaggio', fp_id: 'rxHL7ucAo9', ias_id: 195 },
+    '202': { name: 'Propriano', fp_id: 'rl4ZBaUpjc', ias_id: 202 },
+    '205': { name: 'Cargèse',fp_id: 'HeIrt89Ccc', ias_id: 205 },
+    '208': { name: 'Port  Xavier Colonna', fp_id: 'rgLQHR8BE5', ias_id: 208 },
+    '618': { name: 'St Louis du Mourillon',fp_id: 'EgPpAqCd1K', ias_id: 618 },
+    
+    // Below ports are not referenced in ias db
+    // '0': { name: 'test port',fp_id: '', ias_id: 0 },
+    // '0': { name: 'Port Boulouris', fp_id: '4lggFOoxWc', ias_id: 0 },
+    // '0': { name: 'Port Gallice',fp_id: 'Bgd22Svr45', ias_id: 0 },
+    // '??': { name: 'Les Ancres à Vis', fp_id: 'rx8ZUKsU4Wi', ias_id: 0 },
+    // '??': { name: 'Beaulieu Plaisance', fp_id: 'rlV.xMO33Io', ias_id: 0 },
+    // '??': { name: 'Marigot', fp_id: 'rgmlITNzoi', ias_id: 0 },
+    // '??': { name: 'Port de Bouc', fp_id: 'rgLXUSuBN9', ias_id: 0 },
+    // '??': { name: 'Port le Terondel',fp_id: 'Nevxl4kHZK', ias_id: 0 },
+    // '??': { name: 'MARIBAY',fp_id: 'HxbfPuC1ic', ias_id: 0 },
+    // '??': { name: 'Port de Fréjus',fp_id: 'SxNZc10mt39', ias_id: 0 },
+}
+
+
+exports.router = [{
+    method: "POST",
+    route: "/api/emplacement/places_from_ias",
+    handler: updatePlaceCaptorFromIasHandler,
+}];
+
+exports.store = {
+    getPlaces: getPlacesV2,
+    updatePlaces: updatePlacesV2,
+};
+

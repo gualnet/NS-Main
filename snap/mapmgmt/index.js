@@ -1,3 +1,4 @@
+const TYPES = require('../../types');
 const ENUM = require('../lib-js/enums');
 const { verifyRoleAccess } = require('../lib-js/verify');
 const myLogger = require('../lib-js/myLogger');
@@ -712,41 +713,7 @@ async function deleteZoneWhere(whereOptions) {
         });
     });
 }
-const getPlaceByHandler = async (req, res) => {
-    try {
-        const where = { ...req.get };
-        const places = await getPlaceWhere(where);
-        res.end(JSON.stringify({ success: true, payload: places }));
-    } catch (error) {
-			console.error('[ERROR]', error);
-			myLogger.logError(error, { module: 'mapmgmt' })
-			const errorHttpCode = error.cause?.httpCode || 500;
-			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify({
-				success: false,
-				error: error.toString(),
-			}));
-    }
-};
-const removePlaceByHandler = async (req, res) => {
-    try {
-        const where = { ...req.get };
-        if (Object.entries(where).length === 0) { // isObjectEmpty
-            throw new Error('Where options empty');
-        }
-        const places = await deletePlaceWhere(where);
-        res.end(JSON.stringify({ success: true, payload: places }));
-    } catch (error) {
-			console.error('[ERROR]', error);
-			myLogger.logError(error, { module: 'mapmgmt' })
-			const errorHttpCode = error.cause?.httpCode || 500;
-			res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify({
-				success: false,
-				error: error.toString(),
-			}));
-    }
-};
+
 
 const getZoneByHandler = async (req, res) => {
     try {
@@ -841,18 +808,6 @@ exports.router =
         },
 
         // * API NEXT GEN
-        {
-            on: true,
-            route: "/api/next/places",
-            handler: getPlaceByHandler,
-            method: "GET"
-        },
-        {
-            on: true,
-            route: "/api/next/places",
-            handler: removePlaceByHandler,
-            method: "DELETE"
-        },
         {
             on: true,
             route: "/api/next/zones",

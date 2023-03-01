@@ -172,17 +172,6 @@ const influxResultsToObjectMultipleOccurences = (influxRaw) => {
 	return(obj);
 };
 
-// async function getAdminById(_id) {
-// 	return new Promise(resolve => {
-// 			STORE.db.linkdbfp.FindById(_userCol, _id, null, function (_err, _data) {
-// 					if (_data)
-// 							resolve(_data);
-// 					else
-// 							resolve(_err);
-// 			});
-// 	});
-// }
-
 const fetchDataFromBuoysServer = async (options) => {
 	const limit = options.limit;
 	const limitStr = (limit > 0) ? `LIMIT ${limit}` : '';
