@@ -138,7 +138,7 @@ const influxResultsToObjectSingleOccurence = (influxRaw) => {
 			time: valuesArr[0],
 			buoy_num: valuesArr[1],
 			devid: valuesArr[2],
-			presence_TS: valuesArr[6],
+			presence_TS: valuesArr[5],
 		}
 	});
 	return(obj);
@@ -158,14 +158,14 @@ const influxResultsToObjectMultipleOccurences = (influxRaw) => {
 				time: valuesArr[0],
 				buoy_num: valuesArr[1],
 				devid: valuesArr[2],
-				presence_TS: valuesArr[6],
+				presence_TS: valuesArr[5],
 			});
 		} else {
 			obj[valuesArr[2]] = [{
 				time: valuesArr[0],
 				buoy_num: valuesArr[1],
 				devid: valuesArr[2],
-				presence_TS: valuesArr[6],
+				presence_TS: valuesArr[5],
 			}]
 		}
 	});
@@ -288,7 +288,12 @@ const getPresenceByHarbourHandler = async (req, res) => {
 		const harbourInfo = portsInfo[harbourId];
 
 		if (!harbourInfo) {
-			throw new Error('Invalid port id', { cause: { httpCode: 401 }});
+			res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify({
+				success: true,
+				results: [],
+			}));
+			return;
 		}
 		const timeOffset = "7m";
 		const dbName = 'presence_jadespot_ts_new';
@@ -317,7 +322,7 @@ const getPresenceByHarbourHandler = async (req, res) => {
 			error: error.toString(),
 		}));
 	}
-}
+};
 
 const addPort = async (req, res) => {
 	const portId = req.body.id;
