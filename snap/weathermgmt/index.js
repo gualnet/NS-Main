@@ -186,26 +186,22 @@ const deleteWeathersV2 = async (where = {}) => {
 /* ************** */
 /* API HANDLERS */
 
-async function getWeatherFromHarbourHandler(_req, _res) {
-	/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-	const DB_NS = SCHEMA.NAUTICSPOT;
+async function getWeatherFromHarbourHandler(req, res) {
 	try {
-		const findWeatherResp = await DB_NS.weather.find({ harbour_id: _req.param.harbour_id });
-		if (findWeatherResp.error) {
-			throw new Error(findWeatherResp.message);
-		}
-		let weather = findWeatherResp.data;
+		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		const DB_NS = SCHEMA.NAUTICSPOT;
+
+		let weather = await getWeathersV2({ harbour_id: req.param.harbour_id });
 		weather = weather.sort(dynamicSort("date")).reverse();
 		if (weather[0]) {
-			UTILS.httpUtil.dataSuccess(_req, _res, "success", weather[0])
+			UTILS.httpUtil.dataSuccess(req, res, "success", weather[0])
 			return;
 		}
 	} catch (error) {
 		console.error('[ERROR]', error);
-		myLogger.logError(error, { module: 'weathermgmt' })
 		const errorHttpCode = error.cause?.httpCode || 500;
-		_res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
-		_res.end(JSON.stringify({
+		res.writeHead(errorHttpCode, '', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
 			success: false,
 			error: error.toString(),
 		}));
