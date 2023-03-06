@@ -290,7 +290,6 @@ const HEADER_TABLE = [ // From
 	[ 'Information Bonifacio Marina <info@bonifaciomarina.com>', ['BxqaMWYBqc'] ],
 	[ 'Capitainerie de St Tropez<meteo@nauticspot.fr>', ['NxGjeYPrNF'] ],
 	[ '<capitainerie@cargese.corsica>', ['HeIrt89Ccc'] ],
-	[ 'CAPITAINERIE DE SANTA LUCIA<meteo@nauticspot.fr>', ['Ng.zE6KrNt'] ],
 	[ 'PORT DE PALAVAS LES FLOTS<meteo@nauticspot.fr>', ['NxfYN1MNNY'] ],
 	[ 'PORTS DE THEOULE - FIGUEIRETTE', ['Bl3Zhaqrc7o', 'SxpZalOr9mi'] ],
 	[ 'CAPITAINERIE DU CAP D\'AIL', ["BeqfYD1u45"] ],
