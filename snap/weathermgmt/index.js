@@ -562,7 +562,7 @@ exports.plugin =
 				} else if (_role == "admin") {
 					_weathers = await getWeathersV2({});
 				}
-				_weathers = _weathers.splice(0, 500) // limit to speed up the front but should never reach that limit if we keep only the few last days of weather forecasts
+				// _weathers = _weathers.splice(0, 500) // limit to speed up the front but should never reach that limit if we keep only the few last days of weather forecasts
 			} catch (error) {
 				console.error(error);
 				res.setHeader("Content-Type", "text/html");
@@ -632,5 +632,7 @@ exports.plugin =
 }
 
 exports.store = {
+	find: getWeathersV2,
 	create: createWeathersV2,
+	delete: deleteWeathersV2,
 };

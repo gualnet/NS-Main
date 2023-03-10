@@ -118,7 +118,7 @@ const fetchOnMessageHandler = (msg, seqno) => {
 			if (info.which !== 'TEXT') {
 				// Get the details of the email (From, To, Subjectm, Date)
 				const headerContent = Imap.parseHeader(buffer);
-				console.log(`${prefix} Parsed Header: ${inspect(headerContent)}`)
+				// console.log(`${prefix} Parsed Header: ${inspect(headerContent)}`)
 				msgData.header = headerContent;
 			}
 		});
@@ -185,7 +185,7 @@ function buildAttMessageFunction(attachment, msgData) {
 			});
 			stream.on('end', async () => {
 				// upload file on cloudi
-				console.log('\nUPLOAD TO CLOUDINARY', filename)
+				// console.log('\nUPLOAD TO CLOUDINARY', filename)
 				const upload = await STORE.cloudinary.uploadFile(
 					Buffer.from(buffer, encoding),
 					prefix + filename,
@@ -196,7 +196,7 @@ function buildAttMessageFunction(attachment, msgData) {
 						// eraseLocal
 					},
 				);
-				registerWeatherForecastLinkToHarbour(upload.secure_url, upload.public_id, header);
+				registerWeatherForecastLinkToHarbour(upload.secure_url, upload.public_id, header, filename);
 			})
 		});
 		msg.once('end', function () {
@@ -279,13 +279,15 @@ const weatherAutoLoader = async (req, res) => {
 	}
 };
 
-const HEADER_TABLE = [ // From
+// Used to Match one of the email header attributs [from / to] to the supposed receiver harbour
+const HEADER_TABLE = [
 	[ 'SPL PORTS DE MENTON', ['EgiqgIFh7K', 'Nxs1tMY37Y'] ],
 	[ 'PORT DE PLAISANCE DE GRUISSAN', ['4e2cd2p6mt'] ],
 	[ 'PORT LA NAPOULE CAPITAINERIE', ['ElFV4x2R7Y'] ],
 	[ 'PORT CARNON', ['Nx6KHMP2mY'] ],
 	[ 'REGIE DU PORT LEUCATE', ['EgDGCtXVVK'] ],
-	[ 'Météo France Produits  <production.sud-est@meteo.fr>', ['NgrXhh0LNF'] ], // Cogolin
+	// [ 'Météo France Produits  <production.sud-est@meteo.fr>', ['NgrXhh0LNF'] ], // Cogolin
+
 	//
 	[ 'Information Bonifacio Marina <info@bonifaciomarina.com>', ['BxqaMWYBqc'] ],
 	[ 'Capitainerie de St Tropez<meteo@nauticspot.fr>', ['NxGjeYPrNF'] ],
@@ -296,8 +298,13 @@ const HEADER_TABLE = [ // From
 	// [ '', [''] ],
 ];
 
-const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHeaders) => {
+// Used to Match attachment name attributs to the supposed receiver harbour
+const ATTACHEMENT_TABLE = [
+	['Navicap_FRONTIGNAN', ['4lzFJgcBVK'], 'frontignan'],
+	['Navicap_8384_6', ['NgrXhh0LNF'], 'cogolin'] // cogolin
+];
 
+const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHeaders, attachmentName) => {
 	const emailFrom = emailHeaders.from[0];
 	const emailTo = emailHeaders.to[0];
 	// extract email
@@ -313,11 +320,17 @@ const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHe
 			console.log('MATCH', emailTo, 'To', harbourId);
 		}
 	});
-
 	if (!harbourId) {
-		console.log('[ERROR] NO harbour found',emailHeaders)
+		ATTACHEMENT_TABLE.map(entries => {
+			if (attachmentName?.includes(entries[0])) {
+				harbourId = entries[1];
+				console.log(`MATCH [${attachmentName}] From [${entries[2]}][${harbourId}]`);
+			}
+		})
+		console.error('[ERROR] NO harbour found',emailHeaders)
 		return
 	}
+
 	try {
 		/**@type {Array<Promise<TYPES.T_harbour>>} */
 		const promises = [];
@@ -329,7 +342,6 @@ const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHe
 				title: `Météo du ${date.toLocaleDateString().split('-').reverse().join('-')}`,
 				img: secureUrl,
 				cloudinary_img_public_id: publicId,
-				date: Date.now(),
 				created_at: Date.now(),
 				updated_at: Date.now(),
 			};
@@ -337,6 +349,43 @@ const registerWeatherForecastLinkToHarbour = async (secureUrl, publicId, emailHe
 		});
 		const results = await Promise.all(promises);
 		console.log('Weather object created:',results);
+	} catch (error) {
+		console.log('[ERROR]', error);
+	}
+}
+
+// Clean the forecast older than 15 days
+const deleteOldWeatherForecastHandler = async (req, res) => {
+	try {
+		// get all forecasts
+		/**@type {TYPES.T_weather[]} */
+		const allForecastList = await STORE.weathermgmt.find({});
+
+		// filter and keep older than 15 days
+		let refDate = new Date();
+		refDate.setDate(refDate.getDate() - 15);
+		refDate.setHours(0, 0, 0);
+		const oldforecasts = allForecastList.filter(forecast => forecast.created_at <= refDate);
+
+		// delete older forecasts
+		const promisesHolder = [];
+		const promisesCloudinary = [];
+		oldforecasts.map(forecast => {
+			if (forecast.cloudinary_img_public_id) {
+				promisesCloudinary.push(STORE.cloudinary.deleteFile(forecast.cloudinary_img_public_id));
+			}
+			promisesHolder.push(STORE.weathermgmt.delete({ id: forecast.id }));
+		})
+		await Promise.all(promisesCloudinary);
+		const result = await Promise.all(promisesHolder);
+		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify({
+			success: true,
+			_allForecastList_count: allForecastList.length,
+			_oldforecasts_count: oldforecasts.length,
+			count: result.length,
+			result,
+		}));
 	} catch (error) {
 		console.log('[ERROR]', error);
 	}
@@ -366,4 +415,9 @@ exports.router = [{
 	route: "/api/weather/loader",
 	method: "GET",
 	handler: weatherAutoLoader,
+}, {
+	on: true,
+	route: "/api/weather/clean-older",
+	method: "GET",
+	handler: deleteOldWeatherForecastHandler,
 }];
