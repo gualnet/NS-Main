@@ -192,7 +192,7 @@ async function getWeatherFromHarbourHandler(req, res) {
 		const DB_NS = SCHEMA.NAUTICSPOT;
 
 		let weather = await getWeathersV2({ harbour_id: req.param.harbour_id });
-		weather = weather.sort(dynamicSort("date")).reverse();
+		weather = weather.sort(dynamicSort("created_at")).reverse();
 		if (weather[0]) {
 			UTILS.httpUtil.dataSuccess(req, res, "success", weather[0])
 			return;
@@ -572,7 +572,7 @@ exports.plugin =
 
 			var _weatherGen = "";
 			for (var i = 0; i < _weathers.length; i++) {
-				var date = new Date(_weathers[i].created_at || _weathers[i].date);
+				var date = new Date(_weathers[i].created_at);
 				var dateFormated = [("0" + (date.getDate())).slice(-2), ("0" + (date.getMonth() + 1)).slice(-2), date.getFullYear()].join('-') + ' ' + [("0" + (date.getHours())).slice(-2), ("0" + (date.getMinutes())).slice(-2), ("0" + (date.getSeconds())).slice(-2)].join(':');
 				const [currentHarbour] = await STORE.harbourmgmt.getHarbours({ id: _weathers[i].harbour_id });
 				_weatherGen += _weatherHtml.replace(/__ID__/g, _weathers[i].id)
@@ -583,7 +583,7 @@ exports.plugin =
 					.replace(/__BULLETIN__/g, _weathers[i].img || '')
 					.replace(/__TITLE__/g, _weathers[i].title)
 					.replace(/__DATE__/g, dateFormated)
-					.replace(/__DATETIMEORDER__/g, _weathers[i].created_at || _weathers[i].date)
+					.replace(/__DATETIMEORDER__/g, _weathers[i].created_at)
 			}
 			_indexHtml = _indexHtml.replace("__WEATHER__", _weatherGen).replace(/undefined/g, '');
 
