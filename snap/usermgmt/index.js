@@ -1075,5 +1075,7 @@ exports.plugin =
 exports.store =
 {
 	getUsers: getUsersV2,
+	createUsers: createUserV2,
 	updateUsers: updateUsersV2,
+	deleteUser: deleteUserV2,
 }

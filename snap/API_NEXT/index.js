@@ -79,16 +79,12 @@ exports.store = {
 const getUsersHandler = async (req, res) => {
 	console.log('getUsersHandler');
 	try {
-		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-		const DB_NS = SCHEMA.NAUTICSPOT;
+		// /**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
+		// const DB_NS = SCHEMA.NAUTICSPOT;
 
 		console.log('req.get', req.get)
 		const searchOpt = { ...req.get };
-		const findUserResp = await DB_NS.user.find(searchOpt);
-		if (findUserResp.error) {
-			throw new Error(findUserResp.error);
-		}
-		const users = findUserResp.data;
+		const users = await STORE.usermgmt.getUsers(searchOpt);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -139,8 +135,7 @@ const createUsersHandler = async (req, res) => {
 		const newUser = { ...emptyUser, ...req.body };
 		newUser.created_at = Date.now();
 
-		const createdUser = await createElement(TABLES.USERS, newUser);
-		console.log('Created User', createdUser);
+		const createdUser = await STORE.usermgmt.createUsers(newUser);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
@@ -161,10 +156,10 @@ const updateUsersHandler = async (req, res) => {
 	console.log('updateUsersHandler')
 	try {
 		const searchObj = { ...req.get };
-		const updteObj = { ...req.body };
+		const updateObj = { ...req.body };
 
-		/**@type {TYPES.T_user} */
-		const updatedUser = await updateElement(TABLES.USERS, searchObj, updteObj);
+		/**@type {TYPES.T_user[]} */
+		const updatedUser = await STORE.usermgmt.updateUsers(searchObj, updateObj);
 		console.log('Updated User', updatedUser)
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
@@ -185,16 +180,8 @@ const updateUsersHandler = async (req, res) => {
 const deleteUsersHandler = async (req, res) => {
 	console.log('deleteUsersHandler')
 	try {
-		/**@type {TYPES.T_SCHEMA['NAUTICSPOT']} */
-		const DB_NS = SCHEMA.NAUTICSPOT;
-
 		const searchObj = { ...req.get };
-
-		const deleteUserResp = await DB_NS.user.delete(searchObj);
-		if (deleteUserResp.error) {
-			throw new Error(deleteUserResp.error);
-		}
-		const deletedUsers = deleteUserResp.data;
+		const deletedUsers = await STORE.usermgmt.deleteUser(searchObj);
 
 		res.writeHead(200, 'Success', { 'Content-Type': 'application/json' });
 		res.end(JSON.stringify({
