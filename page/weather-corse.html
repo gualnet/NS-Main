@@ -206,10 +206,10 @@
 		window.addEventListener('load', async () => {
 			const harbour = await fetchHarbourData();
 			const forecast = await fetchWeatherForecastLink();
-
-			displayForecastLinkBtn({ forecastLink: forecast.img });
-			fetchWeatherByCoords(harbour);
-
+			if (forecast?.img) {
+				displayForecastLinkBtn({ forecastLink: forecast.img });
+			}
+			await fetchWeatherByCoords(harbour);
 		});
 
 		const fetchWeatherForecastLink = async () => {

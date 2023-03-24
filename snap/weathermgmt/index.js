@@ -196,6 +196,8 @@ async function getWeatherFromHarbourHandler(req, res) {
 		if (weather[0]) {
 			UTILS.httpUtil.dataSuccess(req, res, "success", weather[0])
 			return;
+		} else {
+			UTILS.httpUtil.dataError(req, res, "Error", "Pas de bulletin meteo", "404", "1.0");
 		}
 	} catch (error) {
 		console.error('[ERROR]', error);
